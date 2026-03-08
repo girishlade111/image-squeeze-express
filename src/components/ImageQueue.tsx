@@ -60,7 +60,9 @@ const ImageQueue = ({
       {isProcessing && (
         <div className="mb-4">
           <Progress value={progress} className="h-2 rounded-full" />
-          <p className="mt-1 text-center text-xs text-muted-foreground">{progress}% complete</p>
+          <p className="mt-1.5 text-center text-xs font-medium text-muted-foreground">
+            {processingText || `${progress}% complete`}
+          </p>
         </div>
       )}
 
