@@ -1,62 +1,57 @@
 import { Zap } from 'lucide-react';
 
 const Footer = () => (
-  <footer className="mt-20 border-t border-border/40 bg-card/30">
-    <div className="container mx-auto px-4 py-10">
-      <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
-        {/* Logo */}
-        <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-bg">
-            <Zap className="h-4 w-4 text-primary-foreground" />
-          </div>
+  <footer className="mt-24 border-t border-foreground/10 bg-background" style={{ backgroundColor: 'hsl(0 0% 3%)' }}>
+    <div className="container mx-auto px-4 py-10 sm:px-6">
+      {/* Top row */}
+      <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:justify-between">
+        {/* Logo + tagline */}
+        <div className="flex items-center gap-2.5">
+          <span className="text-xl">⚡</span>
           <div>
-            <span className="text-sm font-bold gradient-text">ImageSqueeze</span>
-            <p className="text-[10px] text-muted-foreground">Compress. Resize. Convert.</p>
+            <span
+              className="text-lg font-extrabold"
+              style={{
+                background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              ImageSqueeze
+            </span>
+            <p className="text-[11px] text-muted-foreground">Compress. Resize. Convert. Instantly.</p>
           </div>
         </div>
 
-        {/* Links */}
-        <nav className="flex gap-6 text-sm text-muted-foreground">
-          <a href="#home" className="hover:text-foreground transition-colors">Privacy Policy</a>
-          <a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a>
-          <a href="#faq" className="hover:text-foreground transition-colors">FAQ</a>
+        {/* Nav links */}
+        <nav className="flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
+          <a href="#home" className="transition-colors hover:text-foreground">Home</a>
+          <a href="#how-it-works" className="transition-colors hover:text-foreground">How It Works</a>
+          <a href="#features" className="transition-colors hover:text-foreground">Features</a>
+          <a href="#faq" className="transition-colors hover:text-foreground">FAQ</a>
         </nav>
-
-        {/* Social */}
-        <div className="flex items-center gap-4 text-muted-foreground">
-          <a
-            href="https://github.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-foreground transition-colors text-sm"
-          >
-            GitHub
-          </a>
-          <a
-            href="https://twitter.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-foreground transition-colors text-sm"
-          >
-            Twitter/X
-          </a>
-        </div>
       </div>
 
-      <div className="mt-8 text-center text-xs text-muted-foreground">
-        <p>
-          Built with ❤️ by{' '}
-          <a
-            href="https://ladestack.in"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="font-medium text-violet hover:underline"
-          >
-            Lade Stack
-          </a>
-        </p>
-        <p className="mt-1">© 2026 ImageSqueeze by Lade Stack. All rights reserved.</p>
-      </div>
+      {/* Divider */}
+      <div className="my-6 h-px bg-foreground/10" />
+
+      {/* Middle */}
+      <p className="text-center text-sm text-muted-foreground">
+        Built with <span className="text-red-400">❤️</span> by{' '}
+        <a
+          href="https://ladestack.in"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-primary hover:underline"
+        >
+          Lade Stack
+        </a>
+      </p>
+
+      {/* Bottom */}
+      <p className="mt-3 text-center text-xs text-muted-foreground/60">
+        © 2026 ImageSqueeze by Lade Stack. All rights reserved.
+      </p>
     </div>
   </footer>
 );
