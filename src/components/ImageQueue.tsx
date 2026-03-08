@@ -41,6 +41,7 @@ const ImageQueue = ({
   files,
   isProcessing,
   progress,
+  processingText,
   onRemove,
   onClearAll,
   onProcessAll,
