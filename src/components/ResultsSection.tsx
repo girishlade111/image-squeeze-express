@@ -1,27 +1,27 @@
 import { Download, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ImageItem, formatFileSize } from '@/lib/image-processing';
+import { UploadedFile } from '@/hooks/useImageUpload';
+import { formatFileSize, getCompressionRatio } from '@/utils/imageProcessor';
 import { saveAs } from 'file-saver';
 import JSZip from 'jszip';
 
 interface ResultsSectionProps {
-  images: ImageItem[];
+  files: UploadedFile[];
   onReset: () => void;
 }
 
-const ResultsSection = ({ images, onReset }: ResultsSectionProps) => {
-  const processed = images.filter((i) => i.status === 'done');
-  if (processed.length === 0) return null;
+const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
+  if (files.length === 0) return null;
 
-  const downloadSingle = (img: ImageItem) => {
-    if (img.processedFile) saveAs(img.processedFile, img.processedFile.name);
+  const downloadSingle = (f: UploadedFile) => {
+    if (f.processedFile) saveAs(f.processedFile, f.processedFile.name);
   };
 
   const downloadAll = async () => {
     const zip = new JSZip();
-    processed.forEach((img) => {
-      if (img.processedFile) zip.file(img.processedFile.name, img.processedFile);
+    files.forEach((f) => {
+      if (f.processedFile) zip.file(f.processedFile.name, f.processedFile);
     });
     const blob = await zip.generateAsync({ type: 'blob' });
     saveAs(blob, 'imagesqueeze_batch.zip');
@@ -37,64 +37,43 @@ const ResultsSection = ({ images, onReset }: ResultsSectionProps) => {
       <h2 className="mb-6 text-center text-2xl font-bold">Results</h2>
 
       <div className="space-y-4">
-        {processed.map((img) => {
-          const reduction = Math.round(
-            ((img.originalSize - (img.processedSize || 0)) / img.originalSize) * 100
-          );
-          const ext = img.processedFile?.type.split('/')[1]?.toUpperCase() || '';
+        {files.map((f) => {
+          const newSize = f.result?.sizeBytes || 0;
+          const ratio = getCompressionRatio(f.originalSize, newSize);
+          const ext = f.processedFile?.type.split('/')[1]?.toUpperCase() || '';
 
           return (
-            <div key={img.id} className="glass-card rounded-2xl p-4">
+            <div key={f.id} className="rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-4">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                 {/* Before */}
                 <div className="flex flex-1 items-center gap-3">
-                  <img
-                    src={img.preview}
-                    alt="Before"
-                    className="h-16 w-16 rounded-xl object-cover"
-                    loading="lazy"
-                  />
+                  <img src={f.preview} alt="Before" className="h-16 w-16 rounded-xl object-cover" loading="lazy" />
                   <div>
                     <p className="text-xs font-medium text-muted-foreground">Before</p>
-                    <p className="text-sm font-semibold">{formatFileSize(img.originalSize)}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {img.originalWidth}×{img.originalHeight}
-                    </p>
+                    <p className="text-sm font-semibold">{formatFileSize(f.originalSize)}</p>
+                    <p className="text-xs text-muted-foreground">{f.originalWidth}×{f.originalHeight}</p>
                   </div>
                 </div>
 
                 {/* Reduction badge */}
-                <Badge className="mx-auto flex-shrink-0 rounded-full bg-success/20 text-success border-success/30 px-3 py-1 text-sm font-bold">
-                  ▼ {reduction}% smaller
+                <Badge className="mx-auto flex-shrink-0 rounded-full bg-emerald-500/15 text-emerald-400 border-emerald-500/25 px-3 py-1 text-sm font-bold">
+                  {ratio}
                 </Badge>
 
                 {/* After */}
                 <div className="flex flex-1 items-center gap-3 sm:justify-end">
                   <div className="text-right">
                     <p className="text-xs font-medium text-muted-foreground">After</p>
-                    <p className="text-sm font-semibold">{formatFileSize(img.processedSize || 0)}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {img.processedWidth}×{img.processedHeight}
-                    </p>
+                    <p className="text-sm font-semibold">{formatFileSize(newSize)}</p>
+                    <p className="text-xs text-muted-foreground">{f.result?.width}×{f.result?.height}</p>
                   </div>
-                  <img
-                    src={img.processedPreview}
-                    alt="After"
-                    className="h-16 w-16 rounded-xl object-cover"
-                    loading="lazy"
-                  />
+                  <img src={f.processedPreview} alt="After" className="h-16 w-16 rounded-xl object-cover" loading="lazy" />
                 </div>
               </div>
 
               <div className="mt-3 flex items-center justify-between">
-                <Badge variant="outline" className="rounded-full text-xs">
-                  {ext}
-                </Badge>
-                <Button
-                  size="sm"
-                  className="rounded-full gradient-bg text-primary-foreground"
-                  onClick={() => downloadSingle(img)}
-                >
+                <Badge variant="outline" className="rounded-full text-xs">{ext}</Badge>
+                <Button size="sm" className="rounded-full text-primary-foreground" style={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)' }} onClick={() => downloadSingle(f)}>
                   <Download className="mr-1 h-3.5 w-3.5" /> Download
                 </Button>
               </div>
@@ -104,11 +83,7 @@ const ResultsSection = ({ images, onReset }: ResultsSectionProps) => {
       </div>
 
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-        <Button
-          size="lg"
-          className="rounded-full gradient-bg text-primary-foreground"
-          onClick={downloadAll}
-        >
+        <Button size="lg" className="rounded-full text-primary-foreground" style={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)' }} onClick={downloadAll}>
           <Download className="mr-2 h-4 w-4" /> Download All as ZIP
         </Button>
         <Button variant="outline" size="lg" className="rounded-full" onClick={onReset}>
@@ -116,26 +91,11 @@ const ResultsSection = ({ images, onReset }: ResultsSectionProps) => {
         </Button>
       </div>
 
-      {/* Share */}
       <div className="mt-6 text-center">
         <p className="mb-2 text-sm text-muted-foreground">Share ImageSqueeze</p>
         <div className="flex justify-center gap-3">
-          <a
-            href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full bg-secondary px-4 py-2 text-xs font-medium transition-colors hover:bg-secondary/80"
-          >
-            Twitter/X
-          </a>
-          <a
-            href={`https://wa.me/?text=${shareText}%20${shareUrl}`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="rounded-full bg-secondary px-4 py-2 text-xs font-medium transition-colors hover:bg-secondary/80"
-          >
-            WhatsApp
-          </a>
+          <a href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`} target="_blank" rel="noopener noreferrer" className="rounded-full bg-secondary px-4 py-2 text-xs font-medium transition-colors hover:bg-secondary/80">Twitter/X</a>
+          <a href={`https://wa.me/?text=${shareText}%20${shareUrl}`} target="_blank" rel="noopener noreferrer" className="rounded-full bg-secondary px-4 py-2 text-xs font-medium transition-colors hover:bg-secondary/80">WhatsApp</a>
         </div>
       </div>
     </section>
