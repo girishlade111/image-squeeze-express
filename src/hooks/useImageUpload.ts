@@ -167,6 +167,7 @@ export function useImageUpload() {
     processAll,
     isProcessing,
     progress,
+    processingText,
     hasFiles,
     allDone,
     processedFiles,
