@@ -96,10 +96,11 @@ const Header = () => {
       </div>
 
       {/* Mobile dropdown */}
-      <div
+      <nav
         className={`overflow-hidden border-t border-foreground/10 bg-background/95 backdrop-blur-md md:hidden transition-all duration-300 ease-in-out ${
           mobileOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0 border-transparent'
         }`}
+        aria-label="Mobile navigation"
       >
         <div className="px-4 pb-4 pt-2">
           {navLinks.map((l) => (
