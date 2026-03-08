@@ -111,7 +111,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                 {/* Before */}
                 <div className="flex flex-1 items-center gap-3">
-                  <img src={f.preview} alt="Before" className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl object-cover" loading="lazy" />
+                  <img src={f.preview} alt={`Original ${f.name}`} className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl object-cover" loading="lazy" />
                   <div>
                     <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">Before</p>
                     <p className="text-sm font-semibold">{formatFileSize(f.originalSize)}</p>
