@@ -114,7 +114,7 @@ const Header = () => {
             </a>
           ))}
         </div>
-      </div>
+      </nav>
     </header>
   );
 };
