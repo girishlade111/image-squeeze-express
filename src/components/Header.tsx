@@ -96,8 +96,12 @@ const Header = () => {
       </div>
 
       {/* Mobile dropdown */}
-      {mobileOpen && (
-        <div className="border-t border-foreground/10 bg-background/95 backdrop-blur-md px-4 pb-4 pt-2 md:hidden animate-fade-in-up" style={{ animationDuration: '0.2s' }}>
+      <div
+        className={`overflow-hidden border-t border-foreground/10 bg-background/95 backdrop-blur-md md:hidden transition-all duration-300 ease-in-out ${
+          mobileOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0 border-transparent'
+        }`}
+      >
+        <div className="px-4 pb-4 pt-2">
           {navLinks.map((l) => (
             <a
               key={l.href}
@@ -109,7 +113,7 @@ const Header = () => {
             </a>
           ))}
         </div>
-      )}
+      </div>
     </header>
   );
 };

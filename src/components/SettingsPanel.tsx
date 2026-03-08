@@ -190,7 +190,7 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
                   </Button>
                 )}
               </div>
-              <div className="grid grid-cols-3 gap-2 max-h-[240px] overflow-y-auto pr-1">
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 max-h-[240px] overflow-y-auto pr-1">
                 {presets.map((p) => (
                   <button
                     key={p.id}

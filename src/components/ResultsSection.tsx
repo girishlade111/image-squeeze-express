@@ -151,16 +151,16 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
       </div>
 
       {/* Bottom actions */}
-      <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+      <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
         <Button
           size="lg"
-          className="rounded-full text-primary-foreground"
+          className="w-full sm:w-auto rounded-full text-primary-foreground"
           style={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)' }}
           onClick={downloadAll}
         >
           <Download className="mr-2 h-4 w-4" /> Download All as ZIP
         </Button>
-        <Button variant="outline" size="lg" className="rounded-full" onClick={onReset}>
+        <Button variant="outline" size="lg" className="w-full sm:w-auto rounded-full" onClick={onReset}>
           <RefreshCw className="mr-2 h-4 w-4" /> Process More Images
         </Button>
       </div>

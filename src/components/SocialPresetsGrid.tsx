@@ -55,7 +55,7 @@ const SocialPresetsGrid = ({ onSelectPreset }: SocialPresetsGridProps) => {
       <p className={`mx-auto mb-8 max-w-lg text-center text-sm text-muted-foreground transition-all duration-700 ${visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'}`} style={{ animationDelay: '100ms' }}>
         Click a platform to auto-fill the perfect dimensions.
       </p>
-      <div className="mx-auto grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+      <div className="mx-auto grid max-w-3xl grid-cols-2 gap-3 lg:grid-cols-6">
         {platforms.map((p, i) => (
           <Button
             key={p.name}
