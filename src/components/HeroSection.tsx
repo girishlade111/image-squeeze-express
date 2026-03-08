@@ -1,11 +1,13 @@
 import UploadZone from '@/components/UploadZone';
+import ImageQueue from '@/components/ImageQueue';
 
 interface HeroSectionProps {
   onFilesSelected: (files: FileList | File[]) => void;
   imageCount: number;
+  children?: React.ReactNode;
 }
 
-const HeroSection = ({ onFilesSelected, imageCount }: HeroSectionProps) => (
+const HeroSection = ({ onFilesSelected, imageCount, children }: HeroSectionProps) => (
   <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
     {/* Background radial glow */}
     <div className="pointer-events-none absolute inset-0">
@@ -56,6 +58,9 @@ const HeroSection = ({ onFilesSelected, imageCount }: HeroSectionProps) => (
         <div className="mx-auto mt-12 max-w-2xl">
           <UploadZone onFilesSelected={onFilesSelected} imageCount={imageCount} />
         </div>
+
+        {/* Queue injected via children */}
+        {children}
       </div>
     </div>
   </section>

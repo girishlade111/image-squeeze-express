@@ -1,7 +1,7 @@
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
-import SettingsPanel from '@/components/SettingsPanel';
 import ImageQueue from '@/components/ImageQueue';
+import SettingsPanel from '@/components/SettingsPanel';
 import ResultsSection from '@/components/ResultsSection';
 import SocialPresetsGrid from '@/components/SocialPresetsGrid';
 import HowItWorks from '@/components/HowItWorks';
@@ -9,9 +9,11 @@ import FeaturesGrid from '@/components/FeaturesGrid';
 import ProTeaser from '@/components/ProTeaser';
 import FAQSection from '@/components/FAQSection';
 import Footer from '@/components/Footer';
+import { useImageUpload } from '@/hooks/useImageUpload';
 import { useImageProcessor } from '@/hooks/useImageProcessor';
 
 const Index = () => {
+  const { files, addFiles, removeFile, clearAll: clearUploads } = useImageUpload();
   const {
     images,
     settings,
@@ -34,24 +36,16 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main>
-        <HeroSection onFilesSelected={addImages} imageCount={images.length} />
+        <HeroSection onFilesSelected={addFiles} imageCount={files.length}>
+          <ImageQueue files={files} onRemove={removeFile} onClearAll={clearUploads} />
+        </HeroSection>
 
         {hasImages && (
-          <>
-            <SettingsPanel
-              settings={settings}
-              setSettings={setSettings}
-              totalOriginalSize={totalOriginalSize}
-            />
-            <ImageQueue
-              images={images}
-              isProcessing={isProcessing}
-              progress={progress}
-              onRemove={removeImage}
-              onProcessAll={processAll}
-              onClearAll={clearAll}
-            />
-          </>
+          <SettingsPanel
+            settings={settings}
+            setSettings={setSettings}
+            totalOriginalSize={totalOriginalSize}
+          />
         )}
 
         {allDone && processedImages.length > 0 && (
