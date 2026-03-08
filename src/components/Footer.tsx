@@ -1,4 +1,14 @@
 import { Link } from 'react-router-dom';
+import { Instagram, Linkedin, Github, CodepenIcon, Mail, Globe } from 'lucide-react';
+
+const socials = [
+  { icon: Instagram, href: 'https://www.instagram.com/girish_lade_/', label: 'Instagram' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/in/girish-lade-075bba201/', label: 'LinkedIn' },
+  { icon: Github, href: 'https://github.com/girishlade111', label: 'GitHub' },
+  { icon: CodepenIcon, href: 'https://codepen.io/Girish-Lade-the-looper', label: 'CodePen' },
+  { icon: Mail, href: 'mailto:admin@ladestack.in', label: 'Email' },
+  { icon: Globe, href: 'https://ladestack.in', label: 'Website' },
+];
 
 const Footer = () => {
   const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -69,8 +79,24 @@ const Footer = () => {
         {/* Divider */}
         <div className="my-6 h-px bg-foreground/10" />
 
+        {/* Social icons */}
+        <div className="flex items-center justify-center gap-3">
+          {socials.map((s) => (
+            <a
+              key={s.label}
+              href={s.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={s.label}
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-border/50 bg-foreground/[0.03] text-muted-foreground transition-all hover:border-primary/50 hover:bg-primary/10 hover:text-primary hover:scale-110"
+            >
+              <s.icon className="h-4 w-4" />
+            </a>
+          ))}
+        </div>
+
         {/* Middle */}
-        <p className="text-center text-sm text-muted-foreground">
+        <p className="mt-5 text-center text-sm text-muted-foreground">
           Built with <span className="text-red-400">❤️</span> by{' '}
           <a
             href="https://ladestack.in"
