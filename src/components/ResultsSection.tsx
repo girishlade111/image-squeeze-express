@@ -106,30 +106,31 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
               }`}
               style={{ animationDelay: visible ? `${(i + 1) * 120}ms` : '0ms' }}
             >
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+              {/* Mobile: stack vertically. Desktop: side by side */}
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                 {/* Before */}
                 <div className="flex flex-1 items-center gap-3">
-                  <img src={f.preview} alt="Before" className="h-16 w-16 rounded-xl object-cover" loading="lazy" />
+                  <img src={f.preview} alt="Before" className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl object-cover" loading="lazy" />
                   <div>
-                    <p className="text-xs font-medium text-muted-foreground">Before</p>
+                    <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">Before</p>
                     <p className="text-sm font-semibold">{formatFileSize(f.originalSize)}</p>
                     <p className="text-xs text-muted-foreground">{f.originalWidth}×{f.originalHeight}</p>
                   </div>
                 </div>
 
                 {/* Reduction badge */}
-                <Badge className="mx-auto flex-shrink-0 rounded-full bg-emerald-500/15 text-emerald-400 border-emerald-500/25 px-3 py-1 text-sm font-bold">
+                <Badge className="self-center flex-shrink-0 rounded-full bg-emerald-500/15 text-emerald-400 border-emerald-500/25 px-3 py-1 text-sm font-bold">
                   {ratio}
                 </Badge>
 
                 {/* After */}
                 <div className="flex flex-1 items-center gap-3 sm:justify-end">
-                  <div className="text-right">
-                    <p className="text-xs font-medium text-muted-foreground">After</p>
+                  <img src={f.processedPreview} alt="After" className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl object-cover sm:order-2" loading="lazy" />
+                  <div className="sm:text-right">
+                    <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">After</p>
                     <p className="text-sm font-semibold">{formatFileSize(newSize)}</p>
                     <p className="text-xs text-muted-foreground">{f.result?.width}×{f.result?.height}</p>
                   </div>
-                  <img src={f.processedPreview} alt="After" className="h-16 w-16 rounded-xl object-cover" loading="lazy" />
                 </div>
               </div>
 
