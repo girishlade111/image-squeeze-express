@@ -110,6 +110,7 @@ export function useImageUpload() {
 
     for (const item of toProcess) {
       // Mark processing
+      setProcessingText(`Processing ${completed + 1} of ${total}...`);
       setFiles((prev) =>
         prev.map((f) => (f.id === item.id ? { ...f, status: 'processing' as const } : f))
       );
