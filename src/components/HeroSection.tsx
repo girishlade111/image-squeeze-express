@@ -1,5 +1,5 @@
 import UploadZone from '@/components/UploadZone';
-import ImageQueue from '@/components/ImageQueue';
+
 
 interface HeroSectionProps {
   onFilesSelected: (files: FileList | File[]) => void;
