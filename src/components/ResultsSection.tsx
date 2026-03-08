@@ -50,25 +50,26 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
     return () => obs.disconnect();
   }, []);
 
-  if (files.length === 0) return null;
+  const { totalSaved, avgReduction } = useMemo(() => {
+    const totalOriginal = files.reduce((s, f) => s + f.originalSize, 0);
+    const totalNew = files.reduce((s, f) => s + (f.result?.sizeBytes || 0), 0);
+    const saved = totalOriginal - totalNew;
+    const avg = totalOriginal > 0 ? Math.round((saved / totalOriginal) * 100) : 0;
+    return { totalSaved: saved, avgReduction: avg };
+  }, [files]);
 
-  const totalOriginal = files.reduce((s, f) => s + f.originalSize, 0);
-  const totalNew = files.reduce((s, f) => s + (f.result?.sizeBytes || 0), 0);
-  const totalSaved = totalOriginal - totalNew;
-  const avgReduction = totalOriginal > 0 ? Math.round((totalSaved / totalOriginal) * 100) : 0;
-
-  const downloadSingle = (f: UploadedFile) => {
+  const downloadSingle = useCallback((f: UploadedFile) => {
     if (f.processedFile) saveAs(f.processedFile, f.processedFile.name);
-  };
+  }, []);
 
-  const downloadAll = async () => {
+  const downloadAll = useCallback(async () => {
     const zip = new JSZip();
     files.forEach((f) => {
       if (f.processedFile) zip.file(f.processedFile.name, f.processedFile);
     });
     const blob = await zip.generateAsync({ type: 'blob' });
     saveAs(blob, 'imagesqueeze_batch.zip');
-  };
+  }, [files]);
 
   const shareText = encodeURIComponent('I just compressed my images with ImageSqueeze — 100% free & private! 🚀');
   const shareUrl = encodeURIComponent('https://imagesqueeze.com');
