@@ -137,13 +137,14 @@ export async function processImage(
     settings.lockAspectRatio
   );
 
-  // 2) Run browser-image-compression (handles quality + web workers)
+  // 2) Run browser-image-compression with exact options from spec
   const compressionOpts: Parameters<typeof imageCompression>[1] = {
+    maxSizeMB: settings.targetSizeKB ? settings.targetSizeKB / 1024 : 999,
+    maxWidthOrHeight: Math.max(settings.width || 9999, settings.height || 9999),
     useWebWorker: true,
+    fileType: settings.outputFormat === 'original' ? file.type : `image/${settings.outputFormat}`,
     initialQuality: settings.quality / 100,
-    fileType: outputMime,
-    maxSizeMB: settings.targetSizeKB ? settings.targetSizeKB / 1024 : 50,
-    maxWidthOrHeight: Math.max(targetW, targetH),
+    alwaysKeepResolution: !settings.width && !settings.height,
   };
 
   let result: Blob = await imageCompression(file, compressionOpts);
