@@ -1,77 +1,114 @@
 import { useState } from 'react';
-import { Zap, Moon, Sun, Menu, X } from 'lucide-react';
+import { Moon, Sun, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts/ThemeContext';
+
+const navLinks = [
+  { label: 'How It Works', href: '#how-it-works' },
+  { label: 'FAQ', href: '#faq' },
+];
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { darkMode, toggleDarkMode } = useTheme();
 
-  const navLinks = [
-    { label: 'Home', href: '#home' },
-    { label: 'How It Works', href: '#how-it-works' },
-    { label: 'FAQ', href: '#faq' },
-  ];
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const el = document.querySelector(href);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
+    setMobileOpen(false);
+  };
 
   return (
-    <header className="sticky top-0 z-50 w-full glass-card border-b border-border/40">
-      <div className="container mx-auto flex h-16 items-center justify-between px-4">
-        <a href="#home" className="flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl gradient-bg">
-            <Zap className="h-5 w-5 text-primary-foreground" />
-          </div>
-          <div>
-            <span className="text-lg font-bold gradient-text">ImageSqueeze</span>
-            <p className="hidden text-[10px] leading-tight text-muted-foreground sm:block">
-              Compress. Resize. Convert. Instantly. 100% Private.
-            </p>
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-foreground/10 backdrop-blur-md bg-background/60">
+      <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
+        {/* Brand */}
+        <a href="#home" className="flex items-center gap-2.5 group">
+          <span className="text-2xl" role="img" aria-label="lightning bolt">⚡</span>
+          <div className="flex flex-col">
+            <span
+              className="text-xl font-extrabold tracking-tight"
+              style={{
+                background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              ImageSqueeze
+            </span>
+            <span className="text-[10px] font-medium tracking-wide text-muted-foreground leading-none mt-0.5">
+              Compress. Resize. Convert. Instantly.
+            </span>
           </div>
         </a>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        {/* Desktop nav */}
+        <div className="hidden items-center gap-1 md:flex">
           {navLinks.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              onClick={(e) => handleNavClick(e, l.href)}
+              className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-foreground/5"
             >
               {l.label}
             </a>
           ))}
+          <div className="ml-2 h-5 w-px bg-border" />
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleDarkMode}
-            className="rounded-full"
+            className="ml-1 rounded-full hover:bg-foreground/5"
             aria-label="Toggle theme"
           >
-            {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {darkMode ? (
+              <Sun className="h-[18px] w-[18px] text-amber-400" />
+            ) : (
+              <Moon className="h-[18px] w-[18px]" />
+            )}
           </Button>
-        </nav>
+        </div>
 
-        <div className="flex items-center gap-2 md:hidden">
-          <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="rounded-full">
-            {darkMode ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        {/* Mobile controls */}
+        <div className="flex items-center gap-1 md:hidden">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleDarkMode}
+            className="rounded-full hover:bg-foreground/5"
+          >
+            {darkMode ? (
+              <Sun className="h-[18px] w-[18px] text-amber-400" />
+            ) : (
+              <Moon className="h-[18px] w-[18px]" />
+            )}
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setMobileOpen(!mobileOpen)} className="rounded-full">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="rounded-full hover:bg-foreground/5"
+          >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </div>
       </div>
 
+      {/* Mobile dropdown */}
       {mobileOpen && (
-        <nav className="border-t border-border/40 bg-background px-4 py-4 md:hidden">
+        <div className="border-t border-foreground/10 bg-background/95 backdrop-blur-md px-4 pb-4 pt-2 md:hidden">
           {navLinks.map((l) => (
             <a
               key={l.href}
               href={l.href}
-              onClick={() => setMobileOpen(false)}
-              className="block py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+              onClick={(e) => handleNavClick(e, l.href)}
+              className="block rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-foreground/5"
             >
               {l.label}
             </a>
           ))}
-        </nav>
+        </div>
       )}
     </header>
   );

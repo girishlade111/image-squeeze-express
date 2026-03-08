@@ -1,6 +1,5 @@
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
-import UploadZone from '@/components/UploadZone';
 import SettingsPanel from '@/components/SettingsPanel';
 import ImageQueue from '@/components/ImageQueue';
 import ResultsSection from '@/components/ResultsSection';
@@ -35,8 +34,7 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main>
-        <HeroSection />
-        <UploadZone onFilesSelected={addImages} imageCount={images.length} />
+        <HeroSection onFilesSelected={addImages} imageCount={images.length} />
 
         {hasImages && (
           <>

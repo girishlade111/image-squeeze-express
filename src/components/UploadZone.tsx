@@ -32,7 +32,7 @@ const UploadZone = ({ onFilesSelected, imageCount }: UploadZoneProps) => {
   );
 
   return (
-    <div id="upload" className="container mx-auto px-4">
+    <div id="upload" className="w-full">
       <div
         onDragOver={(e) => {
           e.preventDefault();
@@ -41,22 +41,34 @@ const UploadZone = ({ onFilesSelected, imageCount }: UploadZoneProps) => {
         onDragLeave={() => setDragOver(false)}
         onDrop={handleDrop}
         onClick={() => inputRef.current?.click()}
-        className={`glass-card mx-auto flex max-w-2xl cursor-pointer flex-col items-center gap-4 rounded-2xl border-2 border-dashed p-10 text-center transition-all duration-300 ${
+        className={`group relative flex min-h-[400px] cursor-pointer flex-col items-center justify-center gap-5 rounded-2xl border-2 border-dashed bg-foreground/[0.02] backdrop-blur-sm p-8 text-center transition-all duration-300 ${
           dragOver
-            ? 'border-violet shadow-[0_0_30px_hsl(var(--violet)/0.4)]'
-            : 'border-border hover:border-violet/60 hover:shadow-[0_0_20px_hsl(var(--violet)/0.2)]'
+            ? 'border-primary bg-primary/10 shadow-[0_0_40px_hsl(var(--violet)/0.3)]'
+            : 'border-primary/30 hover:border-primary/60 hover:bg-primary/[0.06]'
         }`}
       >
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-violet/10">
-          <CloudUpload className="h-8 w-8 text-violet" />
+        {/* Icon */}
+        <div className={`flex h-20 w-20 items-center justify-center rounded-2xl transition-all duration-300 ${
+          dragOver ? 'bg-primary/20 scale-110' : 'bg-primary/10 group-hover:bg-primary/15 group-hover:scale-105'
+        }`}>
+          <CloudUpload className="h-10 w-10 text-primary" strokeWidth={1.5} />
         </div>
+
+        {/* Text */}
         <div>
-          <p className="text-lg font-semibold">Drag & Drop your images here</p>
-          <p className="mt-1 text-sm text-muted-foreground">or click to browse</p>
+          <p className="text-xl font-semibold text-foreground">
+            Drag & Drop images here
+          </p>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            or click to browse files
+          </p>
         </div>
-        <p className="text-xs text-muted-foreground">
-          Supports: JPG, PNG, WebP, AVIF, GIF, BMP · Up to 10 files ({imageCount}/10)
+
+        {/* Supported formats */}
+        <p className="text-xs text-muted-foreground/70">
+          Supports: JPG, PNG, WebP, GIF, BMP • Max 10 files ({imageCount}/10)
         </p>
+
         <input
           ref={inputRef}
           type="file"
