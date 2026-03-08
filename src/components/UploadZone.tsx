@@ -80,6 +80,9 @@ const UploadZone = ({ onFilesSelected, imageCount }: UploadZoneProps) => {
           multiple
           className="hidden"
           onChange={handleChange}
+          aria-label="Select image files to compress"
+          tabIndex={-1}
+        />
         />
       </div>
     </div>
