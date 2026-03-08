@@ -29,12 +29,14 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-md bg-background/60 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background/60 transition-all duration-300 ${
         scrolled
-          ? 'border-foreground/10 shadow-lg shadow-background/50'
-          : 'border-transparent'
+          ? 'shadow-lg shadow-background/50'
+          : ''
       }`}
     >
+      {/* Violet glow line */}
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
         {/* Brand */}
         <a href="#home" className="flex items-center gap-2.5 group">

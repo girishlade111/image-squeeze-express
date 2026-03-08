@@ -9,11 +9,15 @@ interface HeroSectionProps {
 
 const HeroSection = ({ onFilesSelected, imageCount, children }: HeroSectionProps) => (
   <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
-    {/* Background radial glow */}
-    <div className="pointer-events-none absolute inset-0">
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[500px] w-[700px] rounded-full bg-primary/15 blur-[150px]" />
-      <div className="absolute bottom-0 left-1/4 h-[300px] w-[400px] rounded-full bg-accent/10 blur-[120px]" />
-    </div>
+    {/* Gradient mesh background */}
+    <div className="pointer-events-none absolute inset-0" style={{
+      background: `
+        radial-gradient(ellipse 80% 50% at 50% 20%, hsl(263 70% 58% / 0.15), transparent),
+        radial-gradient(ellipse 60% 40% at 80% 60%, hsl(187 92% 43% / 0.1), transparent),
+        radial-gradient(ellipse 50% 50% at 20% 80%, hsl(263 70% 58% / 0.08), transparent),
+        radial-gradient(ellipse 40% 30% at 70% 10%, hsl(187 92% 43% / 0.06), transparent)
+      `
+    }} />
 
     <div className="container relative mx-auto px-4 sm:px-6 py-12 sm:py-20">
       <div className="mx-auto max-w-4xl text-center">
