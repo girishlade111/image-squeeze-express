@@ -108,6 +108,11 @@ const ImageQueue = ({
                 {f.status === 'error' && <AlertCircle className="mr-1 h-2.5 w-2.5" />}
                 {statusLabel[f.status]}
               </Badge>
+              {f.status === 'error' && f.error && (
+                <p className="mt-1 text-[10px] text-red-400 leading-tight line-clamp-2" title={f.error}>
+                  {f.error.length > 60 ? f.error.slice(0, 60) + '…' : f.error}
+                </p>
+              )}
             </div>
 
             {/* Remove button */}

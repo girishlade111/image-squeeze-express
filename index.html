@@ -1,6 +1,17 @@
 <!doctype html>
-<html lang="en" class="dark">
+<html lang="en">
   <head>
+    <script>
+      (function(){
+        try {
+          var t = localStorage.getItem('imagesqueeze-theme');
+          var dark = t ? t === 'dark' : true;
+          document.documentElement.classList.toggle('dark', dark);
+        } catch(e) {
+          document.documentElement.classList.add('dark');
+        }
+      })();
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ImageSqueeze — Free Image Compressor, Resizer & WebP Converter</title>

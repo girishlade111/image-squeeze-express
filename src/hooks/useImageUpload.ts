@@ -37,6 +37,20 @@ export function useImageUpload() {
     const incoming = Array.from(fileList).filter((f) => f.type.startsWith('image/'));
     if (incoming.length === 0) return;
 
+    // Show warnings for special cases
+    incoming.forEach((file) => {
+      if (file.size > 10 * 1024 * 1024) {
+        toast.warning('⚠️ Large file detected. Processing may take a few seconds.', {
+          description: file.name,
+        });
+      }
+      if (file.type === 'image/gif') {
+        toast.info('ℹ️ GIF files will be converted to static image. Animated GIFs are not supported.', {
+          description: file.name,
+        });
+      }
+    });
+
     setFiles((prev) => {
       const remaining = MAX_FILES - prev.length;
       if (remaining <= 0) {
@@ -48,7 +62,6 @@ export function useImageUpload() {
         toast.warning('⚠️ Free version supports up to 10 images at once.');
       }
 
-      // Create files synchronously with placeholder dims, then update async
       const newFiles: UploadedFile[] = toAdd.map((file) => {
         const preview = URL.createObjectURL(file);
         urlsRef.current.push(preview);
@@ -64,7 +77,6 @@ export function useImageUpload() {
         };
       });
 
-      // Async dimension loading
       newFiles.forEach((nf) => {
         getImageDimensions(nf.file).then((dims) => {
           setFiles((p) =>
