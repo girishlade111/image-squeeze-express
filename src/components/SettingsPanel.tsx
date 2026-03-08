@@ -197,13 +197,15 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
                     onClick={() =>
                       onUpdate({ width: p.w, height: p.h, selectedPreset: p.id })
                     }
-                    className={`flex flex-col items-center gap-1 rounded-xl border p-3 text-center transition-all hover:bg-primary/5 ${
+                    aria-label={`${p.name} preset: ${p.w} by ${p.h} pixels`}
+                    aria-pressed={settings.selectedPreset === p.id}
+                    className={`flex flex-col items-center gap-1 rounded-xl border p-3 text-center transition-all hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                       settings.selectedPreset === p.id
                         ? 'border-primary bg-primary/10 shadow-[0_0_12px_hsl(var(--violet)/0.2)]'
                         : 'border-border/50 bg-transparent'
                     }`}
                   >
-                    <span className="text-lg">{p.emoji}</span>
+                    <span className="text-lg" aria-hidden="true">{p.emoji}</span>
                     <span className="text-[11px] font-medium leading-tight">{p.name}</span>
                     <span className="text-[10px] text-muted-foreground">{p.w}×{p.h}</span>
                   </button>
@@ -213,12 +215,15 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
           </TabsContent>
 
           {/* ── CONVERT ── */}
-          <TabsContent value="convert" className="mt-6 space-y-3">
+          <TabsContent value="convert" className="mt-6 space-y-3" role="radiogroup" aria-label="Output format selection">
             {formats.map((f) => (
               <button
                 key={f.value}
                 onClick={() => onUpdate({ outputFormat: f.value })}
-                className={`flex w-full items-center gap-4 rounded-xl border p-4 text-left transition-all hover:bg-primary/5 ${
+                role="radio"
+                aria-checked={settings.outputFormat === f.value}
+                aria-label={`Output format: ${f.label}`}
+                className={`flex w-full items-center gap-4 rounded-xl border p-4 text-left transition-all hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   settings.outputFormat === f.value
                     ? 'border-primary bg-primary/10 shadow-[0_0_12px_hsl(var(--violet)/0.15)]'
                     : 'border-border/50'

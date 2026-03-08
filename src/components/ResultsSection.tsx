@@ -75,7 +75,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
   const shareUrl = encodeURIComponent('https://imagesqueeze.com');
 
   return (
-    <section className="container mx-auto mt-12 max-w-3xl px-4" ref={ref}>
+    <section className="container mx-auto mt-12 max-w-3xl px-4" ref={ref} aria-label="Compression results">
       <h2
         className={`mb-8 text-center text-2xl font-extrabold tracking-tight sm:text-3xl transition-all duration-700 ${
           visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
@@ -111,7 +111,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                 {/* Before */}
                 <div className="flex flex-1 items-center gap-3">
-                  <img src={f.preview} alt="Before" className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl object-cover" loading="lazy" />
+                  <img src={f.preview} alt={`Original ${f.name}`} className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl object-cover" loading="lazy" />
                   <div>
                     <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">Before</p>
                     <p className="text-sm font-semibold">{formatFileSize(f.originalSize)}</p>
@@ -126,7 +126,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
 
                 {/* After */}
                 <div className="flex flex-1 items-center gap-3 sm:justify-end">
-                  <img src={f.processedPreview} alt="After" className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl object-cover sm:order-2" loading="lazy" />
+                  <img src={f.processedPreview} alt={`Compressed ${f.name}`} className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl object-cover sm:order-2" loading="lazy" />
                   <div className="sm:text-right">
                     <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">After</p>
                     <p className="text-sm font-semibold">{formatFileSize(newSize)}</p>

@@ -57,7 +57,7 @@ const Header = () => {
         </a>
 
         {/* Desktop nav */}
-        <div className="hidden items-center gap-1 md:flex">
+        <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
           {navLinks.map((l) => (
             <a
               key={l.href}
@@ -82,24 +82,25 @@ const Header = () => {
               <Moon className="h-[18px] w-[18px]" />
             )}
           </Button>
-        </div>
+        </nav>
 
         {/* Mobile controls */}
         <div className="flex items-center gap-1 md:hidden">
-          <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="rounded-full hover:bg-foreground/5">
+          <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="rounded-full hover:bg-foreground/5" aria-label="Toggle theme">
             {darkMode ? <Sun className="h-[18px] w-[18px] text-amber-400" /> : <Moon className="h-[18px] w-[18px]" />}
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setMobileOpen(!mobileOpen)} className="rounded-full hover:bg-foreground/5">
+          <Button variant="ghost" size="icon" onClick={() => setMobileOpen(!mobileOpen)} className="rounded-full hover:bg-foreground/5" aria-label={mobileOpen ? 'Close menu' : 'Open menu'} aria-expanded={mobileOpen}>
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </div>
       </div>
 
       {/* Mobile dropdown */}
-      <div
+      <nav
         className={`overflow-hidden border-t border-foreground/10 bg-background/95 backdrop-blur-md md:hidden transition-all duration-300 ease-in-out ${
           mobileOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0 border-transparent'
         }`}
+        aria-label="Mobile navigation"
       >
         <div className="px-4 pb-4 pt-2">
           {navLinks.map((l) => (
@@ -113,7 +114,7 @@ const Header = () => {
             </a>
           ))}
         </div>
-      </div>
+      </nav>
     </header>
   );
 };

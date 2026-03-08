@@ -20,7 +20,7 @@
     --secondary-foreground: 240 6% 20%;
 
     --muted: 240 5% 93%;
-    --muted-foreground: 240 4% 46%;
+    --muted-foreground: 240 4% 40%;
 
     --accent: 187 92% 43%;
     --accent-foreground: 0 0% 100%;
@@ -68,6 +68,9 @@
 
     --muted: 240 4% 16%;
     --muted-foreground: 240 5% 65%;
+
+    /* Copyright text needs better contrast */
+    --copyright-foreground: 240 5% 55%;
 
     --accent: 187 92% 43%;
     --accent-foreground: 0 0% 100%;

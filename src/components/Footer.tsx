@@ -22,7 +22,7 @@ const Footer = () => (
         </div>
 
         {/* Nav links */}
-        <nav className="flex flex-wrap items-center gap-5 text-sm text-muted-foreground">
+        <nav className="flex flex-wrap items-center gap-5 text-sm text-muted-foreground" aria-label="Footer navigation">
           <a href="#home" className="transition-colors hover:text-foreground">Home</a>
           <a href="#how-it-works" className="transition-colors hover:text-foreground">How It Works</a>
           <a href="#features" className="transition-colors hover:text-foreground">Features</a>
@@ -47,7 +47,7 @@ const Footer = () => (
       </p>
 
       {/* Bottom */}
-      <p className="mt-3 text-center text-xs text-muted-foreground/60">
+      <p className="mt-3 text-center text-xs text-muted-foreground">
         © 2026 ImageSqueeze by Lade Stack. All rights reserved.
       </p>
     </div>
