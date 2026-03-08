@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import UploadZone from '@/components/UploadZone';
@@ -14,7 +13,6 @@ import Footer from '@/components/Footer';
 import { useImageProcessor } from '@/hooks/useImageProcessor';
 
 const Index = () => {
-  const [darkMode, setDarkMode] = useState(true);
   const {
     images,
     settings,
@@ -31,15 +29,11 @@ const Index = () => {
     processedImages,
   } = useImageProcessor();
 
-  useEffect(() => {
-    document.documentElement.classList.toggle('dark', darkMode);
-  }, [darkMode]);
-
   const totalOriginalSize = images.reduce((sum, img) => sum + img.originalSize, 0);
 
   return (
     <div className="min-h-screen bg-background">
-      <Header darkMode={darkMode} toggleDarkMode={() => setDarkMode(!darkMode)} />
+      <Header />
       <main>
         <HeroSection />
         <UploadZone onFilesSelected={addImages} imageCount={images.length} />
