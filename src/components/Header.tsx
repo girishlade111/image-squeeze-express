@@ -86,10 +86,10 @@ const Header = () => {
 
         {/* Mobile controls */}
         <div className="flex items-center gap-1 md:hidden">
-          <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="rounded-full hover:bg-foreground/5">
+          <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="rounded-full hover:bg-foreground/5" aria-label="Toggle theme">
             {darkMode ? <Sun className="h-[18px] w-[18px] text-amber-400" /> : <Moon className="h-[18px] w-[18px]" />}
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setMobileOpen(!mobileOpen)} className="rounded-full hover:bg-foreground/5">
+          <Button variant="ghost" size="icon" onClick={() => setMobileOpen(!mobileOpen)} className="rounded-full hover:bg-foreground/5" aria-label={mobileOpen ? 'Close menu' : 'Open menu'} aria-expanded={mobileOpen}>
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </div>
