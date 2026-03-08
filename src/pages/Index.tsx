@@ -1,16 +1,19 @@
+import { lazy, Suspense, useMemo } from 'react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import ImageQueue from '@/components/ImageQueue';
 import SettingsPanel from '@/components/SettingsPanel';
-import ResultsSection from '@/components/ResultsSection';
-import SocialPresetsGrid from '@/components/SocialPresetsGrid';
-import HowItWorks from '@/components/HowItWorks';
-import FeaturesGrid from '@/components/FeaturesGrid';
-import ProTeaser from '@/components/ProTeaser';
-import FAQSection from '@/components/FAQSection';
-import Footer from '@/components/Footer';
+import LazySection from '@/components/LazySection';
 import { useImageUpload } from '@/hooks/useImageUpload';
 import { useSettings } from '@/hooks/useSettings';
+
+const ResultsSection = lazy(() => import('@/components/ResultsSection'));
+const SocialPresetsGrid = lazy(() => import('@/components/SocialPresetsGrid'));
+const HowItWorks = lazy(() => import('@/components/HowItWorks'));
+const FeaturesGrid = lazy(() => import('@/components/FeaturesGrid'));
+const ProTeaser = lazy(() => import('@/components/ProTeaser'));
+const FAQSection = lazy(() => import('@/components/FAQSection'));
+const Footer = lazy(() => import('@/components/Footer'));
 
 const Index = () => {
   const {
@@ -28,6 +31,8 @@ const Index = () => {
   } = useImageUpload();
   const { settings, update: updateSettings, resetResize } = useSettings();
 
+  const handleProcessAll = useMemo(() => () => processAll(settings), [processAll, settings]);
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -43,22 +48,36 @@ const Index = () => {
             processingText={processingText}
             onRemove={removeFile}
             onClearAll={clearAll}
-            onProcessAll={() => processAll(settings)}
+            onProcessAll={handleProcessAll}
             allDone={allDone}
           />
         </HeroSection>
 
         {allDone && processedFiles.length > 0 && (
-          <ResultsSection files={processedFiles} onReset={clearAll} />
+          <Suspense fallback={null}>
+            <ResultsSection files={processedFiles} onReset={clearAll} />
+          </Suspense>
         )}
 
-        <SocialPresetsGrid onSelectPreset={(w, h) => updateSettings({ width: w, height: h, selectedPreset: null })} />
-        <HowItWorks />
-        <FeaturesGrid />
-        <ProTeaser />
-        <FAQSection />
+        <Suspense fallback={null}>
+          <LazySection>
+            <SocialPresetsGrid onSelectPreset={(w, h) => updateSettings({ width: w, height: h, selectedPreset: null })} />
+          </LazySection>
+          <LazySection>
+            <HowItWorks />
+          </LazySection>
+          <LazySection>
+            <FeaturesGrid />
+          </LazySection>
+          <LazySection>
+            <ProTeaser />
+          </LazySection>
+          <LazySection>
+            <FAQSection />
+          </LazySection>
+          <Footer />
+        </Suspense>
       </main>
-      <Footer />
     </div>
   );
 };
