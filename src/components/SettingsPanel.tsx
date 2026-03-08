@@ -220,7 +220,10 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
               <button
                 key={f.value}
                 onClick={() => onUpdate({ outputFormat: f.value })}
-                className={`flex w-full items-center gap-4 rounded-xl border p-4 text-left transition-all hover:bg-primary/5 ${
+                role="radio"
+                aria-checked={settings.outputFormat === f.value}
+                aria-label={`Output format: ${f.label}`}
+                className={`flex w-full items-center gap-4 rounded-xl border p-4 text-left transition-all hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   settings.outputFormat === f.value
                     ? 'border-primary bg-primary/10 shadow-[0_0_12px_hsl(var(--violet)/0.15)]'
                     : 'border-border/50'
