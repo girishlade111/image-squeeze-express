@@ -1,12 +1,78 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState, useEffect } from 'react';
+import Header from '@/components/Header';
+import HeroSection from '@/components/HeroSection';
+import UploadZone from '@/components/UploadZone';
+import SettingsPanel from '@/components/SettingsPanel';
+import ImageQueue from '@/components/ImageQueue';
+import ResultsSection from '@/components/ResultsSection';
+import SocialPresetsGrid from '@/components/SocialPresetsGrid';
+import HowItWorks from '@/components/HowItWorks';
+import FeaturesGrid from '@/components/FeaturesGrid';
+import ProTeaser from '@/components/ProTeaser';
+import FAQSection from '@/components/FAQSection';
+import Footer from '@/components/Footer';
+import { useImageProcessor } from '@/hooks/useImageProcessor';
 
 const Index = () => {
+  const [darkMode, setDarkMode] = useState(true);
+  const {
+    images,
+    settings,
+    setSettings,
+    addImages,
+    removeImage,
+    clearAll,
+    processAll,
+    resetAll,
+    isProcessing,
+    progress,
+    hasImages,
+    allDone,
+    processedImages,
+  } = useImageProcessor();
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('dark', darkMode);
+  }, [darkMode]);
+
+  const totalOriginalSize = images.reduce((sum, img) => sum + img.originalSize, 0);
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="mb-4 text-4xl font-bold">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="min-h-screen bg-background">
+      <Header darkMode={darkMode} toggleDarkMode={() => setDarkMode(!darkMode)} />
+      <main>
+        <HeroSection />
+        <UploadZone onFilesSelected={addImages} imageCount={images.length} />
+
+        {hasImages && (
+          <>
+            <SettingsPanel
+              settings={settings}
+              setSettings={setSettings}
+              totalOriginalSize={totalOriginalSize}
+            />
+            <ImageQueue
+              images={images}
+              isProcessing={isProcessing}
+              progress={progress}
+              onRemove={removeImage}
+              onProcessAll={processAll}
+              onClearAll={clearAll}
+            />
+          </>
+        )}
+
+        {allDone && processedImages.length > 0 && (
+          <ResultsSection images={images} onReset={resetAll} />
+        )}
+
+        <SocialPresetsGrid setSettings={setSettings} />
+        <HowItWorks />
+        <FeaturesGrid />
+        <ProTeaser />
+        <FAQSection />
+      </main>
+      <Footer />
     </div>
   );
 };
