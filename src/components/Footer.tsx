@@ -1,4 +1,14 @@
 import { Link } from 'react-router-dom';
+import { Instagram, Linkedin, Github, CodepenIcon, Mail, Globe } from 'lucide-react';
+
+const socials = [
+  { icon: Instagram, href: 'https://www.instagram.com/girish_lade_/', label: 'Instagram' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/in/girish-lade-075bba201/', label: 'LinkedIn' },
+  { icon: Github, href: 'https://github.com/girishlade111', label: 'GitHub' },
+  { icon: CodepenIcon, href: 'https://codepen.io/Girish-Lade-the-looper', label: 'CodePen' },
+  { icon: Mail, href: 'mailto:admin@ladestack.in', label: 'Email' },
+  { icon: Globe, href: 'https://ladestack.in', label: 'Website' },
+];
 
 const Footer = () => {
   const handleAnchorClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
