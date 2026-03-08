@@ -24,7 +24,7 @@ const ResultsSection = ({ images, onReset }: ResultsSectionProps) => {
       if (img.processedFile) zip.file(img.processedFile.name, img.processedFile);
     });
     const blob = await zip.generateAsync({ type: 'blob' });
-    saveAs(blob, 'imagesqueeze-output.zip');
+    saveAs(blob, 'imagesqueeze_batch.zip');
   };
 
   const shareText = encodeURIComponent(
