@@ -24,6 +24,7 @@ export function useImageUpload() {
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [processingText, setProcessingText] = useState('');
   const urlsRef = useRef<string[]>([]);
 
   useEffect(() => {
