@@ -21,6 +21,7 @@ const Index = () => {
     processAll,
     isProcessing,
     progress,
+    processingText,
     hasFiles,
     allDone,
     processedFiles,
