@@ -24,6 +24,7 @@ export function useImageUpload() {
   const [files, setFiles] = useState<UploadedFile[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [processingText, setProcessingText] = useState('');
   const urlsRef = useRef<string[]>([]);
 
   useEffect(() => {
@@ -103,10 +104,13 @@ export function useImageUpload() {
 
     setIsProcessing(true);
     setProgress(0);
+    setProcessingText('');
     let completed = 0;
+    const total = toProcess.length;
 
     for (const item of toProcess) {
       // Mark processing
+      setProcessingText(`Processing ${completed + 1} of ${total}...`);
       setFiles((prev) =>
         prev.map((f) => (f.id === item.id ? { ...f, status: 'processing' as const } : f))
       );
@@ -143,11 +147,12 @@ export function useImageUpload() {
       }
 
       completed++;
-      setProgress(Math.round((completed / toProcess.length) * 100));
+      setProgress(Math.round((completed / total) * 100));
     }
 
     setIsProcessing(false);
-    toast.success('✅ All images processed!');
+    setProcessingText('');
+    toast.success('✅ All images processed successfully!');
   }, [files]);
 
   const hasFiles = files.length > 0;
@@ -162,6 +167,7 @@ export function useImageUpload() {
     processAll,
     isProcessing,
     progress,
+    processingText,
     hasFiles,
     allDone,
     processedFiles,

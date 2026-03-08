@@ -21,6 +21,7 @@ const Index = () => {
     processAll,
     isProcessing,
     progress,
+    processingText,
     hasFiles,
     allDone,
     processedFiles,
@@ -39,6 +40,7 @@ const Index = () => {
             files={files}
             isProcessing={isProcessing}
             progress={progress}
+            processingText={processingText}
             onRemove={removeFile}
             onClearAll={clearAll}
             onProcessAll={() => processAll(settings)}
