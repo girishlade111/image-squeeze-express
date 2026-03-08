@@ -126,7 +126,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
 
                 {/* After */}
                 <div className="flex flex-1 items-center gap-3 sm:justify-end">
-                  <img src={f.processedPreview} alt="After" className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl object-cover sm:order-2" loading="lazy" />
+                  <img src={f.processedPreview} alt={`Compressed ${f.name}`} className="h-14 w-14 sm:h-16 sm:w-16 rounded-xl object-cover sm:order-2" loading="lazy" />
                   <div className="sm:text-right">
                     <p className="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-muted-foreground">After</p>
                     <p className="text-sm font-semibold">{formatFileSize(newSize)}</p>
