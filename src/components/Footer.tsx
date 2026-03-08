@@ -1,5 +1,3 @@
-import { Zap } from 'lucide-react';
-
 const Footer = () => (
   <footer className="mt-24 border-t border-foreground/10 bg-background" style={{ backgroundColor: 'hsl(0 0% 3%)' }}>
     <div className="container mx-auto px-4 py-10 sm:px-6">
