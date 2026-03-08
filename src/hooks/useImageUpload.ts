@@ -104,7 +104,9 @@ export function useImageUpload() {
 
     setIsProcessing(true);
     setProgress(0);
+    setProcessingText('');
     let completed = 0;
+    const total = toProcess.length;
 
     for (const item of toProcess) {
       // Mark processing
