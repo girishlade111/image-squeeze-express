@@ -75,7 +75,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
   const shareUrl = encodeURIComponent('https://imagesqueeze.com');
 
   return (
-    <section className="container mx-auto mt-12 max-w-3xl px-4" ref={ref}>
+    <section className="container mx-auto mt-12 max-w-3xl px-4" ref={ref} aria-label="Compression results">
       <h2
         className={`mb-8 text-center text-2xl font-extrabold tracking-tight sm:text-3xl transition-all duration-700 ${
           visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'

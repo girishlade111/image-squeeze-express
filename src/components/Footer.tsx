@@ -47,7 +47,7 @@ const Footer = () => (
       </p>
 
       {/* Bottom */}
-      <p className="mt-3 text-center text-xs text-muted-foreground/60">
+      <p className="mt-3 text-center text-xs text-muted-foreground">
         © 2026 ImageSqueeze by Lade Stack. All rights reserved.
       </p>
     </div>

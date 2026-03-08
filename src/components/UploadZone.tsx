@@ -55,7 +55,7 @@ const UploadZone = ({ onFilesSelected, imageCount }: UploadZoneProps) => {
         <div className={`flex h-20 w-20 items-center justify-center rounded-2xl transition-all duration-300 ${
           dragOver ? 'bg-primary/20 scale-110' : 'bg-primary/10 group-hover:bg-primary/15 group-hover:scale-105'
         }`}>
-          <CloudUpload className="h-10 w-10 text-primary" strokeWidth={1.5} />
+          <CloudUpload className="h-10 w-10 text-primary" strokeWidth={1.5} aria-hidden="true" />
         </div>
 
         {/* Text */}

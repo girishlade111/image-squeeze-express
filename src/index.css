@@ -69,6 +69,9 @@
     --muted: 240 4% 16%;
     --muted-foreground: 240 5% 65%;
 
+    /* Copyright text needs better contrast */
+    --copyright-foreground: 240 5% 55%;
+
     --accent: 187 92% 43%;
     --accent-foreground: 0 0% 100%;
 

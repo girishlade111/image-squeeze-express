@@ -82,7 +82,7 @@ const Header = () => {
               <Moon className="h-[18px] w-[18px]" />
             )}
           </Button>
-        </div>
+        </nav>
 
         {/* Mobile controls */}
         <div className="flex items-center gap-1 md:hidden">

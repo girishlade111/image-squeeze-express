@@ -215,7 +215,7 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
           </TabsContent>
 
           {/* ── CONVERT ── */}
-          <TabsContent value="convert" className="mt-6 space-y-3">
+          <TabsContent value="convert" className="mt-6 space-y-3" role="radiogroup" aria-label="Output format selection">
             {formats.map((f) => (
               <button
                 key={f.value}
