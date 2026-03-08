@@ -43,8 +43,8 @@ const UploadZone = ({ onFilesSelected, imageCount }: UploadZoneProps) => {
         onClick={() => inputRef.current?.click()}
         className={`group relative flex min-h-[400px] cursor-pointer flex-col items-center justify-center gap-5 rounded-2xl border-2 border-dashed bg-foreground/[0.02] backdrop-blur-sm p-8 text-center transition-all duration-300 ${
           dragOver
-            ? 'border-primary bg-primary/10 shadow-[0_0_40px_hsl(var(--violet)/0.3)]'
-            : 'border-primary/30 hover:border-primary/60 hover:bg-primary/[0.06]'
+            ? 'scale-[1.03] border-primary bg-primary/10 shadow-[0_0_30px_rgba(124,58,237,0.4)]'
+            : 'border-primary/30 hover:border-primary/60 hover:bg-primary/[0.06] hover:shadow-[0_0_20px_rgba(124,58,237,0.15)]'
         }`}
       >
         {/* Icon */}

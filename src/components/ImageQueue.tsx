@@ -58,8 +58,8 @@ const ImageQueue = ({
 
       {/* Progress bar */}
       {isProcessing && (
-        <div className="mb-4">
-          <Progress value={progress} className="h-2 rounded-full" />
+        <div className="mb-4 animate-fade-in-up" style={{ animationDuration: '0.3s' }}>
+          <Progress value={progress} className="h-2.5 rounded-full" />
           <p className="mt-1.5 text-center text-xs font-medium text-muted-foreground">
             {processingText || `${progress}% complete`}
           </p>
@@ -68,10 +68,11 @@ const ImageQueue = ({
 
       {/* Grid */}
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {files.map((f) => (
+        {files.map((f, i) => (
           <div
             key={f.id}
-            className="group relative flex items-center gap-3 rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-3 transition-colors hover:border-border"
+            className="group relative flex items-center gap-3 rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-3 transition-all duration-300 hover:border-border animate-fade-in-up"
+            style={{ animationDelay: `${i * 50}ms`, animationDuration: '0.4s' }}
           >
             {/* Thumbnail */}
             <div className="relative h-[60px] w-[60px] flex-shrink-0">
@@ -131,7 +132,9 @@ const ImageQueue = ({
           size="lg"
           disabled={isProcessing || allDone}
           onClick={onProcessAll}
-          className="rounded-full px-8 text-primary-foreground"
+          className={`rounded-full px-8 text-primary-foreground transition-all ${
+            isProcessing ? 'animate-pulse' : ''
+          }`}
           style={{
             background: isProcessing || allDone ? undefined : 'linear-gradient(135deg, #7C3AED, #06B6D4)',
           }}

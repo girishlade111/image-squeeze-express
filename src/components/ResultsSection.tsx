@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { Download, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -11,8 +12,50 @@ interface ResultsSectionProps {
   onReset: () => void;
 }
 
+/** Simple counter animation hook */
+function useCountUp(target: number, duration = 800) {
+  const [value, setValue] = useState(0);
+  const started = useRef(false);
+
+  useEffect(() => {
+    if (started.current || target === 0) return;
+    started.current = true;
+    const start = performance.now();
+    const tick = (now: number) => {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      // ease-out
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(Math.round(target * eased));
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }, [target, duration]);
+
+  return value;
+}
+
 const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold: 0.05 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   if (files.length === 0) return null;
+
+  const totalOriginal = files.reduce((s, f) => s + f.originalSize, 0);
+  const totalNew = files.reduce((s, f) => s + (f.result?.sizeBytes || 0), 0);
+  const totalSaved = totalOriginal - totalNew;
+  const avgReduction = totalOriginal > 0 ? Math.round((totalSaved / totalOriginal) * 100) : 0;
 
   const downloadSingle = (f: UploadedFile) => {
     if (f.processedFile) saveAs(f.processedFile, f.processedFile.name);
@@ -27,23 +70,42 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
     saveAs(blob, 'imagesqueeze_batch.zip');
   };
 
-  const shareText = encodeURIComponent(
-    'I just compressed my images with ImageSqueeze — 100% free & private! 🚀'
-  );
+  const shareText = encodeURIComponent('I just compressed my images with ImageSqueeze — 100% free & private! 🚀');
   const shareUrl = encodeURIComponent('https://imagesqueeze.com');
 
   return (
-    <section className="container mx-auto mt-12 max-w-3xl px-4">
-      <h2 className="mb-6 text-center text-2xl font-bold">Results</h2>
+    <section className="container mx-auto mt-12 max-w-3xl px-4" ref={ref}>
+      <h2
+        className={`mb-8 text-center text-2xl font-extrabold tracking-tight sm:text-3xl transition-all duration-700 ${
+          visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
+        }`}
+      >
+        Results
+      </h2>
 
-      <div className="space-y-4">
-        {files.map((f) => {
+      {/* Stats bar */}
+      <StatsBar
+        filesCount={files.length}
+        totalSaved={totalSaved}
+        avgReduction={avgReduction}
+        visible={visible}
+      />
+
+      {/* Result cards */}
+      <div className="mt-6 space-y-4">
+        {files.map((f, i) => {
           const newSize = f.result?.sizeBytes || 0;
           const ratio = getCompressionRatio(f.originalSize, newSize);
           const ext = f.processedFile?.type.split('/')[1]?.toUpperCase() || '';
 
           return (
-            <div key={f.id} className="rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-4">
+            <div
+              key={f.id}
+              className={`rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-4 transition-all duration-700 ${
+                visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
+              }`}
+              style={{ animationDelay: visible ? `${(i + 1) * 120}ms` : '0ms' }}
+            >
               <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                 {/* Before */}
                 <div className="flex flex-1 items-center gap-3">
@@ -73,7 +135,12 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
 
               <div className="mt-3 flex items-center justify-between">
                 <Badge variant="outline" className="rounded-full text-xs">{ext}</Badge>
-                <Button size="sm" className="rounded-full text-primary-foreground" style={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)' }} onClick={() => downloadSingle(f)}>
+                <Button
+                  size="sm"
+                  className="rounded-full text-primary-foreground"
+                  style={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)' }}
+                  onClick={() => downloadSingle(f)}
+                >
                   <Download className="mr-1 h-3.5 w-3.5" /> Download
                 </Button>
               </div>
@@ -82,8 +149,14 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
         })}
       </div>
 
+      {/* Bottom actions */}
       <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-        <Button size="lg" className="rounded-full text-primary-foreground" style={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)' }} onClick={downloadAll}>
+        <Button
+          size="lg"
+          className="rounded-full text-primary-foreground"
+          style={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)' }}
+          onClick={downloadAll}
+        >
           <Download className="mr-2 h-4 w-4" /> Download All as ZIP
         </Button>
         <Button variant="outline" size="lg" className="rounded-full" onClick={onReset}>
@@ -91,15 +164,53 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
         </Button>
       </div>
 
+      {/* Share */}
       <div className="mt-6 text-center">
         <p className="mb-2 text-sm text-muted-foreground">Share ImageSqueeze</p>
         <div className="flex justify-center gap-3">
-          <a href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`} target="_blank" rel="noopener noreferrer" className="rounded-full bg-secondary px-4 py-2 text-xs font-medium transition-colors hover:bg-secondary/80">Twitter/X</a>
-          <a href={`https://wa.me/?text=${shareText}%20${shareUrl}`} target="_blank" rel="noopener noreferrer" className="rounded-full bg-secondary px-4 py-2 text-xs font-medium transition-colors hover:bg-secondary/80">WhatsApp</a>
+          <a href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`} target="_blank" rel="noopener noreferrer" className="rounded-full bg-secondary px-4 py-2 text-xs font-medium transition-colors hover:bg-secondary/80">
+            Twitter/X
+          </a>
+          <a href={`https://wa.me/?text=${shareText}%20${shareUrl}`} target="_blank" rel="noopener noreferrer" className="rounded-full bg-secondary px-4 py-2 text-xs font-medium transition-colors hover:bg-secondary/80">
+            WhatsApp
+          </a>
         </div>
       </div>
     </section>
   );
 };
+
+/** Animated stats bar */
+function StatsBar({ filesCount, totalSaved, avgReduction, visible }: {
+  filesCount: number;
+  totalSaved: number;
+  avgReduction: number;
+  visible: boolean;
+}) {
+  const animatedSaved = useCountUp(visible ? Math.round(totalSaved / 1024) : 0);
+  const animatedReduction = useCountUp(visible ? avgReduction : 0);
+
+  return (
+    <div
+      className={`grid grid-cols-3 gap-3 transition-all duration-700 ${
+        visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
+      }`}
+      style={{ animationDelay: '100ms' }}
+    >
+      <div className="rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-4 text-center">
+        <p className="text-2xl font-extrabold text-primary">{filesCount}</p>
+        <p className="text-[11px] text-muted-foreground mt-0.5">Images</p>
+      </div>
+      <div className="rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-4 text-center">
+        <p className="text-2xl font-extrabold text-emerald-400">{animatedSaved} KB</p>
+        <p className="text-[11px] text-muted-foreground mt-0.5">Saved</p>
+      </div>
+      <div className="rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-4 text-center">
+        <p className="text-2xl font-extrabold text-emerald-400">{animatedReduction}%</p>
+        <p className="text-[11px] text-muted-foreground mt-0.5">Avg Reduction</p>
+      </div>
+    </div>
+  );
+}
 
 export default ResultsSection;

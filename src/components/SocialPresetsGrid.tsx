@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 
 interface SocialPresetsGridProps {
@@ -14,25 +15,55 @@ const platforms = [
 ];
 
 const SocialPresetsGrid = ({ onSelectPreset }: SocialPresetsGridProps) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold: 0.1 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   const handleClick = (w: number, h: number) => {
     onSelectPreset(w, h);
     document.getElementById('upload')?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
-    <section className="container mx-auto mt-20 px-4">
-      <h2 className="mb-2 text-center text-2xl font-bold sm:text-3xl">
-        Optimize for Social Media — <span className="gradient-text">One Click</span>
+    <section className="container mx-auto mt-24 px-4" ref={ref}>
+      <h2
+        className={`mb-2 text-center text-2xl font-extrabold tracking-tight sm:text-3xl transition-all duration-700 ${
+          visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
+        }`}
+      >
+        Optimize for Social Media —{' '}
+        <span
+          style={{
+            background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}
+        >
+          One Click
+        </span>
       </h2>
-      <p className="mx-auto mb-8 max-w-lg text-center text-sm text-muted-foreground">
+      <p className={`mx-auto mb-8 max-w-lg text-center text-sm text-muted-foreground transition-all duration-700 ${visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'}`} style={{ animationDelay: '100ms' }}>
         Click a platform to auto-fill the perfect dimensions.
       </p>
       <div className="mx-auto grid max-w-3xl grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        {platforms.map((p) => (
+        {platforms.map((p, i) => (
           <Button
             key={p.name}
             variant="outline"
-            className="flex h-auto flex-col gap-1 rounded-2xl border-border/50 bg-card/60 backdrop-blur-sm px-4 py-5 hover:border-primary/60 hover:shadow-[0_0_15px_hsl(var(--violet)/0.15)]"
+            className={`flex h-auto flex-col gap-1 rounded-2xl border-border/50 bg-card/60 backdrop-blur-sm px-4 py-5 transition-all duration-500 hover:border-primary/60 hover:shadow-[0_0_15px_rgba(124,58,237,0.15)] hover:scale-105 ${
+              visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
+            }`}
+            style={{ animationDelay: visible ? `${i * 80 + 200}ms` : '0ms' }}
             onClick={() => handleClick(p.w, p.h)}
           >
             <span className="text-2xl">{p.icon}</span>

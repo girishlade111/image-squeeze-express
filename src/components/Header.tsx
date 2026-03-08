@@ -1,16 +1,24 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Moon, Sun, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts/ThemeContext';
 
 const navLinks = [
   { label: 'How It Works', href: '#how-it-works' },
+  { label: 'Features', href: '#features' },
   { label: 'FAQ', href: '#faq' },
 ];
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const { darkMode, toggleDarkMode } = useTheme();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
@@ -20,7 +28,13 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-foreground/10 backdrop-blur-md bg-background/60">
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 border-b backdrop-blur-md bg-background/60 transition-all duration-300 ${
+        scrolled
+          ? 'border-foreground/10 shadow-lg shadow-background/50'
+          : 'border-transparent'
+      }`}
+    >
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
         {/* Brand */}
         <a href="#home" className="flex items-center gap-2.5 group">
@@ -36,7 +50,7 @@ const Header = () => {
             >
               ImageSqueeze
             </span>
-            <span className="text-[10px] font-medium tracking-wide text-muted-foreground leading-none mt-0.5">
+            <span className="hidden text-[10px] font-medium tracking-wide text-muted-foreground leading-none mt-0.5 sm:block">
               Compress. Resize. Convert. Instantly.
             </span>
           </div>
@@ -72,24 +86,10 @@ const Header = () => {
 
         {/* Mobile controls */}
         <div className="flex items-center gap-1 md:hidden">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={toggleDarkMode}
-            className="rounded-full hover:bg-foreground/5"
-          >
-            {darkMode ? (
-              <Sun className="h-[18px] w-[18px] text-amber-400" />
-            ) : (
-              <Moon className="h-[18px] w-[18px]" />
-            )}
+          <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="rounded-full hover:bg-foreground/5">
+            {darkMode ? <Sun className="h-[18px] w-[18px] text-amber-400" /> : <Moon className="h-[18px] w-[18px]" />}
           </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setMobileOpen(!mobileOpen)}
-            className="rounded-full hover:bg-foreground/5"
-          >
+          <Button variant="ghost" size="icon" onClick={() => setMobileOpen(!mobileOpen)} className="rounded-full hover:bg-foreground/5">
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </Button>
         </div>
@@ -97,7 +97,7 @@ const Header = () => {
 
       {/* Mobile dropdown */}
       {mobileOpen && (
-        <div className="border-t border-foreground/10 bg-background/95 backdrop-blur-md px-4 pb-4 pt-2 md:hidden">
+        <div className="border-t border-foreground/10 bg-background/95 backdrop-blur-md px-4 pb-4 pt-2 md:hidden animate-fade-in-up" style={{ animationDuration: '0.2s' }}>
           {navLinks.map((l) => (
             <a
               key={l.href}
