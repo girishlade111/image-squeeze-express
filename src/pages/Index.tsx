@@ -11,29 +11,21 @@ import FAQSection from '@/components/FAQSection';
 import Footer from '@/components/Footer';
 import { useImageUpload } from '@/hooks/useImageUpload';
 import { useSettings } from '@/hooks/useSettings';
-import { useImageProcessor } from '@/hooks/useImageProcessor';
 
 const Index = () => {
-  const { files, addFiles, removeFile, clearAll: clearUploads } = useImageUpload();
-  const { settings, update: updateSettings, resetResize } = useSettings();
   const {
-    images,
-    settings: processorSettings,
-    setSettings: setProcessorSettings,
-    addImages,
-    removeImage,
+    files,
+    addFiles,
+    removeFile,
     clearAll,
     processAll,
-    resetAll,
     isProcessing,
     progress,
-    hasImages,
+    hasFiles,
     allDone,
-    processedImages,
-  } = useImageProcessor();
-
-  const totalOriginalSize = images.reduce((sum, img) => sum + img.originalSize, 0);
-  const hasFiles = files.length > 0;
+    processedFiles,
+  } = useImageUpload();
+  const { settings, update: updateSettings, resetResize } = useSettings();
 
   return (
     <div className="min-h-screen bg-background">
@@ -43,14 +35,22 @@ const Index = () => {
           {hasFiles && (
             <SettingsPanel settings={settings} onUpdate={updateSettings} onResetResize={resetResize} />
           )}
-          <ImageQueue files={files} onRemove={removeFile} onClearAll={clearUploads} />
+          <ImageQueue
+            files={files}
+            isProcessing={isProcessing}
+            progress={progress}
+            onRemove={removeFile}
+            onClearAll={clearAll}
+            onProcessAll={() => processAll(settings)}
+            allDone={allDone}
+          />
         </HeroSection>
 
-        {allDone && processedImages.length > 0 && (
-          <ResultsSection images={images} onReset={resetAll} />
+        {allDone && processedFiles.length > 0 && (
+          <ResultsSection files={processedFiles} onReset={clearAll} />
         )}
 
-        <SocialPresetsGrid setSettings={setProcessorSettings} />
+        <SocialPresetsGrid onSelectPreset={(w, h) => updateSettings({ width: w, height: h, selectedPreset: null })} />
         <HowItWorks />
         <FeaturesGrid />
         <ProTeaser />
