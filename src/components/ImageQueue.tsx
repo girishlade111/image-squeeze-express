@@ -9,6 +9,7 @@ interface ImageQueueProps {
   files: UploadedFile[];
   isProcessing: boolean;
   progress: number;
+  processingText: string;
   onRemove: (id: string) => void;
   onClearAll: () => void;
   onProcessAll: () => void;
