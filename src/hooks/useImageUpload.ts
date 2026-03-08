@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { toast } from 'sonner';
 import { processImage, toDownloadFile, getImageDimensions, ProcessResult } from '@/utils/imageProcessor';
 import type { Settings } from '@/hooks/useSettings';
@@ -37,40 +37,47 @@ export function useImageUpload() {
     const incoming = Array.from(fileList).filter((f) => f.type.startsWith('image/'));
     if (incoming.length === 0) return;
 
-    // Check limit
-    const currentCount = files.length;
-    const remaining = MAX_FILES - currentCount;
-    if (remaining <= 0) {
-      toast.warning('⚠️ Free version supports up to 10 images at once.');
-      return;
-    }
-    const toAdd = incoming.slice(0, remaining);
-    if (incoming.length > remaining) {
-      toast.warning('⚠️ Free version supports up to 10 images at once.');
-    }
+    setFiles((prev) => {
+      const remaining = MAX_FILES - prev.length;
+      if (remaining <= 0) {
+        toast.warning('⚠️ Free version supports up to 10 images at once.');
+        return prev;
+      }
+      const toAdd = incoming.slice(0, remaining);
+      if (incoming.length > remaining) {
+        toast.warning('⚠️ Free version supports up to 10 images at once.');
+      }
 
-    const newFiles: UploadedFile[] = [];
-    for (const file of toAdd) {
-      const preview = URL.createObjectURL(file);
-      urlsRef.current.push(preview);
-      let dims = { width: 0, height: 0 };
-      try {
-        dims = await getImageDimensions(file);
-      } catch {}
-      newFiles.push({
-        id: crypto.randomUUID(),
-        file,
-        name: file.name,
-        originalSize: file.size,
-        originalWidth: dims.width,
-        originalHeight: dims.height,
-        preview,
-        status: 'ready',
+      // Create files synchronously with placeholder dims, then update async
+      const newFiles: UploadedFile[] = toAdd.map((file) => {
+        const preview = URL.createObjectURL(file);
+        urlsRef.current.push(preview);
+        return {
+          id: crypto.randomUUID(),
+          file,
+          name: file.name,
+          originalSize: file.size,
+          originalWidth: 0,
+          originalHeight: 0,
+          preview,
+          status: 'ready' as const,
+        };
       });
-    }
 
-    setFiles((prev) => [...prev, ...newFiles]);
-  }, [files.length]);
+      // Async dimension loading
+      newFiles.forEach((nf) => {
+        getImageDimensions(nf.file).then((dims) => {
+          setFiles((p) =>
+            p.map((f) =>
+              f.id === nf.id ? { ...f, originalWidth: dims.width, originalHeight: dims.height } : f
+            )
+          );
+        }).catch(() => {});
+      });
+
+      return [...prev, ...newFiles];
+    });
+  }, []);
 
   const removeFile = useCallback((id: string) => {
     setFiles((prev) => {
@@ -99,65 +106,77 @@ export function useImageUpload() {
   }, []);
 
   const processAll = useCallback(async (settings: Settings) => {
-    const toProcess = files.filter((f) => f.status !== 'done');
-    if (toProcess.length === 0) return;
+    setFiles((currentFiles) => {
+      const toProcess = currentFiles.filter((f) => f.status !== 'done');
+      if (toProcess.length === 0) return currentFiles;
 
-    setIsProcessing(true);
-    setProgress(0);
-    setProcessingText('');
-    let completed = 0;
-    const total = toProcess.length;
+      // Kick off processing outside setState
+      (async () => {
+        setIsProcessing(true);
+        setProgress(0);
+        setProcessingText('');
+        let completed = 0;
+        const total = toProcess.length;
 
-    for (const item of toProcess) {
-      // Mark processing
-      setProcessingText(`Processing ${completed + 1} of ${total}...`);
-      setFiles((prev) =>
-        prev.map((f) => (f.id === item.id ? { ...f, status: 'processing' as const } : f))
-      );
+        for (const item of toProcess) {
+          setProcessingText(`Processing ${completed + 1} of ${total}...`);
+          setFiles((prev) =>
+            prev.map((f) => (f.id === item.id ? { ...f, status: 'processing' as const } : f))
+          );
 
-      try {
-        const result = await processImage(item.file, {
-          quality: settings.quality,
-          targetSizeKB: settings.targetSizeKB,
-          width: settings.width,
-          height: settings.height,
-          lockAspectRatio: settings.lockAspectRatio,
-          outputFormat: settings.outputFormat,
-        });
+          try {
+            const result = await processImage(item.file, {
+              quality: settings.quality,
+              targetSizeKB: settings.targetSizeKB,
+              width: settings.width,
+              height: settings.height,
+              lockAspectRatio: settings.lockAspectRatio,
+              outputFormat: settings.outputFormat,
+            });
 
-        const processedFile = toDownloadFile(item.name, result.blob);
-        const processedPreview = URL.createObjectURL(result.blob);
-        urlsRef.current.push(processedPreview);
+            const processedFile = toDownloadFile(item.name, result.blob);
+            const processedPreview = URL.createObjectURL(result.blob);
+            urlsRef.current.push(processedPreview);
 
-        setFiles((prev) =>
-          prev.map((f) =>
-            f.id === item.id
-              ? { ...f, status: 'done' as const, result, processedFile, processedPreview }
-              : f
-          )
-        );
-      } catch (err) {
-        setFiles((prev) =>
-          prev.map((f) =>
-            f.id === item.id
-              ? { ...f, status: 'error' as const, error: String(err) }
-              : f
-          )
-        );
-      }
+            setFiles((prev) =>
+              prev.map((f) =>
+                f.id === item.id
+                  ? { ...f, status: 'done' as const, result, processedFile, processedPreview }
+                  : f
+              )
+            );
+          } catch (err) {
+            setFiles((prev) =>
+              prev.map((f) =>
+                f.id === item.id
+                  ? { ...f, status: 'error' as const, error: String(err) }
+                  : f
+              )
+            );
+          }
 
-      completed++;
-      setProgress(Math.round((completed / total) * 100));
-    }
+          completed++;
+          setProgress(Math.round((completed / total) * 100));
+        }
 
-    setIsProcessing(false);
-    setProcessingText('');
-    toast.success('✅ All images processed successfully!');
-  }, [files]);
+        setIsProcessing(false);
+        setProcessingText('');
+        toast.success('✅ All images processed successfully!');
+      })();
+
+      return currentFiles;
+    });
+  }, []);
 
   const hasFiles = files.length > 0;
-  const allDone = files.length > 0 && files.every((f) => f.status === 'done' || f.status === 'error');
-  const processedFiles = files.filter((f) => f.status === 'done');
+  const allDone = useMemo(
+    () => files.length > 0 && files.every((f) => f.status === 'done' || f.status === 'error'),
+    [files]
+  );
+  const processedFiles = useMemo(
+    () => files.filter((f) => f.status === 'done'),
+    [files]
+  );
 
   return {
     files,
