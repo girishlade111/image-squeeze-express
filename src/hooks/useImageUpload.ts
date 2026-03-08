@@ -147,11 +147,12 @@ export function useImageUpload() {
       }
 
       completed++;
-      setProgress(Math.round((completed / toProcess.length) * 100));
+      setProgress(Math.round((completed / total) * 100));
     }
 
     setIsProcessing(false);
-    toast.success('✅ All images processed!');
+    setProcessingText('');
+    toast.success('✅ All images processed successfully!');
   }, [files]);
 
   const hasFiles = files.length > 0;
