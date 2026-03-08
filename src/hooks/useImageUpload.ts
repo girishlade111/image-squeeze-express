@@ -173,7 +173,20 @@ export function useImageUpload() {
 
         setIsProcessing(false);
         setProcessingText('');
-        toast.success('✅ All images processed successfully!');
+
+        // Show appropriate toast based on results
+        setFiles((finalFiles) => {
+          const doneCount = finalFiles.filter((f) => f.status === 'done').length;
+          const errorCount = finalFiles.filter((f) => f.status === 'error').length;
+          if (doneCount > 0 && errorCount === 0) {
+            toast.success('✅ All images processed successfully!');
+          } else if (doneCount > 0 && errorCount > 0) {
+            toast.warning(`⚠️ ${doneCount} processed, ${errorCount} failed.`);
+          } else if (errorCount > 0) {
+            toast.error('❌ All images failed to process.');
+          }
+          return finalFiles;
+        });
       })();
 
       return currentFiles;

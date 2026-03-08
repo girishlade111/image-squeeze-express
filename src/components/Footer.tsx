@@ -49,7 +49,7 @@ const Footer = () => {
         style={{ background: 'linear-gradient(180deg, #7C3AED, transparent)' }}
       />
 
-      <div className="relative" style={{ backgroundColor: 'hsl(240 10% 4%)' }}>
+      <div className="relative bg-card border-t border-border/20">
         <div className="container mx-auto px-6 pb-8 pt-16">
           {/* Main grid */}
           <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-12">
