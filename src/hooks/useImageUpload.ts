@@ -3,8 +3,6 @@ import { toast } from 'sonner';
 import { processImage, toDownloadFile, getImageDimensions, ProcessResult } from '@/utils/imageProcessor';
 import type { Settings } from '@/hooks/useSettings';
 
-import type { Settings } from '@/hooks/useSettings';
-
 export interface UploadedFile {
   id: string;
   file: File;
