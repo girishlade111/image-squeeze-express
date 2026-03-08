@@ -83,7 +83,6 @@ const UploadZone = ({ onFilesSelected, imageCount }: UploadZoneProps) => {
           aria-label="Select image files to compress"
           tabIndex={-1}
         />
-        />
       </div>
     </div>
   );
