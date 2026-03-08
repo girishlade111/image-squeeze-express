@@ -1,6 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import { Mail, Globe, Twitter, MessageSquare, Clock, MapPin } from 'lucide-react';
+import { Mail, Globe, Instagram, Linkedin, Github, CodepenIcon, MessageSquare, Clock, MapPin } from 'lucide-react';
 
 const contactMethods = [
   {
@@ -12,27 +12,36 @@ const contactMethods = [
     external: true,
   },
   {
-    icon: Twitter,
-    title: 'Twitter / X',
-    desc: 'Follow us for updates, tips, and new feature announcements.',
-    link: 'https://twitter.com/ladestack',
-    linkText: '@ladestack',
-    external: true,
-  },
-  {
     icon: Mail,
     title: 'Email',
     desc: 'For business inquiries, partnerships, or detailed support requests.',
-    link: 'mailto:hello@ladestack.in',
-    linkText: 'hello@ladestack.in',
+    link: 'mailto:admin@ladestack.in',
+    linkText: 'admin@ladestack.in',
     external: false,
   },
+  {
+    icon: Github,
+    title: 'GitHub',
+    desc: 'Check out our open source projects and contributions.',
+    link: 'https://github.com/girishlade111',
+    linkText: 'girishlade111',
+    external: true,
+  },
+];
+
+const socialProfiles = [
+  { icon: Instagram, href: 'https://www.instagram.com/girish_lade_/', label: 'Instagram', handle: '@girish_lade_' },
+  { icon: Linkedin, href: 'https://www.linkedin.com/in/girish-lade-075bba201/', label: 'LinkedIn', handle: 'Girish Lade' },
+  { icon: Github, href: 'https://github.com/girishlade111', label: 'GitHub', handle: 'girishlade111' },
+  { icon: CodepenIcon, href: 'https://codepen.io/Girish-Lade-the-looper', label: 'CodePen', handle: 'Girish Lade' },
+  { icon: Mail, href: 'mailto:admin@ladestack.in', label: 'Email', handle: 'admin@ladestack.in' },
+  { icon: Globe, href: 'https://ladestack.in', label: 'Website', handle: 'ladestack.in' },
 ];
 
 const faqs = [
   { q: 'How quickly do you respond?', a: 'We typically respond within 24–48 hours on business days.' },
   { q: 'Do you offer custom enterprise solutions?', a: 'Yes! If you need a white-label image compression tool or API integration, reach out via email and we\'ll discuss your requirements.' },
-  { q: 'I found a bug — how do I report it?', a: 'Please reach out via Twitter or email with a description of the issue, your browser name/version, and any error messages you see. Screenshots are very helpful!' },
+  { q: 'I found a bug — how do I report it?', a: 'Please reach out via Instagram, LinkedIn, or email with a description of the issue, your browser name/version, and any error messages you see. Screenshots are very helpful!' },
   { q: 'Can I request a new feature?', a: 'Absolutely! We love hearing from users. Send us your ideas via any of the contact methods above.' },
 ];
 
@@ -71,6 +80,30 @@ const Contact = () => (
           ))}
         </div>
 
+        {/* Social profiles */}
+        <section className="mt-12">
+          <h2 className="text-xl font-bold tracking-tight">Connect on Social Media</h2>
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
+            {socialProfiles.map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex items-center gap-3 rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-4 transition-all hover:border-primary/50 hover:shadow-[0_0_15px_rgba(124,58,237,0.1)]"
+              >
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10 transition-colors group-hover:bg-primary/20">
+                  <s.icon className="h-5 w-5 text-primary" />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-bold">{s.label}</p>
+                  <p className="truncate text-[11px] text-muted-foreground">{s.handle}</p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+
         {/* Info section */}
         <div className="mt-12 grid gap-6 sm:grid-cols-2">
           <div className="rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-6">
@@ -79,7 +112,7 @@ const Contact = () => (
               <h3 className="text-sm font-bold">Response Time</h3>
             </div>
             <p className="mt-3 text-sm text-muted-foreground leading-relaxed">
-              We aim to respond to all inquiries within <strong className="text-foreground">24–48 hours</strong> during business days. For urgent issues, Twitter DMs tend to get the fastest response.
+              We aim to respond to all inquiries within <strong className="text-foreground">24–48 hours</strong> during business days. For urgent issues, Instagram or LinkedIn DMs tend to get the fastest response.
             </p>
           </div>
           <div className="rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-6">
