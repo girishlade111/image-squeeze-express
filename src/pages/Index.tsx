@@ -10,14 +10,16 @@ import ProTeaser from '@/components/ProTeaser';
 import FAQSection from '@/components/FAQSection';
 import Footer from '@/components/Footer';
 import { useImageUpload } from '@/hooks/useImageUpload';
+import { useSettings } from '@/hooks/useSettings';
 import { useImageProcessor } from '@/hooks/useImageProcessor';
 
 const Index = () => {
   const { files, addFiles, removeFile, clearAll: clearUploads } = useImageUpload();
+  const { settings, update: updateSettings, resetResize } = useSettings();
   const {
     images,
-    settings,
-    setSettings,
+    settings: processorSettings,
+    setSettings: setProcessorSettings,
     addImages,
     removeImage,
     clearAll,
@@ -31,28 +33,24 @@ const Index = () => {
   } = useImageProcessor();
 
   const totalOriginalSize = images.reduce((sum, img) => sum + img.originalSize, 0);
+  const hasFiles = files.length > 0;
 
   return (
     <div className="min-h-screen bg-background">
       <Header />
       <main>
         <HeroSection onFilesSelected={addFiles} imageCount={files.length}>
+          {hasFiles && (
+            <SettingsPanel settings={settings} onUpdate={updateSettings} onResetResize={resetResize} />
+          )}
           <ImageQueue files={files} onRemove={removeFile} onClearAll={clearUploads} />
         </HeroSection>
-
-        {hasImages && (
-          <SettingsPanel
-            settings={settings}
-            setSettings={setSettings}
-            totalOriginalSize={totalOriginalSize}
-          />
-        )}
 
         {allDone && processedImages.length > 0 && (
           <ResultsSection images={images} onReset={resetAll} />
         )}
 
-        <SocialPresetsGrid setSettings={setSettings} />
+        <SocialPresetsGrid setSettings={setProcessorSettings} />
         <HowItWorks />
         <FeaturesGrid />
         <ProTeaser />
