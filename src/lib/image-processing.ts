@@ -82,15 +82,26 @@ export async function processImage(
     if (maxDim > 0) options.maxWidthOrHeight = maxDim;
   }
 
-  let compressed = await imageCompression(file, options);
+  let compressed: File | Blob = await imageCompression(file, options);
 
-  // If resize is needed, use canvas for precise dimensions
-  if (targetWidth && targetHeight) {
-    compressed = await resizeWithCanvas(compressed, targetWidth, targetHeight, outputMime, settings.quality);
+  // Determine final dimensions for canvas pass
+  const compressedDims = await getImageDimensions(compressed as File);
+  const finalWidth = targetWidth || compressedDims.width;
+  const finalHeight = targetHeight || compressedDims.height;
+
+  // Always use Canvas API as fallback for format conversion (especially WebP)
+  // and for precise resizing. This ensures reliable WebP output across browsers.
+  const needsCanvasPass =
+    outputMime === 'image/webp' ||
+    (targetWidth && targetHeight) ||
+    outputMime !== file.type;
+
+  if (needsCanvasPass) {
+    compressed = await convertWithCanvas(compressed, finalWidth, finalHeight, outputMime, settings.quality);
   }
 
   // Get final dimensions
-  const dims = await getImageDimensions(compressed);
+  const dims = await getImageDimensions(compressed as File);
 
   // Rename file with correct extension
   const baseName = file.name.replace(/\.[^.]+$/, '');
@@ -100,7 +111,11 @@ export async function processImage(
   return { file: newFile, width: dims.width, height: dims.height };
 }
 
-async function resizeWithCanvas(
+/**
+ * Canvas API fallback for reliable format conversion (especially WebP)
+ * and precise resizing. Draws image onto canvas and exports as target MIME.
+ */
+async function convertWithCanvas(
   file: File | Blob,
   width: number,
   height: number,
