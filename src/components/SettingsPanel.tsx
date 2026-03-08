@@ -242,7 +242,7 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">{f.label}</span>
                     {f.recommended && (
-                      <span className="rounded-full bg-accent/20 px-2 py-0.5 text-[10px] font-bold text-accent">
+                      <span className="animate-pulse rounded-full bg-accent/20 px-2 py-0.5 text-[10px] font-bold text-accent" style={{ animationDuration: '2.5s' }}>
                         Recommended
                       </span>
                     )}
