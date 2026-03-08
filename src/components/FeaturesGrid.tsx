@@ -1,28 +1,66 @@
+import { useEffect, useRef, useState } from 'react';
+
 const features = [
-  { icon: '🔒', title: '100% Private', desc: 'Images are processed in your browser. Nothing is uploaded to any server.' },
-  { icon: '⚡', title: 'Lightning Fast', desc: 'No waiting for uploads. Processing starts instantly.' },
+  { icon: '🔒', title: '100% Private', desc: 'Images processed in your browser. Zero server uploads.' },
+  { icon: '⚡', title: 'Lightning Fast', desc: 'No upload wait times. Compression starts instantly.' },
   { icon: '📦', title: 'Batch Processing', desc: 'Compress up to 10 images at once for free.' },
   { icon: '🎯', title: 'Social Presets', desc: 'One-click resize for Instagram, LinkedIn, WhatsApp & more.' },
-  { icon: '🔄', title: 'Format Conversion', desc: 'Convert to WebP, PNG, or JPEG with one click.' },
-  { icon: '🆓', title: 'Free Forever', desc: 'No account, no hidden fees, no watermarks.' },
+  { icon: '🔄', title: 'Format Conversion', desc: 'Convert to WebP (30% smaller), PNG, or JPEG instantly.' },
+  { icon: '🆓', title: 'Free Forever', desc: 'No account, no hidden fees, no watermarks. Ever.' },
 ];
 
-const FeaturesGrid = () => (
-  <section className="container mx-auto mt-20 px-4">
-    <h2 className="mb-10 text-center text-2xl font-bold sm:text-3xl">
-      Why <span className="gradient-text">ImageSqueeze</span>?
-    </h2>
+const FeaturesGrid = () => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
 
-    <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {features.map((f, i) => (
-        <div key={i} className="glass-card rounded-2xl p-6">
-          <span className="text-3xl">{f.icon}</span>
-          <h3 className="mt-3 text-base font-bold">{f.title}</h3>
-          <p className="mt-1 text-sm text-muted-foreground">{f.desc}</p>
-        </div>
-      ))}
-    </div>
-  </section>
-);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect(); } },
+      { threshold: 0.1 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <section id="features" className="container mx-auto mt-24 px-4" ref={ref}>
+      <h2 className="mb-14 text-center text-3xl font-extrabold tracking-tight sm:text-4xl">
+        Why Choose{' '}
+        <span
+          style={{
+            background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}
+        >
+          ImageSqueeze
+        </span>
+        ?
+      </h2>
+
+      <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {features.map((f, i) => (
+          <div
+            key={f.title}
+            className={`group rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-6 transition-all duration-700 hover:border-primary/40 hover:shadow-[0_0_24px_hsl(var(--violet)/0.12)] ${
+              visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
+            }`}
+            style={{ animationDelay: visible ? `${i * 100}ms` : '0ms' }}
+          >
+            {/* Icon circle */}
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-2xl transition-transform duration-300 group-hover:scale-110">
+              {f.icon}
+            </div>
+
+            <h3 className="text-base font-bold">{f.title}</h3>
+            <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{f.desc}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+};
 
 export default FeaturesGrid;
