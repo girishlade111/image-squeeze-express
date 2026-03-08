@@ -106,7 +106,7 @@ export async function processImage(
   // Rename file with correct extension
   const baseName = file.name.replace(/\.[^.]+$/, '');
   const ext = getExtension(outputMime);
-  const newFile = new File([compressed], `${baseName}-squeezed${ext}`, { type: outputMime });
+  const newFile = new File([compressed], `imagesqueeze_${baseName}${ext}`, { type: outputMime });
 
   return { file: newFile, width: dims.width, height: dims.height };
 }
