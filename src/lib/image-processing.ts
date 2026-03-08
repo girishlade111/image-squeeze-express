@@ -111,7 +111,11 @@ export async function processImage(
   return { file: newFile, width: dims.width, height: dims.height };
 }
 
-async function resizeWithCanvas(
+/**
+ * Canvas API fallback for reliable format conversion (especially WebP)
+ * and precise resizing. Draws image onto canvas and exports as target MIME.
+ */
+async function convertWithCanvas(
   file: File | Blob,
   width: number,
   height: number,
