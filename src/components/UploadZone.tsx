@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { CloudUpload } from 'lucide-react';
 
 interface UploadZoneProps {
@@ -32,8 +33,12 @@ const UploadZone = ({ onFilesSelected, imageCount }: UploadZoneProps) => {
   );
 
   return (
-    <div id="upload" className="w-full">
-      <div
+    <motion.div 
+      id="upload" 
+      className="w-full"
+      layout
+    >
+      <motion.div
         role="button"
         tabIndex={0}
         aria-label={`Upload images. ${imageCount} of 10 selected. Click or drag and drop files here.`}
@@ -45,20 +50,37 @@ const UploadZone = ({ onFilesSelected, imageCount }: UploadZoneProps) => {
         onDrop={handleDrop}
         onClick={() => inputRef.current?.click()}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inputRef.current?.click(); } }}
-        className={`group relative flex min-h-[140px] sm:min-h-[180px] cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed bg-foreground/[0.02] p-4 sm:p-6 text-center transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+        className={`relative flex min-h-[140px] sm:min-h-[180px] cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed bg-foreground/[0.02] p-4 sm:p-6 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
           dragOver
-            ? 'scale-[1.01] border-primary bg-primary/10'
+            ? 'border-primary bg-primary/10'
             : 'border-primary/25 hover:border-primary/50 hover:bg-primary/[0.04]'
         }`}
+        whileHover={{ scale: 1.01 }}
+        whileTap={{ scale: 0.99 }}
       >
+        <AnimatePresence>
+          {dragOver && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.8 }}
+              className="absolute inset-0 rounded-xl bg-primary/5"
+            />
+          )}
+        </AnimatePresence>
+
         {/* Icon */}
-        <div className={`flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-300 ${
-          dragOver ? 'bg-primary/20 scale-105' : 'bg-primary/[0.08] group-hover:bg-primary/12'
-        }`}>
-          <CloudUpload className={`h-6 w-6 text-primary transition-transform duration-300 ${
-            dragOver ? 'scale-105' : ''
-          }`} strokeWidth={1.5} aria-hidden="true" />
-        </div>
+        <motion.div 
+          className={`flex h-12 w-12 items-center justify-center rounded-xl transition-colors ${
+            dragOver ? 'bg-primary/20' : 'bg-primary/[0.08]'
+          }`}
+          animate={{
+            scale: dragOver ? 1.1 : 1,
+          }}
+          transition={{ type: "spring", stiffness: 300, damping: 20 }}
+        >
+          <CloudUpload className={`h-6 w-6 text-primary`} strokeWidth={1.5} aria-hidden="true" />
+        </motion.div>
 
         {/* Text */}
         <div>
@@ -85,8 +107,8 @@ const UploadZone = ({ onFilesSelected, imageCount }: UploadZoneProps) => {
           aria-label="Select image files to compress"
           tabIndex={-1}
         />
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 };
 

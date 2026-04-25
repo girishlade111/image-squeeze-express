@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { motion } from 'framer-motion';
 import UploadZone from '@/components/UploadZone';
 
 interface HeroSectionProps {
@@ -16,7 +17,7 @@ const HeroSection = ({ onFilesSelected, imageCount, children }: HeroSectionProps
   ], []);
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-16">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-12">
       {/* Animated gradient mesh background */}
       <div className="pointer-events-none absolute inset-0" style={{
         background: `
@@ -30,9 +31,9 @@ const HeroSection = ({ onFilesSelected, imageCount, children }: HeroSectionProps
       {/* Floating blurred shapes */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {floatingShapes.map((shape, i) => (
-          <div
+          <motion.div
             key={i}
-            className="absolute rounded-full opacity-30 animate-float"
+            className="absolute rounded-full opacity-30"
             style={{
               width: shape.size,
               height: shape.size,
@@ -42,8 +43,17 @@ const HeroSection = ({ onFilesSelected, imageCount, children }: HeroSectionProps
                 ? 'radial-gradient(circle, hsl(263 70% 58% / 0.4), transparent)' 
                 : 'radial-gradient(circle, hsl(187 92% 43% / 0.4), transparent)',
               filter: 'blur(60px)',
-              animationDelay: shape.delay,
-              animationDuration: shape.duration,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              x: [0, 30, 0],
+              scale: [1, 1.05, 1],
+            }}
+            transition={{
+              duration: parseFloat(shape.duration),
+              delay: parseFloat(shape.delay),
+              repeat: Infinity,
+              ease: "easeInOut",
             }}
           />
         ))}
@@ -52,7 +62,12 @@ const HeroSection = ({ onFilesSelected, imageCount, children }: HeroSectionProps
       <div className="container relative mx-auto px-4 sm:px-6 py-8 sm:py-12">
         <div className="mx-auto max-w-3xl text-center">
           {/* Headline */}
-          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
+          <motion.h1 
+            className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
             Compress Images Up to 90%
             <br />
             <span
@@ -64,15 +79,25 @@ const HeroSection = ({ onFilesSelected, imageCount, children }: HeroSectionProps
             >
               Instantly & Privately
             </span>
-          </h1>
+          </motion.h1>
 
           {/* Subheadline */}
-          <p className="mx-auto mt-3 max-w-xl text-sm sm:text-base text-muted-foreground">
+          <motion.p 
+            className="mx-auto mt-3 max-w-xl text-sm sm:text-base text-muted-foreground"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+          >
             No uploads to servers. No login required. Your images never leave your device.
-          </p>
+          </motion.p>
 
           {/* Trust badges */}
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
+          <motion.div 
+            className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+          >
             {[
               { emoji: '🔒', label: '100% Private' },
               { emoji: '⚡', label: 'Instant' },
@@ -86,12 +111,17 @@ const HeroSection = ({ onFilesSelected, imageCount, children }: HeroSectionProps
                 {badge.label}
               </div>
             ))}
-          </div>
+          </motion.div>
 
           {/* Upload Zone */}
-          <div className="mx-auto mt-8 max-w-xl">
+          <motion.div 
+            className="mx-auto mt-8 max-w-xl"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.3 }}
+          >
             <UploadZone onFilesSelected={onFilesSelected} imageCount={imageCount} />
-          </div>
+          </motion.div>
 
           {/* Queue injected via children */}
           {children}
