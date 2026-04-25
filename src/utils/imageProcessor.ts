@@ -1,25 +1,20 @@
 import imageCompression from 'browser-image-compression';
 
-/* ─── Types ─── */
 export type ImageFormat = 'jpeg' | 'png' | 'webp' | 'original';
 export type QualityPreset = 'max' | 'high' | 'balanced' | 'compact';
 export type Rotation = 0 | 90 | 180 | 270;
 
 export interface ProcessSettings {
-  // Basic compression
-  quality: number;            // 10-100
+  quality: number;
   autoOptimize: boolean;
   targetSizeKB: number | null;
   
-  // Resize
   width: number | null;
   height: number | null;
   lockAspectRatio: boolean;
   
-  // Format
   outputFormat: ImageFormat;
   
-  // Advanced options
   stripEXIF: boolean;
   grayscale: boolean;
   rotation: Rotation;
@@ -34,10 +29,8 @@ export interface ProcessResult {
   width: number;
   height: number;
   sizeBytes: number;
-  reduction: number;  // percentage reduced
+  reduction: number;
 }
-
-/* ─── Helpers ─── */
 
 export function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
@@ -64,8 +57,6 @@ export function getImageDimensions(file: File | Blob): Promise<{ width: number; 
   });
 }
 
-/* ─── Internal helpers ─── */
-
 function toMime(format: ProcessSettings['outputFormat'], originalType: string): string {
   if (format === 'original') return originalType;
   return `image/${format}`;
@@ -77,7 +68,6 @@ function toExt(mime: string): string {
   return '.jpg';
 }
 
-/** Calculate target dimensions respecting aspect ratio */
 function calcDimensions(
   origW: number,
   origH: number,
@@ -100,15 +90,16 @@ function calcDimensions(
   };
 }
 
-/** Apply rotation and mirroring to canvas context */
-function applyTransforms(
+function applyCanvasTransforms(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number,
   rotation: number,
-  mirror: boolean
+  mirror: boolean,
+  canvasW: number,
+  canvasH: number
 ): void {
-  ctx.translate(width / 2, height / 2);
+  ctx.translate(canvasW / 2, canvasH / 2);
   
   if (mirror) {
     ctx.scale(-1, 1);
@@ -126,10 +117,75 @@ function applyTransforms(
       break;
   }
   
-  ctx.translate(-width / 2, -height / 2);
+  ctx.translate(-canvasW / 2, -canvasH / 2);
 }
 
-/** Apply grayscale to canvas */
+async function canvasProcess(
+  source: Blob,
+  width: number,
+  height: number,
+  mime: string,
+  quality: number,
+  options: {
+    rotation?: Rotation;
+    mirror?: boolean;
+    grayscale?: boolean;
+    progressive?: boolean;
+  }
+): Promise<Blob> {
+  const img = await loadImage(source);
+  
+  let canvasWidth = width;
+  let canvasHeight = height;
+  if (options.rotation === 90 || options.rotation === 270) {
+    canvasWidth = height;
+    canvasHeight = width;
+  }
+  
+  const canvas = document.createElement('canvas');
+  canvas.width = canvasWidth;
+  canvas.height = canvasHeight;
+  
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Canvas context unavailable');
+  
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  
+  if (options.rotation || options.mirror) {
+    applyCanvasTransforms(
+      ctx,
+      width,
+      height,
+      options.rotation || 0,
+      options.mirror || false,
+      canvasWidth,
+      canvasHeight
+    );
+  }
+  
+  ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+  
+  if (options.grayscale) {
+    applyGrayscale(ctx, canvasWidth, canvasHeight);
+  }
+  
+  const qualityNum = Math.max(0.1, Math.min(1, quality / 100));
+  
+  return new Promise((resolve, reject) => {
+    const mimeType = mime === 'image/jpeg' && options.progressive ? 'image/jpeg' : mime;
+    
+    canvas.toBlob(
+      (blob) => {
+        if (blob) resolve(blob);
+        else reject(new Error('Canvas toBlob returned null'));
+      },
+      mimeType,
+      qualityNum
+    );
+  });
+}
+
 function applyGrayscale(ctx: CanvasRenderingContext2D, width: number, height: number): void {
   const imgData = ctx.getImageData(0, 0, width, height);
   const data = imgData.data;
@@ -144,119 +200,82 @@ function applyGrayscale(ctx: CanvasRenderingContext2D, width: number, height: nu
   ctx.putImageData(imgData, 0, 0);
 }
 
-/**
- * Advanced Canvas processing with rotation, mirroring, and grayscale
- */
-function advancedCanvasProcess(
-  source: Blob,
-  width: number,
-  height: number,
-  mime: string,
-  quality: number,
-  options: {
-    rotation?: Rotation;
-    mirror?: boolean;
-    grayscale?: boolean;
-    progressive?: boolean;
-  }
-): Promise<Blob> {
+function loadImage(source: Blob): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => {
-      const canvas = document.createElement('canvas');
-      
-      // Handle rotation for canvas dimensions
-      let canvasWidth = width;
-      let canvasHeight = height;
-      if (options.rotation === 90 || options.rotation === 270) {
-        canvasWidth = height;
-        canvasHeight = width;
-      }
-      
-      canvas.width = canvasWidth;
-      canvas.height = canvasHeight;
-      
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        reject(new Error('Canvas context unavailable'));
-        return;
-      }
-      
-      // Apply transforms
-      if (options.rotation || options.mirror) {
-        applyTransforms(ctx, width, height, options.rotation || 0, options.mirror || false);
-      }
-      
-      // Draw the image
-      ctx.drawImage(img, 0, 0, width, height);
-      
-      // Apply grayscale if needed
-      if (options.grayscale) {
-        applyGrayscale(ctx, canvasWidth, canvasHeight);
-      }
-      
-      // Configure progressive encoding for JPEG
-      const qualityNum = quality / 100;
-      
-      canvas.toBlob(
-        (blob) => {
-          if (blob) resolve(blob);
-          else reject(new Error('Canvas toBlob returned null'));
-        },
-        mime,
-        qualityNum
-      );
-      
       URL.revokeObjectURL(img.src);
+      resolve(img);
     };
-    img.onerror = () => reject(new Error('Failed to load image for canvas processing'));
+    img.onerror = () => {
+      URL.revokeObjectURL(img.src);
+      reject(new Error('Failed to load image'));
+    };
     img.src = URL.createObjectURL(source);
   });
 }
 
-/**
- * Canvas API — precise resize + reliable format conversion (especially WebP).
- */
-function canvasResize(
+function calculateOptimalQuality(
+  originalSize: number,
+  targetSizeKB: number | null,
+  outputFormat: ImageFormat,
+  hasTransforms: boolean
+): number {
+  if (targetSizeKB && targetSizeKB > 0) {
+    const targetBytes = targetSizeKB * 1024;
+    const ratio = targetBytes / originalSize;
+    
+    if (ratio >= 0.9) return 95;
+    if (ratio >= 0.7) return 82;
+    if (ratio >= 0.5) return 68;
+    if (ratio >= 0.3) return 50;
+    return 35;
+  }
+  
+  if (outputFormat === 'webp') {
+    return hasTransforms ? 80 : 75;
+  }
+  
+  if (outputFormat === 'png') {
+    return 100;
+  }
+  
+  return 80;
+}
+
+async function compressWithCanvas(
   source: Blob,
-  width: number,
-  height: number,
+  targetWidth: number,
+  targetHeight: number,
   mime: string,
   quality: number
 ): Promise<Blob> {
+  const img = await loadImage(source);
+  
+  const canvas = document.createElement('canvas');
+  canvas.width = targetWidth;
+  canvas.height = targetHeight;
+  
+  const ctx = canvas.getContext('2d');
+  if (!ctx) throw new Error('Canvas context unavailable');
+  
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = 'high';
+  ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+  
+  const qualityNum = Math.max(0.1, Math.min(1, quality / 100));
+  
   return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.onload = () => {
-      const canvas = document.createElement('canvas');
-      canvas.width = width;
-      canvas.height = height;
-      const ctx = canvas.getContext('2d');
-      if (!ctx) {
-        reject(new Error('Canvas context unavailable'));
-        return;
-      }
-      
-      // Use high-quality image smoothing
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-      ctx.drawImage(img, 0, 0, width, height);
-      
-      canvas.toBlob(
-        (blob) => {
-          if (blob) resolve(blob);
-          else reject(new Error('Canvas toBlob returned null'));
-        },
-        mime,
-        quality / 100
-      );
-      URL.revokeObjectURL(img.src);
-    };
-    img.onerror = () => reject(new Error('Failed to load image for canvas processing'));
-    img.src = URL.createObjectURL(source);
+    canvas.toBlob(
+      (blob) => {
+        if (blob) resolve(blob);
+        else reject(new Error('Canvas toBlob returned null'));
+      },
+      mime,
+      qualityNum
+    );
   });
 }
-
-/* ─── Main processor ─── */
 
 export async function processImage(
   file: File,
@@ -266,7 +285,6 @@ export async function processImage(
   const outputMime = toMime(settings.outputFormat, file.type);
   const origDims = await getImageDimensions(file);
 
-  // 1) Calculate final target dimensions
   const { w: targetW, h: targetH } = calcDimensions(
     origDims.width,
     origDims.height,
@@ -275,44 +293,77 @@ export async function processImage(
     settings.lockAspectRatio
   );
 
-  // 2) Run browser-image-compression with exact options
-  const compressionOpts: Parameters<typeof imageCompression>[1] = {
-    maxSizeMB: settings.targetSizeKB ? settings.targetSizeKB / 1024 : 999,
-    maxWidthOrHeight: Math.max(settings.width || 9999, settings.height || 9999),
-    useWebWorker: true,
-    fileType: settings.outputFormat === 'original' ? file.type : `image/${settings.outputFormat}`,
-    initialQuality: settings.quality / 100,
-    alwaysKeepResolution: !settings.width && !settings.height,
-  };
-
-  let result: Blob = await imageCompression(file, compressionOpts);
-
-  // 3) Check if we need canvas processing
-  const needsAdvanced = 
+  const hasTransforms = 
     settings.rotation !== 0 ||
     settings.mirror ||
     settings.grayscale ||
-    outputMime === 'image/webp' ||
-    outputMime !== file.type ||
-    targetW !== origDims.width ||
-    targetH !== origDims.height;
+    settings.stripEXIF;
 
-  if (needsAdvanced) {
-    result = await advancedCanvasProcess(result, targetW, targetH, outputMime, settings.quality, {
-      rotation: settings.rotation,
-      mirror: settings.mirror,
-      grayscale: settings.grayscale,
-      progressive: settings.progressive,
-    });
-  } else if (targetW !== origDims.width || targetH !== origDims.height) {
-    // Simple resize only
-    result = await canvasResize(result, targetW, targetH, outputMime, settings.quality);
+  const needsResize = targetW !== origDims.width || targetH !== origDims.height;
+  const needsFormatChange = outputMime !== file.type;
+  
+  const quality = settings.autoOptimize
+    ? calculateOptimalQuality(originalSize, settings.targetSizeKB, settings.outputFormat, hasTransforms)
+    : settings.quality;
+
+  let result: Blob;
+
+  if (hasTransforms || needsResize || needsFormatChange) {
+    result = await canvasProcess(
+      file,
+      targetW,
+      targetH,
+      outputMime,
+      quality,
+      {
+        rotation: settings.rotation,
+        mirror: settings.mirror,
+        grayscale: settings.grayscale,
+        progressive: settings.progressive && outputMime === 'image/jpeg',
+      }
+    );
+    
+    if (result.size > (settings.targetSizeKB || Infinity) * 1024 && settings.targetSizeKB) {
+      let iterQuality = quality;
+      let iterResult = result;
+      
+      for (let i = 0; i < 5; i++) {
+        iterQuality = Math.max(10, iterQuality - 10);
+        iterResult = await canvasProcess(
+          file,
+          targetW,
+          targetH,
+          outputMime,
+          iterQuality,
+          {
+            rotation: settings.rotation,
+            mirror: settings.mirror,
+            grayscale: settings.grayscale,
+            progressive: settings.progressive && outputMime === 'image/jpeg',
+          }
+        );
+        
+        if (iterResult.size <= settings.targetSizeKB! * 1024) {
+          result = iterResult;
+          break;
+        }
+        result = iterResult;
+      }
+    }
+  } else {
+    const compressionOpts: Parameters<typeof imageCompression>[1] = {
+      maxSizeMB: settings.targetSizeKB ? settings.targetSizeKB / 1024 : 50,
+      maxWidthOrHeight: Math.max(targetW, targetH),
+      useWebWorker: true,
+      fileType: outputMime,
+      initialQuality: quality / 100,
+      alwaysKeepResolution: !needsResize,
+    };
+    
+    result = await imageCompression(file, compressionOpts);
   }
 
-  // 4) Read final dimensions
   const finalDims = await getImageDimensions(result);
-
-  // 5) Calculate reduction
   const reduction = Math.round(((originalSize - result.size) / originalSize) * 100);
 
   return {
@@ -320,20 +371,16 @@ export async function processImage(
     width: finalDims.width,
     height: finalDims.height,
     sizeBytes: result.size,
-    reduction,
+    reduction: Math.max(0, reduction),
   };
 }
 
-/** Build a downloadable File from a processing result */
 export function toDownloadFile(originalName: string, blob: Blob): File {
   const baseName = originalName.replace(/\.[^.]+$/, '');
   const ext = toExt(blob.type);
   return new File([blob], `imagesqueeze_${baseName}${ext}`, { type: blob.type });
 }
 
-/* ─── Utility Functions ─── */
-
-/** Get recommended quality for target file size */
 export function estimateQualityForSize(
   originalSize: number,
   targetSizeKB: number
@@ -346,9 +393,6 @@ export function estimateQualityForSize(
   return 30;
 }
 
-/** Check if image needs rotation based on EXIF */
 export async function getExifOrientation(file: File): Promise<number> {
-  // Basic EXIF orientation check (simplified)
-  // Returns 1-8 representing different orientations
   return 1;
 }
