@@ -65,8 +65,14 @@ const defaults: Settings = {
 function load(): Settings {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return { ...defaults, ...JSON.parse(raw) };
-  } catch {}
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      return { ...defaults, ...parsed };
+    }
+  } catch {
+    // Fall back to defaults on error
+    return { ...defaults };
+  }
   return { ...defaults };
 }
 
