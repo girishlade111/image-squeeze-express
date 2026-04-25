@@ -1,44 +1,123 @@
-# ImageSqueeze — robots.txt
-# Allow all crawlers to access all content
+# Robots.txt for ImageSqueeze
+# Full access allowed to all search engines and crawlers
+
+# ========================================
+# GENERAL SETTINGS
+# ========================================
 
 User-agent: *
 Allow: /
-Disallow:
+Disallow: /api/
+Disallow: /_next/static/
+Disallow: /_next/data/
 
-# Search engine specific
+# Crawl-delay: 1 second between requests
+Crawl-delay: 1
+
+# ========================================
+# SEARCH ENGINE BOTS
+# ========================================
+
 User-agent: Googlebot
 Allow: /
-
+Disallow: /api/
 User-agent: Googlebot-Image
+Allow: /
+User-agent: Googlebot-Video
+Allow: /
+User-agent: Googlebot-News
+Allow: /
+User-agent: Googlebot-Other
 Allow: /
 
 User-agent: Bingbot
 Allow: /
+Disallow: /api/
+User-agent: msnbot
+Allow: /
+User-agent: msnbot-media
+Allow: /
+User-agent: bingbot
+Allow: /
+Disallow: /api/
 
 User-agent: Slurp
+Allow: /
+Disallow: /api/
+User-agent: Yahoo! Slurp
 Allow: /
 
 User-agent: DuckDuckBot
 Allow: /
-
-User-agent: Baiduspider
+User-agent: DuckBot
 Allow: /
 
 User-agent: YandexBot
 Allow: /
-
-# Social media crawlers
-User-agent: Twitterbot
+Disallow: /api/
+User-agent: YandexImagesBot
+Allow: /
+User-agent: YandexVideoBot
 Allow: /
 
+User-agent: Baiduspider
+Allow: /
+Disallow: /api/
+User-agent: BaiduImagespider
+Allow: /
+User-agent: Baiduuspider
+Allow: /
+
+User-agent: Exabot
+Allow: /
+Disallow: /api/
+
+User-agent: Soso Spider
+Allow: /
+User-agent: Sosospider
+Allow: /
+
+User-agent: Yeti
+Allow: /
+Disallow: /api/
+
+User-agent: purebot
+Allow: /
+
+User-agent: ScipmBot
+Allow: /
+
+User-agent: Gaisbot
+Allow: /
+
+User-agent: coccocbot
+Allow: /
+Disallow: /api/
+
+User-agent: coccocbot-image
+Allow: /
+
+# ========================================
+# SOCIAL MEDIA BOTS
+# ========================================
+
+User-agent: Twitterbot
+Allow: /
+Disallow: /api/
+
 User-agent: facebookexternalhit
+Allow: /
+Disallow: /api/
+User-agent: Facebot
 Allow: /
 
 User-agent: LinkedInBot
 Allow: /
+Disallow: /api/
 
 User-agent: Pinterest
 Allow: /
+Disallow: /api/
 
 User-agent: WhatsApp
 Allow: /
@@ -49,21 +128,135 @@ Allow: /
 User-agent: Discordbot
 Allow: /
 
-# AI crawlers
+User-agent: Slackbot
+Allow: /
+
+User-agent: SkypePreview
+Allow: /
+
+# ========================================
+# AI & ML CRAWLERS
+# ========================================
+
 User-agent: GPTBot
 Allow: /
+Disallow: /api/
+Allow: /*?ref=chatgpt
+Disallow: /*?ref=openai
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /api/
 
 User-agent: Google-Extended
+Allow: /
+Disallow: /api/
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: GoogleVertexBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /api/
+
+User-agent: anthropic-ai
+Allow: /
+Disallow: /api/
+
+User-agent: Amazonbot
+Allow: /
+Disallow: /api/
+
+User-agent: Amazon-Device
 Allow: /
 
 User-agent: Applebot
 Allow: /
+Disallow: /api/
 
-# Sitemap
+User-agent: AppleNewsBot
+Allow: /
+
+User-agent: AhrefsBot
+Allow: /
+Disallow: /api/
+
+User-agent: SemrushBot
+Allow: /
+Disallow: /api/
+
+User-agent: Moz
+Allow: /
+
+User-agent: seoscanners
+Allow: /
+
+# ========================================
+# FEED & MEDIA BOTS
+# ========================================
+
+User-agent: FeedBurner
+Allow: /
+
+User-agent: Mediapartners-Google
+Allow: /
+
+User-agent: GoogleAdsense
+Allow: /
+
+User-agent: GoogleMediapartners
+Allow: /
+
+User-agent: AdSense bot
+Allow: /
+
+User-agent: BingPreview
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Fasterbot
+Allow: /
+
+User-agent: CloudflareAlwaysOnline
+Allow: /
+
+User-agent: CloudflareSpeedTest
+Allow: /
+
+User-agent: CCBot
+Allow: /
+Disallow: /api/
+
+User-agent: CommonCrawl
+Allow: /
+
+User-agent: DatadogSynthetics
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+# ========================================
+# SITEMAP LOCATION
+# ========================================
+
 Sitemap: https://imagesqueeze.com/sitemap.xml
+Sitemap: https://imagesqueeze.com/sitemap-index.xml
 
-# Host
+# ========================================
+# HOST DIRECTIVE
+# ========================================
+
 Host: https://imagesqueeze.com
+
+# ========================================
+# SOURCE
+# ========================================
+
+# Generated for ImageSqueeze - Free Online Image Compressor
+# Last Updated: April 2026
