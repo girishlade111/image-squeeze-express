@@ -1,6 +1,5 @@
 import { X, Loader2, Check, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { UploadedFile } from '@/hooks/useImageUpload';
 import { formatFileSize } from '@/utils/imageProcessor';
@@ -52,15 +51,32 @@ const ImageQueue = ({
   return (
     <div className="mx-auto mt-10 max-w-2xl">
       {/* Count */}
-      <p className="mb-4 text-sm font-medium text-muted-foreground">
-        {files.length} image{files.length !== 1 ? 's' : ''} selected
-      </p>
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-sm font-semibold text-foreground">
+          {files.length} image{files.length !== 1 ? 's' : ''} selected
+        </p>
+        {!isProcessing && !allDone && files.length > 0 && (
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="h-8 rounded-full text-xs text-muted-foreground hover:text-destructive"
+            onClick={onClearAll}
+          >
+            Clear All
+          </Button>
+        )}
+      </div>
 
       {/* Progress bar */}
       {isProcessing && (
-        <div className="mb-4 animate-fade-in-up" style={{ animationDuration: '0.3s' }}>
-          <Progress value={progress} className="h-2.5 rounded-full" />
-          <p className="mt-1.5 text-center text-xs font-medium text-muted-foreground">
+        <div className="mb-6" style={{ animationDuration: '0.3s' }}>
+          <div className="relative overflow-hidden rounded-full bg-secondary/50 h-3">
+            <div 
+              className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary to-accent transition-all duration-300 ease-out"
+              style={{ width: `${progress}%` }}
+            />
+          </div>
+          <p className="mt-2 text-center text-xs font-medium text-muted-foreground">
             {processingText || `${progress}% complete`}
           </p>
         </div>
@@ -71,20 +87,20 @@ const ImageQueue = ({
         {files.map((f, i) => (
           <div
             key={f.id}
-            className="group relative flex items-center gap-3 rounded-2xl border border-border/50 bg-card/60 backdrop-blur-sm p-3 transition-all duration-300 hover:border-border animate-fade-in-up"
+            className="group relative flex items-center gap-3 rounded-2xl border border-border/40 bg-card/70 backdrop-blur-sm p-3.5 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/[0.08]"
             style={{ animationDelay: `${i * 50}ms`, animationDuration: '0.4s' }}
           >
             {/* Thumbnail */}
-            <div className="relative h-[60px] w-[60px] flex-shrink-0">
+            <div className="relative h-[64px] w-[64px] flex-shrink-0 overflow-hidden rounded-xl">
               <img
                 src={f.preview}
                 alt={f.name}
-                className="h-full w-full rounded-xl object-cover"
+                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
                 loading="lazy"
               />
               {f.status === 'processing' && (
-                <div className="absolute inset-0 flex items-center justify-center rounded-xl bg-background/60">
-                  <Loader2 className="h-5 w-5 animate-spin text-primary" />
+                <div className="absolute inset-0 flex items-center justify-center bg-background/70 backdrop-blur-sm">
+                  <div className="h-8 w-8 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
                 </div>
               )}
             </div>
@@ -92,16 +108,16 @@ const ImageQueue = ({
             {/* Info */}
             <div className="min-w-0 flex-1">
               <p className="truncate text-sm font-medium leading-tight" title={f.name}>
-                {truncate(f.name, 20)}
+                {truncate(f.name, 22)}
               </p>
-              <p className="mt-0.5 text-xs text-muted-foreground">
+              <p className="mt-1 text-xs text-muted-foreground">
                 {formatFileSize(f.originalSize)}
-                <span className="mx-1">·</span>
+                <span className="mx-1.5">·</span>
                 {f.originalWidth}×{f.originalHeight}
               </p>
               <Badge
                 variant="outline"
-                className={`mt-1.5 rounded-full px-2 py-0 text-[10px] font-medium ${statusStyles[f.status]}`}
+                className={`mt-2 rounded-full px-2.5 py-0.5 text-[10px] font-medium ${statusStyles[f.status]}`}
               >
                 {f.status === 'processing' && <Loader2 className="mr-1 h-2.5 w-2.5 animate-spin" />}
                 {f.status === 'done' && <Check className="mr-1 h-2.5 w-2.5" />}
@@ -122,7 +138,7 @@ const ImageQueue = ({
                 onRemove(f.id);
               }}
               disabled={isProcessing}
-              className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-destructive/90 text-destructive-foreground opacity-0 shadow-md transition-opacity group-hover:opacity-100 hover:bg-destructive disabled:opacity-0"
+              className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-destructive/90 text-destructive-foreground opacity-0 shadow-md transition-all duration-200 group-hover:opacity-100 hover:bg-destructive hover:scale-110 disabled:opacity-0"
               aria-label={`Remove ${f.name}`}
             >
               <X className="h-3.5 w-3.5" />
@@ -132,42 +148,33 @@ const ImageQueue = ({
       </div>
 
       {/* Action buttons */}
-      <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-        <Button
-          size="lg"
-          disabled={isProcessing || allDone}
-          onClick={onProcessAll}
-          className={`rounded-full px-8 text-primary-foreground transition-all ${
-            isProcessing ? 'animate-pulse' : ''
-          }`}
-          style={{
-            background: isProcessing || allDone ? undefined : 'linear-gradient(135deg, #7C3AED, #06B6D4)',
-          }}
-        >
-          {isProcessing ? (
-            <>
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              Processing…
-            </>
-          ) : allDone ? (
-            <>
-              <Check className="mr-2 h-4 w-4" />
-              All Done!
-            </>
-          ) : (
-            '⚡ Compress & Convert All'
-          )}
-        </Button>
-        <Button
-          variant="ghost"
-          size="lg"
-          className="rounded-full text-destructive hover:bg-destructive/10 hover:text-destructive"
-          onClick={onClearAll}
-          disabled={isProcessing}
-        >
-          Clear All
-        </Button>
-      </div>
+      {!allDone && (
+        <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <Button
+            size="lg"
+            disabled={isProcessing}
+            onClick={onProcessAll}
+            className={`w-full sm:w-auto rounded-2xl px-8 text-primary-foreground transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/25 ${
+              isProcessing ? 'animate-pulse' : ''
+            }`}
+            style={{
+              background: isProcessing ? undefined : 'linear-gradient(135deg, #7C3AED, #06B6D4)',
+            }}
+          >
+            {isProcessing ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Processing...
+              </>
+            ) : (
+              <>
+                <span className="mr-2 text-lg">⚡</span>
+                Compress & Convert All
+              </>
+            )}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

@@ -29,14 +29,14 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-background/60 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-2xl bg-background/70 transition-all duration-500 ${
         scrolled
-          ? 'shadow-lg shadow-background/50'
+          ? 'shadow-lg shadow-primary/[0.08] border-b border-border/20'
           : ''
       }`}
     >
-      {/* Violet glow line */}
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
+      {/* Gradient line */}
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
         {/* Brand */}
         <a href="#home" className="flex items-center gap-2.5 group">
@@ -65,17 +65,17 @@ const Header = () => {
               key={l.href}
               href={l.href}
               onClick={(e) => handleNavClick(e, l.href)}
-              className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-foreground/5"
+              className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground hover:bg-primary/5 hover:scale-105"
             >
               {l.label}
             </a>
           ))}
-          <div className="ml-2 h-5 w-px bg-border" />
+          <div className="ml-2 h-6 w-px bg-border" />
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleDarkMode}
-            className="ml-1 rounded-full hover:bg-foreground/5"
+            className="ml-1 rounded-full hover:bg-primary/5 hover:text-primary transition-all duration-300"
             aria-label="Toggle theme"
           >
             {darkMode ? (

@@ -66,16 +66,16 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
 
   return (
     <div className="mx-auto mt-10 max-w-2xl">
-      <div className="rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-5 sm:p-6">
+      <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-2xl p-5 sm:p-6 shadow-2xl shadow-primary/[0.05]">
         <Tabs defaultValue="compress">
-          <TabsList className="grid w-full grid-cols-3 rounded-xl bg-secondary/80 p-1">
-            <TabsTrigger value="compress" className="rounded-lg text-xs font-semibold sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+          <TabsList className="grid w-full grid-cols-3 rounded-2xl bg-secondary/60 p-1.5">
+            <TabsTrigger value="compress" className="rounded-xl text-xs font-semibold sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25">
               Compress
             </TabsTrigger>
-            <TabsTrigger value="resize" className="rounded-lg text-xs font-semibold sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            <TabsTrigger value="resize" className="rounded-xl text-xs font-semibold sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25">
               Resize
             </TabsTrigger>
-            <TabsTrigger value="convert" className="rounded-lg text-xs font-semibold sm:text-sm data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+            <TabsTrigger value="convert" className="rounded-xl text-xs font-semibold sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25">
               Convert
             </TabsTrigger>
           </TabsList>
@@ -182,15 +182,15 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
 
             {/* Presets */}
             <div>
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-3">
                 <p className="text-sm font-semibold">Social Media Presets</p>
                 {settings.selectedPreset && (
-                  <Button variant="ghost" size="sm" className="h-7 rounded-full text-xs text-muted-foreground" onClick={onResetResize}>
+                  <Button variant="ghost" size="sm" className="h-7 rounded-full text-xs text-muted-foreground hover:text-destructive" onClick={onResetResize}>
                     <X className="mr-1 h-3 w-3" /> Clear
                   </Button>
                 )}
               </div>
-              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 max-h-[240px] overflow-y-auto pr-1">
+              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 max-h-[240px] overflow-y-auto pr-1">
                 {presets.map((p) => (
                   <button
                     key={p.id}
@@ -199,13 +199,13 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
                     }
                     aria-label={`${p.name} preset: ${p.w} by ${p.h} pixels`}
                     aria-pressed={settings.selectedPreset === p.id}
-                    className={`flex flex-col items-center gap-1 rounded-xl border p-3 text-center transition-all hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                    className={`flex flex-col items-center gap-1.5 rounded-2xl border p-4 text-center transition-all duration-300 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                       settings.selectedPreset === p.id
-                        ? 'border-primary bg-primary/10 shadow-[0_0_12px_hsl(var(--violet)/0.2)]'
-                        : 'border-border/50 bg-transparent'
+                        ? 'border-primary bg-gradient-to-br from-primary/10 to-accent/10 shadow-[0_0_20px_hsl(var(--violet)/0.2)]'
+                        : 'border-border/40 bg-transparent hover:border-primary/30'
                     }`}
                   >
-                    <span className="text-lg" aria-hidden="true">{p.emoji}</span>
+                    <span className="text-2xl" aria-hidden="true">{p.emoji}</span>
                     <span className="text-[11px] font-medium leading-tight">{p.name}</span>
                     <span className="text-[10px] text-muted-foreground">{p.w}×{p.h}</span>
                   </button>
@@ -223,18 +223,18 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
                 role="radio"
                 aria-checked={settings.outputFormat === f.value}
                 aria-label={`Output format: ${f.label}`}
-                className={`flex w-full items-center gap-4 rounded-xl border p-4 text-left transition-all hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                className={`flex w-full items-center gap-4 rounded-2xl border p-4 text-left transition-all duration-300 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                   settings.outputFormat === f.value
-                    ? 'border-primary bg-primary/10 shadow-[0_0_12px_hsl(var(--violet)/0.15)]'
-                    : 'border-border/50'
+                    ? 'border-primary bg-gradient-to-br from-primary/10 to-accent/10 shadow-[0_0_20px_hsl(var(--violet)/0.15)]'
+                    : 'border-border/40'
                 }`}
               >
                 {/* Radio dot */}
-                <div className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
-                  settings.outputFormat === f.value ? 'border-primary' : 'border-muted-foreground/40'
+                <div className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border-2 transition-all ${
+                  settings.outputFormat === f.value ? 'border-primary scale-110' : 'border-muted-foreground/40'
                 }`}>
                   {settings.outputFormat === f.value && (
-                    <div className="h-2.5 w-2.5 rounded-full bg-primary" />
+                    <div className="h-2.5 w-2.5 rounded-full bg-primary animate-scale-in" />
                   )}
                 </div>
 
@@ -242,7 +242,7 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
                   <div className="flex items-center gap-2">
                     <span className="text-sm font-semibold">{f.label}</span>
                     {f.recommended && (
-                      <span className="animate-pulse rounded-full bg-accent/20 px-2 py-0.5 text-[10px] font-bold text-accent" style={{ animationDuration: '2.5s' }}>
+                      <span className="rounded-full bg-gradient-to-r from-accent/20 to-primary/20 px-2.5 py-0.5 text-[10px] font-bold text-accent">
                         Recommended
                       </span>
                     )}

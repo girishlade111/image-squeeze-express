@@ -49,14 +49,14 @@ const Footer = () => {
         style={{ background: 'linear-gradient(180deg, #7C3AED, transparent)' }}
       />
 
-      <div className="relative bg-card border-t border-border/20">
+      <div className="relative bg-card/80 backdrop-blur-xl border-t border-border/20">
         <div className="container mx-auto px-6 pb-8 pt-16">
           {/* Main grid */}
           <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-12">
             {/* Brand column */}
             <div className="lg:col-span-5">
               <Link to="/" className="inline-flex items-center gap-2.5 group">
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 border border-primary/20 transition-all group-hover:bg-primary/20 group-hover:scale-105">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg group-hover:shadow-primary/20">
                   <Zap className="h-5 w-5 text-primary" />
                 </div>
                 <span
@@ -75,7 +75,7 @@ const Footer = () => {
               </p>
 
               {/* Social icons */}
-              <div className="mt-6 flex items-center gap-2">
+              <div className="mt-6 flex items-center gap-2.5">
                 {socials.map((s) => (
                   <a
                     key={s.label}
@@ -83,7 +83,7 @@ const Footer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.label}
-                    className="group/icon flex h-9 w-9 items-center justify-center rounded-lg border border-border/40 bg-foreground/[0.03] text-muted-foreground transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-primary hover:-translate-y-0.5 hover:shadow-[0_4px_12px_hsl(var(--primary)/0.15)]"
+                    className="group/icon flex h-10 w-10 items-center justify-center rounded-xl border border-border/40 bg-foreground/[0.03] text-muted-foreground transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-primary hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/15"
                   >
                     <s.icon className="h-4 w-4 transition-transform duration-300 group-hover/icon:scale-110" />
                   </a>

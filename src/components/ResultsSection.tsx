@@ -75,14 +75,19 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
   const shareUrl = encodeURIComponent('https://imagesqueeze.com');
 
   return (
-    <section className="container mx-auto mt-12 max-w-3xl px-4" ref={ref} aria-label="Compression results">
-      <h2
-        className={`mb-8 text-center text-2xl font-extrabold tracking-tight sm:text-3xl transition-all duration-700 ${
-          visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
+    <section className="container mx-auto mt-16 max-w-3xl px-4" ref={ref} aria-label="Compression results">
+      <div
+        className={`text-center transition-all duration-700 ${
+          visible ? 'opacity-100' : 'opacity-0'
         }`}
       >
-        Results
-      </h2>
+        <div className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-primary/10 to-accent/10 px-6 py-3">
+          <span className="text-3xl">🎉</span>
+          <h2 className="text-2xl font-extrabold tracking-tight">
+            Compression Complete!
+          </h2>
+        </div>
+      </div>
 
       {/* Stats bar */}
       <StatsBar
@@ -194,22 +199,22 @@ function StatsBar({ filesCount, totalSaved, avgReduction, visible }: {
 
   return (
     <div
-      className={`grid grid-cols-3 gap-3 transition-all duration-700 ${
-        visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
+      className={`grid grid-cols-3 gap-4 transition-all duration-700 ${
+        visible ? 'opacity-100' : 'opacity-0'
       }`}
       style={{ animationDelay: '100ms' }}
     >
-      <div className="rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-4 text-center">
-        <p className="text-2xl font-extrabold text-primary">{filesCount}</p>
-        <p className="text-[11px] text-muted-foreground mt-0.5">Images</p>
+      <div className="rounded-2xl border border-border/40 bg-card/70 backdrop-blur-xl p-5 text-center shadow-lg">
+        <p className="text-3xl font-extrabold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">{filesCount}</p>
+        <p className="text-[11px] font-medium text-muted-foreground mt-1">Images</p>
       </div>
-      <div className="rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-4 text-center">
-        <p className="text-2xl font-extrabold text-emerald-400">{animatedSaved} KB</p>
-        <p className="text-[11px] text-muted-foreground mt-0.5">Saved</p>
+      <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.05] p-5 text-center shadow-lg shadow-emerald-500/[0.1]">
+        <p className="text-3xl font-extrabold text-emerald-400">{animatedSaved} KB</p>
+        <p className="text-[11px] font-medium text-muted-foreground mt-1">Saved</p>
       </div>
-      <div className="rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-4 text-center">
-        <p className="text-2xl font-extrabold text-emerald-400">{animatedReduction}%</p>
-        <p className="text-[11px] text-muted-foreground mt-0.5">Avg Reduction</p>
+      <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.05] p-5 text-center shadow-lg shadow-emerald-500/[0.1]">
+        <p className="text-3xl font-extrabold text-emerald-400">{animatedReduction}%</p>
+        <p className="text-[11px] font-medium text-muted-foreground mt-1">Smaller</p>
       </div>
     </div>
   );
