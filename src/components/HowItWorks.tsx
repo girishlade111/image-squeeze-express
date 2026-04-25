@@ -49,7 +49,7 @@ const HowItWorks = () => {
         How It{' '}
         <span
           style={{
-            background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
+            background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
           }}
@@ -75,7 +75,7 @@ const HowItWorks = () => {
                 </div>
                 {/* Number badge */}
                 <div className="absolute -top-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-primary-foreground"
-                  style={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)' }}
+                  style={{ background: 'linear-gradient(135deg, #4F46E5, #0D9488)' }}
                 >
                   {s.num}
                 </div>

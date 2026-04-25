@@ -196,7 +196,7 @@ const ImageQueue = ({
                   isProcessing ? 'animate-pulse' : ''
                 }`}
                 style={{
-                  background: isProcessing ? undefined : 'linear-gradient(135deg, #7C3AED, #06B6D4)',
+                  background: isProcessing ? undefined : 'linear-gradient(135deg, #4F46E5, #0D9488)',
                 }}
               >
                 {isProcessing ? (

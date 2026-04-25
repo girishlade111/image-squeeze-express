@@ -72,7 +72,7 @@ const HeroSection = ({ onFilesSelected, imageCount, children }: HeroSectionProps
             <br />
             <span
               style={{
-                background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
+                background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
               }}

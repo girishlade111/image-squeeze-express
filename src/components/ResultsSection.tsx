@@ -145,7 +145,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
                 <Button
                   size="sm"
                   className="rounded-full text-primary-foreground"
-                  style={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)' }}
+                  style={{ background: 'linear-gradient(135deg, #4F46E5, #0D9488)' }}
                   onClick={() => downloadSingle(f)}
                 >
                   <Download className="mr-1 h-3.5 w-3.5" /> Download
@@ -161,7 +161,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
         <Button
           size="lg"
           className="w-full sm:w-auto rounded-full text-primary-foreground"
-          style={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)' }}
+          style={{ background: 'linear-gradient(135deg, #4F46E5, #0D9488)' }}
           onClick={downloadAll}
         >
           <Download className="mr-2 h-4 w-4" /> Download All as ZIP

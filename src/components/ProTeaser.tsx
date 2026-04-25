@@ -51,7 +51,7 @@ const ProTeaser = () => {
         className={`relative mx-auto max-w-4xl overflow-hidden rounded-2xl p-[1px] transition-all duration-700 ${
           visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
         }`}
-        style={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)' }}
+        style={{ background: 'linear-gradient(135deg, #4F46E5, #0D9488)' }}
       >
         {/* Inner card */}
         <div className="rounded-[15px] bg-card p-8 sm:p-10">
@@ -62,7 +62,7 @@ const ProTeaser = () => {
                 Need More Power?{' '}
                 <span
                   style={{
-                    background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
+                    background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                   }}
@@ -98,7 +98,7 @@ const ProTeaser = () => {
               <Button
                 size="lg"
                 className="mt-6 w-full rounded-full text-primary-foreground"
-                style={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)' }}
+                style={{ background: 'linear-gradient(135deg, #4F46E5, #0D9488)' }}
                 onClick={() => setOpen(true)}
               >
                 🔔 Join Waitlist
@@ -129,7 +129,7 @@ const ProTeaser = () => {
             <Button
               type="submit"
               className="flex-shrink-0 rounded-full text-primary-foreground"
-              style={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)' }}
+              style={{ background: 'linear-gradient(135deg, #4F46E5, #0D9488)' }}
             >
               Notify Me
             </Button>

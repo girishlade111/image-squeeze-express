@@ -19,7 +19,7 @@ const About = () => (
         {/* Hero */}
         <h1 className="text-4xl font-black tracking-tight sm:text-5xl">
           About{' '}
-          <span style={{ background: 'linear-gradient(135deg, #7C3AED, #06B6D4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          <span style={{ background: 'linear-gradient(135deg, #4F46E5, #0D9488)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             ImageSqueeze
           </span>
         </h1>
