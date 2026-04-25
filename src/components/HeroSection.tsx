@@ -9,10 +9,10 @@ interface HeroSectionProps {
 
 const HeroSection = ({ onFilesSelected, imageCount, children }: HeroSectionProps) => {
   const floatingShapes = useMemo(() => [
-    { size: 320, left: '5%', top: '15%', delay: '0s', duration: '20s' },
-    { size: 260, left: '80%', top: '60%', delay: '-5s', duration: '25s' },
-    { size: 180, left: '70%', top: '20%', delay: '-10s', duration: '18s' },
-    { size: 150, left: '15%', top: '70%', delay: '-7s', duration: '22s' },
+    { size: 200, left: '5%', top: '15%', delay: '0s', duration: '20s' },
+    { size: 160, left: '80%', top: '60%', delay: '-5s', duration: '25s' },
+    { size: 120, left: '70%', top: '20%', delay: '-10s', duration: '18s' },
+    { size: 100, left: '15%', top: '70%', delay: '-7s', duration: '22s' },
   ], []);
 
   return (

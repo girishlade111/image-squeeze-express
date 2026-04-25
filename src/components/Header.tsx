@@ -15,7 +15,7 @@ const Header = () => {
   const { darkMode, toggleDarkMode } = useTheme();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 50);
+    const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
@@ -29,21 +29,19 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-2xl bg-background/70 transition-all duration-500 ${
+      className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-background/80 transition-all duration-300 ${
         scrolled
-          ? 'shadow-lg shadow-primary/[0.08] border-b border-border/20'
+          ? 'shadow-sm border-b border-border/20'
           : ''
       }`}
     >
-      {/* Gradient line */}
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
-      <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6">
-        {/* Brand */}
-        <a href="#home" className="flex items-center gap-2.5 group">
-          <span className="text-2xl" role="img" aria-label="lightning bolt">⚡</span>
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+      <div className="container mx-auto flex h-12 items-center justify-between px-3 sm:px-4">
+        <a href="#home" className="flex items-center gap-1.5 group">
+          <span className="text-lg" role="img" aria-label="lightning bolt">⚡</span>
           <div className="flex flex-col">
             <span
-              className="text-xl font-extrabold tracking-tight"
+              className="text-base font-bold tracking-tight"
               style={{
                 background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
                 WebkitBackgroundClip: 'text',
@@ -52,65 +50,59 @@ const Header = () => {
             >
               ImageSqueeze
             </span>
-            <span className="hidden text-[10px] font-medium tracking-wide text-muted-foreground leading-none mt-0.5 sm:block">
-              Compress. Resize. Convert. Instantly.
-            </span>
           </div>
         </a>
 
-        {/* Desktop nav */}
-        <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
+        <nav className="hidden items-center gap-0.5 md:flex" aria-label="Main navigation">
           {navLinks.map((l) => (
             <a
               key={l.href}
               href={l.href}
               onClick={(e) => handleNavClick(e, l.href)}
-              className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-all duration-300 hover:text-foreground hover:bg-primary/5 hover:scale-105"
+              className="rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-primary/5"
             >
               {l.label}
             </a>
           ))}
-          <div className="ml-2 h-6 w-px bg-border" />
+          <div className="ml-1.5 h-4 w-px bg-border" />
           <Button
             variant="ghost"
             size="icon"
             onClick={toggleDarkMode}
-            className="ml-1 rounded-full hover:bg-primary/5 hover:text-primary transition-all duration-300"
+            className="h-7 w-7 rounded-full hover:bg-primary/5 hover:text-primary"
             aria-label="Toggle theme"
           >
             {darkMode ? (
-              <Sun className="h-[18px] w-[18px] text-amber-400" />
+              <Sun className="h-3.5 w-3.5 text-amber-400" />
             ) : (
-              <Moon className="h-[18px] w-[18px]" />
+              <Moon className="h-3.5 w-3.5" />
             )}
           </Button>
         </nav>
 
-        {/* Mobile controls */}
-        <div className="flex items-center gap-1 md:hidden">
-          <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="rounded-full hover:bg-foreground/5" aria-label="Toggle theme">
-            {darkMode ? <Sun className="h-[18px] w-[18px] text-amber-400" /> : <Moon className="h-[18px] w-[18px]" />}
+        <div className="flex items-center gap-0.5 md:hidden">
+          <Button variant="ghost" size="icon" onClick={toggleDarkMode} className="h-8 w-8 rounded-full hover:bg-foreground/5" aria-label="Toggle theme">
+            {darkMode ? <Sun className="h-4 w-4 text-amber-400" /> : <Moon className="h-4 w-4" />}
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setMobileOpen(!mobileOpen)} className="rounded-full hover:bg-foreground/5" aria-label={mobileOpen ? 'Close menu' : 'Open menu'} aria-expanded={mobileOpen}>
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          <Button variant="ghost" size="icon" onClick={() => setMobileOpen(!mobileOpen)} className="h-8 w-8 rounded-full hover:bg-foreground/5" aria-label={mobileOpen ? 'Close menu' : 'Open menu'} aria-expanded={mobileOpen}>
+            {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </Button>
         </div>
       </div>
 
-      {/* Mobile dropdown */}
       <nav
-        className={`overflow-hidden border-t border-foreground/10 bg-background/95 backdrop-blur-md md:hidden transition-all duration-300 ease-in-out ${
-          mobileOpen ? 'max-h-60 opacity-100' : 'max-h-0 opacity-0 border-transparent'
+        className={`overflow-hidden border-t border-foreground/10 bg-background/95 backdrop-blur-md md:hidden transition-all duration-200 ${
+          mobileOpen ? 'max-h-48 opacity-100' : 'max-h-0 opacity-0 border-transparent'
         }`}
         aria-label="Mobile navigation"
       >
-        <div className="px-4 pb-4 pt-2">
+        <div className="px-3 pb-3 pt-1">
           {navLinks.map((l) => (
             <a
               key={l.href}
               href={l.href}
               onClick={(e) => handleNavClick(e, l.href)}
-              className="block rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-foreground/5"
+              className="block rounded-lg px-3 py-2 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-foreground/5"
             >
               {l.label}
             </a>

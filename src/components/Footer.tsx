@@ -36,31 +36,22 @@ const Footer = () => {
   };
 
   return (
-    <footer className="relative mt-32 overflow-hidden">
-      {/* Gradient top border */}
+    <footer className="relative mt-16 overflow-hidden">
       <div
         className="h-px w-full"
         style={{ background: 'linear-gradient(90deg, transparent, #7C3AED, #06B6D4, transparent)' }}
       />
 
-      {/* Subtle glow */}
-      <div
-        className="pointer-events-none absolute left-1/2 top-0 -translate-x-1/2 h-40 w-[600px] opacity-20 blur-[100px]"
-        style={{ background: 'linear-gradient(180deg, #7C3AED, transparent)' }}
-      />
-
       <div className="relative bg-card/80 backdrop-blur-xl border-t border-border/20">
-        <div className="container mx-auto px-6 pb-8 pt-16">
-          {/* Main grid */}
-          <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-12">
-            {/* Brand column */}
+        <div className="container mx-auto px-4 pb-6 pt-10">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-12">
             <div className="lg:col-span-5">
-              <Link to="/" className="inline-flex items-center gap-2.5 group">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20 transition-all duration-300 group-hover:scale-105 group-hover:shadow-lg group-hover:shadow-primary/20">
-                  <Zap className="h-5 w-5 text-primary" />
+              <Link to="/" className="inline-flex items-center gap-2 group">
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 border border-primary/20">
+                  <Zap className="h-4 w-4 text-primary" />
                 </div>
                 <span
-                  className="text-xl font-extrabold tracking-tight"
+                  className="text-base font-bold tracking-tight"
                   style={{
                     background: 'linear-gradient(135deg, #7C3AED, #06B6D4)',
                     WebkitBackgroundClip: 'text',
@@ -70,12 +61,11 @@ const Footer = () => {
                   ImageSqueeze
                 </span>
               </Link>
-              <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+              <p className="mt-3 max-w-xs text-xs leading-relaxed text-muted-foreground">
                 Compress, resize, and convert your images instantly — right in your browser. No uploads, no signups, 100% private.
               </p>
 
-              {/* Social icons */}
-              <div className="mt-6 flex items-center gap-2.5">
+              <div className="mt-4 flex items-center gap-1.5">
                 {socials.map((s) => (
                   <a
                     key={s.label}
@@ -83,27 +73,25 @@ const Footer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.label}
-                    className="group/icon flex h-10 w-10 items-center justify-center rounded-xl border border-border/40 bg-foreground/[0.03] text-muted-foreground transition-all duration-300 hover:border-primary/50 hover:bg-primary/10 hover:text-primary hover:-translate-y-1 hover:shadow-lg hover:shadow-primary/15"
+                    className="group/icon flex h-7 w-7 items-center justify-center rounded-lg border border-border/40 bg-foreground/[0.03] text-muted-foreground transition-colors hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
                   >
-                    <s.icon className="h-4 w-4 transition-transform duration-300 group-hover/icon:scale-110" />
+                    <s.icon className="h-3.5 w-3.5" />
                   </a>
                 ))}
               </div>
             </div>
 
-            {/* Link columns */}
             <div className="lg:col-span-7">
-              <div className="grid grid-cols-3 gap-8">
-                {/* Product */}
+              <div className="grid grid-cols-3 gap-6">
                 <div>
-                  <h4 className="mb-4 text-xs font-bold uppercase tracking-[0.15em] text-foreground/50">Product</h4>
-                  <nav className="flex flex-col gap-2.5" aria-label="Product links">
+                  <h4 className="mb-3 text-[10px] font-bold uppercase tracking-[0.15em] text-foreground/50">Product</h4>
+                  <nav className="flex flex-col gap-2" aria-label="Product links">
                     {productLinks.map((link) => (
                       <a
                         key={link.label}
                         href={link.href}
                         onClick={(e) => handleAnchorClick(e, link.href)}
-                        className="text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground hover:translate-x-0.5"
+                        className="text-xs text-muted-foreground transition-colors hover:text-foreground"
                       >
                         {link.label}
                       </a>
@@ -111,15 +99,14 @@ const Footer = () => {
                   </nav>
                 </div>
 
-                {/* Company */}
                 <div>
-                  <h4 className="mb-4 text-xs font-bold uppercase tracking-[0.15em] text-foreground/50">Company</h4>
-                  <nav className="flex flex-col gap-2.5" aria-label="Company links">
+                  <h4 className="mb-3 text-[10px] font-bold uppercase tracking-[0.15em] text-foreground/50">Company</h4>
+                  <nav className="flex flex-col gap-2" aria-label="Company links">
                     {companyLinks.map((link) => (
                       <Link
                         key={link.label}
                         to={link.to}
-                        className="text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
+                        className="text-xs text-muted-foreground transition-colors hover:text-foreground"
                       >
                         {link.label}
                       </Link>
@@ -128,23 +115,21 @@ const Footer = () => {
                       href="https://ladestack.in"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
+                      className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-colors hover:text-foreground"
                     >
                       Lade Stack
-                      <span className="text-[10px] opacity-60">↗</span>
                     </a>
                   </nav>
                 </div>
 
-                {/* Legal */}
                 <div>
-                  <h4 className="mb-4 text-xs font-bold uppercase tracking-[0.15em] text-foreground/50">Legal</h4>
-                  <nav className="flex flex-col gap-2.5" aria-label="Legal links">
+                  <h4 className="mb-3 text-[10px] font-bold uppercase tracking-[0.15em] text-foreground/50">Legal</h4>
+                  <nav className="flex flex-col gap-2" aria-label="Legal links">
                     {legalLinks.map((link) => (
                       <Link
                         key={link.label}
                         to={link.to}
-                        className="text-sm text-muted-foreground transition-colors duration-200 hover:text-foreground"
+                        className="text-xs text-muted-foreground transition-colors hover:text-foreground"
                       >
                         {link.label}
                       </Link>
@@ -155,12 +140,11 @@ const Footer = () => {
             </div>
           </div>
 
-          {/* Bottom bar */}
-          <div className="mt-14 flex flex-col items-center gap-4 border-t border-foreground/[0.06] pt-8 sm:flex-row sm:justify-between">
-            <p className="text-xs text-muted-foreground/70">
+          <div className="mt-8 flex flex-col items-center gap-2 border-t border-foreground/[0.06] pt-6 sm:flex-row sm:justify-between">
+            <p className="text-[10px] text-muted-foreground/70">
               © 2026 ImageSqueeze. All rights reserved.
             </p>
-            <p className="text-xs text-muted-foreground/70">
+            <p className="text-[10px] text-muted-foreground/70">
               Built with <span className="text-red-400">❤️</span> by{' '}
               <a
                 href="https://ladestack.in"

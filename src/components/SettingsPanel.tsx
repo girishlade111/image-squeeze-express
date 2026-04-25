@@ -166,28 +166,28 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
               </button>
 
               <div className="flex-1">
-                <Label className="text-sm font-medium">Height (px)</Label>
+                <Label className="text-xs font-medium">Height (px)</Label>
                 <Input
                   type="number"
                   placeholder="Auto"
                   value={settings.height ?? ''}
                   onChange={(e) => handleHeightChange(e.target.value)}
-                  className="mt-1.5 rounded-xl"
+                  className="mt-1 rounded-lg"
                 />
               </div>
             </div>
 
             {/* Presets */}
             <div>
-              <div className="flex items-center justify-between mb-3">
-                <p className="text-sm font-semibold">Social Media Presets</p>
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-xs font-medium">Presets</p>
                 {settings.selectedPreset && (
-                  <Button variant="ghost" size="sm" className="h-7 rounded-full text-xs text-muted-foreground hover:text-destructive" onClick={onResetResize}>
-                    <X className="mr-1 h-3 w-3" /> Clear
+                  <Button variant="ghost" size="sm" className="h-6 text-[10px] text-muted-foreground hover:text-destructive" onClick={onResetResize}>
+                    <X className="mr-0.5 h-2.5 w-2.5" /> Clear
                   </Button>
                 )}
               </div>
-              <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 max-h-[240px] overflow-y-auto pr-1">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 max-h-[180px] overflow-y-auto pr-1">
                 {presets.map((p) => (
                   <button
                     key={p.id}
@@ -196,23 +196,23 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
                     }
                     aria-label={`${p.name} preset: ${p.w} by ${p.h} pixels`}
                     aria-pressed={settings.selectedPreset === p.id}
-                    className={`flex flex-col items-center gap-1.5 rounded-2xl border p-4 text-center transition-all duration-300 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                    className={`flex flex-col items-center gap-0.5 rounded-lg border p-2 text-center transition-colors hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary ${
                       settings.selectedPreset === p.id
-                        ? 'border-primary bg-gradient-to-br from-primary/10 to-accent/10 shadow-[0_0_20px_hsl(var(--violet)/0.2)]'
-                        : 'border-border/40 bg-transparent hover:border-primary/30'
+                        ? 'border-primary bg-primary/10'
+                        : 'border-border/40 bg-transparent'
                     }`}
                   >
-                    <span className="text-2xl" aria-hidden="true">{p.emoji}</span>
-                    <span className="text-[11px] font-medium leading-tight">{p.name}</span>
-                    <span className="text-[10px] text-muted-foreground">{p.w}×{p.h}</span>
+                    <span className="text-base" aria-hidden="true">{p.emoji}</span>
+                    <span className="text-[9px] font-medium">{p.name}</span>
+                    <span className="text-[8px] text-muted-foreground">{p.w}×{p.h}</span>
                   </button>
                 ))}
               </div>
             </div>
           </TabsContent>
 
-          {/* ── CONVERT ── */}
-          <TabsContent value="convert" className="mt-6 space-y-3" role="radiogroup" aria-label="Output format selection">
+{/* ── CONVERT ── */}
+          <TabsContent value="convert" className="mt-4 space-y-2" role="radiogroup" aria-label="Output format selection">
             {formats.map((f) => (
               <button
                 key={f.value}
@@ -220,41 +220,40 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
                 role="radio"
                 aria-checked={settings.outputFormat === f.value}
                 aria-label={`Output format: ${f.label}`}
-                className={`flex w-full items-center gap-4 rounded-2xl border p-4 text-left transition-all duration-300 hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                className={`flex w-full items-center gap-3 rounded-lg border p-3 text-left transition-colors hover:bg-primary/5 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary ${
                   settings.outputFormat === f.value
-                    ? 'border-primary bg-gradient-to-br from-primary/10 to-accent/10 shadow-[0_0_20px_hsl(var(--violet)/0.15)]'
+                    ? 'border-primary bg-primary/10'
                     : 'border-border/40'
                 }`}
               >
-                {/* Radio dot */}
-                <div className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full border-2 transition-all ${
-                  settings.outputFormat === f.value ? 'border-primary scale-110' : 'border-muted-foreground/40'
+                <div className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border ${
+                  settings.outputFormat === f.value ? 'border-primary' : 'border-muted-foreground/40'
                 }`}>
                   {settings.outputFormat === f.value && (
-                    <div className="h-2.5 w-2.5 rounded-full bg-primary animate-scale-in" />
+                    <div className="h-2 w-2 rounded-full bg-primary" />
                   )}
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm font-semibold">{f.label}</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs font-medium">{f.label}</span>
                     {f.recommended && (
-                      <span className="rounded-full bg-gradient-to-r from-accent/20 to-primary/20 px-2.5 py-0.5 text-[10px] font-bold text-accent">
-                        Recommended
+                      <span className="rounded-full bg-accent/20 px-1.5 py-0.5 text-[9px] font-medium text-accent">
+                        Best
                       </span>
                     )}
-                    {f.value === 'webp' && (
+{f.value === 'webp' && (
                       <Tooltip>
                         <TooltipTrigger asChild>
-                          <Info className="h-3.5 w-3.5 text-muted-foreground cursor-help" />
+                          <Info className="h-3 w-3 text-muted-foreground cursor-help" />
                         </TooltipTrigger>
-                        <TooltipContent className="max-w-[240px] text-xs">
-                          WebP images are ~30% smaller than JPEG at the same quality. They improve website load speed and Core Web Vitals scores.
+                        <TooltipContent className="max-w-[200px] text-[10px]">
+                          WebP ~30% smaller than JPEG
                         </TooltipContent>
                       </Tooltip>
                     )}
                   </div>
-                  <p className="text-xs text-muted-foreground mt-0.5">{f.desc}</p>
+                  <p className="text-[10px] text-muted-foreground">{f.desc}</p>
                 </div>
               </button>
             ))}
