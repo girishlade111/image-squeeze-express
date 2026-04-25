@@ -1,6 +1,12 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { toast } from 'sonner';
-import { processImage, toDownloadFile, getImageDimensions, ProcessResult } from '@/utils/imageProcessor';
+import { 
+  processImage, 
+  toDownloadFile, 
+  getImageDimensions, 
+  type ProcessResult,
+  type ProcessSettings,
+} from '@/utils/imageProcessor';
 import type { Settings } from '@/hooks/useSettings';
 
 export interface UploadedFile {
@@ -139,12 +145,20 @@ export function useImageUpload() {
           try {
             const result = await processImage(item.file, {
               quality: settings.quality,
+              autoOptimize: settings.autoOptimize,
               targetSizeKB: settings.targetSizeKB,
               width: settings.width,
               height: settings.height,
               lockAspectRatio: settings.lockAspectRatio,
               outputFormat: settings.outputFormat,
-            });
+              stripEXIF: settings.stripEXIF,
+              grayscale: settings.grayscale,
+              rotation: settings.rotation,
+              mirror: settings.mirror,
+              preserveMetadata: settings.preserveMetadata,
+              progressive: settings.progressive,
+              embedColorProfile: settings.embedColorProfile,
+            }, item.originalSize);
 
             const processedFile = toDownloadFile(item.name, result.blob);
             const processedPreview = URL.createObjectURL(result.blob);

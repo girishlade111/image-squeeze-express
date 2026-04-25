@@ -5,8 +5,8 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { Link2, Unlink2, Info, X } from 'lucide-react';
-import { Settings } from '@/hooks/useSettings';
+import { Link2, Unlink2, Info, X, RotateCw, FlipHorizontal, ImageIcon, Layers } from 'lucide-react';
+import { Settings, QualityPreset, Rotation } from '@/hooks/useSettings';
 
 interface SettingsPanelProps {
   settings: Settings;
@@ -16,14 +16,14 @@ interface SettingsPanelProps {
 
 /* ─── Presets ─── */
 const presets = [
-  { id: 'ig-post', emoji: '📸', name: 'Instagram Post', w: 1080, h: 1080 },
-  { id: 'ig-story', emoji: '📱', name: 'Instagram Story', w: 1080, h: 1920 },
-  { id: 'li-post', emoji: '💼', name: 'LinkedIn Post', w: 1200, h: 627 },
-  { id: 'li-banner', emoji: '💼', name: 'LinkedIn Banner', w: 1584, h: 396 },
-  { id: 'wa-dp', emoji: '💬', name: 'WhatsApp DP', w: 500, h: 500 },
-  { id: 'tw-post', emoji: '🐦', name: 'Twitter/X Post', w: 1200, h: 675 },
-  { id: 'fb-cover', emoji: '📘', name: 'Facebook Cover', w: 820, h: 312 },
-  { id: 'yt-thumb', emoji: '📺', name: 'YouTube Thumb', w: 1280, h: 720 },
+  { id: 'ig-post', emoji: '📸', name: 'IG Post', w: 1080, h: 1080 },
+  { id: 'ig-story', emoji: '📱', name: 'IG Story', w: 1080, h: 1920 },
+  { id: 'li-post', emoji: '💼', name: 'LinkedIn', w: 1200, h: 627 },
+  { id: 'li-banner', emoji: '📊', name: 'LI Banner', w: 1584, h: 396 },
+  { id: 'wa-dp', emoji: '💬', name: 'WhatsApp', w: 500, h: 500 },
+  { id: 'tw-post', emoji: '🐦', name: 'Twitter', w: 1200, h: 675 },
+  { id: 'fb-cover', emoji: '📘', name: 'FB Cover', w: 820, h: 312 },
+  { id: 'yt-thumb', emoji: '📺', name: 'YT Thumb', w: 1280, h: 720 },
   { id: 'fullhd', emoji: '🖥️', name: 'Full HD', w: 1920, h: 1080 },
 ];
 
@@ -31,14 +31,30 @@ const presets = [
 const formats: { value: Settings['outputFormat']; label: string; desc: string; recommended?: boolean }[] = [
   { value: 'jpeg', label: 'JPEG', desc: 'Best for photos' },
   { value: 'png', label: 'PNG', desc: 'Best for transparency' },
-  { value: 'webp', label: 'WebP ⭐', desc: '30% smaller than JPEG', recommended: true },
-  { value: 'original', label: 'Keep Original', desc: 'No conversion' },
+  { value: 'webp', label: 'WebP ⭐', desc: '30% smaller', recommended: true },
+  { value: 'original', label: 'Keep', desc: 'No conversion' },
+];
+
+/* ─── Quality presets ─── */
+const qualityPresets: { value: QualityPreset; label: string; quality: number; desc: string }[] = [
+  { value: 'max', label: 'Max', quality: 100, desc: 'Lossless' },
+  { value: 'high', label: 'High', quality: 90, desc: 'Best quality' },
+  { value: 'balanced', label: 'Balanced', quality: 75, desc: 'Recommended' },
+  { value: 'compact', label: 'Compact', quality: 50, desc: 'Smallest size' },
+];
+
+/* ─── Rotation options ─── */
+const rotations: { value: Rotation; label: string }[] = [
+  { value: 0, label: '0°' },
+  { value: 90, label: '90°' },
+  { value: 180, label: '180°' },
+  { value: 270, label: '270°' },
 ];
 
 function qualityHint(q: number) {
-  if (q >= 80) return { emoji: '🟢', text: 'High Quality — minimal size reduction' };
-  if (q >= 50) return { emoji: '🟡', text: 'Balanced — great for web & social' };
-  return { emoji: '🔴', text: 'Aggressive — maximum compression' };
+  if (q >= 90) return { emoji: '🟢', text: 'High' };
+  if (q >= 50) return { emoji: '🟡', text: 'Balanced' };
+  return { emoji: '🔴', text: 'Compact' };
 }
 
 const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps) => {
@@ -68,7 +84,7 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
     <div className="mx-auto mt-6 max-w-xl">
       <div className="rounded-xl border border-border/40 bg-card/70 backdrop-blur-xl p-4 shadow-sm">
         <Tabs defaultValue="compress">
-          <TabsList className="grid w-full grid-cols-3 rounded-lg bg-secondary/60 p-1">
+          <TabsList className="grid w-full grid-cols-4 rounded-lg bg-secondary/60 p-1">
             <TabsTrigger value="compress" className="rounded-md text-[11px] font-medium data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground">
               Compress
             </TabsTrigger>
@@ -76,7 +92,10 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
               Resize
             </TabsTrigger>
             <TabsTrigger value="convert" className="rounded-md text-[11px] font-medium data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground">
-              Convert
+              Format
+            </TabsTrigger>
+            <TabsTrigger value="advanced" className="rounded-md text-[11px] font-medium data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground">
+              Advanced
             </TabsTrigger>
           </TabsList>
 
@@ -234,7 +253,7 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
                   )}
                 </div>
 
-                <div className="flex-1 min-w-0">
+<div className="flex-1 min-w-0">
                   <div className="flex items-center gap-1.5">
                     <span className="text-xs font-medium">{f.label}</span>
                     {f.recommended && (
@@ -242,7 +261,7 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
                         Best
                       </span>
                     )}
-{f.value === 'webp' && (
+                    {f.value === 'webp' && (
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Info className="h-3 w-3 text-muted-foreground cursor-help" />
@@ -257,6 +276,77 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
                 </div>
               </button>
             ))}
+          </TabsContent>
+
+          {/* ── ADVANCED ── */}
+          <TabsContent value="advanced" className="mt-4 space-y-3">
+            {/* Rotation */}
+            <div>
+              <Label className="text-xs font-medium mb-2 block">Rotation</Label>
+              <div className="flex gap-1">
+                {rotations.map((r) => (
+                  <button
+                    key={r.value}
+                    onClick={() => onUpdate({ rotation: r.value })}
+                    className={`flex-1 py-1.5 rounded-md text-[10px] font-medium border transition-colors ${
+                      settings.rotation === r.value
+                        ? 'border-primary bg-primary/10 text-primary'
+                        : 'border-border/40 text-muted-foreground hover:border-primary/30'
+                    }`}
+                  >
+                    {r.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Flip */}
+            <div className="flex items-center justify-between rounded-lg bg-secondary/50 px-3 py-2">
+              <div className="flex items-center gap-2">
+                <FlipHorizontal className="h-3.5 w-3.5 text-muted-foreground" />
+                <Label className="text-xs">Mirror/Flip</Label>
+              </div>
+              <Switch
+                checked={settings.mirror}
+                onCheckedChange={(checked) => onUpdate({ mirror: checked })}
+              />
+            </div>
+
+            {/* Grayscale */}
+            <div className="flex items-center justify-between rounded-lg bg-secondary/50 px-3 py-2">
+              <div className="flex items-center gap-2">
+                <ImageIcon className="h-3.5 w-3.5 text-muted-foreground" />
+                <Label className="text-xs">Grayscale</Label>
+              </div>
+              <Switch
+                checked={settings.grayscale}
+                onCheckedChange={(checked) => onUpdate({ grayscale: checked })}
+              />
+            </div>
+
+            {/* Strip EXIF */}
+            <div className="flex items-center justify-between rounded-lg bg-secondary/50 px-3 py-2">
+              <div className="flex items-center gap-2">
+                <Layers className="h-3.5 w-3.5 text-muted-foreground" />
+                <Label className="text-xs">Strip EXIF Data</Label>
+              </div>
+              <Switch
+                checked={settings.stripEXIF}
+                onCheckedChange={(checked) => onUpdate({ stripEXIF: checked })}
+              />
+            </div>
+
+            {/* Progressive */}
+            <div className="flex items-center justify-between rounded-lg bg-secondary/50 px-3 py-2">
+              <div>
+                <Label className="text-xs">Progressive JPEG</Label>
+                <p className="text-[9px] text-muted-foreground">Faster loading</p>
+              </div>
+              <Switch
+                checked={settings.progressive}
+                onCheckedChange={(checked) => onUpdate({ progressive: checked })}
+              />
+            </div>
           </TabsContent>
         </Tabs>
       </div>
