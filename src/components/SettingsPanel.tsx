@@ -65,28 +65,28 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
   };
 
   return (
-    <div className="mx-auto mt-10 max-w-2xl">
-      <div className="rounded-3xl border border-border/40 bg-card/70 backdrop-blur-2xl p-5 sm:p-6 shadow-2xl shadow-primary/[0.05]">
+    <div className="mx-auto mt-6 max-w-xl">
+      <div className="rounded-xl border border-border/40 bg-card/70 backdrop-blur-xl p-4 shadow-sm">
         <Tabs defaultValue="compress">
-          <TabsList className="grid w-full grid-cols-3 rounded-2xl bg-secondary/60 p-1.5">
-            <TabsTrigger value="compress" className="rounded-xl text-xs font-semibold sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25">
+          <TabsList className="grid w-full grid-cols-3 rounded-lg bg-secondary/60 p-1">
+            <TabsTrigger value="compress" className="rounded-md text-[11px] font-medium data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground">
               Compress
             </TabsTrigger>
-            <TabsTrigger value="resize" className="rounded-xl text-xs font-semibold sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25">
+            <TabsTrigger value="resize" className="rounded-md text-[11px] font-medium data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground">
               Resize
             </TabsTrigger>
-            <TabsTrigger value="convert" className="rounded-xl text-xs font-semibold sm:text-sm data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:shadow-lg data-[state=active]:shadow-primary/25">
+            <TabsTrigger value="convert" className="rounded-md text-[11px] font-medium data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground">
               Convert
             </TabsTrigger>
           </TabsList>
 
           {/* ── COMPRESS ── */}
-          <TabsContent value="compress" className="mt-6 space-y-6">
+          <TabsContent value="compress" className="mt-4 space-y-4">
             {/* Quality slider */}
             <div>
               <div className="flex items-center justify-between">
-                <Label className="text-sm font-semibold">
-                  Compression Quality: {settings.quality}%
+                <Label className="text-xs font-medium">
+                  Quality: {settings.quality}%
                 </Label>
               </div>
               <Slider
@@ -98,18 +98,18 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
                 max={100}
                 step={1}
                 disabled={settings.autoOptimize}
-                className="mt-3"
+                className="mt-2"
               />
-              <p className="mt-2 text-xs text-muted-foreground">
+              <p className="mt-1 text-[10px] text-muted-foreground">
                 {hint.emoji} {hint.text}
               </p>
             </div>
 
             {/* Auto optimize */}
-            <div className="flex items-center justify-between rounded-xl bg-secondary/50 px-4 py-3">
+            <div className="flex items-center justify-between rounded-lg bg-secondary/50 px-3 py-2">
               <div>
-                <Label className="text-sm font-medium">Auto Optimize for Web</Label>
-                <p className="text-xs text-muted-foreground mt-0.5">Locks quality to 75% for best web performance</p>
+                <Label className="text-xs font-medium">Auto Optimize</Label>
+                <p className="text-[10px] text-muted-foreground">Locks to 75%</p>
               </div>
               <Switch
                 checked={settings.autoOptimize}
@@ -121,7 +121,7 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
 
             {/* Target size */}
             <div>
-              <Label className="text-sm font-medium">Target Size (KB)</Label>
+              <Label className="text-xs font-medium">Target Size (KB)</Label>
               <Input
                 type="number"
                 placeholder="e.g. 200"
@@ -129,32 +129,29 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
                 onChange={(e) =>
                   onUpdate({ targetSizeKB: e.target.value ? Number(e.target.value) : null })
                 }
-                className="mt-1.5 rounded-xl"
+                className="mt-1 rounded-lg"
               />
-              <p className="mt-1 text-xs text-muted-foreground">
-                Leave blank to use quality slider
-              </p>
             </div>
           </TabsContent>
 
           {/* ── RESIZE ── */}
-          <TabsContent value="resize" className="mt-6 space-y-6">
+          <TabsContent value="resize" className="mt-4 space-y-4">
             {/* Dimension inputs */}
             <div className="flex items-end gap-2">
               <div className="flex-1">
-                <Label className="text-sm font-medium">Width (px)</Label>
+                <Label className="text-xs font-medium">Width (px)</Label>
                 <Input
                   type="number"
                   placeholder="Auto"
                   value={settings.width ?? ''}
                   onChange={(e) => handleWidthChange(e.target.value)}
-                  className="mt-1.5 rounded-xl"
+                  className="mt-1 rounded-lg"
                 />
               </div>
 
               <button
                 onClick={() => onUpdate({ lockAspectRatio: !settings.lockAspectRatio })}
-                className={`mb-1 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full border transition-colors ${
+                className={`mb-1 flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border transition-colors ${
                   settings.lockAspectRatio
                     ? 'border-primary/50 bg-primary/10 text-primary'
                     : 'border-border text-muted-foreground hover:border-primary/30'
@@ -162,9 +159,9 @@ const SettingsPanel = ({ settings, onUpdate, onResetResize }: SettingsPanelProps
                 aria-label="Toggle aspect ratio lock"
               >
                 {settings.lockAspectRatio ? (
-                  <Link2 className="h-4 w-4" />
+                  <Link2 className="h-3.5 w-3.5" />
                 ) : (
-                  <Unlink2 className="h-4 w-4" />
+                  <Unlink2 className="h-3.5 w-3.5" />
                 )}
               </button>
 

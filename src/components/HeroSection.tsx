@@ -49,10 +49,10 @@ const HeroSection = ({ onFilesSelected, imageCount, children }: HeroSectionProps
         ))}
       </div>
 
-      <div className="container relative mx-auto px-4 sm:px-6 py-12 sm:py-20">
-        <div className="mx-auto max-w-4xl text-center">
+      <div className="container relative mx-auto px-4 sm:px-6 py-8 sm:py-12">
+        <div className="mx-auto max-w-3xl text-center">
           {/* Headline */}
-          <h1 className="text-5xl font-black leading-[1.1] tracking-tight sm:text-6xl md:text-7xl">
+          <h1 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl">
             Compress Images Up to 90%
             <br />
             <span
@@ -67,29 +67,29 @@ const HeroSection = ({ onFilesSelected, imageCount, children }: HeroSectionProps
           </h1>
 
           {/* Subheadline */}
-          <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground sm:text-xl leading-relaxed">
+          <p className="mx-auto mt-3 max-w-xl text-sm sm:text-base text-muted-foreground">
             No uploads to servers. No login required. Your images never leave your device.
           </p>
 
           {/* Trust badges */}
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2 sm:gap-3">
             {[
               { emoji: '🔒', label: '100% Private' },
-              { emoji: '⚡', label: 'Instant Processing' },
-              { emoji: '🆓', label: 'Free Forever' },
+              { emoji: '⚡', label: 'Instant' },
+              { emoji: '🆓', label: 'Free' },
             ].map((badge) => (
               <div
                 key={badge.label}
-                className="flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.07] px-4 py-2 text-sm font-medium text-foreground"
+                className="flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/[0.07] px-3 py-1 text-xs font-medium text-foreground"
               >
-                <span className="text-base">{badge.emoji}</span>
+                <span className="text-xs">{badge.emoji}</span>
                 {badge.label}
               </div>
             ))}
           </div>
 
           {/* Upload Zone */}
-          <div className="mx-auto mt-12 max-w-2xl">
+          <div className="mx-auto mt-8 max-w-xl">
             <UploadZone onFilesSelected={onFilesSelected} imageCount={imageCount} />
           </div>
 

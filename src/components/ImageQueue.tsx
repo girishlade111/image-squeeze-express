@@ -32,8 +32,8 @@ const statusStyles = {
 const statusLabel: Record<UploadedFile['status'], string> = {
   ready: 'Ready',
   processing: 'Processing…',
-  done: 'Done ✓',
-  error: 'Error ✗',
+  done: 'Done',
+  error: 'Error',
 };
 
 const ImageQueue = ({
@@ -49,112 +49,94 @@ const ImageQueue = ({
   if (files.length === 0) return null;
 
   return (
-    <div className="mx-auto mt-10 max-w-2xl">
-      {/* Count */}
-      <div className="flex items-center justify-between mb-4">
-        <p className="text-sm font-semibold text-foreground">
-          {files.length} image{files.length !== 1 ? 's' : ''} selected
+    <div className="mx-auto mt-6 max-w-xl">
+      <div className="flex items-center justify-between mb-3">
+        <p className="text-xs font-medium text-foreground">
+          {files.length} file{files.length !== 1 ? 's' : ''} selected
         </p>
         {!isProcessing && !allDone && files.length > 0 && (
           <Button 
             variant="ghost" 
             size="sm" 
-            className="h-8 rounded-full text-xs text-muted-foreground hover:text-destructive"
+            className="h-6 rounded-full text-[10px] text-muted-foreground hover:text-destructive"
             onClick={onClearAll}
           >
-            Clear All
+            Clear
           </Button>
         )}
       </div>
 
-      {/* Progress bar */}
       {isProcessing && (
-        <div className="mb-6" style={{ animationDuration: '0.3s' }}>
-          <div className="relative overflow-hidden rounded-full bg-secondary/50 h-3">
+        <div className="mb-4">
+          <div className="relative overflow-hidden rounded-full bg-secondary/50 h-2">
             <div 
-              className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary to-accent transition-all duration-300 ease-out"
+              className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary to-accent transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>
-          <p className="mt-2 text-center text-xs font-medium text-muted-foreground">
-            {processingText || `${progress}% complete`}
+          <p className="mt-1 text-center text-[10px] text-muted-foreground">
+            {processingText || `${progress}%`}
           </p>
         </div>
       )}
 
-      {/* Grid */}
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         {files.map((f, i) => (
           <div
             key={f.id}
-            className="group relative flex items-center gap-3 rounded-2xl border border-border/40 bg-card/70 backdrop-blur-sm p-3.5 transition-all duration-300 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/[0.08]"
-            style={{ animationDelay: `${i * 50}ms`, animationDuration: '0.4s' }}
+            className="group relative flex items-center gap-2 rounded-lg border border-border/40 bg-card/60 p-2 transition-all duration-200 hover:border-primary/30"
           >
-            {/* Thumbnail */}
-            <div className="relative h-[64px] w-[64px] flex-shrink-0 overflow-hidden rounded-xl">
+            <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg">
               <img
                 src={f.preview}
                 alt={f.name}
-                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
+                className="h-full w-full object-cover"
                 loading="lazy"
               />
               {f.status === 'processing' && (
-                <div className="absolute inset-0 flex items-center justify-center bg-background/70 backdrop-blur-sm">
-                  <div className="h-8 w-8 rounded-full border-2 border-primary/30 border-t-primary animate-spin" />
+                <div className="absolute inset-0 flex items-center justify-center bg-background/70">
+                  <div className="h-5 w-5 rounded-full border border-primary/30 border-t-primary animate-spin" />
                 </div>
               )}
             </div>
 
-            {/* Info */}
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium leading-tight" title={f.name}>
-                {truncate(f.name, 22)}
+              <p className="truncate text-xs font-medium" title={f.name}>
+                {truncate(f.name, 20)}
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">
-                {formatFileSize(f.originalSize)}
-                <span className="mx-1.5">·</span>
-                {f.originalWidth}×{f.originalHeight}
+              <p className="text-[10px] text-muted-foreground">
+                {formatFileSize(f.originalSize)} · {f.originalWidth}×{f.originalHeight}
               </p>
               <Badge
                 variant="outline"
-                className={`mt-2 rounded-full px-2.5 py-0.5 text-[10px] font-medium ${statusStyles[f.status]}`}
+                className={`mt-1 rounded px-1.5 py-0 text-[9px] font-medium ${statusStyles[f.status]}`}
               >
-                {f.status === 'processing' && <Loader2 className="mr-1 h-2.5 w-2.5 animate-spin" />}
-                {f.status === 'done' && <Check className="mr-1 h-2.5 w-2.5" />}
-                {f.status === 'error' && <AlertCircle className="mr-1 h-2.5 w-2.5" />}
                 {statusLabel[f.status]}
               </Badge>
-              {f.status === 'error' && f.error && (
-                <p className="mt-1 text-[10px] text-red-400 leading-tight line-clamp-2" title={f.error}>
-                  {f.error.length > 60 ? f.error.slice(0, 60) + '…' : f.error}
-                </p>
-              )}
             </div>
 
-            {/* Remove button */}
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 onRemove(f.id);
               }}
               disabled={isProcessing}
-              className="absolute -right-2 -top-2 flex h-7 w-7 items-center justify-center rounded-full bg-destructive/90 text-destructive-foreground opacity-0 shadow-md transition-all duration-200 group-hover:opacity-100 hover:bg-destructive hover:scale-110 disabled:opacity-0"
+              className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-destructive/90 text-destructive-foreground opacity-0 shadow-sm transition-all duration-150 group-hover:opacity-100 hover:bg-destructive disabled:opacity-0"
               aria-label={`Remove ${f.name}`}
             >
-              <X className="h-3.5 w-3.5" />
+              <X className="h-3 w-3" />
             </button>
           </div>
         ))}
       </div>
 
-      {/* Action buttons */}
       {!allDone && (
-        <div className="mt-8 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+        <div className="mt-4 flex justify-center gap-2">
           <Button
-            size="lg"
+            size="sm"
             disabled={isProcessing}
             onClick={onProcessAll}
-            className={`w-full sm:w-auto rounded-2xl px-8 text-primary-foreground transition-all duration-300 hover:scale-105 hover:shadow-xl hover:shadow-primary/25 ${
+            className={`h-8 rounded-lg text-xs transition-all ${
               isProcessing ? 'animate-pulse' : ''
             }`}
             style={{
@@ -163,13 +145,13 @@ const ImageQueue = ({
           >
             {isProcessing ? (
               <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                <Loader2 className="mr-1 h-3 w-3 animate-spin" />
                 Processing...
               </>
             ) : (
               <>
-                <span className="mr-2 text-lg">⚡</span>
-                Compress & Convert All
+                <span className="mr-1 text-xs">⚡</span>
+                Compress
               </>
             )}
           </Button>

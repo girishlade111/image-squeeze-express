@@ -45,47 +45,34 @@ const UploadZone = ({ onFilesSelected, imageCount }: UploadZoneProps) => {
         onDrop={handleDrop}
         onClick={() => inputRef.current?.click()}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inputRef.current?.click(); } }}
-        className={`group relative flex min-h-[200px] sm:min-h-[360px] cursor-pointer flex-col items-center justify-center gap-4 sm:gap-5 rounded-3xl border-2 border-dashed bg-foreground/[0.02] backdrop-blur-sm p-6 sm:p-8 text-center transition-all duration-500 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+        className={`group relative flex min-h-[140px] sm:min-h-[180px] cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed bg-foreground/[0.02] p-4 sm:p-6 text-center transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
           dragOver
-            ? 'scale-[1.02] border-primary bg-primary/15 shadow-[0_0_60px_rgba(124,58,237,0.35)]'
-            : 'border-primary/25 hover:border-primary/50 hover:bg-primary/[0.06] hover:shadow-[0_8px_40px_rgba(124,58,237,0.12)]'
+            ? 'scale-[1.01] border-primary bg-primary/10'
+            : 'border-primary/25 hover:border-primary/50 hover:bg-primary/[0.04]'
         }`}
       >
-        {/* Animated ring on hover */}
-        <div className={`pointer-events-none absolute inset-2 rounded-3xl border-2 border-primary/20 transition-all duration-500 ${
-          dragOver ? 'opacity-100 scale-100' : 'opacity-0 scale-95'
-        }`} />
-        
-        {/* Subtle corner accents */}
-        <div className={`pointer-events-none absolute inset-0 rounded-3xl overflow-hidden transition-all duration-300 ${
-          dragOver ? 'bg-primary/5' : ''
-        }`}>
-          <div className="absolute -top-20 -left-20 h-40 w-40 rounded-full bg-primary/10 blur-3xl transition-transform duration-500 group-hover:scale-150" />
-          <div className="absolute -bottom-20 -right-20 h-40 w-40 rounded-full bg-cyan-500/10 blur-3xl transition-transform duration-500 group-hover:scale-150" />
-        </div>
-
         {/* Icon */}
-        <div className={`relative flex h-24 w-24 items-center justify-center rounded-2xl transition-all duration-500 ease-out ${
-          dragOver ? 'bg-primary/25 scale-110 shadow-[0_0_30px_rgba(124,58,237,0.3)]' : 'bg-primary/[0.08] group-hover:bg-primary/12 group-hover:scale-105'
+        <div className={`flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-300 ${
+          dragOver ? 'bg-primary/20 scale-105' : 'bg-primary/[0.08] group-hover:bg-primary/12'
         }`}>
-          <CloudUpload className={`h-12 w-12 text-primary transition-transform duration-300 ${
-            dragOver ? 'scale-110' : ''
+          <CloudUpload className={`h-6 w-6 text-primary transition-transform duration-300 ${
+            dragOver ? 'scale-105' : ''
           }`} strokeWidth={1.5} aria-hidden="true" />
         </div>
 
         {/* Text */}
         <div>
-          <p className="text-xl font-semibold text-foreground">
-            Drag & Drop images here
+          <p className="text-sm font-medium text-foreground">
+            Drag & Drop images
           </p>
-          <p className="mt-1.5 text-sm text-muted-foreground">
-            or click to browse files
+          <p className="mt-0.5 text-xs text-muted-foreground">
+            or click to browse
           </p>
         </div>
 
         {/* Supported formats */}
-        <p className="text-xs text-muted-foreground/70">
-          Supports: JPG, PNG, WebP, GIF, BMP • Max 10 files ({imageCount}/10)
+        <p className="text-[10px] text-muted-foreground/60">
+          JPG, PNG, WebP, GIF, BMP • {imageCount}/10 files
         </p>
 
         <input
