@@ -8,13 +8,13 @@ export interface ProcessSettings {
   quality: number;
   autoOptimize: boolean;
   targetSizeKB: number | null;
-  
+
   width: number | null;
   height: number | null;
   lockAspectRatio: boolean;
-  
+
   outputFormat: ImageFormat;
-  
+
   stripEXIF: boolean;
   grayscale: boolean;
   rotation: Rotation;
@@ -33,32 +33,54 @@ export interface ProcessResult {
 }
 
 export function formatFileSize(bytes: number): string {
+  if (!Number.isFinite(bytes) || bytes < 0) return '0 B';
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
 export function getCompressionRatio(originalSize: number, newSize: number): string {
-  if (originalSize === 0) return '▼ 0%';
-  const ratio = Math.round(((originalSize - newSize) / originalSize) * 100);
-  if (ratio <= 0) return '— same';
-  return `▼ ${ratio}%`;
+  if (!originalSize || originalSize <= 0) return '— same';
+  const diff = originalSize - newSize;
+  if (Math.abs(diff) < 1) return '— same';
+  const ratio = Math.round((diff / originalSize) * 100);
+  if (ratio > 0) return `▼ ${ratio}%`;
+  return `▲ ${Math.abs(ratio)}%`;
 }
 
 export function getImageDimensions(file: File | Blob): Promise<{ width: number; height: number }> {
   return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
     const img = new Image();
-    img.onload = () => {
-      resolve({ width: img.naturalWidth, height: img.naturalHeight });
-      URL.revokeObjectURL(img.src);
+    const cleanup = () => {
+      try {
+        URL.revokeObjectURL(url);
+      } catch {
+        /* noop */
+      }
     };
-    img.onerror = () => reject(new Error('Failed to load image'));
-    img.src = URL.createObjectURL(file);
+    img.onload = () => {
+      const dims = { width: img.naturalWidth, height: img.naturalHeight };
+      cleanup();
+      resolve(dims);
+    };
+    img.onerror = () => {
+      cleanup();
+      reject(new Error('Failed to load image'));
+    };
+    img.src = url;
   });
 }
 
 function toMime(format: ProcessSettings['outputFormat'], originalType: string): string {
-  if (format === 'original') return originalType;
+  if (format === 'original') {
+    // Browser may not support output to all input types via canvas (e.g. AVIF, GIF).
+    // Fall back to PNG for lossless-only types, JPEG for everything else.
+    if (originalType === 'image/png' || originalType === 'image/jpeg' || originalType === 'image/webp') {
+      return originalType;
+    }
+    return 'image/png';
+  }
   return `image/${format}`;
 }
 
@@ -75,18 +97,30 @@ function calcDimensions(
   targetH: number | null,
   lock: boolean
 ): { w: number; h: number } {
+  // No resize requested
   if (!targetW && !targetH) return { w: origW, h: origH };
 
+  // Sanitize values
+  const safeW = targetW && targetW > 0 ? targetW : null;
+  const safeH = targetH && targetH > 0 ? targetH : null;
+  const aspect = origW > 0 && origH > 0 ? origW / origH : 1;
+
   if (lock) {
-    const aspect = origW / origH;
-    if (targetW && !targetH) return { w: targetW, h: Math.round(targetW / aspect) };
-    if (!targetW && targetH) return { w: Math.round(targetH * aspect), h: targetH };
-    if (targetW) return { w: targetW, h: Math.round(targetW / aspect) };
+    if (safeW && safeH) {
+      // Both provided with lock on: honor width, derive height from aspect ratio
+      return { w: safeW, h: Math.max(1, Math.round(safeW / aspect)) };
+    }
+    if (safeW) {
+      return { w: safeW, h: Math.max(1, Math.round(safeW / aspect)) };
+    }
+    if (safeH) {
+      return { w: Math.max(1, Math.round(safeH * aspect)), h: safeH };
+    }
   }
 
   return {
-    w: targetW || origW,
-    h: targetH || origH,
+    w: safeW || origW,
+    h: safeH || origH,
   };
 }
 
@@ -100,11 +134,11 @@ function applyCanvasTransforms(
   canvasH: number
 ): void {
   ctx.translate(canvasW / 2, canvasH / 2);
-  
+
   if (mirror) {
     ctx.scale(-1, 1);
   }
-  
+
   switch (rotation) {
     case 90:
       ctx.rotate(Math.PI / 2);
@@ -116,7 +150,7 @@ function applyCanvasTransforms(
       ctx.rotate(-Math.PI / 2);
       break;
   }
-  
+
   ctx.translate(-canvasW / 2, -canvasH / 2);
 }
 
@@ -130,28 +164,33 @@ async function canvasProcess(
     rotation?: Rotation;
     mirror?: boolean;
     grayscale?: boolean;
-    progressive?: boolean;
   }
 ): Promise<Blob> {
   const img = await loadImage(source);
-  
+
   let canvasWidth = width;
   let canvasHeight = height;
   if (options.rotation === 90 || options.rotation === 270) {
     canvasWidth = height;
     canvasHeight = width;
   }
-  
+
   const canvas = document.createElement('canvas');
   canvas.width = canvasWidth;
   canvas.height = canvasHeight;
-  
+
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Canvas context unavailable');
-  
+
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
-  
+
+  // Always fill background white to avoid transparent JPEG artifacts
+  if (mime === 'image/jpeg') {
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+  }
+
   if (options.rotation || options.mirror) {
     applyCanvasTransforms(
       ctx,
@@ -163,24 +202,22 @@ async function canvasProcess(
       canvasHeight
     );
   }
-  
+
   ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
-  
+
   if (options.grayscale) {
     applyGrayscale(ctx, canvasWidth, canvasHeight);
   }
-  
+
   const qualityNum = Math.max(0.1, Math.min(1, quality / 100));
-  
+
   return new Promise((resolve, reject) => {
-    const mimeType = mime === 'image/jpeg' && options.progressive ? 'image/jpeg' : mime;
-    
     canvas.toBlob(
       (blob) => {
         if (blob) resolve(blob);
         else reject(new Error('Canvas toBlob returned null'));
       },
-      mimeType,
+      mime,
       qualityNum
     );
   });
@@ -189,29 +226,37 @@ async function canvasProcess(
 function applyGrayscale(ctx: CanvasRenderingContext2D, width: number, height: number): void {
   const imgData = ctx.getImageData(0, 0, width, height);
   const data = imgData.data;
-  
+
   for (let i = 0; i < data.length; i += 4) {
     const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
     data[i] = gray;
     data[i + 1] = gray;
     data[i + 2] = gray;
   }
-  
+
   ctx.putImageData(imgData, 0, 0);
 }
 
 function loadImage(source: Blob): Promise<HTMLImageElement> {
   return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(source);
     const img = new Image();
+    const cleanup = () => {
+      try {
+        URL.revokeObjectURL(url);
+      } catch {
+        /* noop */
+      }
+    };
     img.onload = () => {
-      URL.revokeObjectURL(img.src);
+      cleanup();
       resolve(img);
     };
     img.onerror = () => {
-      URL.revokeObjectURL(img.src);
+      cleanup();
       reject(new Error('Failed to load image'));
     };
-    img.src = URL.createObjectURL(source);
+    img.src = url;
   });
 }
 
@@ -224,57 +269,23 @@ function calculateOptimalQuality(
   if (targetSizeKB && targetSizeKB > 0) {
     const targetBytes = targetSizeKB * 1024;
     const ratio = targetBytes / originalSize;
-    
+
     if (ratio >= 0.9) return 95;
     if (ratio >= 0.7) return 82;
     if (ratio >= 0.5) return 68;
     if (ratio >= 0.3) return 50;
     return 35;
   }
-  
+
   if (outputFormat === 'webp') {
     return hasTransforms ? 80 : 75;
   }
-  
+
   if (outputFormat === 'png') {
     return 100;
   }
-  
-  return 80;
-}
 
-async function compressWithCanvas(
-  source: Blob,
-  targetWidth: number,
-  targetHeight: number,
-  mime: string,
-  quality: number
-): Promise<Blob> {
-  const img = await loadImage(source);
-  
-  const canvas = document.createElement('canvas');
-  canvas.width = targetWidth;
-  canvas.height = targetHeight;
-  
-  const ctx = canvas.getContext('2d');
-  if (!ctx) throw new Error('Canvas context unavailable');
-  
-  ctx.imageSmoothingEnabled = true;
-  ctx.imageSmoothingQuality = 'high';
-  ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
-  
-  const qualityNum = Math.max(0.1, Math.min(1, quality / 100));
-  
-  return new Promise((resolve, reject) => {
-    canvas.toBlob(
-      (blob) => {
-        if (blob) resolve(blob);
-        else reject(new Error('Canvas toBlob returned null'));
-      },
-      mime,
-      qualityNum
-    );
-  });
+  return 80;
 }
 
 export async function processImage(
@@ -293,7 +304,7 @@ export async function processImage(
     settings.lockAspectRatio
   );
 
-  const hasTransforms = 
+  const hasTransforms =
     settings.rotation !== 0 ||
     settings.mirror ||
     settings.grayscale ||
@@ -301,7 +312,7 @@ export async function processImage(
 
   const needsResize = targetW !== origDims.width || targetH !== origDims.height;
   const needsFormatChange = outputMime !== file.type;
-  
+
   const quality = settings.autoOptimize
     ? calculateOptimalQuality(originalSize, settings.targetSizeKB, settings.outputFormat, hasTransforms)
     : settings.quality;
@@ -319,15 +330,19 @@ export async function processImage(
         rotation: settings.rotation,
         mirror: settings.mirror,
         grayscale: settings.grayscale,
-        progressive: settings.progressive && outputMime === 'image/jpeg',
       }
     );
-    
-    if (result.size > (settings.targetSizeKB || Infinity) * 1024 && settings.targetSizeKB) {
+
+    // Iteratively reduce quality if a target size is set
+    if (settings.targetSizeKB && settings.targetSizeKB > 0) {
+      const limit = settings.targetSizeKB * 1024;
       let iterQuality = quality;
       let iterResult = result;
-      
       for (let i = 0; i < 5; i++) {
+        if (iterResult.size <= limit) {
+          result = iterResult;
+          break;
+        }
         iterQuality = Math.max(10, iterQuality - 10);
         iterResult = await canvasProcess(
           file,
@@ -339,27 +354,22 @@ export async function processImage(
             rotation: settings.rotation,
             mirror: settings.mirror,
             grayscale: settings.grayscale,
-            progressive: settings.progressive && outputMime === 'image/jpeg',
           }
         );
-        
-        if (iterResult.size <= settings.targetSizeKB! * 1024) {
-          result = iterResult;
-          break;
-        }
         result = iterResult;
+        if (iterQuality <= 10) break;
       }
     }
   } else {
     const compressionOpts: Parameters<typeof imageCompression>[1] = {
-      maxSizeMB: settings.targetSizeKB ? settings.targetSizeKB / 1024 : 50,
+      maxSizeMB: settings.targetSizeKB && settings.targetSizeKB > 0 ? settings.targetSizeKB / 1024 : 50,
       maxWidthOrHeight: Math.max(targetW, targetH),
       useWebWorker: true,
       fileType: outputMime,
       initialQuality: quality / 100,
       alwaysKeepResolution: !needsResize,
     };
-    
+
     result = await imageCompression(file, compressionOpts);
   }
 
@@ -376,7 +386,7 @@ export async function processImage(
 }
 
 export function toDownloadFile(originalName: string, blob: Blob): File {
-  const baseName = originalName.replace(/\.[^.]+$/, '');
+  const baseName = originalName.replace(/\.[^.]+$/, '') || 'image';
   const ext = toExt(blob.type);
   return new File([blob], `imagesqueeze_${baseName}${ext}`, { type: blob.type });
 }
@@ -385,7 +395,8 @@ export function estimateQualityForSize(
   originalSize: number,
   targetSizeKB: number
 ): number {
-  const ratio = targetSizeKB * 1024 / originalSize;
+  if (!originalSize || originalSize <= 0) return 75;
+  const ratio = (targetSizeKB * 1024) / originalSize;
   if (ratio >= 0.9) return 95;
   if (ratio >= 0.7) return 80;
   if (ratio >= 0.5) return 65;
