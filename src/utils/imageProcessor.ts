@@ -74,9 +74,15 @@ export function getImageDimensions(file: File | Blob): Promise<{ width: number; 
 
 function toMime(format: ProcessSettings['outputFormat'], originalType: string): string {
   if (format === 'original') {
-    // Browser may not support output to all input types via canvas (e.g. AVIF, GIF).
-    // Fall back to PNG for lossless-only types, JPEG for everything else.
-    if (originalType === 'image/png' || originalType === 'image/jpeg' || originalType === 'image/webp') {
+    // Round-trip the original format for the formats the browser can re-encode
+    // losslessly via canvas (PNG, JPEG, WebP, AVIF). Anything else (GIF, BMP,
+    // TIFF, …) falls back to PNG so we never silently drop pixels.
+    if (
+      originalType === 'image/png' ||
+      originalType === 'image/jpeg' ||
+      originalType === 'image/webp' ||
+      originalType === 'image/avif'
+    ) {
       return originalType;
     }
     return 'image/png';
@@ -87,7 +93,34 @@ function toMime(format: ProcessSettings['outputFormat'], originalType: string): 
 function toExt(mime: string): string {
   if (mime === 'image/webp') return '.webp';
   if (mime === 'image/png') return '.png';
+  if (mime === 'image/avif') return '.avif';
   return '.jpg';
+}
+
+/**
+ * Feature-detects whether the current browser can encode a given mime type
+ * through `canvas.toBlob`. The check is cached after the first call so the UI
+ * can call it freely while rendering the format picker.
+ */
+const _supportCache = new Map<string, boolean>();
+export function isFormatSupported(mime: string): boolean {
+  const cached = _supportCache.get(mime);
+  if (cached !== undefined) return cached;
+  if (typeof document === 'undefined') {
+    _supportCache.set(mime, false);
+    return false;
+  }
+  try {
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = 1;
+    const dataUrl = canvas.toDataURL(mime);
+    const supported = dataUrl.startsWith(`data:${mime}`);
+    _supportCache.set(mime, supported);
+    return supported;
+  } catch {
+    _supportCache.set(mime, false);
+    return false;
+  }
 }
 
 interface CropRect {
@@ -323,6 +356,12 @@ function calculateOptimalQuality(
 
   if (outputFormat === 'webp') {
     return hasTransforms ? 80 : 75;
+  }
+
+  // AVIF encodes more efficiently than WebP, so a lower quality number
+  // produces a visually equivalent result. Use 65/60 as defaults.
+  if (outputFormat === 'avif') {
+    return hasTransforms ? 70 : 65;
   }
 
   if (outputFormat === 'png') {
