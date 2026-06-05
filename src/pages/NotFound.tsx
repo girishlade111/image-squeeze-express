@@ -1,9 +1,16 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { Home, AlertTriangle } from "lucide-react";
+import { Home, AlertTriangle, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
+import Footer from "@/components/Footer";
+
+const allTools = [
+  { label: 'Image Compressor', to: '/', desc: 'Resize & convert images' },
+  { label: 'Compress PDF', to: '/compress-pdf', desc: 'Shrink PDFs in your browser' },
+  { label: 'Bulk File Rename', to: '/bulk-rename', desc: 'Rename 100 files at once' },
+];
 
 const NotFound = () => {
   const location = useLocation();
@@ -15,31 +22,84 @@ const NotFound = () => {
   return (
     <div className="min-h-screen bg-background">
       <Header />
-      <main className="container mx-auto flex min-h-[80vh] items-center justify-center px-4 pt-16">
+      <main className="container relative mx-auto flex min-h-[80vh] flex-col items-center justify-center overflow-hidden px-4 pt-16 pb-12">
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: `
+              radial-gradient(ellipse 60% 40% at 50% 30%, hsl(var(--primary) / 0.15), transparent),
+              radial-gradient(ellipse 40% 30% at 70% 70%, hsl(var(--accent) / 0.1), transparent)
+            `,
+          }}
+          aria-hidden
+        />
         <motion.div
-          className="text-center"
+          className="relative z-10 mx-auto max-w-xl text-center"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4 }}
         >
-          <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/15 text-amber-300">
+          <motion.div
+            className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-500/15 text-amber-300"
+            initial={{ rotate: -8, scale: 0.8 }}
+            animate={{ rotate: 0, scale: 1 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 14 }}
+          >
             <AlertTriangle className="h-8 w-8" strokeWidth={1.75} />
+          </motion.div>
+          <h1 className="mt-6 text-6xl font-black tracking-tight sm:text-7xl">
+            <span
+              style={{
+                background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              404
+            </span>
+          </h1>
+          <p className="mt-3 text-lg font-semibold sm:text-xl">Page not found</p>
+          <p className="mt-2 text-sm text-muted-foreground">
+            The page you were looking for doesn’t exist. The path{' '}
+            <code className="rounded bg-secondary px-1.5 py-0.5 text-xs">{location.pathname}</code>{' '}
+            isn’t one of our routes.
+          </p>
+
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+            <Button asChild className="rounded-full px-5">
+              <a href="/">
+                <Home className="mr-2 h-4 w-4" />
+                Return to Home
+              </a>
+            </Button>
+            <Button asChild variant="outline" className="rounded-full px-5">
+              <a href="/#how-it-works">
+                <Search className="mr-2 h-4 w-4" />
+                See How It Works
+              </a>
+            </Button>
           </div>
-          <h1 className="mt-6 text-5xl font-extrabold tracking-tight">404</h1>
-          <p className="mt-2 text-base text-muted-foreground">
-            Oops! The page you’re looking for doesn’t exist.
-          </p>
-          <p className="mt-1 text-xs text-muted-foreground/60">
-            <code className="rounded bg-secondary px-1.5 py-0.5">{location.pathname}</code>
-          </p>
-          <Button asChild className="mt-6 rounded-full px-5">
-            <a href="/">
-              <Home className="mr-2 h-4 w-4" />
-              Return to Home
-            </a>
-          </Button>
+
+          <div className="mt-10 text-left">
+            <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-foreground/40">
+              Or try one of our tools
+            </p>
+            <div className="mt-3 grid gap-2 sm:grid-cols-3">
+              {allTools.map((t) => (
+                <a
+                  key={t.to}
+                  href={t.to}
+                  className="group rounded-2xl border border-border/50 bg-card/60 p-3 text-left transition-colors hover:border-primary/40 hover:bg-primary/5"
+                >
+                  <p className="text-sm font-semibold group-hover:text-primary">{t.label}</p>
+                  <p className="mt-0.5 text-[10px] text-muted-foreground">{t.desc}</p>
+                </a>
+              ))}
+            </div>
+          </div>
         </motion.div>
       </main>
+      <Footer />
     </div>
   );
 };
