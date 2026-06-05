@@ -104,7 +104,7 @@ const HeroSection = ({ onFilesSelected, imageCount, maxFiles = 50, children }: H
             transition={{ duration: 0.5, delay: 0.1 }}
           >
             Free image compressor that runs entirely in your browser. Resize for social media,
-            convert to WebP, and download — no uploads, no login.
+            convert to WebP or AVIF, and download — no uploads, no login, no watermarks.
           </motion.p>
 
           {/* Trust badges */}
