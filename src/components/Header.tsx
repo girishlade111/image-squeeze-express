@@ -9,6 +9,7 @@ const navLinks = [
   { label: 'Features', href: '#features' },
   { label: 'Social Presets', href: '#social-presets' },
   { label: 'FAQ', href: '#faq' },
+  { label: 'Compress PDF', href: '/compress-pdf', isRoute: true },
 ];
 
 const Header = () => {
