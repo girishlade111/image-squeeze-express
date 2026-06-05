@@ -837,7 +837,7 @@ function RuleEditor({
       <p className="text-[10px] text-muted-foreground">
         Reverses the order of every character in the base name.
         <br />
-        <span className="font-mono">photo → otpoh</span>
+        <span className="font-mono">photo → otohp</span>
       </p>
     );
   }
