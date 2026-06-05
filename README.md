@@ -230,8 +230,11 @@ All three tools share:
 |--------|----------------|
 | **Screenshots to share** | Find&Replace `Screenshot ` → ``, Case `lower`, Whitespace `dash` |
 | **Numbered batch** | Numbering `start=1 pad=2 separator=_ position=start` |
-| **Date-stamped** | Prefix `2024-05-17-`, Find&Replace `IMG_` → `` |
+| **Date-stamped** | Date `format=YYYY-MM-DD position=start separator=_` |
 | **URL-safe slugs** | Whitespace `dash`, Remove Chars `!@#$%^&*()`, Case `lower` |
+| **Re-sequence broken numbering** | Counter From Name `where=last fallbackStart=1 pad=2 position=end` |
+| **Normalise extensions to lowercase** | Replace Extension `mode=lower` |
+| **Cap long names to 40 chars** | Trim `mode=truncate maxLength=40 ellipsis=true` |
 
 ---
 
