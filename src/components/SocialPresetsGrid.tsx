@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 
 interface SocialPresetsGridProps {
-  onSelectPreset: (w: number, h: number) => void;
+  onSelectPreset: (w: number, h: number, id: string) => void;
 }
 
 const platforms = [
