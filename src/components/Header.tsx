@@ -10,6 +10,7 @@ const navLinks = [
   { label: 'Social Presets', href: '#social-presets' },
   { label: 'FAQ', href: '#faq' },
   { label: 'Compress PDF', href: '/compress-pdf', isRoute: true },
+  { label: 'Bulk Rename', href: '/bulk-rename', isRoute: true },
 ];
 
 const Header = () => {
