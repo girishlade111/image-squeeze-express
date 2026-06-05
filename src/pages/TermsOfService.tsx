@@ -77,7 +77,7 @@ const TermsOfService = () => (
         <section className="mt-10">
           <h2 className="text-xl font-bold">6. Free Service</h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            ImageSqueeze is currently offered <strong className="text-foreground">free of charge</strong>. We reserve the right to introduce premium features in the future, but the core compression, resize, and conversion functionality will remain free.
+            ImageSqueeze is offered <strong className="text-foreground">free of charge</strong>. All compression, resize, format conversion, PDF compression, and bulk-rename features are available to every user with no hidden fees, no watermarks, and no usage limits beyond the per-batch caps documented on each tool.
           </p>
         </section>
 
