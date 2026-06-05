@@ -108,6 +108,32 @@ const ImageQueue = ({
         </div>
         {!isProcessing && files.length > 0 && (
           <div className="flex items-center gap-1">
+            <div
+              className="flex h-6 items-center rounded-full border border-border/40 bg-background/40 p-0.5"
+              role="group"
+              aria-label="Queue view mode"
+            >
+              <button
+                onClick={() => setViewMode('cards')}
+                aria-pressed={!isList}
+                aria-label="Card view"
+                className={`flex h-5 w-5 items-center justify-center rounded-full transition-colors ${
+                  !isList ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <LayoutGrid className="h-3 w-3" />
+              </button>
+              <button
+                onClick={() => setViewMode('list')}
+                aria-pressed={isList}
+                aria-label="List view"
+                className={`flex h-5 w-5 items-center justify-center rounded-full transition-colors ${
+                  isList ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-foreground'
+                }`}
+              >
+                <List className="h-3 w-3" />
+              </button>
+            </div>
             <Button
               variant="ghost"
               size="sm"
