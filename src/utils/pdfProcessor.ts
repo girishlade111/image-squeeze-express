@@ -82,7 +82,8 @@ interface RenderedPage {
   height: number;
 }
 
-async function loadPdfDocument(file: File | Blob): Promise<pdfjsLib.PDFDocumentProxy> {
+async function loadPdfDocument(file: File | Blob): Promise<import('pdfjs-dist').PDFDocumentProxy> {
+  const pdfjsLib = await getPdfjs();
   const buffer = await file.arrayBuffer();
   // pdfjs mutates the buffer it receives — pass a copy to keep the caller's
   // File usable for retries.
@@ -91,7 +92,7 @@ async function loadPdfDocument(file: File | Blob): Promise<pdfjsLib.PDFDocumentP
 }
 
 async function renderPageToJpeg(
-  page: pdfjsLib.PDFPageProxy,
+  page: import('pdfjs-dist').PDFPageProxy,
   quality: number,
   scale: number,
   maxWidth: number | null
