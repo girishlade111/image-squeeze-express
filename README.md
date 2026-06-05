@@ -410,20 +410,33 @@ flowchart TB
     Plan --> Loop{For each file}
     Loop --> Split[✂️ splitExtension<br/>preserve ext]
 
-    Split --> Order[📐 apply rules in order]
+    Split --> Order[📐 apply base rules in order]
     Order --> Replace[🔍 applyReplace<br/>plain or regex]
     Order --> Affix[✏️ prefix / suffix]
     Order --> Number[🔢 applyNumbering]
     Order --> Case[Aa applyCase]
     Order --> Space[📏 applyWhitespace]
     Order --> Strip[🧹 applyRemoveChars]
+    Order --> Date[📅 applyDate<br/>uses lastModified]
+    Order --> Insert[🧷 applyInsertAt<br/>negative = from end]
+    Order --> Trim[✂️ applyTrim<br/>start/end/both/truncate]
+    Order --> Counter[🔁 applyExtractCounter<br/>uses original base]
+    Order --> Reverse[🪞 applyReverse]
 
-    Replace --> Compose[🧩 candidate = newBase + ext]
+    Replace --> Compose[🧩 candidate = newBase + newExt]
     Affix --> Compose
     Number --> Compose
     Case --> Compose
     Space --> Compose
     Strip --> Compose
+    Date --> Compose
+    Insert --> Compose
+    Trim --> Compose
+    Counter --> Compose
+    Reverse --> Compose
+
+    ExtRules[🗂️ Replace Extension rules] --> NewExt[🔧 applyExtRules]
+    NewExt --> Compose
 
     Compose --> Dedup{collision?<br/>seen map}
     Dedup -->|yes| Suffix["append (2) (3)…"]
@@ -444,9 +457,9 @@ flowchart TB
     classDef util fill:#16a34a,stroke:#4ade80,color:#fff
     classDef out fill:#ea580c,stroke:#fb923c,color:#fff
 
-    class Drop,Rules,Preview,Click ui
+    class Drop,Rules,ExtRules,Preview,Click ui
     class Hook,Plan,Loop,Compose,Dedup logic
-    class Split,Order,Replace,Affix,Number,Case,Space,Strip,Suffix,Push,Sanitise,Zip util
+    class Split,Order,Replace,Affix,Number,Case,Space,Strip,Date,Insert,Trim,Counter,Reverse,NewExt,Suffix,Push,Sanitise,Zip util
     class Save,Disk out
 ```
 
