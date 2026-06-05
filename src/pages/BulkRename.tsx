@@ -95,7 +95,8 @@ const BulkRename = () => {
               >
                 Rename hundreds of files at once with a live preview. Combine find
                 &amp; replace, prefix/suffix, sequential numbering, case changes,
-                and whitespace rules — all in your browser.
+                date stamps, trim, insert-at, counter extraction, reverse, and
+                more — all in your browser.
               </motion.p>
 
               <motion.div
