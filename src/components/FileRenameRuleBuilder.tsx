@@ -549,6 +549,299 @@ function RuleEditor({
     );
   }
 
+  if (rule.kind === 'date') {
+    const formats: { value: DateFormat; label: string }[] = [
+      { value: 'YYYY-MM-DD', label: '2024-05-17' },
+      { value: 'YYYYMMDD', label: '20240517' },
+      { value: 'YYYY-MM-DD_HHMMSS', label: '2024-05-17_142315' },
+      { value: 'YYYY-MM-DD HHMM', label: '2024-05-17 1423' },
+      { value: 'DD-MM-YYYY', label: '17-05-2024' },
+      { value: 'MM-DD-YYYY', label: '05-17-2024' },
+      { value: 'ISO', label: 'ISO 8601' },
+    ];
+    return (
+      <div className="space-y-1.5">
+        <div className="grid grid-cols-2 gap-1.5">
+          <div>
+            <label className="text-[9px] text-muted-foreground">Format</label>
+            <select
+              value={rule.format}
+              onChange={(e) => onChange({ format: e.target.value as DateFormat })}
+              className="h-7 w-full rounded-md border border-border/40 bg-background/40 px-1.5 text-[11px]"
+              aria-label="Date format"
+            >
+              {formats.map((f) => (
+                <option key={f.value} value={f.value}>
+                  {f.label}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="text-[9px] text-muted-foreground">Separator</label>
+            <Input
+              value={rule.separator}
+              onChange={(e) => onChange({ separator: e.target.value })}
+              className="h-7 text-[11px]"
+              aria-label="Date separator"
+            />
+          </div>
+        </div>
+        <div className="grid grid-cols-3 gap-1">
+          {(['start', 'suffix', 'start'] as const).map((_, _i) => null)}
+          {(['start', 'end'] as const).map((p) => (
+            <button
+              key={p}
+              onClick={() => onChange({ position: p })}
+              aria-pressed={rule.position === p}
+              className={`rounded-md border px-1.5 py-1 text-[10px] font-semibold transition-all ${
+                rule.position === p
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-border/40 hover:border-primary/30'
+              }`}
+            >
+              {p === 'start' ? 'Prefix' : 'Suffix'}
+            </button>
+          ))}
+          <label className="col-span-1 flex items-center justify-center gap-1 rounded-md border border-border/40 bg-background/40 px-1.5 py-1 text-[10px] text-muted-foreground">
+            <input
+              type="checkbox"
+              checked={rule.useCurrent}
+              onChange={(e) => onChange({ useCurrent: e.target.checked })}
+              className="h-3 w-3 accent-[hsl(var(--primary))]"
+            />
+            Now
+          </label>
+        </div>
+      </div>
+    );
+  }
+
+  if (rule.kind === 'insertAt') {
+    return (
+      <div className="flex items-center gap-1.5">
+        <Input
+          type="number"
+          value={rule.index}
+          onChange={(e) => onChange({ index: Number(e.target.value) || 0 })}
+          className="h-7 w-20 text-[11px]"
+          aria-label="Insert position"
+          placeholder="0"
+        />
+        <Input
+          value={rule.text}
+          onChange={(e) => onChange({ text: e.target.value })}
+          placeholder="Text to insert…"
+          className="h-7 text-[11px]"
+          aria-label="Text to insert"
+        />
+        <span className="text-[9px] text-muted-foreground">-ve = from end</span>
+      </div>
+    );
+  }
+
+  if (rule.kind === 'trim') {
+    const modes: { value: TrimMode; label: string }[] = [
+      { value: 'start', label: 'Trim Start' },
+      { value: 'end', label: 'Trim End' },
+      { value: 'both', label: 'Trim Both' },
+      { value: 'truncate', label: 'Truncate' },
+    ];
+    const isTruncate = rule.mode === 'truncate';
+    return (
+      <div className="space-y-1.5">
+        <div className="grid grid-cols-4 gap-1">
+          {modes.map((m) => (
+            <button
+              key={m.value}
+              onClick={() => onChange({ mode: m.value })}
+              aria-pressed={rule.mode === m.value}
+              className={`rounded-md border px-1.5 py-1 text-[10px] font-semibold transition-all ${
+                rule.mode === m.value
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-border/40 hover:border-primary/30'
+              }`}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
+        <div className="flex items-center gap-1.5">
+          {isTruncate ? (
+            <>
+              <label className="text-[9px] text-muted-foreground">Max length</label>
+              <Input
+                type="number"
+                min={1}
+                value={rule.maxLength}
+                onChange={(e) =>
+                  onChange({ maxLength: Math.max(1, Number(e.target.value) || 1) })
+                }
+                className="h-7 w-16 text-[11px]"
+                aria-label="Max length"
+              />
+              <label className="ml-1 flex items-center gap-1 text-[10px] text-muted-foreground">
+                <input
+                  type="checkbox"
+                  checked={rule.ellipsis}
+                  onChange={(e) => onChange({ ellipsis: e.target.checked })}
+                  className="h-3 w-3 accent-[hsl(var(--primary))]"
+                />
+                ...
+              </label>
+            </>
+          ) : (
+            <>
+              <label className="text-[9px] text-muted-foreground">Chars</label>
+              <Input
+                type="number"
+                min={0}
+                value={rule.count}
+                onChange={(e) =>
+                  onChange({ count: Math.max(0, Number(e.target.value) || 0) })
+                }
+                className="h-7 w-16 text-[11px]"
+                aria-label="Character count"
+              />
+            </>
+          )}
+        </div>
+      </div>
+    );
+  }
+
+  if (rule.kind === 'replaceExt') {
+    const modes: { value: ExtMode; label: string }[] = [
+      { value: 'set', label: 'Set' },
+      { value: 'lower', label: 'lower' },
+      { value: 'upper', label: 'UPPER' },
+      { value: 'remove', label: 'None' },
+    ];
+    return (
+      <div className="space-y-1.5">
+        <div className="grid grid-cols-4 gap-1">
+          {modes.map((m) => (
+            <button
+              key={m.value}
+              onClick={() => onChange({ mode: m.value })}
+              aria-pressed={rule.mode === m.value}
+              className={`rounded-md border px-1.5 py-1 text-[10px] font-semibold transition-all ${
+                rule.mode === m.value
+                  ? 'border-primary bg-primary/10 text-primary'
+                  : 'border-border/40 hover:border-primary/30'
+              }`}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
+        {rule.mode === 'set' && (
+          <Input
+            value={rule.extension ?? ''}
+            onChange={(e) => onChange({ extension: e.target.value })}
+            placeholder=".jpg (leading dot optional)"
+            className="h-7 text-[11px]"
+            aria-label="New extension"
+          />
+        )}
+      </div>
+    );
+  }
+
+  if (rule.kind === 'extractCounter') {
+    return (
+      <div className="space-y-1.5">
+        <div className="grid grid-cols-2 gap-1.5">
+          <div>
+            <label className="text-[9px] text-muted-foreground">Find in</label>
+            <div className="grid grid-cols-2 gap-1">
+              {(['first', 'last'] as const).map((w) => (
+                <button
+                  key={w}
+                  onClick={() => onChange({ where: w as CounterWhere })}
+                  aria-pressed={rule.where === w}
+                  className={`rounded-md border px-1.5 py-1 text-[10px] font-semibold capitalize transition-all ${
+                    rule.where === w
+                      ? 'border-primary bg-primary/10 text-primary'
+                      : 'border-border/40 hover:border-primary/30'
+                  }`}
+                >
+                  {w}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div>
+            <label className="text-[9px] text-muted-foreground">Place at</label>
+            <div className="grid grid-cols-2 gap-1">
+              {(['start', 'end'] as const).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => onChange({ position: p })}
+                  aria-pressed={rule.position === p}
+                  className={`rounded-md border px-1.5 py-1 text-[10px] font-semibold capitalize transition-all ${
+                    rule.position === p
+                      ? 'border-primary bg-primary/10 text-primary'
+                      : 'border-border/40 hover:border-primary/30'
+                  }`}
+                >
+                  {p}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="grid grid-cols-3 gap-1.5">
+          <div>
+            <label className="text-[9px] text-muted-foreground">Sep</label>
+            <Input
+              value={rule.separator}
+              onChange={(e) => onChange({ separator: e.target.value })}
+              className="h-7 text-[11px]"
+              aria-label="Separator"
+            />
+          </div>
+          <div>
+            <label className="text-[9px] text-muted-foreground">Pad</label>
+            <Input
+              type="number"
+              min={0}
+              max={10}
+              value={rule.pad}
+              onChange={(e) =>
+                onChange({ pad: Math.max(0, Math.min(10, Number(e.target.value) || 0)) })
+              }
+              className="h-7 text-[11px]"
+              aria-label="Counter padding"
+            />
+          </div>
+          <div>
+            <label className="text-[9px] text-muted-foreground">Fallback</label>
+            <Input
+              type="number"
+              value={rule.fallbackStart}
+              onChange={(e) =>
+                onChange({ fallbackStart: Math.max(0, Number(e.target.value) || 0) })
+              }
+              className="h-7 text-[11px]"
+              aria-label="Fallback start"
+            />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (rule.kind === 'reverse') {
+    return (
+      <p className="text-[10px] text-muted-foreground">
+        Reverses the order of every character in the base name.
+        <br />
+        <span className="font-mono">photo → otpoh</span>
+      </p>
+    );
+  }
+
   return null;
 }
 
