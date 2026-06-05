@@ -10,7 +10,7 @@ interface UploadZoneProps {
 
 const ACCEPT = 'image/jpeg,image/png,image/webp,image/avif,image/gif,image/bmp';
 
-const UploadZone = ({ onFilesSelected, imageCount, maxFiles = 10 }: UploadZoneProps) => {
+const UploadZone = ({ onFilesSelected, imageCount, maxFiles = 50 }: UploadZoneProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragOver, setDragOver] = useState(false);
   const full = imageCount >= maxFiles;
