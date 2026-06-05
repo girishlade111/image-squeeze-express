@@ -132,7 +132,7 @@ const addableRuleTypes: {
     factory: () => ({
       kind: 'date',
       format: 'YYYY-MM-DD',
-      position: 'prefix',
+      position: 'start',
       separator: '_',
       useCurrent: false,
     }),
