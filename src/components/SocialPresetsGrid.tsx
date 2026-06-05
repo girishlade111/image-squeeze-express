@@ -6,12 +6,12 @@ interface SocialPresetsGridProps {
 }
 
 const platforms = [
-  { name: 'Instagram', icon: '📸', sizes: '1080×1080', w: 1080, h: 1080 },
-  { name: 'LinkedIn', icon: '💼', sizes: '1200×627', w: 1200, h: 627 },
-  { name: 'WhatsApp', icon: '💬', sizes: '500×500', w: 500, h: 500 },
-  { name: 'Twitter/X', icon: '🐦', sizes: '1200×675', w: 1200, h: 675 },
-  { name: 'Facebook', icon: '📘', sizes: '820×312', w: 820, h: 312 },
-  { name: 'YouTube', icon: '▶️', sizes: '1280×720', w: 1280, h: 720 },
+  { id: 'ig-post', name: 'Instagram', icon: '📸', sizes: '1080×1080', w: 1080, h: 1080 },
+  { id: 'li-post', name: 'LinkedIn', icon: '💼', sizes: '1200×627', w: 1200, h: 627 },
+  { id: 'wa-dp', name: 'WhatsApp', icon: '💬', sizes: '500×500', w: 500, h: 500 },
+  { id: 'tw-post', name: 'Twitter/X', icon: '🐦', sizes: '1200×675', w: 1200, h: 675 },
+  { id: 'fb-cover', name: 'Facebook', icon: '📘', sizes: '820×312', w: 820, h: 312 },
+  { id: 'yt-thumb', name: 'YouTube', icon: '▶️', sizes: '1280×720', w: 1280, h: 720 },
 ];
 
 const SocialPresetsGrid = ({ onSelectPreset }: SocialPresetsGridProps) => {
@@ -29,8 +29,8 @@ const SocialPresetsGrid = ({ onSelectPreset }: SocialPresetsGridProps) => {
     return () => obs.disconnect();
   }, []);
 
-  const handleClick = (w: number, h: number) => {
-    onSelectPreset(w, h);
+  const handleClick = (w: number, h: number, id: string) => {
+    onSelectPreset(w, h, id);
     document.getElementById('upload')?.scrollIntoView({ behavior: 'smooth' });
   };
 
