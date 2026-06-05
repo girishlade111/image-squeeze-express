@@ -108,6 +108,61 @@ const addableRuleTypes: {
     icon: Eraser,
     factory: () => ({ kind: 'removeChars', chars: '' }),
   },
+  {
+    kind: 'date',
+    label: 'Date Stamp',
+    desc: 'Insert file mtime as prefix/suffix',
+    icon: CalendarDays,
+    factory: () => ({
+      kind: 'date',
+      format: 'YYYY-MM-DD',
+      position: 'prefix',
+      separator: '_',
+      useCurrent: false,
+    }),
+  },
+  {
+    kind: 'insertAt',
+    label: 'Insert At',
+    desc: 'Insert text at a position',
+    icon: MousePointerClick,
+    factory: () => ({ kind: 'insertAt', index: 0, text: '' }),
+  },
+  {
+    kind: 'trim',
+    label: 'Trim / Truncate',
+    desc: 'Strip ends or cap length',
+    icon: Scissors,
+    factory: () => ({ kind: 'trim', mode: 'start', count: 1, maxLength: 50, ellipsis: true }),
+  },
+  {
+    kind: 'replaceExt',
+    label: 'Replace Extension',
+    desc: 'Change, case-fix, or strip the file extension',
+    icon: FileType,
+    factory: () => ({ kind: 'replaceExt', mode: 'lower' }),
+  },
+  {
+    kind: 'extractCounter',
+    label: 'Counter From Name',
+    desc: 'Re-sequence the number in the filename',
+    icon: ListOrdered,
+    factory: () => ({
+      kind: 'extractCounter',
+      where: 'last',
+      position: 'end',
+      separator: '_',
+      pad: 2,
+      fallbackStart: 1,
+    }),
+  },
+  {
+    kind: 'reverse',
+    label: 'Reverse Name',
+    desc: 'Flip the base name backwards',
+    icon: Repeat,
+    factory: () => ({ kind: 'reverse' }),
+  },
 ];
 
 const InfoTip = ({ children }: { children: React.ReactNode }) => (
