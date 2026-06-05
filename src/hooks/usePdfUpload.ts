@@ -45,7 +45,6 @@ async function getPdfPageCount(file: File): Promise<number> {
     const doc = await task.promise;
     const count = doc.numPages;
     await doc.cleanup();
-    await doc.destroy();
     return count;
   } catch {
     throw new Error('Could not read PDF — file may be corrupted or password-protected.');
