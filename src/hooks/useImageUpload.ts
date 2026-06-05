@@ -159,7 +159,7 @@ export function useImageUpload() {
       // Process only this file
       void processFiles([id], settings);
     },
-    []
+    [processFiles]
   );
 
   const clearAll = useCallback(() => {
@@ -296,7 +296,7 @@ export function useImageUpload() {
         toast.error(`❌ All ${errorCount} images failed to process.`);
       }
     },
-    [revokeUrl]
+    []
   );
 
   const processAll = useCallback(
