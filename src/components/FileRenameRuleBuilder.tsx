@@ -45,6 +45,22 @@ interface FileRenameRuleBuilderProps {
   onReset: () => void;
 }
 
+const KIND_LABELS: Record<RenameRule['kind'], string> = {
+  replace: 'Find & Replace',
+  prefix: 'Add Prefix',
+  suffix: 'Add Suffix',
+  numbering: 'Numbering',
+  case: 'Change Case',
+  whitespace: 'Whitespace',
+  removeChars: 'Remove Chars',
+  date: 'Date Stamp',
+  insertAt: 'Insert At',
+  trim: 'Trim / Truncate',
+  replaceExt: 'Replace Extension',
+  extractCounter: 'Counter From Name',
+  reverse: 'Reverse Name',
+};
+
 const addableRuleTypes: {
   kind: RenameRule['kind'];
   label: string;
