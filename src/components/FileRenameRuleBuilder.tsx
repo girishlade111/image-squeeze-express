@@ -588,7 +588,6 @@ function RuleEditor({
           </div>
         </div>
         <div className="grid grid-cols-3 gap-1">
-          {(['start', 'suffix', 'start'] as const).map((_, _i) => null)}
           {(['start', 'end'] as const).map((p) => (
             <button
               key={p}
