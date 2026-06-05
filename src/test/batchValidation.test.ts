@@ -92,14 +92,13 @@ describe('validateBatch', () => {
   });
 
   it('flags files that would push the total batch size over MAX_TOTAL_BATCH_SIZE', () => {
-    const tenMeg = 10 * 1024 * 1024;
-    // 80 × 10 MB = 800 MB > 750 MB cap, all 50 should still be accepted
-    // (the cap is a soft warning, not a hard reject)
-    const files = Array.from({ length: 80 }, (_, i) => makeFile(`f${i}.jpg`, tenMeg));
+    // Use 20 MB files: 50 × 20 MB = 1000 MB > 750 MB cap
+    const fileSize = 20 * 1024 * 1024;
+    const files = Array.from({ length: 80 }, (_, i) => makeFile(`f${i}.jpg`, fileSize));
     const r = validateBatch(files, 0);
     expect(r.accepted.length).toBe(50);
     expect(r.overflow.length).toBe(30);
-    expect(r.acceptedBytes).toBe(50 * tenMeg);
+    expect(r.acceptedBytes).toBe(50 * fileSize);
     expect(r.exceedsTotalCap).toBe(true);
   });
 
