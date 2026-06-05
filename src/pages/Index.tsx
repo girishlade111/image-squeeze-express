@@ -5,6 +5,7 @@ import ImageQueue from '@/components/ImageQueue';
 import SettingsPanel from '@/components/SettingsPanel';
 import LazySection from '@/components/LazySection';
 import PageDropOverlay from '@/components/PageDropOverlay';
+import ScrollToTop from '@/components/ScrollToTop';
 import { useImageUpload } from '@/hooks/useImageUpload';
 import { useSettings } from '@/hooks/useSettings';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
@@ -124,6 +125,7 @@ const Index = () => {
       </main>
 
       <PageDropOverlay visible={isDragging} />
+      <ScrollToTop />
     </div>
   );
 };
