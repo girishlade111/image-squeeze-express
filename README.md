@@ -547,7 +547,7 @@ flowchart LR
 | 🗜️ **Compression Ratio** | Up to **90%** file size reduction |
 | 📦 **Max Batch Size** | **10 images** per session |
 | 📥 **Supported Input** | JPG, PNG, WebP, AVIF, GIF, BMP |
-| 📤 **Output Formats** | JPEG, PNG, WebP, Original |
+| 📤 **Output Formats** | JPEG, PNG, WebP, AVIF, Original |
 | 📐 **Max Resolution** | Browser memory limited |
 | ☁️ **Server Uploads** | **Zero** — fully client-side |
 | 🎯 **Default Quality** | 75% (Auto-Optimize mode) |
