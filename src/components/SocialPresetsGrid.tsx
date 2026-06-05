@@ -64,7 +64,7 @@ const SocialPresetsGrid = ({ onSelectPreset }: SocialPresetsGridProps) => {
               visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
             }`}
             style={{ animationDelay: visible ? `${i * 80 + 200}ms` : '0ms' }}
-            onClick={() => handleClick(p.w, p.h)}
+            onClick={() => handleClick(p.w, p.h, p.id)}
           >
             <span className="text-2xl">{p.icon}</span>
             <span className="text-xs font-semibold">{p.name}</span>
