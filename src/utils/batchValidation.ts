@@ -4,6 +4,11 @@
  * which are skipped, and what warnings to surface — without mutating any state
  * itself, so the function is easy to unit-test.
  *
+ * The function is metadata-only: it takes a shadow shape (`IncomingFile`) and
+ * returns a report keyed by *array index* into the original list, so the
+ * caller can map back to its real `File` objects without a key-collision
+ * bug for files that share a name+size+type triple.
+ *
  * Returns a structured report instead of throwing so the caller can decide
  * how to present each warning to the user (toast, banner, etc.).
  */
@@ -17,18 +22,22 @@ export interface IncomingFile {
 }
 
 export interface BatchValidationReport {
-  /** Files safe to add (already capped at the remaining slot count). */
-  accepted: IncomingFile[];
-  /** Files dropped because they would push the queue past MAX_FILES. */
-  overflow: IncomingFile[];
-  /** Files dropped because their individual size exceeded MAX_FILE_SIZE. */
-  oversized: IncomingFile[];
-  /** Total bytes of the `accepted` set. */
+  /** Indices into the original `incoming` array for files safe to add. */
+  accepted: number[];
+  /** Indices for files dropped because the queue would overflow MAX_FILES. */
+  overflow: number[];
+  /** Indices for files dropped because their size exceeded MAX_FILE_SIZE. */
+  oversized: number[];
+  /** Total bytes of the accepted set. */
   acceptedBytes: number;
   /** Soft warning: at least one accepted file is larger than 10 MB. */
   hasLargeFiles: boolean;
-  /** Soft warning: at least one accepted file is an animated GIF. */
+  /** Soft warning: at least one incoming file is an animated GIF. */
   hasAnimatedGifs: boolean;
+  /** Count of incoming animated GIFs (for the toast message). */
+  animatedGifCount: number;
+  /** Count of accepted files larger than 10 MB (for the toast message). */
+  largeFileCount: number;
   /**
    * Soft warning: total accepted bytes exceed the recommended batch cap
    * (MAX_TOTAL_BATCH_SIZE). The user can still proceed; the hook surfaces a
@@ -43,24 +52,40 @@ export function validateBatch(
   incoming: IncomingFile[],
   currentCount: number
 ): BatchValidationReport {
-  const oversized = incoming.filter((f) => f.size > MAX_FILE_SIZE);
-  // Only consider non-oversized files for the "what fits in the queue" pass.
-  const viable = incoming.filter((f) => f.size <= MAX_FILE_SIZE);
+  const oversized: number[] = [];
+  const viable: number[] = [];
+
+  incoming.forEach((f, i) => {
+    if (f.size > MAX_FILE_SIZE) {
+      oversized.push(i);
+    } else {
+      viable.push(i);
+    }
+  });
 
   const remaining = Math.max(0, MAX_FILES - currentCount);
   const overflow = viable.length > remaining ? viable.slice(remaining) : [];
   const accepted = viable.slice(0, remaining);
 
-  const acceptedBytes = accepted.reduce((s, f) => s + f.size, 0);
-  const animatedGifCount = incoming.filter((f) => f.type === 'image/gif').length;
+  const acceptedBytes = accepted.reduce((s, i) => s + incoming[i].size, 0);
+  const animatedGifIndices: number[] = [];
+  incoming.forEach((f, i) => {
+    if (f.type === 'image/gif') animatedGifIndices.push(i);
+  });
+  const largeFileCount = accepted.reduce(
+    (n, i) => (incoming[i].size > LARGE_FILE_WARN_BYTES ? n + 1 : n),
+    0
+  );
 
   return {
     accepted,
     overflow,
     oversized,
     acceptedBytes,
-    hasLargeFiles: accepted.some((f) => f.size > LARGE_FILE_WARN_BYTES),
-    hasAnimatedGifs: animatedGifCount > 0,
+    hasLargeFiles: largeFileCount > 0,
+    hasAnimatedGifs: animatedGifIndices.length > 0,
+    animatedGifCount: animatedGifIndices.length,
+    largeFileCount,
     exceedsTotalCap: acceptedBytes > MAX_TOTAL_BATCH_SIZE,
   };
 }
