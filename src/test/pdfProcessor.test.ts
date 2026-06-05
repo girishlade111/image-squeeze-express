@@ -15,7 +15,7 @@ describe('pdfProcessor helpers', () => {
 
     it('formats kilobytes (< 1 MB)', () => {
       expect(formatBytes(1024)).toBe('1.0 KB');
-      expect(formatBytes(2_457_600)).toBe('2400.0 KB');
+      expect(formatBytes(900 * 1024)).toBe('900.0 KB');
     });
 
     it('formats megabytes', () => {
