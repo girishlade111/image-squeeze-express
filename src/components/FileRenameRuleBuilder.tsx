@@ -218,7 +218,8 @@ const FileRenameRuleBuilder = ({
             <Label className="text-xs font-semibold">Rename Rules</Label>
             <InfoTip>
               Rules are applied in the order shown. File extensions are never
-              touched — only the base name is modified.
+              touched by base rules — use "Replace Extension" to modify the
+              extension itself.
             </InfoTip>
           </div>
           <div className="flex items-center gap-1">
