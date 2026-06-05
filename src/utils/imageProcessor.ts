@@ -72,7 +72,7 @@ export function getImageDimensions(file: File | Blob): Promise<{ width: number; 
   });
 }
 
-function toMime(format: ProcessSettings['outputFormat'], originalType: string): string {
+export function toMime(format: ProcessSettings['outputFormat'], originalType: string): string {
   if (format === 'original') {
     // Round-trip the original format for the formats the browser can re-encode
     // losslessly via canvas (PNG, JPEG, WebP, AVIF). Anything else (GIF, BMP,
@@ -90,7 +90,7 @@ function toMime(format: ProcessSettings['outputFormat'], originalType: string): 
   return `image/${format}`;
 }
 
-function toExt(mime: string): string {
+export function toExt(mime: string): string {
   if (mime === 'image/webp') return '.webp';
   if (mime === 'image/png') return '.png';
   if (mime === 'image/avif') return '.avif';
@@ -337,7 +337,7 @@ function loadImage(source: Blob): Promise<HTMLImageElement> {
   });
 }
 
-function calculateOptimalQuality(
+export function calculateOptimalQuality(
   originalSize: number,
   targetSizeKB: number | null,
   outputFormat: ImageFormat,
