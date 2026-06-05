@@ -848,7 +848,8 @@ image-squeeze-express/
 │   │   ├── example.test.ts
 │   │   ├── imageProcessor.test.ts    # 41 tests
 │   │   ├── pdfProcessor.test.ts      # 12 tests
-│   │   └── fileRenamer.test.ts       # 66 tests
+│   │   ├── fileRenamer.test.ts       # 66 tests
+│   │   └── batchValidation.test.ts   # 14 tests
 │   ├── App.tsx                       # Router
 │   ├── main.tsx                      # Entry point
 │   └── index.css                     # Styles & design tokens
