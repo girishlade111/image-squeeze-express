@@ -120,3 +120,97 @@ describe('computeAspectDimensions', () => {
     });
   });
 });
+
+describe('calcDimensions (image processor)', () => {
+  it('returns source dimensions when no resize requested', () => {
+    expect(calcDimensions(1920, 1080, null, null, true)).toEqual({
+      w: 1920,
+      h: 1080,
+    });
+  });
+
+  it('honors an explicit single dimension with lock on (derives the other)', () => {
+    // Width only, lock on → height derived from source aspect (16:9 → 1080/1920*1080)
+    expect(calcDimensions(1920, 1080, 960, null, true)).toEqual({
+      w: 960,
+      h: 540,
+    });
+    // Height only, lock on → width derived from source aspect
+    expect(calcDimensions(1920, 1080, null, 540, true)).toEqual({
+      w: 960,
+      h: 540,
+    });
+  });
+
+  it('honors both explicit dimensions with lock on (no aspect override)', () => {
+    // Regression test: previously the height was silently re-derived from the
+    // source aspect ratio, breaking every social media preset that targeted a
+    // different aspect ratio than the uploaded image.
+    const r = calcDimensions(1920, 1080, 1080, 1080, true);
+    expect(r.w).toBe(1080);
+    expect(r.h).toBe(1080);
+  });
+
+  it('honors both explicit dimensions with lock off', () => {
+    const r = calcDimensions(1920, 1080, 500, 500, false);
+    expect(r.w).toBe(500);
+    expect(r.h).toBe(500);
+  });
+
+  it('produces a center-crop rectangle when source aspect is wider than target', () => {
+    // 1920×1080 source → 1080×1080 target (square). Source is wider so crop sides.
+    const r = calcDimensions(1920, 1080, 1080, 1080, true);
+    expect(r.w).toBe(1080);
+    expect(r.h).toBe(1080);
+    expect(r.crop).toEqual({ x: 420, y: 0, w: 1080, h: 1080 });
+  });
+
+  it('produces a center-crop rectangle when source aspect is taller than target', () => {
+    // 1080×1920 source → 1200×675 target (16:9). Source is taller so crop top/bottom.
+    const r = calcDimensions(1080, 1920, 1200, 675, false);
+    expect(r.w).toBe(1200);
+    expect(r.h).toBe(675);
+    // sourceAspect = 1080/1920 = 0.5625
+    // targetAspect = 1200/675 = 1.7778
+    // Source is taller → cropW = 1080, cropH = 1080 / 1.7778 ≈ 607.5
+    expect(r.crop?.w).toBeCloseTo(1080, 5);
+    expect(r.crop?.h).toBeCloseTo(607.5, 1);
+    expect(r.crop?.x).toBe(0);
+    expect(r.crop?.y).toBeCloseTo((1920 - 607.5) / 2, 1);
+  });
+
+  it('does not crop when source and target aspect ratios already match', () => {
+    // 1920×1080 (16:9) source → 1200×675 (16:9) target. No crop needed.
+    const r = calcDimensions(1920, 1080, 1200, 675, true);
+    expect(r.w).toBe(1200);
+    expect(r.h).toBe(675);
+    expect(r.crop).toBeUndefined();
+  });
+
+  it('does not crop when source dimensions are unknown', () => {
+    const r = calcDimensions(0, 0, 1080, 1080, true);
+    expect(r.w).toBe(1080);
+    expect(r.h).toBe(1080);
+    expect(r.crop).toBeUndefined();
+  });
+
+  it('handles social media preset dimensions correctly', () => {
+    // Real-world social media presets (subset of SocialPresetsGrid + SettingsPanel).
+    const presets: { name: string; w: number; h: number }[] = [
+      { name: 'Instagram Post', w: 1080, h: 1080 },
+      { name: 'LinkedIn Post', w: 1200, h: 627 },
+      { name: 'WhatsApp DP', w: 500, h: 500 },
+      { name: 'Twitter / X', w: 1200, h: 675 },
+      { name: 'Facebook Cover', w: 820, h: 312 },
+      { name: 'YouTube Thumb', w: 1280, h: 720 },
+      { name: 'IG Story', w: 1080, h: 1920 },
+    ];
+
+    // Source: a 4000×3000 landscape photo (4:3).
+    for (const p of presets) {
+      const r = calcDimensions(4000, 3000, p.w, p.h, true);
+      expect(r.w, `${p.name} width`).toBe(p.w);
+      expect(r.h, `${p.name} height`).toBe(p.h);
+    }
+  });
+});
