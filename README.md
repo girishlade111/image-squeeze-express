@@ -135,6 +135,7 @@ All three tools share:
 | **JPEG** | Photos, complex images | Universal compatibility |
 | **PNG** | Transparency, graphics | Lossless, larger files |
 | **WebP** ⭐ | Web performance | ~30% smaller than JPEG at same quality |
+| **AVIF** | Best compression | ~50% smaller than JPEG; requires Chrome 85+ / Firefox 113+ / Safari 16+ |
 | **Keep Original** | Compression only | No format change |
 
 #### 🔄 Other Transforms
