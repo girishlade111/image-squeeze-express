@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 
-export type ImageFormat = 'jpeg' | 'png' | 'webp' | 'original';
+export type ImageFormat = 'jpeg' | 'png' | 'webp' | 'avif' | 'original';
 export type QualityPreset = 'max' | 'high' | 'balanced' | 'compact' | 'custom';
 export type Rotation = 0 | 90 | 180 | 270;
 

@@ -50,6 +50,7 @@ const formats: {
   recommended?: boolean;
 }[] = [
   { value: 'webp', label: 'WebP', desc: '~30% smaller than JPEG', recommended: true },
+  { value: 'avif', label: 'AVIF', desc: '~50% smaller than JPEG' },
   { value: 'jpeg', label: 'JPEG', desc: 'Best for photos' },
   { value: 'png', label: 'PNG', desc: 'Lossless, supports transparency' },
   { value: 'original', label: 'Keep Original', desc: 'No format change' },
