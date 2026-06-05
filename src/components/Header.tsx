@@ -173,34 +173,34 @@ const Header = () => {
               </a>
             ))}
             <div className="my-3 h-px bg-border" />
-            <a
-              href="/about"
+            <Link
+              to="/about"
               onClick={() => setMobileOpen(false)}
               className="rounded-xl px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground"
             >
               About
-            </a>
-            <a
-              href="/privacy"
+            </Link>
+            <Link
+              to="/privacy"
               onClick={() => setMobileOpen(false)}
               className="rounded-xl px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground"
             >
               Privacy Policy
-            </a>
-            <a
-              href="/terms"
+            </Link>
+            <Link
+              to="/terms"
               onClick={() => setMobileOpen(false)}
               className="rounded-xl px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground"
             >
               Terms of Service
-            </a>
-            <a
-              href="/contact"
+            </Link>
+            <Link
+              to="/contact"
               onClick={() => setMobileOpen(false)}
               className="rounded-xl px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground"
             >
               Contact
-            </a>
+            </Link>
           </div>
         </nav>
       </div>
