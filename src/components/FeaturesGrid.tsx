@@ -4,7 +4,6 @@ const features = [
   { icon: '🔒', title: '100% Private', desc: 'Images processed in your browser. Zero server uploads.' },
   { icon: '⚡', title: 'Lightning Fast', desc: 'No upload wait times. Compression starts instantly.' },
   { icon: '📦', title: 'Batch Processing', desc: 'Compress up to 50 images at once (up to 750 MB) for free.' },
-  { icon: '🎯', title: 'Social Presets', desc: 'One-click resize for Instagram, LinkedIn, WhatsApp & more.' },
   { icon: '🔄', title: 'Format Conversion', desc: 'Convert to WebP (30% smaller), AVIF (50% smaller), PNG, or JPEG instantly.' },
   { icon: '🆓', title: 'Free Forever', desc: 'No account, no hidden fees, no watermarks. Ever.' },
 ];
