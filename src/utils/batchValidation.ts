@@ -15,6 +15,11 @@
 
 import { MAX_FILES, MAX_FILE_SIZE, MAX_TOTAL_BATCH_SIZE } from '@/hooks/imageUploadLimits';
 
+export { MAX_FILES, MAX_FILE_SIZE, MAX_TOTAL_BATCH_SIZE };
+
+/** Soft warning threshold: files above this size may be slow to process. */
+export const LARGE_FILE_THRESHOLD = 10 * 1024 * 1024;
+
 export interface IncomingFile {
   name: string;
   size: number;
@@ -46,7 +51,7 @@ export interface BatchValidationReport {
   exceedsTotalCap: boolean;
 }
 
-const LARGE_FILE_WARN_BYTES = 10 * 1024 * 1024;
+const LARGE_FILE_WARN_BYTES = LARGE_FILE_THRESHOLD;
 
 export function validateBatch(
   incoming: IncomingFile[],
@@ -70,7 +75,11 @@ export function validateBatch(
   const acceptedBytes = accepted.reduce((s, i) => s + incoming[i].size, 0);
   const animatedGifIndices: number[] = [];
   incoming.forEach((f, i) => {
-    if (f.type === 'image/gif') animatedGifIndices.push(i);
+    // Detect by mime OR by extension. Some browsers/droppers set a generic
+    // mime on dragged files, so the extension is a necessary fallback.
+    if (f.type === 'image/gif' || f.name.toLowerCase().endsWith('.gif')) {
+      animatedGifIndices.push(i);
+    }
   });
   const largeFileCount = accepted.reduce(
     (n, i) => (incoming[i].size > LARGE_FILE_WARN_BYTES ? n + 1 : n),
