@@ -869,7 +869,7 @@ image-squeeze-express/
 
 ## 🧪 Testing
 
-The project ships with **79 unit tests** across 3 modules, all in pure-function form so they run in jsdom without any browser shim.
+The project ships with **106 unit tests** across 3 modules, all in pure-function form so they run in jsdom without any browser shim.
 
 ### 📋 Test Coverage
 
