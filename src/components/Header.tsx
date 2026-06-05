@@ -20,7 +20,11 @@ const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const { darkMode, toggleDarkMode } = useTheme();
+  const location = useLocation();
   const firstMobileLinkRef = useRef<HTMLAnchorElement>(null);
+
+  const isToolActive = (to: string) =>
+    to === '/' ? location.pathname === '/' : location.pathname.startsWith(to);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
