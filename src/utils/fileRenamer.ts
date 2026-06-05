@@ -166,8 +166,10 @@ function applyNumbering(
   const n = rule.start + index;
   const padded =
     rule.pad > 0 ? String(n).padStart(rule.pad, '0') : String(n);
-  const token = `${padded}${rule.separator}`;
-  return rule.position === 'start' ? `${token}${s}` : `${s}${token}`;
+  // The separator sits *between* the number and the name regardless of
+  // position so the result reads as a natural delimiter, not a trailing
+  // punctuation mark.
+  return rule.position === 'start' ? `${padded}${rule.separator}${s}` : `${s}${rule.separator}${padded}`;
 }
 
 /**
