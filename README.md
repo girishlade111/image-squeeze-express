@@ -545,7 +545,7 @@ flowchart LR
 | Metric | Value |
 |--------|-------|
 | 🗜️ **Compression Ratio** | Up to **90%** file size reduction |
-| 📦 **Max Batch Size** | **10 images** per session |
+| 📦 **Max Batch Size** | **50 images** per session (750 MB total) |
 | 📥 **Supported Input** | JPG, PNG, WebP, AVIF, GIF, BMP |
 | 📤 **Output Formats** | JPEG, PNG, WebP, AVIF, Original |
 | 📐 **Max Resolution** | Browser memory limited |
