@@ -216,7 +216,7 @@ describe('fileRenamer', () => {
       const rule: RenameRule = {
         kind: 'date',
         format: 'YYYY-MM-DD',
-        position: 'prefix',
+        position: 'start',
         separator: '_',
         useCurrent: false,
       };
@@ -229,7 +229,7 @@ describe('fileRenamer', () => {
       const rule: RenameRule = {
         kind: 'date',
         format: 'YYYYMMDD',
-        position: 'suffix',
+        position: 'end',
         separator: '-',
         useCurrent: false,
       };
@@ -243,7 +243,7 @@ describe('fileRenamer', () => {
       const rule: RenameRule = {
         kind: 'date',
         format: 'YYYY-MM-DD',
-        position: 'prefix',
+        position: 'start',
         separator: '_',
         useCurrent: true,
       };
@@ -265,7 +265,7 @@ describe('fileRenamer', () => {
       const rule: RenameRule = {
         kind: 'date',
         format: 'YYYYMMDD',
-        position: 'prefix',
+        position: 'start',
         separator: '_',
         useCurrent: false,
       };
@@ -361,7 +361,8 @@ describe('fileRenamer', () => {
 
   describe('reverse rule', () => {
     it('reverses a string', () => {
-      expect(renameBase('photo', [{ kind: 'reverse' }], 0, 1)).toBe('otpoh');
+      // p-h-o-t-o -> o-t-o-h-p
+      expect(renameBase('photo', [{ kind: 'reverse' }], 0, 1)).toBe('otohp');
     });
     it('handles empty strings', () => {
       expect(renameBase('', [{ kind: 'reverse' }], 0, 1)).toBe('');
@@ -563,7 +564,7 @@ describe('fileRenamer', () => {
           {
             kind: 'date',
             format: 'YYYY-MM-DD',
-            position: 'prefix',
+            position: 'start',
             separator: '_',
             useCurrent: false,
           },
