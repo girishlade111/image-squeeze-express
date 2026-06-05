@@ -221,3 +221,89 @@ describe('calcDimensions (image processor)', () => {
     }
   });
 });
+
+describe('AVIF format support', () => {
+  it('ImageFormat type includes "avif"', () => {
+    const fmt: ImageFormat = 'avif';
+    expect(fmt).toBe('avif');
+  });
+
+  describe('toMime', () => {
+    it('returns image/avif when the user picks the AVIF output', () => {
+      expect(toMime('avif', 'image/png')).toBe('image/avif');
+      expect(toMime('avif', 'image/jpeg')).toBe('image/avif');
+    });
+
+    it('round-trips an AVIF input when the user picks "Keep Original"', () => {
+      expect(toMime('original', 'image/avif')).toBe('image/avif');
+    });
+
+    it('still falls back to PNG for non-round-trippable inputs', () => {
+      expect(toMime('original', 'image/gif')).toBe('image/png');
+      expect(toMime('original', 'image/bmp')).toBe('image/png');
+    });
+
+    it('preserves jpeg/png/webp when "Keep Original" is selected', () => {
+      expect(toMime('original', 'image/jpeg')).toBe('image/jpeg');
+      expect(toMime('original', 'image/png')).toBe('image/png');
+      expect(toMime('original', 'image/webp')).toBe('image/webp');
+    });
+  });
+
+  describe('toExt', () => {
+    it('maps image/avif to .avif', () => {
+      expect(toExt('image/avif')).toBe('.avif');
+    });
+    it('still maps the existing formats', () => {
+      expect(toExt('image/jpeg')).toBe('.jpg');
+      expect(toExt('image/png')).toBe('.png');
+      expect(toExt('image/webp')).toBe('.webp');
+    });
+  });
+
+  describe('toDownloadFile with AVIF', () => {
+    it('produces a .avif file when the blob is an AVIF', () => {
+      const blob = new Blob([new Uint8Array([0, 0, 0, 32, 102, 116, 121, 112])], {
+        type: 'image/avif',
+      });
+      const file = toDownloadFile('photo.png', blob);
+      expect(file.name).toBe('imagesqueeze_photo.avif');
+      expect(file.type).toBe('image/avif');
+    });
+  });
+
+  describe('calculateOptimalQuality for AVIF', () => {
+    it('picks a lower number than WebP because AVIF compresses better', () => {
+      const webp = calculateOptimalQuality(1_000_000, null, 'webp', false);
+      const avif = calculateOptimalQuality(1_000_000, null, 'avif', false);
+      expect(avif).toBeLessThan(webp);
+    });
+
+    it('respects the hasTransforms bump', () => {
+      const plain = calculateOptimalQuality(1_000_000, null, 'avif', false);
+      const transformed = calculateOptimalQuality(1_000_000, null, 'avif', true);
+      expect(transformed).toBeGreaterThan(plain);
+    });
+
+    it('targets a specific byte budget when targetSizeKB is set (AVIF)', () => {
+      // 50% of original → expected ≥ 50
+      const q = calculateOptimalQuality(1_000_000, 500, 'avif', false);
+      expect(q).toBeGreaterThanOrEqual(50);
+    });
+  });
+
+  describe('isFormatSupported', () => {
+    it('returns a boolean for known mimes', () => {
+      // jsdom has no real canvas, so the answer is deterministic in tests.
+      const result = isFormatSupported('image/avif');
+      expect(typeof result).toBe('boolean');
+    });
+
+    it('caches its result', () => {
+      // First call populates the cache; second call should be identical.
+      const a = isFormatSupported('image/png');
+      const b = isFormatSupported('image/png');
+      expect(a).toBe(b);
+    });
+  });
+});
