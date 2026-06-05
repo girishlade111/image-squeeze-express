@@ -4,6 +4,13 @@ import {
   getCompressionRatio,
   estimateQualityForSize,
   calcDimensions,
+  toMime,
+  toExt,
+  calculateOptimalQuality,
+  isFormatSupported,
+  toDownloadFile,
+  type ImageFormat,
+  type ProcessSettings,
 } from '../utils/imageProcessor';
 import { computeAspectDimensions } from '../hooks/useSettings';
 
