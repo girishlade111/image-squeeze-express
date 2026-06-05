@@ -222,7 +222,7 @@ const HowItWorksRename = () => {
     {
       icon: <Eye className="h-4 w-4 text-primary" />,
       title: '2. Build rules',
-      desc: 'Stack find & replace, prefixes, numbers, case, and whitespace rules. Preview updates live.',
+      desc: 'Stack 13 rule types — find/replace, prefixes, numbers, case, dates, trim, and more. Preview updates live.',
     },
     {
       icon: <Download className="h-4 w-4 text-primary" />,
