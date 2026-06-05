@@ -296,12 +296,16 @@ describe('fileRenamer', () => {
       ).toBe('photo!');
     });
     it('supports negative indices (counted from the end)', () => {
+      // -1 = append at the end, -2 = insert before the last char, etc.
       expect(
         renameBase('photo', [{ kind: 'insertAt', index: -1, text: 'X' }], 0, 1)
       ).toBe('photoX');
       expect(
+        renameBase('photo', [{ kind: 'insertAt', index: -2, text: 'X' }], 0, 1)
+      ).toBe('photXo');
+      expect(
         renameBase('photo', [{ kind: 'insertAt', index: -3, text: 'X' }], 0, 1)
-      ).toBe('phXoto');
+      ).toBe('phoXto');
     });
     it('is a no-op for empty text', () => {
       expect(
