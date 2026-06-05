@@ -13,7 +13,7 @@ const faqs = [
   },
   {
     q: 'What formats are supported?',
-    a: 'You can upload JPG, PNG, WebP, GIF, BMP, and AVIF images. For output, you can choose between JPEG, PNG, or WebP — or keep the original format.',
+    a: 'You can upload JPG, PNG, WebP, GIF, BMP, and AVIF images. For output, you can choose between JPEG, PNG, WebP, or AVIF — or keep the original format. (AVIF requires a modern browser: Chrome 85+, Firefox 113+, or Safari 16+.)',
   },
   {
     q: 'Is there a file size limit?',

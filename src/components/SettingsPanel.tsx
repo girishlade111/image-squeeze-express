@@ -376,47 +376,71 @@ const SettingsPanel = ({
             role="radiogroup"
             aria-label="Output format selection"
           >
-            {formats.map((f) => (
-              <button
-                key={f.value}
-                onClick={() => onUpdate({ outputFormat: f.value })}
-                role="radio"
-                aria-checked={settings.outputFormat === f.value}
-                aria-label={`Output format: ${f.label}`}
-                className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left transition-all ${
-                  settings.outputFormat === f.value
-                    ? 'border-primary bg-primary/10 shadow-sm'
-                    : 'border-border/40 hover:border-primary/30 hover:bg-primary/5'
-                }`}
-              >
-                <div
-                  className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+            {formats.map((f) => {
+              const formatMime = `image/${f.value}`;
+              const supported = f.value === 'original' || f.value === 'png' || isFormatSupported(formatMime);
+              const disabled = !supported;
+              const button = (
+                <button
+                  key={f.value}
+                  onClick={() => !disabled && onUpdate({ outputFormat: f.value })}
+                  role="radio"
+                  aria-checked={settings.outputFormat === f.value}
+                  aria-disabled={disabled}
+                  aria-label={`Output format: ${f.label}${disabled ? ' (not supported by your browser)' : ''}`}
+                  className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left transition-all ${
                     settings.outputFormat === f.value
-                      ? 'border-primary'
-                      : 'border-muted-foreground/40'
-                  }`}
+                      ? 'border-primary bg-primary/10 shadow-sm'
+                      : 'border-border/40 hover:border-primary/30 hover:bg-primary/5'
+                  } ${disabled ? 'cursor-not-allowed opacity-50 hover:border-border/40 hover:bg-transparent' : ''}`}
                 >
-                  {settings.outputFormat === f.value && (
-                    <motion.div
-                      layoutId="formatDot"
-                      className="h-2 w-2 rounded-full bg-primary"
-                    />
-                  )}
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-xs font-semibold">{f.label}</span>
-                    {f.recommended && (
-                      <span className="rounded-full bg-accent/20 px-1.5 py-0.5 text-[9px] font-bold text-accent">
-                        ⭐ Best
-                      </span>
+                  <div
+                    className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+                      settings.outputFormat === f.value
+                        ? 'border-primary'
+                        : 'border-muted-foreground/40'
+                    }`}
+                  >
+                    {settings.outputFormat === f.value && (
+                      <motion.div
+                        layoutId="formatDot"
+                        className="h-2 w-2 rounded-full bg-primary"
+                      />
                     )}
                   </div>
-                  <p className="text-[10px] text-muted-foreground">{f.desc}</p>
-                </div>
-              </button>
-            ))}
+
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs font-semibold">{f.label}</span>
+                      {f.recommended && (
+                        <span className="rounded-full bg-accent/20 px-1.5 py-0.5 text-[9px] font-bold text-accent">
+                          ⭐ Best
+                        </span>
+                      )}
+                      {disabled && (
+                        <span className="rounded-full bg-muted px-1.5 py-0.5 text-[9px] font-semibold text-muted-foreground">
+                          🚫 Unsupported
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-[10px] text-muted-foreground">
+                      {disabled ? 'Not supported by your browser — try Chrome 85+ or Safari 16+.' : f.desc}
+                    </p>
+                  </div>
+                </button>
+              );
+              return disabled ? (
+                <Tooltip key={f.value}>
+                  <TooltipTrigger asChild>{button}</TooltipTrigger>
+                  <TooltipContent className="max-w-[220px] text-xs leading-relaxed">
+                    {f.label} encoding is not available in this browser. Update to
+                    the latest Chrome, Firefox, Edge, or Safari to enable it.
+                  </TooltipContent>
+                </Tooltip>
+              ) : (
+                button
+              );
+            })}
           </TabsContent>
 
           {/* ── ADVANCED ── */}
