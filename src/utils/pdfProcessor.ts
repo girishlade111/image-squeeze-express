@@ -1,9 +1,5 @@
 import * as pdfjsLib from 'pdfjs-dist';
 import { PDFDocument } from 'pdf-lib';
-// Vite resolves ?url imports to a public URL for the worker.
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore - vite handles the ?url suffix at build time
-import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.min.mjs?url';
 
 export type PdfQualityPreset = 'low' | 'medium' | 'high' | 'custom';
 
