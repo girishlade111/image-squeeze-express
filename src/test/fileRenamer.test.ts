@@ -259,9 +259,11 @@ describe('fileRenamer', () => {
         ],
         rules: [{ kind: 'replace', find: 'a', replace: 'X', mode: 'plain', caseSensitive: false }],
       });
-      // First file becomes "X.txt" — second collides when its 'b' isn't
-      // replaced but we expect the second to also become something that
-      // doesn't collide. Adjust scenario:
+      // First file becomes "X.txt" — second's 'b' is not 'a' so it stays
+      // 'b.txt'. No collision here.
+      expect(plan.map((p) => p.renamedName)).toEqual(['X.txt', 'b.txt']);
+
+      // Now two files that *do* collide after the rule.
       const plan2 = buildRenamePlan({
         files: [
           { id: '1', name: 'A.txt' },
@@ -269,11 +271,10 @@ describe('fileRenamer', () => {
         ],
         rules: [{ kind: 'case', mode: 'upper' }],
       });
-      // Both become "A.TXT" — second should be de-duplicated
-      expect(plan2[0].renamedName).toBe('A.TXT');
-      expect(plan2[1].renamedName).toBe('A (2).TXT');
-      // Reference the first plan so the assertion is used
-      expect(plan).toHaveLength(2);
+      // Base "A" -> "A", base "a" -> "A". Both become "A.txt" — extensions
+      // are preserved untouched, so the dedup must compare on the full name.
+      expect(plan2[0].renamedName).toBe('A.txt');
+      expect(plan2[1].renamedName).toBe('A (2).txt');
     });
 
     it('indexes numbering from 0 with the configured start offset', () => {
