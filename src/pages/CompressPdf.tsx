@@ -68,116 +68,44 @@ const CompressPdf = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main>
-        <section
-          className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-12 pb-12"
+        <ToolHero
+          prefix="Compress PDFs"
+          highlight="Up to 90%"
+          suffix="Smaller & Free"
+          subhead="Shrink PDF files right in your browser. We re-render every page as a compressed image and rebuild the document — no uploads, no login, no watermarks."
+          badges={[
+            { emoji: '🔒', label: '100% Private' },
+            { emoji: '⚡', label: 'Runs Locally' },
+            { emoji: '🆓', label: 'Free Forever' },
+            { emoji: '📦', label: 'Batch (5)' },
+          ]}
         >
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background: `
-                radial-gradient(ellipse 80% 50% at 50% 20%, hsl(var(--primary) / 0.18), transparent),
-                radial-gradient(ellipse 60% 40% at 80% 60%, hsl(var(--accent) / 0.12), transparent),
-                radial-gradient(ellipse 50% 50% at 20% 80%, hsl(var(--primary) / 0.1), transparent)
-              `,
-            }}
-            aria-hidden
-          />
-
-          <div className="container relative mx-auto px-4 sm:px-6">
-            <div className="mx-auto max-w-3xl text-center">
-              <motion.h1
-                className="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                Compress PDFs{' '}
-                <span
-                  style={{
-                    background:
-                      'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                  }}
-                >
-                  Up to 90%
-                </span>
-                <br className="hidden sm:block" />
-                <span className="sm:hidden"> </span>
-                Smaller & Free
-              </motion.h1>
-
-              <motion.p
-                className="mx-auto mt-3 max-w-xl text-sm sm:text-base text-muted-foreground"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-              >
-                Shrink PDF files right in your browser. We re-render every page as a
-                compressed image and rebuild the document — no uploads, no login.
-              </motion.p>
-
-              <motion.div
-                className="mt-5 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                {[
-                  { emoji: '🔒', label: '100% Private' },
-                  { emoji: '⚡', label: 'Runs Locally' },
-                  { emoji: '🆓', label: 'Free Forever' },
-                  { emoji: '📦', label: 'Batch (5)' },
-                ].map((badge) => (
-                  <div
-                    key={badge.label}
-                    className="flex items-center gap-1 rounded-full border border-primary/20 bg-primary/[0.07] px-2.5 py-0.5 text-[11px] font-medium text-foreground"
-                  >
-                    <span className="text-xs" aria-hidden>
-                      {badge.emoji}
-                    </span>
-                    {badge.label}
-                  </div>
-                ))}
-              </motion.div>
-
-              <motion.div
-                className="mx-auto mt-6 max-w-xl"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-              >
-                <div ref={uploadRef}>
-                  <PdfUploadZone onFilesSelected={addFiles} pdfCount={files.length} />
-                </div>
-              </motion.div>
-
-              {hasFiles && (
-                <PdfSettingsPanel
-                  preset={preset}
-                  onPresetChange={setPreset}
-                  quality={quality}
-                  onQualityChange={setQuality}
-                />
-              )}
-
-              <PdfQueue
-                files={files}
-                isProcessing={isProcessing}
-                progress={progress}
-                processingText={processingText}
-                currentItem={currentItem}
-                onRemove={removeFile}
-                onClearAll={clearAll}
-                onProcessAll={() => processAll(settings)}
-                onRetry={(id) => processFiles([id], settings)}
-                onAddMore={handleAddMore}
-                allDone={allDone}
-                readyCount={readyCount}
-              />
-            </div>
+          <div ref={uploadRef}>
+            <PdfUploadZone onFilesSelected={addFiles} pdfCount={files.length} />
           </div>
-        </section>
+          {hasFiles && (
+            <PdfSettingsPanel
+              preset={preset}
+              onPresetChange={setPreset}
+              quality={quality}
+              onQualityChange={setQuality}
+            />
+          )}
+          <PdfQueue
+            files={files}
+            isProcessing={isProcessing}
+            progress={progress}
+            processingText={processingText}
+            currentItem={currentItem}
+            onRemove={removeFile}
+            onClearAll={clearAll}
+            onProcessAll={() => processAll(settings)}
+            onRetry={(id) => processFiles([id], settings)}
+            onAddMore={handleAddMore}
+            allDone={allDone}
+            readyCount={readyCount}
+          />
+        </ToolHero>
 
         {allDone && processedFiles.length > 0 && (
           <PdfResultsSection files={processedFiles} onReset={clearAll} />
