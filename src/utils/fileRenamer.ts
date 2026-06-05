@@ -229,16 +229,17 @@ export function buildRenamePlan({ files, rules }: BuildPlanInput): RenamePlanEnt
     const newBase = renameBase(base, rules, i, total);
     let candidate = `${newBase}${ext}`;
 
-    // De-duplicate to avoid silent file overwrites inside the ZIP
-    if (candidate !== f.name) {
-      const key = candidate.toLowerCase();
-      const count = seen.get(key) ?? 0;
-      if (count > 0) {
-        const { base: cBase, ext: cExt } = splitExtension(candidate);
-        candidate = `${cBase} (${count + 1})${cExt}`;
-      }
-      seen.set(key, count + 1);
+    // De-duplicate to avoid silent file overwrites inside the ZIP. The
+    // check runs on the *generated* name regardless of whether it changed,
+    // so two source files that both resolve to the same final name still
+    // get unique entries.
+    const key = candidate.toLowerCase();
+    const count = seen.get(key) ?? 0;
+    if (count > 0) {
+      const { base: cBase, ext: cExt } = splitExtension(candidate);
+      candidate = `${cBase} (${count + 1})${cExt}`;
     }
+    seen.set(key, count + 1);
 
     entries.push({
       id: f.id,
