@@ -583,7 +583,7 @@ flowchart LR
 |--------|-------|
 | 🧠 **Memory Management** | Object URLs auto-revoked on unmount |
 | ⚡ **Lazy Loading** | Code-split by route & component (per-route chunks < 470 KB) |
-| 🧪 **Test Coverage** | 106 unit tests across 3 modules |
+| 🧪 **Test Coverage** | 120 unit tests across 3 modules |
 | 🚀 **Dev Server** | Port `8080` (HMR enabled) |
 
 ---
