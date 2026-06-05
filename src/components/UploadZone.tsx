@@ -1,21 +1,24 @@
 import { useCallback, useRef, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { CloudUpload } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { CloudUpload, Sparkles, Zap, Shield } from 'lucide-react';
 
 interface UploadZoneProps {
   onFilesSelected: (files: FileList | File[]) => void;
   imageCount: number;
+  maxFiles?: number;
 }
 
 const ACCEPT = 'image/jpeg,image/png,image/webp,image/avif,image/gif,image/bmp';
 
-const UploadZone = ({ onFilesSelected, imageCount }: UploadZoneProps) => {
+const UploadZone = ({ onFilesSelected, imageCount, maxFiles = 10 }: UploadZoneProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragOver, setDragOver] = useState(false);
+  const full = imageCount >= maxFiles;
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
+      e.stopPropagation();
       setDragOver(false);
       if (e.dataTransfer.files.length > 0) onFilesSelected(e.dataTransfer.files);
     },
@@ -32,69 +35,126 @@ const UploadZone = ({ onFilesSelected, imageCount }: UploadZoneProps) => {
     [onFilesSelected]
   );
 
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        inputRef.current?.click();
+      }
+    },
+    []
+  );
+
   return (
-    <motion.div 
-      id="upload" 
-      className="w-full"
-      layout
-    >
+    <motion.div id="upload" className="w-full" layout>
       <motion.div
         role="button"
-        tabIndex={0}
-        aria-label={`Upload images. ${imageCount} of 10 selected. Click or drag and drop files here.`}
+        tabIndex={full ? -1 : 0}
+        aria-disabled={full}
+        aria-label={
+          full
+            ? `Maximum ${maxFiles} images selected. Remove some to add more.`
+            : `Upload images. ${imageCount} of ${maxFiles} selected. Click, press Enter/Space, or drag and drop files here.`
+        }
         onDragOver={(e) => {
+          if (full) return;
           e.preventDefault();
           setDragOver(true);
         }}
         onDragLeave={() => setDragOver(false)}
         onDrop={handleDrop}
-        onClick={() => inputRef.current?.click()}
-        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); inputRef.current?.click(); } }}
-        className={`relative flex min-h-[140px] sm:min-h-[180px] cursor-pointer flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed bg-foreground/[0.02] p-4 sm:p-6 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
-          dragOver
-            ? 'border-primary bg-primary/10'
-            : 'border-primary/25 hover:border-primary/50 hover:bg-primary/[0.04]'
+        onClick={() => !full && inputRef.current?.click()}
+        onKeyDown={handleKeyDown}
+        className={`group relative flex min-h-[180px] sm:min-h-[220px] cursor-pointer flex-col items-center justify-center gap-4 rounded-2xl border-2 border-dashed bg-foreground/[0.02] p-6 sm:p-8 text-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+          full
+            ? 'cursor-not-allowed border-border/30 opacity-60'
+            : dragOver
+            ? 'border-primary bg-primary/10 scale-[1.01]'
+            : 'border-primary/25 hover:border-primary/50 hover:bg-primary/[0.04] hover:shadow-[0_0_30px_rgba(124,58,237,0.08)]'
         }`}
-        whileHover={{ scale: 1.01 }}
-        whileTap={{ scale: 0.99 }}
+        whileHover={full ? {} : { scale: 1.005 }}
+        whileTap={full ? {} : { scale: 0.995 }}
       >
-        <AnimatePresence>
-          {dragOver && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              className="absolute inset-0 rounded-xl bg-primary/5"
-            />
-          )}
-        </AnimatePresence>
-
-        {/* Icon */}
-        <motion.div 
-          className={`flex h-12 w-12 items-center justify-center rounded-xl transition-colors ${
-            dragOver ? 'bg-primary/20' : 'bg-primary/[0.08]'
+        {/* Decorative gradient glow */}
+        <div
+          aria-hidden
+          className={`pointer-events-none absolute inset-0 rounded-2xl transition-opacity duration-300 ${
+            dragOver ? 'opacity-100' : 'opacity-0'
           }`}
-          animate={{
-            scale: dragOver ? 1.1 : 1,
+          style={{
+            background:
+              'radial-gradient(ellipse 60% 50% at 50% 50%, hsl(var(--primary) / 0.15), transparent)',
           }}
-          transition={{ type: "spring", stiffness: 300, damping: 20 }}
-        >
-          <CloudUpload className={`h-6 w-6 text-primary`} strokeWidth={1.5} aria-hidden="true" />
-        </motion.div>
+        />
+
+        {/* Icon with pulse ring */}
+        <div className="relative">
+          <div
+            className={`absolute inset-0 rounded-2xl transition-all duration-300 ${
+              dragOver ? 'scale-150 opacity-0' : 'scale-100 opacity-100'
+            }`}
+            style={{
+              background: 'radial-gradient(circle, hsl(var(--primary) / 0.2), transparent)',
+              filter: 'blur(8px)',
+            }}
+            aria-hidden
+          />
+          <motion.div
+            className={`relative flex h-14 w-14 items-center justify-center rounded-2xl transition-colors ${
+              dragOver ? 'bg-primary/25' : 'bg-primary/[0.1] group-hover:bg-primary/[0.15]'
+            }`}
+            animate={{ scale: dragOver ? 1.1 : 1, rotate: dragOver ? -6 : 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+          >
+            <CloudUpload className="h-7 w-7 text-primary" strokeWidth={1.75} aria-hidden="true" />
+          </motion.div>
+        </div>
 
         {/* Text */}
-        <div>
-          <p className="text-sm font-medium text-foreground">
-            Drag & Drop images
+        <div className="space-y-1">
+          <p className="text-base sm:text-lg font-semibold text-foreground">
+            {full ? `Maximum ${maxFiles} images reached` : 'Drag & drop images here'}
           </p>
-          <p className="mt-0.5 text-xs text-muted-foreground">
-            or click to browse
+          <p className="text-xs sm:text-sm text-muted-foreground">
+            {full ? (
+              'Remove some images to add more'
+            ) : (
+              <>
+                or{' '}
+                <span className="font-medium text-primary underline-offset-4 group-hover:underline">
+                  browse files
+                </span>
+                {' • '}
+                <kbd className="rounded border border-border/60 bg-secondary/60 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+                  Ctrl V
+                </kbd>{' '}
+                to paste
+              </>
+            )}
           </p>
         </div>
 
+        {/* Quick info chips */}
+        {!full && (
+          <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1">
+            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+              <Shield className="h-2.5 w-2.5" />
+              100% Private
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+              <Zap className="h-2.5 w-2.5" />
+              Instant
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+              <Sparkles className="h-2.5 w-2.5" />
+              Up to 90% smaller
+            </span>
+          </div>
+        )}
+
         {/* Supported formats */}
-        <p className="text-[10px] text-muted-foreground/60">
-          JPG, PNG, WebP, GIF, BMP • {imageCount}/10 files
+        <p className="text-[10px] text-muted-foreground/70">
+          JPG · PNG · WebP · GIF · BMP · AVIF &nbsp;•&nbsp; {imageCount}/{maxFiles} files
         </p>
 
         <input
@@ -102,6 +162,7 @@ const UploadZone = ({ onFilesSelected, imageCount }: UploadZoneProps) => {
           type="file"
           accept={ACCEPT}
           multiple
+          disabled={full}
           className="hidden"
           onChange={handleChange}
           aria-label="Select image files to compress"
