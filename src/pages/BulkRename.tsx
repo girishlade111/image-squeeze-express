@@ -308,6 +308,10 @@ const FaqRename = () => {
       q: 'Is there a limit?',
       a: 'You can rename up to 100 files per session, each up to 200 MB. The free plan supports it all.',
     },
+    {
+      q: 'Can I change or normalise the file extension?',
+      a: 'Yes. Add a "Replace Extension" rule to set, lowercase, uppercase, or strip the extension entirely (e.g. ".JPEG" → ".jpg"). Other rules never touch the extension.',
+    },
   ];
   return (
     <section className="container mx-auto mt-16 max-w-2xl px-4 pb-12">
