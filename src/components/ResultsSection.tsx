@@ -101,10 +101,13 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
 
   return (
     <section
-      className="container mx-auto mt-16 max-w-3xl px-4"
+      className="container relative mx-auto mt-16 max-w-3xl px-4"
       ref={ref}
       aria-label="Compression results"
     >
+      {/* One-time confetti burst when results first appear */}
+      {visible && <ConfettiBurst />}
+
       {/* Heading */}
       <motion.div
         className="text-center"
