@@ -202,7 +202,7 @@ describe('calcDimensions (image processor)', () => {
   });
 
   it('handles social media preset dimensions correctly', () => {
-    // Real-world social media presets (subset of SocialPresetsGrid + SettingsPanel).
+    // Real-world social media presets (from SettingsPanel).
     const presets: { name: string; w: number; h: number }[] = [
       { name: 'Instagram Post', w: 1080, h: 1080 },
       { name: 'LinkedIn Post', w: 1200, h: 627 },
