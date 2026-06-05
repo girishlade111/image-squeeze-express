@@ -62,7 +62,7 @@
 
 | Tool | Route | Best For | Max Inputs | Engine |
 |------|-------|----------|------------|--------|
-| 🖼️ **Image Compressor** | [`/`](#) | Photos, social media, web assets | **10** images × 25 MB | Canvas API + `browser-image-compression` |
+| 🖼️ **Image Compressor** | [`/`](#) | Photos, social media, web assets | **50** images × 25 MB (750 MB total) | Canvas API + `browser-image-compression` |
 | 📕 **Compress PDF** | [`/compress-pdf`](#) | Image-heavy PDFs, email attachments | **5** PDFs × 100 MB | `pdfjs-dist` + `pdf-lib` |
 | ✏️ **Bulk File Rename** | [`/bulk-rename`](#) | Any file type, batch renaming | **100** files × 200 MB | Pure JS string engine + `jszip` |
 
@@ -95,7 +95,7 @@ All three tools share:
 
 ### 🖼️ Image Compressor (`/`)
 
-> The flagship tool. Resize, recompress, and convert up to 10 images at once with full social-media preset support.
+> The flagship tool. Resize, recompress, and convert up to 50 images at once (750 MB total) with full social-media preset support.
 
 #### 🗜️ Compression
 
