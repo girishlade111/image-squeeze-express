@@ -5,10 +5,11 @@ import UploadZone from '@/components/UploadZone';
 interface HeroSectionProps {
   onFilesSelected: (files: FileList | File[]) => void;
   imageCount: number;
+  maxFiles?: number;
   children?: React.ReactNode;
 }
 
-const HeroSection = ({ onFilesSelected, imageCount, children }: HeroSectionProps) => {
+const HeroSection = ({ onFilesSelected, imageCount, maxFiles = 50, children }: HeroSectionProps) => {
   const floatingShapes = useMemo(
     () => [
       { size: 220, left: '5%', top: '15%', delay: '0s', duration: '20s' },
