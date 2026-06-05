@@ -18,12 +18,22 @@ import {
   Info,
   RotateCcw,
   Pencil,
+  CalendarDays,
+  MousePointerClick,
+  Scissors,
+  FileType,
+  ListOrdered,
+  Repeat,
 } from 'lucide-react';
 import type {
   RenameRule,
   CaseMode,
   WhitespaceMode,
   ReplaceMode,
+  DateFormat,
+  TrimMode,
+  ExtMode,
+  CounterWhere,
 } from '@/utils/fileRenamer';
 
 interface FileRenameRuleBuilderProps {
