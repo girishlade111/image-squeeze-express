@@ -188,7 +188,9 @@ export function useImageUpload() {
   );
 
   const addFiles = useCallback((fileList: FileList | File[]) => {
-    const incoming = Array.from(fileList).filter((f) => f.type.startsWith('image/'));
+    const incoming = Array.from(fileList)
+      .filter((f) => f.type.startsWith('image/'))
+      .map((f) => ({ name: f.name, size: f.size, type: f.type }));
     if (incoming.length === 0) {
       toast.error(
         'No valid images found. Please select JPG, PNG, WebP, GIF, BMP, or AVIF files.'
@@ -196,33 +198,58 @@ export function useImageUpload() {
       return;
     }
 
-    // Surface warnings for special cases
-    const oversized = incoming.filter((f) => f.size > 10 * 1024 * 1024);
-    if (oversized.length > 0) {
-      toast.warning(
-        `⚠️ ${oversized.length} large file${oversized.length > 1 ? 's' : ''} detected. Processing may take longer.`,
-        { description: oversized.map((f) => f.name).slice(0, 2).join(', ') }
-      );
-    }
-    const gifs = incoming.filter((f) => f.type === 'image/gif');
-    if (gifs.length > 0) {
-      toast.info('ℹ️ Animated GIFs will become static images.', {
-        description: `${gifs.length} GIF file${gifs.length > 1 ? 's' : ''} detected.`,
-      });
-    }
+    // Re-derive the full File objects from the filter step above. We need the
+    // raw File for blob URLs and processing, but the validator only needs the
+    // metadata — so the file list is split into a metadata shadow and the
+    // original File[] for state insertion.
+    const incomingFiles = Array.from(fileList).filter((f) => f.type.startsWith('image/'));
 
     setFiles((prev) => {
-      const remaining = MAX_FILES - prev.length;
-      if (remaining <= 0) {
-        toast.warning('⚠️ Free version supports up to 10 images at once.');
-        return prev;
-      }
-      const toAdd = incoming.slice(0, remaining);
-      if (incoming.length > remaining) {
-        toast.warning(
-          `⚠️ Only ${remaining} image${remaining > 1 ? 's' : ''} added — free version supports up to 10 at once.`
+      const report = validateBatch(incoming, prev.length);
+
+      // Surface warnings for special cases (the validator reports, the hook
+      // decides how to communicate them).
+      if (report.oversized.length > 0) {
+        toast.error(
+          `${report.oversized.length} file${report.oversized.length > 1 ? 's' : ''} exceed the 25 MB per-file limit and were skipped.`,
+          {
+            description: report.oversized.map((f) => f.name).slice(0, 2).join(', '),
+          }
         );
       }
+      if (report.hasLargeFiles) {
+        const largeCount = report.accepted.filter((f) => f.size > 10 * 1024 * 1024).length;
+        toast.warning(
+          `⚠️ ${largeCount} large file${largeCount > 1 ? 's' : ''} detected. Processing may take longer.`,
+          { description: 'Files over 10 MB are decoded fully in memory.' }
+        );
+      }
+      if (report.hasAnimatedGifs) {
+        const gifCount = incoming.filter((f) => f.type === 'image/gif').length;
+        toast.info('ℹ️ Animated GIFs will become static images.', {
+          description: `${gifCount} GIF file${gifCount > 1 ? 's' : ''} detected.`,
+        });
+      }
+      if (report.overflow.length > 0) {
+        toast.warning(
+          `⚠️ Only ${report.accepted.length} of ${incoming.length} added — free version supports up to ${MAX_FILES} images at once.`
+        );
+      }
+      if (report.exceedsTotalCap) {
+        const totalMB = (report.acceptedBytes / (1024 * 1024)).toFixed(0);
+        toast.warning(
+          `📦 Large batch (~${totalMB} MB) — older devices may slow down while processing ${report.accepted.length} images.`,
+          { description: `Recommended cap is ${MAX_TOTAL_BATCH_SIZE / (1024 * 1024)} MB per batch.` }
+        );
+      }
+
+      // Build UploadedFile entries by matching the validator's `accepted`
+      // metadata back to the original File objects (the validator only sees
+      // the shadow shape so it can stay pure).
+      const acceptedSet = new Set(report.accepted.map((a) => `${a.name}|${a.size}|${a.type}`));
+      const toAdd = incomingFiles.filter((f) =>
+        acceptedSet.has(`${f.name}|${f.size}|${f.type}`)
+      );
 
       const newFiles: UploadedFile[] = toAdd.map((file) => {
         const preview = URL.createObjectURL(file);
