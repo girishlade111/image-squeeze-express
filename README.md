@@ -147,7 +147,7 @@ All three tools share:
 
 #### 📦 Batch Processing
 
-- **📤 Batch Upload** — up to **10 images** simultaneously
+- **📤 Batch Upload** — up to **50 images** per batch (750 MB total)
 - **🖱️ Drag & Drop** — or click to browse
 - **⌨️ Paste from Clipboard** — `Ctrl+V` works anywhere
 - **📊 Progress Tracking** — real-time progress bar with status badges
