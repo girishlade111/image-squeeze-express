@@ -13,7 +13,6 @@ import { usePageDropZone } from '@/hooks/usePageDropZone';
 const ResultsSection = lazy(() => import('@/components/ResultsSection'));
 const HowItWorks = lazy(() => import('@/components/HowItWorks'));
 const FeaturesGrid = lazy(() => import('@/components/FeaturesGrid'));
-const ProTeaser = lazy(() => import('@/components/ProTeaser'));
 const FAQSection = lazy(() => import('@/components/FAQSection'));
 const Footer = lazy(() => import('@/components/Footer'));
 
