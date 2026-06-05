@@ -62,6 +62,12 @@ const ImageQueue = ({
   readyCount,
 }: ImageQueueProps) => {
   const [hoverId, setHoverId] = useState<string | null>(null);
+  // Auto-switch to the compact list view for large batches so 50-image runs
+  // don't generate 25 rows of cards. The user can override the auto-pick.
+  const [viewMode, setViewMode] = useState<ViewMode>(
+    files.length > COMPACT_THRESHOLD ? 'list' : 'cards'
+  );
+  const isList = viewMode === 'list';
 
   if (files.length === 0) return null;
 
