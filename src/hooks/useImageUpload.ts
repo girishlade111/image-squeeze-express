@@ -7,6 +7,12 @@ import {
   type ProcessResult,
   type ProcessSettings,
 } from '@/utils/imageProcessor';
+import { validateBatch } from '@/utils/batchValidation';
+import {
+  MAX_FILES,
+  MAX_FILE_SIZE,
+  MAX_TOTAL_BATCH_SIZE,
+} from '@/hooks/imageUploadLimits';
 import type { Settings } from '@/hooks/useSettings';
 
 export interface UploadedFile {
@@ -24,8 +30,7 @@ export interface UploadedFile {
   processedPreview?: string;
 }
 
-export const MAX_FILES = 10;
-export const MAX_FILE_SIZE = 25 * 1024 * 1024;
+export { MAX_FILES, MAX_FILE_SIZE, MAX_TOTAL_BATCH_SIZE };
 
 export function useImageUpload() {
   const [files, setFiles] = useState<UploadedFile[]>([]);
