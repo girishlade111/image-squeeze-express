@@ -298,11 +298,7 @@ const FileRenameRuleBuilder = ({
                     {index + 1}
                   </span>
                   <span className="text-[11px] font-semibold capitalize">
-                    {rule.kind === 'removeChars'
-                      ? 'Remove Chars'
-                      : rule.kind === 'numbering'
-                      ? 'Numbering'
-                      : rule.kind}
+                    {KIND_LABELS[rule.kind]}
                   </span>
                   <div className="ml-auto flex items-center gap-0.5">
                     <Tooltip>
