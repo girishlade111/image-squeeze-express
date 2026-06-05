@@ -113,6 +113,13 @@ export function isFormatSupported(mime: string): boolean {
   try {
     const canvas = document.createElement('canvas');
     canvas.width = canvas.height = 1;
+    // Some non-browser environments (e.g. jsdom without the optional canvas
+    // shim) leave `toDataURL` unimplemented and print a warning to the
+    // console. Probe first to stay quiet in those test environments.
+    if (typeof canvas.toDataURL !== 'function') {
+      _supportCache.set(mime, false);
+      return false;
+    }
     const dataUrl = canvas.toDataURL(mime);
     const supported = dataUrl.startsWith(`data:${mime}`);
     _supportCache.set(mime, supported);
