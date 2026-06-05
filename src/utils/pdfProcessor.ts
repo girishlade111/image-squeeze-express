@@ -186,7 +186,6 @@ export async function compressPdf(
   }
 
   await pdf.cleanup();
-  await pdf.destroy();
 
   const outBytes = await outDoc.save({ useObjectStreams: true });
   // pdf-lib returns a Node Buffer / Uint8Array — normalise to Uint8Array.
