@@ -126,32 +126,16 @@ function calcDimensions(
 
 function applyCanvasTransforms(
   ctx: CanvasRenderingContext2D,
-  width: number,
-  height: number,
   rotation: number,
-  mirror: boolean,
-  canvasW: number,
-  canvasH: number
+  mirror: boolean
 ): void {
-  ctx.translate(canvasW / 2, canvasH / 2);
-
   if (mirror) {
     ctx.scale(-1, 1);
   }
 
-  switch (rotation) {
-    case 90:
-      ctx.rotate(Math.PI / 2);
-      break;
-    case 180:
-      ctx.rotate(Math.PI);
-      break;
-    case 270:
-      ctx.rotate(-Math.PI / 2);
-      break;
+  if (rotation) {
+    ctx.rotate((rotation * Math.PI) / 180);
   }
-
-  ctx.translate(-canvasW / 2, -canvasH / 2);
 }
 
 async function canvasProcess(
@@ -168,6 +152,7 @@ async function canvasProcess(
 ): Promise<Blob> {
   const img = await loadImage(source);
 
+  // Canvas dimensions swap for 90/270 rotation so the rotated image fits
   let canvasWidth = width;
   let canvasHeight = height;
   if (options.rotation === 90 || options.rotation === 270) {
@@ -191,19 +176,20 @@ async function canvasProcess(
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
   }
 
+  // Move origin to the canvas center so rotation/mirror pivot around it
   if (options.rotation || options.mirror) {
-    applyCanvasTransforms(
-      ctx,
-      width,
-      height,
-      options.rotation || 0,
-      options.mirror || false,
-      canvasWidth,
-      canvasHeight
-    );
+    ctx.translate(canvasWidth / 2, canvasHeight / 2);
+    applyCanvasTransforms(ctx, options.rotation || 0, options.mirror || false);
   }
 
-  ctx.drawImage(img, 0, 0, canvasWidth, canvasHeight);
+  // Draw image centered at the (now-centered) origin using pre-rotation dims
+  ctx.drawImage(
+    img,
+    options.rotation || options.mirror ? -width / 2 : 0,
+    options.rotation || options.mirror ? -height / 2 : 0,
+    width,
+    height
+  );
 
   if (options.grayscale) {
     applyGrayscale(ctx, canvasWidth, canvasHeight);
