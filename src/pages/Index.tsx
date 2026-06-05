@@ -114,7 +114,7 @@ const Index = () => {
         <Suspense fallback={null}>
           <LazySection id="social-presets">
             <SocialPresetsGrid
-              onSelectPreset={(w, h) => updateSettings({ width: w, height: h, selectedPreset: null })}
+              onSelectPreset={(w, h, id) => updateSettings({ width: w, height: h, selectedPreset: id })}
             />
           </LazySection>
           <LazySection>
