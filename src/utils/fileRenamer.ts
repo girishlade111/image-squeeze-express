@@ -64,7 +64,7 @@ export interface RemoveCharsRule {
 export interface DateRule {
   kind: 'date';
   format: DateFormat;
-  position: 'prefix' | 'suffix';
+  position: 'start' | 'end';
   separator: string;
   /** When true, the current date is used instead of the file's lastModified. */
   useCurrent: boolean;
@@ -283,7 +283,9 @@ function applyInsertAt(s: string, rule: InsertAtRule): string {
   if (rule.text.length === 0) return s;
   const len = s.length;
   let idx = rule.index;
-  if (idx < 0) idx = Math.max(0, len + idx);
+  // Negative indices count from the end: -1 = append at the end, -2 =
+  // insert before the last char, etc. We add 1 so that -1 maps to `len`.
+  if (idx < 0) idx = Math.max(0, len + idx + 1);
   if (idx > len) idx = len;
   return s.slice(0, idx) + rule.text + s.slice(idx);
 }
