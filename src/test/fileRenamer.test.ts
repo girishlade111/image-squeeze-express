@@ -208,6 +208,225 @@ describe('fileRenamer', () => {
     });
   });
 
+  describe('date rule', () => {
+    // 2024-05-17 14:23:15 in local time
+    const TS = new Date(2024, 4, 17, 14, 23, 15).getTime();
+
+    it('formats the file mtime as YYYY-MM-DD', () => {
+      const rule: RenameRule = {
+        kind: 'date',
+        format: 'YYYY-MM-DD',
+        position: 'prefix',
+        separator: '_',
+        useCurrent: false,
+      };
+      expect(renameBase('photo', [rule], 0, 1, { lastModified: TS })).toBe(
+        '2024-05-17_photo'
+      );
+    });
+
+    it('formats with the YYYYMMDD token', () => {
+      const rule: RenameRule = {
+        kind: 'date',
+        format: 'YYYYMMDD',
+        position: 'suffix',
+        separator: '-',
+        useCurrent: false,
+      };
+      expect(renameBase('photo', [rule], 0, 1, { lastModified: TS })).toBe(
+        'photo-20240517'
+      );
+    });
+
+    it('uses the current date when useCurrent=true', () => {
+      const before = new Date();
+      const rule: RenameRule = {
+        kind: 'date',
+        format: 'YYYY-MM-DD',
+        position: 'prefix',
+        separator: '_',
+        useCurrent: true,
+      };
+      const result = renameBase('photo', [rule], 0, 1, { lastModified: TS });
+      const after = new Date();
+      const stamp = result.split('_')[0];
+      // The stamp must be a real YYYY-MM-DD that lies between before and after.
+      expect(stamp).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      const stampMs = new Date(stamp).getTime();
+      expect(stampMs).toBeGreaterThanOrEqual(
+        new Date(before.getFullYear(), before.getMonth(), before.getDate()).getTime()
+      );
+      expect(stampMs).toBeLessThanOrEqual(
+        new Date(after.getFullYear(), after.getMonth(), after.getDate()).getTime()
+      );
+    });
+
+    it('falls back to now() when no lastModified is provided', () => {
+      const rule: RenameRule = {
+        kind: 'date',
+        format: 'YYYYMMDD',
+        position: 'prefix',
+        separator: '_',
+        useCurrent: false,
+      };
+      const result = renameBase('photo', [rule], 0, 1);
+      expect(result).toMatch(/^\d{8}_photo$/);
+    });
+  });
+
+  describe('insertAt rule', () => {
+    it('inserts at the start when index=0', () => {
+      expect(
+        renameBase('photo', [{ kind: 'insertAt', index: 0, text: 'IMG_' }], 0, 1)
+      ).toBe('IMG_photo');
+    });
+    it('inserts in the middle', () => {
+      expect(
+        renameBase('photo', [{ kind: 'insertAt', index: 2, text: 'XX' }], 0, 1)
+      ).toBe('phXXoto');
+    });
+    it('inserts at the end when index=length', () => {
+      expect(
+        renameBase('photo', [{ kind: 'insertAt', index: 5, text: '_v2' }], 0, 1)
+      ).toBe('photo_v2');
+    });
+    it('clamps a too-large index to the end', () => {
+      expect(
+        renameBase('photo', [{ kind: 'insertAt', index: 99, text: '!' }], 0, 1)
+      ).toBe('photo!');
+    });
+    it('supports negative indices (counted from the end)', () => {
+      expect(
+        renameBase('photo', [{ kind: 'insertAt', index: -1, text: 'X' }], 0, 1)
+      ).toBe('photoX');
+      expect(
+        renameBase('photo', [{ kind: 'insertAt', index: -3, text: 'X' }], 0, 1)
+      ).toBe('phXoto');
+    });
+    it('is a no-op for empty text', () => {
+      expect(
+        renameBase('photo', [{ kind: 'insertAt', index: 2, text: '' }], 0, 1)
+      ).toBe('photo');
+    });
+  });
+
+  describe('trim rule', () => {
+    it('trims N characters from the start', () => {
+      expect(
+        renameBase('hello world', [{ kind: 'trim', mode: 'start', count: 6, maxLength: 50, ellipsis: true }], 0, 1)
+      ).toBe('world');
+    });
+    it('trims N characters from the end', () => {
+      expect(
+        renameBase('hello world', [{ kind: 'trim', mode: 'end', count: 6, maxLength: 50, ellipsis: true }], 0, 1)
+      ).toBe('hello');
+    });
+    it('trims from both sides (split count)', () => {
+      // count=2 → 1 from each side
+      expect(
+        renameBase('abcdef', [{ kind: 'trim', mode: 'both', count: 2, maxLength: 50, ellipsis: true }], 0, 1)
+      ).toBe('bcde');
+    });
+    it('truncates to a max length', () => {
+      expect(
+        renameBase(
+          'this is a long name',
+          [{ kind: 'trim', mode: 'truncate', count: 0, maxLength: 10, ellipsis: false }],
+          0,
+          1
+        )
+      ).toBe('this is a ');
+    });
+    it('truncates with ellipsis', () => {
+      expect(
+        renameBase(
+          'this is a long name',
+          [{ kind: 'trim', mode: 'truncate', count: 0, maxLength: 10, ellipsis: true }],
+          0,
+          1
+        )
+      ).toBe('this is...');
+    });
+    it('leaves short strings untouched when truncating', () => {
+      expect(
+        renameBase(
+          'short',
+          [{ kind: 'trim', mode: 'truncate', count: 0, maxLength: 50, ellipsis: true }],
+          0,
+          1
+        )
+      ).toBe('short');
+    });
+  });
+
+  describe('reverse rule', () => {
+    it('reverses a string', () => {
+      expect(renameBase('photo', [{ kind: 'reverse' }], 0, 1)).toBe('otpoh');
+    });
+    it('handles empty strings', () => {
+      expect(renameBase('', [{ kind: 'reverse' }], 0, 1)).toBe('');
+    });
+    it('handles palindromes', () => {
+      expect(renameBase('aba', [{ kind: 'reverse' }], 0, 1)).toBe('aba');
+    });
+  });
+
+  describe('extractCounter rule', () => {
+    it('extracts the first number from the original name', () => {
+      const rule: RenameRule = {
+        kind: 'extractCounter',
+        where: 'first',
+        position: 'end',
+        separator: '_',
+        pad: 0,
+        fallbackStart: 1,
+      };
+      const original = 'photo12-v2';
+      expect(renameBase(original, [rule], 0, 3, { originalBase: original })).toBe('photo12-v2_12');
+      expect(renameBase(original, [rule], 1, 3, { originalBase: original })).toBe('photo12-v2_13');
+    });
+
+    it('extracts the last number from the original name', () => {
+      const rule: RenameRule = {
+        kind: 'extractCounter',
+        where: 'last',
+        position: 'start',
+        separator: '_',
+        pad: 0,
+        fallbackStart: 1,
+      };
+      const original = 'photo12-v2';
+      expect(renameBase(original, [rule], 0, 3, { originalBase: original })).toBe('2_photo12-v2');
+      expect(renameBase(original, [rule], 2, 3, { originalBase: original })).toBe('4_photo12-v2');
+    });
+
+    it('zero-pads the new counter', () => {
+      const rule: RenameRule = {
+        kind: 'extractCounter',
+        where: 'last',
+        position: 'end',
+        separator: '_',
+        pad: 3,
+        fallbackStart: 1,
+      };
+      const original = 'photo-v2';
+      expect(renameBase(original, [rule], 0, 5, { originalBase: original })).toBe('photo-v2_002');
+    });
+
+    it('falls back to fallbackStart when the original has no number', () => {
+      const rule: RenameRule = {
+        kind: 'extractCounter',
+        where: 'last',
+        position: 'end',
+        separator: '_',
+        pad: 0,
+        fallbackStart: 100,
+      };
+      const original = 'photo';
+      expect(renameBase(original, [rule], 0, 1, { originalBase: original })).toBe('photo_100');
+    });
+  });
+
   describe('rule ordering', () => {
     it('applies rules in array order', () => {
       const rules: RenameRule[] = [
