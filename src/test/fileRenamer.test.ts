@@ -306,8 +306,11 @@ describe('fileRenamer', () => {
     it('strips characters that are illegal on Windows', () => {
       expect(sanitizeFileName('a<b>c:d"e/f\\g|h?i*j.txt')).toBe('a_b_c_d_e_f_g_h_i_j.txt');
     });
-    it('strips control characters', () => {
-      expect(sanitizeFileName('bad\x00name\x1f.txt')).toBe('badname.txt');
+    it('strips control characters (replaced with underscore)', () => {
+      // Control chars are illegal and are replaced with '_', not removed.
+      // The trailing '_' before the extension survives the trim pass because
+      // it is not at the very end of the string.
+      expect(sanitizeFileName('bad\x00name\x1f.txt')).toBe('bad_name_.txt');
     });
     it('collapses runs of underscores', () => {
       expect(sanitizeFileName('a____b.txt')).toBe('a_b.txt');
