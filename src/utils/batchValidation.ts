@@ -8,7 +8,7 @@
  * how to present each warning to the user (toast, banner, etc.).
  */
 
-import { MAX_FILES, MAX_FILE_SIZE, MAX_TOTAL_BATCH_SIZE } from '@/hooks/useImageUpload';
+import { MAX_FILES, MAX_FILE_SIZE, MAX_TOTAL_BATCH_SIZE } from '@/hooks/imageUploadLimits';
 
 export interface IncomingFile {
   name: string;
