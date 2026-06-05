@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Loader2, Check, AlertCircle, RotateCcw, Plus } from 'lucide-react';
+import { X, Loader2, Check, AlertCircle, RotateCcw, Plus, LayoutGrid, List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -43,6 +43,9 @@ const statusLabel: Record<UploadedFile['status'], string> = {
   done: 'Done',
   error: 'Failed',
 };
+
+type ViewMode = 'cards' | 'list';
+const COMPACT_THRESHOLD = 20;
 
 const ImageQueue = ({
   files,
