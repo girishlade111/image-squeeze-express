@@ -35,6 +35,7 @@ export function useImageUpload() {
   const [currentItem, setCurrentItem] = useState<string | null>(null);
   const urlsRef = useRef<Set<string>>(new Set());
 
+  // Stable revoke helper
   const revokeUrl = useCallback((url: string) => {
     if (!url) return;
     try {
@@ -45,6 +46,7 @@ export function useImageUpload() {
     urlsRef.current.delete(url);
   }, []);
 
+  // Cleanup all blob URLs on unmount
   useEffect(() => {
     const tracked = urlsRef.current;
     return () => {
@@ -59,14 +61,137 @@ export function useImageUpload() {
     };
   }, []);
 
-  const addFiles = useCallback(async (fileList: FileList | File[]) => {
+  // ─────────────────────────────────────────────────────────────────
+  // CORE PROCESSOR — declared FIRST so it can be referenced by the
+  // other callbacks (retryFile, processAll) without hitting a
+  // temporal dead zone at module-evaluation time.
+  // ─────────────────────────────────────────────────────────────────
+  const processFiles = useCallback(
+    async (ids: string[], settings: Settings) => {
+      setIsProcessing(true);
+      setProgress(0);
+      setProcessingText('Starting…');
+
+      // Snapshot the files we'll process (in current order)
+      let targets: UploadedFile[] = [];
+      setFiles((currentFiles) => {
+        targets = currentFiles.filter((f) => ids.includes(f.id));
+        return currentFiles;
+      });
+
+      // Yield to React so any pending status updates can apply first
+      await Promise.resolve();
+
+      if (targets.length === 0) {
+        setIsProcessing(false);
+        setProcessingText('');
+        return;
+      }
+
+      // Mark all targets as processing
+      const idSet = new Set(targets.map((t) => t.id));
+      setFiles((prev) =>
+        prev.map((f) =>
+          idSet.has(f.id)
+            ? { ...f, status: 'processing' as const, error: undefined }
+            : f
+        )
+      );
+
+      const total = targets.length;
+      let completed = 0;
+      let successCount = 0;
+      let errorCount = 0;
+
+      for (const item of targets) {
+        setCurrentItem(item.id);
+        setProcessingText(`Processing ${completed + 1} of ${total}…`);
+
+        try {
+          const ps: ProcessSettings = {
+            quality: settings.quality,
+            autoOptimize: settings.autoOptimize,
+            targetSizeKB: settings.targetSizeKB,
+            width: settings.width,
+            height: settings.height,
+            lockAspectRatio: settings.lockAspectRatio,
+            outputFormat: settings.outputFormat,
+            stripEXIF: settings.stripEXIF,
+            grayscale: settings.grayscale,
+            rotation: settings.rotation,
+            mirror: settings.mirror,
+            preserveMetadata: settings.preserveMetadata,
+            progressive: settings.progressive,
+            embedColorProfile: settings.embedColorProfile,
+          };
+
+          const result = await processImage(item.file, ps, item.originalSize);
+          const processedFile = toDownloadFile(item.name, result.blob);
+          const processedPreview = URL.createObjectURL(result.blob);
+          urlsRef.current.add(processedPreview);
+
+          setFiles((prev) =>
+            prev.map((f) =>
+              f.id === item.id
+                ? {
+                    ...f,
+                    status: 'done' as const,
+                    result,
+                    processedFile,
+                    processedPreview,
+                    error: undefined,
+                  }
+                : f
+            )
+          );
+          successCount++;
+        } catch (err) {
+          const message = err instanceof Error ? err.message : String(err);
+          setFiles((prev) =>
+            prev.map((f) =>
+              f.id === item.id
+                ? { ...f, status: 'error' as const, error: message }
+                : f
+            )
+          );
+          errorCount++;
+        }
+
+        completed++;
+        setProgress(Math.round((completed / total) * 100));
+      }
+
+      setIsProcessing(false);
+      setProcessingText('');
+      setCurrentItem(null);
+
+      if (errorCount === 0) {
+        toast.success(
+          successCount === 1
+            ? '✅ Image processed successfully!'
+            : `✅ All ${successCount} images processed successfully!`
+        );
+      } else if (successCount > 0) {
+        toast.warning(`⚠️ ${successCount} succeeded, ${errorCount} failed.`, {
+          description: 'Click a failed file to retry.',
+        });
+      } else {
+        toast.error(`❌ All ${errorCount} images failed to process.`);
+      }
+    },
+    []
+  );
+
+  const addFiles = useCallback((fileList: FileList | File[]) => {
     const incoming = Array.from(fileList).filter((f) => f.type.startsWith('image/'));
     if (incoming.length === 0) {
-      toast.error('No valid images found. Please select JPG, PNG, WebP, GIF, BMP, or AVIF files.');
+      toast.error(
+        'No valid images found. Please select JPG, PNG, WebP, GIF, BMP, or AVIF files.'
+      );
       return;
     }
 
-    // Surface warnings for special cases (deduped to avoid noise)
+    // Surface warnings for special cases
     const oversized = incoming.filter((f) => f.size > 10 * 1024 * 1024);
     if (oversized.length > 0) {
       toast.warning(
@@ -112,7 +237,7 @@ export function useImageUpload() {
         };
       });
 
-      // Resolve original dimensions asynchronously
+      // Resolve original dimensions asynchronously (best-effort)
       newFiles.forEach((nf) => {
         getImageDimensions(nf.file)
           .then((dims) => {
@@ -125,7 +250,7 @@ export function useImageUpload() {
             );
           })
           .catch(() => {
-            // Silently ignore — dimensions are informational
+            /* ignore — dimensions are informational */
           });
       });
 
@@ -156,7 +281,6 @@ export function useImageUpload() {
             : f
         )
       );
-      // Process only this file
       void processFiles([id], settings);
     },
     [processFiles]
@@ -189,116 +313,6 @@ export function useImageUpload() {
     [revokeUrl]
   );
 
-  /**
-   * Internal processor. Operates on a list of file IDs and a settings snapshot.
-   * Reads the latest files from the latest state via the functional updater.
-   */
-  const processFiles = useCallback(
-    async (ids: string[], settings: Settings) => {
-      setIsProcessing(true);
-      setProgress(0);
-      setProcessingText('Starting…');
-
-      // Snapshot of the actual files we'll process (in current order)
-      let targets: UploadedFile[] = [];
-      setFiles((currentFiles) => {
-        targets = currentFiles.filter((f) => ids.includes(f.id));
-        return currentFiles;
-      });
-
-      // Give React a tick to apply status changes
-      await Promise.resolve();
-
-      if (targets.length === 0) {
-        setIsProcessing(false);
-        setProcessingText('');
-        return;
-      }
-
-      // Mark all targets as processing
-      const idSet = new Set(targets.map((t) => t.id));
-      setFiles((prev) =>
-        prev.map((f) => (idSet.has(f.id) ? { ...f, status: 'processing' as const, error: undefined } : f))
-      );
-
-      const total = targets.length;
-      let completed = 0;
-      let successCount = 0;
-      let errorCount = 0;
-
-      for (const item of targets) {
-        setCurrentItem(item.id);
-        setProcessingText(`Processing ${completed + 1} of ${total}…`);
-
-        try {
-          const ps: ProcessSettings = {
-            quality: settings.quality,
-            autoOptimize: settings.autoOptimize,
-            targetSizeKB: settings.targetSizeKB,
-            width: settings.width,
-            height: settings.height,
-            lockAspectRatio: settings.lockAspectRatio,
-            outputFormat: settings.outputFormat,
-            stripEXIF: settings.stripEXIF,
-            grayscale: settings.grayscale,
-            rotation: settings.rotation,
-            mirror: settings.mirror,
-            preserveMetadata: settings.preserveMetadata,
-            progressive: settings.progressive,
-            embedColorProfile: settings.embedColorProfile,
-          };
-
-          const result = await processImage(item.file, ps, item.originalSize);
-          const processedFile = toDownloadFile(item.name, result.blob);
-          const processedPreview = URL.createObjectURL(result.blob);
-          urlsRef.current.add(processedPreview);
-
-          setFiles((prev) =>
-            prev.map((f) =>
-              f.id === item.id
-                ? { ...f, status: 'done' as const, result, processedFile, processedPreview, error: undefined }
-                : f
-            )
-          );
-          successCount++;
-        } catch (err) {
-          const message = err instanceof Error ? err.message : String(err);
-          setFiles((prev) =>
-            prev.map((f) =>
-              f.id === item.id
-                ? { ...f, status: 'error' as const, error: message }
-                : f
-            )
-          );
-          errorCount++;
-        }
-
-        completed++;
-        setProgress(Math.round((completed / total) * 100));
-      }
-
-      setIsProcessing(false);
-      setProcessingText('');
-      setCurrentItem(null);
-
-      if (errorCount === 0) {
-        toast.success(
-          successCount === 1
-            ? '✅ Image processed successfully!'
-            : `✅ All ${successCount} images processed successfully!`
-        );
-      } else if (successCount > 0) {
-        toast.warning(
-          `⚠️ ${successCount} succeeded, ${errorCount} failed.`,
-          { description: 'Click a failed file to retry.' }
-        );
-      } else {
-        toast.error(`❌ All ${errorCount} images failed to process.`);
-      }
-    },
-    []
-  );
-
   const processAll = useCallback(
     (settings: Settings) => {
       setFiles((currentFiles) => {
@@ -309,17 +323,22 @@ export function useImageUpload() {
           toast.info('Nothing to process. Add images first.');
           return currentFiles;
         }
-        // Reset processed previews for files we're re-processing
+        // Revoke any existing processed previews before re-processing
         currentFiles.forEach((f) => {
           if (toProcess.includes(f.id) && f.processedPreview) {
             revokeUrl(f.processedPreview);
           }
         });
-        // Kick off async work (state updates from inside async fn)
         void processFiles(toProcess, settings);
         return currentFiles.map((f) =>
           toProcess.includes(f.id)
-            ? { ...f, result: undefined, processedFile: undefined, processedPreview: undefined, error: undefined }
+            ? {
+                ...f,
+                result: undefined,
+                processedFile: undefined,
+                processedPreview: undefined,
+                error: undefined,
+              }
             : f
         );
       });
@@ -332,10 +351,7 @@ export function useImageUpload() {
     () => files.length > 0 && files.every((f) => f.status === 'done' || f.status === 'error'),
     [files]
   );
-  const processedFiles = useMemo(
-    () => files.filter((f) => f.status === 'done'),
-    [files]
-  );
+  const processedFiles = useMemo(() => files.filter((f) => f.status === 'done'), [files]);
   const hasErrors = useMemo(() => files.some((f) => f.status === 'error'), [files]);
   const readyCount = useMemo(
     () => files.filter((f) => f.status === 'ready' || f.status === 'error').length,
