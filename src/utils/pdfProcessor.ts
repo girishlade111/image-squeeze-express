@@ -31,10 +31,21 @@ export interface PdfProcessResult {
   durationMs: number;
 }
 
-// Worker file is served from /pdf.worker.min.mjs (copied from pdfjs-dist/build/).
-// This is the most reliable way to ship the worker — Vite won't try to bundle
-// the 1.2 MB minified file as JS.
-pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+// Lazy-load pdfjs so its ~700 KB bundle (which needs `DOMMatrix` etc.) is only
+// fetched on first use and is excluded from the test environment entirely.
+let pdfjsPromise: Promise<typeof import('pdfjs-dist')> | null = null;
+async function getPdfjs() {
+  if (!pdfjsPromise) {
+    pdfjsPromise = import('pdfjs-dist').then((mod) => {
+      // Worker file is served from /pdf.worker.min.mjs (copied from
+      // pdfjs-dist/build/). This is the most reliable way to ship the worker
+      // — Vite won't try to bundle the 1.2 MB minified file as JS.
+      mod.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+      return mod;
+    });
+  }
+  return pdfjsPromise;
+}
 
 export const PDF_QUALITY_PRESETS: Record<Exclude<PdfQualityPreset, 'custom'>, PdfProcessSettings> = {
   low: { quality: 0.4, scale: 1.25, maxWidth: 1100 },
