@@ -7,7 +7,6 @@ import { useTheme } from '@/contexts/ThemeContext';
 const navLinks = [
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Features', href: '#features' },
-  { label: 'Social Presets', href: '#social-presets' },
   { label: 'FAQ', href: '#faq' },
   { label: 'Compress PDF', href: '/compress-pdf', isRoute: true },
   { label: 'Bulk Rename', href: '/bulk-rename', isRoute: true },
