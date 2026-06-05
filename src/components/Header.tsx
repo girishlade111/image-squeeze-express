@@ -200,28 +200,45 @@ const Header = () => {
           aria-label="Mobile navigation"
         >
           <div className="flex flex-col gap-1">
-            {navLinks.map((l, i) =>
-              'isRoute' in l && l.isRoute ? (
+            <p className="px-4 pt-1 pb-1 text-[10px] font-bold uppercase tracking-[0.15em] text-foreground/40">
+              Tools
+            </p>
+            {tools.map((t) => {
+              const active = isToolActive(t.to);
+              const Icon = t.icon;
+              return (
                 <Link
-                  key={l.href}
-                  to={l.href}
+                  key={t.to}
+                  to={t.to}
                   onClick={() => setMobileOpen(false)}
-                  className="rounded-xl px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  aria-current={active ? 'page' : undefined}
+                  className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
+                    active
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-foreground hover:bg-primary/10 hover:text-primary'
+                  }`}
                 >
-                  {l.label}
+                  <Icon className="h-4 w-4" aria-hidden />
+                  {t.label}
                 </Link>
-              ) : (
-                <a
-                  key={l.href}
-                  ref={i === 0 ? firstMobileLinkRef : undefined}
-                  href={l.href}
-                  onClick={(e) => handleNavClick(e, l.href)}
-                  className="rounded-xl px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                >
-                  {l.label}
-                </a>
-              )
-            )}
+              );
+            })}
+
+            <p className="mt-3 px-4 pb-1 text-[10px] font-bold uppercase tracking-[0.15em] text-foreground/40">
+              Resources
+            </p>
+            {navLinks.map((l, i) => (
+              <a
+                key={l.href}
+                ref={i === 0 ? firstMobileLinkRef : undefined}
+                href={l.href}
+                onClick={(e) => handleNavClick(e, l.href)}
+                className="rounded-xl px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                {l.label}
+              </a>
+            ))}
+
             <div className="my-3 h-px bg-border" />
             <Link
               to="/about"
