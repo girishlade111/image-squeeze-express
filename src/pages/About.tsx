@@ -72,7 +72,7 @@ const About = () => (
             </li>
             <li className="flex gap-3">
               <span className="mt-1 text-primary font-bold">•</span>
-              <span><strong className="text-foreground">Batch processes up to 10 images</strong> — with real-time progress tracking and one-click ZIP download.</span>
+              <span><strong className="text-foreground">Batch processes up to 50 images at once</strong> — with real-time progress tracking and one-click ZIP download.</span>
             </li>
           </ul>
         </section>

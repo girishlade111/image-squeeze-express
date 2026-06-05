@@ -25,7 +25,7 @@ const TermsOfService = () => (
             <li className="flex gap-2"><span className="text-primary">•</span> Image compression (up to 90% size reduction)</li>
             <li className="flex gap-2"><span className="text-primary">•</span> Image resizing with social media presets</li>
             <li className="flex gap-2"><span className="text-primary">•</span> Format conversion (JPEG, PNG, WebP)</li>
-            <li className="flex gap-2"><span className="text-primary">•</span> Batch processing (up to 10 images simultaneously)</li>
+            <li className="flex gap-2"><span className="text-primary">•</span> Batch processing (up to 50 images simultaneously, 750 MB total)</li>
             <li className="flex gap-2"><span className="text-primary">•</span> ZIP download of processed images</li>
           </ul>
           <p className="mt-4 text-muted-foreground leading-relaxed">
