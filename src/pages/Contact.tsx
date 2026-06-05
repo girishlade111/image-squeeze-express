@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import DocumentTitle from '@/components/DocumentTitle';
 import { Mail, Globe, Instagram, Linkedin, Github, CodepenIcon, MessageSquare, Clock, MapPin } from 'lucide-react';
 
 const contactMethods = [
@@ -47,6 +48,7 @@ const faqs = [
 
 const Contact = () => (
   <div className="min-h-screen bg-background">
+    <DocumentTitle title="Contact — Get in Touch" />
     <Header />
     <main className="container mx-auto px-4 pt-24 pb-16 sm:px-6">
       <div className="mx-auto max-w-3xl">

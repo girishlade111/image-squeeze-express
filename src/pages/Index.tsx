@@ -6,6 +6,7 @@ import SettingsPanel from '@/components/SettingsPanel';
 import LazySection from '@/components/LazySection';
 import PageDropOverlay from '@/components/PageDropOverlay';
 import ScrollToTop from '@/components/ScrollToTop';
+import DocumentTitle from '@/components/DocumentTitle';
 import { useImageUpload } from '@/hooks/useImageUpload';
 import { useSettings } from '@/hooks/useSettings';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
@@ -72,6 +73,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <DocumentTitle title="Free Online Image Compressor — Up to 90% Smaller & Private" />
       <Header />
       <main>
         <div ref={uploadRef} />

@@ -7,6 +7,7 @@ import PdfQueue from '@/components/PdfQueue';
 import PdfSettingsPanel from '@/components/PdfSettingsPanel';
 import PdfResultsSection from '@/components/PdfResultsSection';
 import ScrollToTop from '@/components/ScrollToTop';
+import DocumentTitle from '@/components/DocumentTitle';
 import { usePdfUpload } from '@/hooks/usePdfUpload';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
 import { usePageDropZone } from '@/hooks/usePageDropZone';
@@ -67,6 +68,7 @@ const CompressPdf = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <DocumentTitle title="Compress PDF — Up to 90% Smaller, Free & Private" />
       <Header />
       <main>
         <ToolHero

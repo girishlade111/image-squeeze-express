@@ -1,5 +1,6 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import DocumentTitle from '@/components/DocumentTitle';
 import { Shield, Zap, Globe, Users, Heart, Code } from 'lucide-react';
 
 const values = [
@@ -13,6 +14,7 @@ const values = [
 
 const About = () => (
   <div className="min-h-screen bg-background">
+    <DocumentTitle title="About — Privacy-First Image Tools" />
     <Header />
     <main className="container mx-auto px-4 pt-24 pb-16 sm:px-6">
       <div className="mx-auto max-w-3xl">

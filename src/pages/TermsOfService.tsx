@@ -1,10 +1,12 @@
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import DocumentTitle from '@/components/DocumentTitle';
 
 const lastUpdated = 'March 8, 2026';
 
 const TermsOfService = () => (
   <div className="min-h-screen bg-background">
+    <DocumentTitle title="Terms of Service" />
     <Header />
     <main className="container mx-auto px-4 pt-24 pb-16 sm:px-6">
       <div className="mx-auto max-w-3xl">

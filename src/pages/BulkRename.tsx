@@ -8,6 +8,7 @@ import FileRenameRuleBuilder from '@/components/FileRenameRuleBuilder';
 import FileRenamePreviewList from '@/components/FileRenamePreviewList';
 import PageDropOverlay from '@/components/PageDropOverlay';
 import ScrollToTop from '@/components/ScrollToTop';
+import DocumentTitle from '@/components/DocumentTitle';
 import { useFileRename } from '@/hooks/useFileRename';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
 import { usePageDropZone } from '@/hooks/usePageDropZone';
@@ -49,6 +50,7 @@ const BulkRename = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <DocumentTitle title="Bulk File Rename — 13 Rule Types, Live Preview & ZIP" />
       <Header />
       <main>
         <ToolHero

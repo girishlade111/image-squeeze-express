@@ -5,6 +5,7 @@ import { Home, AlertTriangle, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import DocumentTitle from "@/components/DocumentTitle";
 
 const allTools = [
   { label: 'Image Compressor', to: '/', desc: 'Resize & convert images' },
@@ -21,6 +22,7 @@ const NotFound = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <DocumentTitle title="404 — Page Not Found" />
       <Header />
       <main className="container relative mx-auto flex min-h-[80vh] flex-col items-center justify-center overflow-hidden px-4 pt-16 pb-12">
         <div
