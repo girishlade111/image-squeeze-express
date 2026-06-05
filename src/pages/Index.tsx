@@ -11,7 +11,6 @@ import { useClipboardPaste } from '@/hooks/useClipboardPaste';
 import { usePageDropZone } from '@/hooks/usePageDropZone';
 
 const ResultsSection = lazy(() => import('@/components/ResultsSection'));
-const SocialPresetsGrid = lazy(() => import('@/components/SocialPresetsGrid'));
 const HowItWorks = lazy(() => import('@/components/HowItWorks'));
 const FeaturesGrid = lazy(() => import('@/components/FeaturesGrid'));
 const ProTeaser = lazy(() => import('@/components/ProTeaser'));
