@@ -94,73 +94,99 @@ const SocialPresetsGrid = ({ onSelectPreset, selectedPreset = null }: SocialPres
           }`}
           style={{ animationDelay: '100ms' }}
         >
-          Hover or click a platform to preview the exact aspect ratio, then auto-fill the dimensions.
+          Hover or click a platform to see exactly how your image will be cropped, then auto-fill the dimensions.
         </p>
       </div>
 
       {/* Demo area */}
       <div className="mx-auto grid max-w-4xl grid-cols-1 gap-6 lg:grid-cols-5">
-        {/* Live preview */}
+        {/* Live preview with sample image */}
         <div
           className={`lg:col-span-2 transition-all duration-700 ${
             visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
           }`}
           style={{ animationDelay: '200ms' }}
         >
-          <div className="relative h-full min-h-[220px] overflow-hidden rounded-2xl border-2 border-border/40 bg-secondary/20 shadow-lg">
-            {/* Subtle grid background */}
-            <div
-              className="absolute inset-0 opacity-30"
-              style={{
-                backgroundImage:
-                  'linear-gradient(45deg, hsl(var(--border)) 25%, transparent 25%), linear-gradient(-45deg, hsl(var(--border)) 25%, transparent 25%)',
-                backgroundSize: '20px 20px',
-              }}
+          <div className="relative aspect-video w-full overflow-hidden rounded-2xl border-2 border-border/40 bg-secondary/30 shadow-lg">
+            {/* Sample photo (SVG landscape) */}
+            <svg
+              viewBox="0 0 400 225"
+              preserveAspectRatio="xMidYMid slice"
+              className="absolute inset-0 h-full w-full"
+              xmlns="http://www.w3.org/2000/svg"
               aria-hidden
-            />
+            >
+              <defs>
+                <linearGradient id="demo-sky" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#1e3a8a" />
+                  <stop offset="55%" stopColor="#f59e0b" />
+                  <stop offset="100%" stopColor="#fbbf24" />
+                </linearGradient>
+                <linearGradient id="demo-mtn-1" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#312e81" />
+                  <stop offset="100%" stopColor="#1e1b4b" />
+                </linearGradient>
+                <linearGradient id="demo-mtn-2" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#4338ca" />
+                  <stop offset="100%" stopColor="#312e81" />
+                </linearGradient>
+              </defs>
+              <rect width="400" height="225" fill="url(#demo-sky)" />
+              <circle cx="310" cy="70" r="28" fill="#fef3c7" opacity="0.9" />
+              <circle cx="310" cy="70" r="20" fill="#fbbf24" />
+              <ellipse cx="80" cy="50" rx="30" ry="8" fill="white" opacity="0.4" />
+              <ellipse cx="125" cy="45" rx="25" ry="6" fill="white" opacity="0.3" />
+              <polygon points="0,225 90,110 180,225" fill="url(#demo-mtn-1)" />
+              <polygon points="130,225 220,80 310,225" fill="url(#demo-mtn-2)" />
+              <polygon points="250,225 340,130 400,180 400,225" fill="url(#demo-mtn-1)" />
+              <rect y="200" width="400" height="25" fill="#065f46" />
+              <rect y="210" width="400" height="15" fill="#047857" />
+            </svg>
 
-            {/* Empty state */}
-            {!activePlatform && (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-center text-muted-foreground">
-                  <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10">
-                    <Eye className="h-6 w-6 text-primary" />
+            {/* Crop frame overlay (everything outside is darkened) */}
+            {activePlatform && (
+              <div
+                key={activePlatform.id}
+                className="animate-fade-in-up absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 border-2 border-white"
+                style={{
+                  aspectRatio: `${activePlatform.w}/${activePlatform.h}`,
+                  width: activePlatform.w >= activePlatform.h ? '90%' : 'auto',
+                  height: activePlatform.h > activePlatform.w ? '90%' : 'auto',
+                  maxWidth: '90%',
+                  maxHeight: '90%',
+                  boxShadow: '0 0 0 9999px rgba(0, 0, 0, 0.7)',
+                }}
+              >
+                {/* Camera-style corner markers */}
+                <div className="absolute -left-1 -top-1 h-3 w-3 border-l-2 border-t-2 border-white" />
+                <div className="absolute -right-1 -top-1 h-3 w-3 border-r-2 border-t-2 border-white" />
+                <div className="absolute -bottom-1 -left-1 h-3 w-3 border-b-2 border-l-2 border-white" />
+                <div className="absolute -bottom-1 -right-1 h-3 w-3 border-b-2 border-r-2 border-white" />
+
+                {/* Platform label inside the crop */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <div className="rounded-md bg-black/70 px-2.5 py-1.5 text-center text-white shadow-lg backdrop-blur-sm">
+                    <div className="text-xl leading-none" aria-hidden>{activePlatform.icon}</div>
+                    <div className="mt-1 text-[10px] font-bold">{activePlatform.name}</div>
                   </div>
-                  <p className="text-xs font-semibold">Live preview</p>
-                  <p className="mt-1 text-[10px]">Hover or click a platform →</p>
                 </div>
               </div>
             )}
 
-            {/* Aspect-ratio frame */}
-            {activePlatform && (
-              <div className="absolute inset-0 flex items-center justify-center p-5">
-                <div
-                  className="relative flex w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-violet-500 via-fuchsia-500 to-pink-500 shadow-2xl ring-2 ring-white/30 transition-all duration-500"
-                  style={{
-                    aspectRatio: `${activePlatform.w}/${activePlatform.h}`,
-                    maxWidth: '100%',
-                    maxHeight: '100%',
-                  }}
-                >
-                  {/* Faux photo content for visual context */}
-                  <div className="absolute inset-0 opacity-30" aria-hidden>
-                    <div className="absolute -left-4 -top-4 h-16 w-16 rounded-full bg-white/40 blur-xl" />
-                    <div className="absolute -right-4 -bottom-4 h-20 w-20 rounded-full bg-yellow-300/40 blur-xl" />
-                    <div className="absolute left-1/2 top-1/2 h-10 w-10 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/30 blur-md" />
-                  </div>
-                  <div className="relative text-center text-white drop-shadow-lg">
-                    <div className="text-3xl" aria-hidden>{activePlatform.icon}</div>
-                    <div className="mt-1 text-[11px] font-bold">{activePlatform.name}</div>
-                    <div className="font-mono text-[10px] opacity-90">{activePlatform.sizes}</div>
-                  </div>
+            {/* Empty state */}
+            {!activePlatform && (
+              <div className="absolute inset-0 z-10 flex items-center justify-center bg-black/40">
+                <div className="rounded-xl bg-black/70 px-4 py-2.5 text-center text-white shadow-lg backdrop-blur-sm">
+                  <Eye className="mx-auto h-5 w-5" />
+                  <p className="mt-1 text-[11px] font-semibold">Hover or click a platform</p>
+                  <p className="text-[10px] opacity-80">to preview the crop</p>
                 </div>
               </div>
             )}
 
             {/* Dimensions badge */}
             {activePlatform && (
-              <div className="absolute left-3 top-3 flex items-center gap-1 rounded-md bg-black/80 px-2 py-1 font-mono text-[10px] text-white backdrop-blur-sm">
+              <div className="absolute left-3 top-3 z-20 flex items-center gap-1 rounded-md bg-black/80 px-2 py-1 font-mono text-[10px] text-white shadow-md backdrop-blur-sm">
                 <Sparkles className="h-2.5 w-2.5" />
                 {activePlatform.w} × {activePlatform.h} • {getRatio(activePlatform.w, activePlatform.h)}
               </div>
@@ -168,11 +194,15 @@ const SocialPresetsGrid = ({ onSelectPreset, selectedPreset = null }: SocialPres
 
             {/* Description badge */}
             {activePlatform && (
-              <div className="absolute bottom-3 left-3 right-3 rounded-md bg-black/70 px-2 py-1 text-center text-[10px] font-medium text-white backdrop-blur-sm">
+              <div className="absolute bottom-3 left-3 right-3 z-20 rounded-md bg-black/70 px-2 py-1 text-center text-[10px] font-medium text-white shadow-md backdrop-blur-sm">
                 {activePlatform.desc}
               </div>
             )}
           </div>
+
+          <p className="mt-2 text-center text-[10px] text-muted-foreground/70">
+            Demo image — your photo will be cropped to match.
+          </p>
         </div>
 
         {/* Platform buttons */}
