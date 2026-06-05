@@ -252,13 +252,17 @@ describe('fileRenamer', () => {
       const stamp = result.split('_')[0];
       // The stamp must be a real YYYY-MM-DD that lies between before and after.
       expect(stamp).toMatch(/^\d{4}-\d{2}-\d{2}$/);
-      const stampMs = new Date(stamp).getTime();
-      expect(stampMs).toBeGreaterThanOrEqual(
-        new Date(before.getFullYear(), before.getMonth(), before.getDate()).getTime()
+      // Compare in UTC to avoid the local-vs-UTC day-boundary ambiguity that
+      // would otherwise make this test fail in non-UTC timezones.
+      const stampMs = Date.UTC(
+        Number(stamp.slice(0, 4)),
+        Number(stamp.slice(5, 7)) - 1,
+        Number(stamp.slice(8, 10))
       );
-      expect(stampMs).toBeLessThanOrEqual(
-        new Date(after.getFullYear(), after.getMonth(), after.getDate()).getTime()
-      );
+      const dayStart = (d: Date) =>
+        Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate());
+      expect(stampMs).toBeGreaterThanOrEqual(dayStart(before));
+      expect(stampMs).toBeLessThanOrEqual(dayStart(after));
     });
 
     it('falls back to now() when no lastModified is provided', () => {
