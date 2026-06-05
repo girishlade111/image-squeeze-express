@@ -25,8 +25,10 @@ describe('fileRenamer', () => {
       expect(splitExtension('.gitignore')).toEqual({ base: '.gitignore', ext: '' });
     });
 
-    it('returns empty extension for trailing-dot files', () => {
-      expect(splitExtension('weird.')).toEqual({ base: 'weird', ext: '' });
+    it('returns the whole name as the base for trailing-dot files', () => {
+      // A file literally named "weird." has no extension. The whole name is
+      // the base — re-attachment round-trips it losslessly.
+      expect(splitExtension('weird.')).toEqual({ base: 'weird.', ext: '' });
     });
   });
 
