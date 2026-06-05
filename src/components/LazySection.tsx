@@ -3,10 +3,18 @@ import { useEffect, useRef, useState, ReactNode } from 'react';
 interface LazySectionProps {
   children: ReactNode;
   className?: string;
+  id?: string;
   rootMargin?: string;
+  minHeight?: number;
 }
 
-const LazySection = ({ children, className, rootMargin = '200px' }: LazySectionProps) => {
+const LazySection = ({
+  children,
+  className,
+  id,
+  rootMargin = '200px',
+  minHeight = 200,
+}: LazySectionProps) => {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -29,8 +37,8 @@ const LazySection = ({ children, className, rootMargin = '200px' }: LazySectionP
   }, [rootMargin]);
 
   return (
-    <div ref={ref} className={className}>
-      {visible ? children : <div style={{ minHeight: '200px' }} />}
+    <div ref={ref} id={id} className={className}>
+      {visible ? children : <div style={{ minHeight }} aria-hidden />}
     </div>
   );
 };
