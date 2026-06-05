@@ -522,6 +522,56 @@ describe('fileRenamer', () => {
         '102-c.jpg',
       ]);
     });
+
+    it('applies replaceExt rules to the extension only', () => {
+      const plan = buildRenamePlan({
+        files: [
+          { id: '1', name: 'photo.JPEG' },
+          { id: '2', name: 'photo2.JPEG' },
+        ],
+        rules: [
+          { kind: 'replaceExt', mode: 'lower' },
+        ],
+      });
+      expect(plan.map((p) => p.renamedName)).toEqual(['photo.jpeg', 'photo2.jpeg']);
+    });
+
+    it('replaces the extension with set mode and adds a leading dot', () => {
+      const plan = buildRenamePlan({
+        files: [{ id: '1', name: 'photo.jpeg' }],
+        rules: [{ kind: 'replaceExt', mode: 'set', extension: 'jpg' }],
+      });
+      expect(plan[0].renamedName).toBe('photo.jpg');
+    });
+
+    it('removes the extension when set to "remove"', () => {
+      const plan = buildRenamePlan({
+        files: [{ id: '1', name: 'photo.jpg' }],
+        rules: [{ kind: 'replaceExt', mode: 'remove' }],
+      });
+      expect(plan[0].renamedName).toBe('photo');
+    });
+
+    it('passes lastModified to the date rule', () => {
+      const TS = new Date(2024, 0, 2, 9, 0, 0).getTime();
+      const plan = buildRenamePlan({
+        files: [
+          { id: '1', name: 'a.jpg', lastModified: TS },
+          { id: '2', name: 'b.jpg', lastModified: TS + 86_400_000 },
+        ],
+        rules: [
+          {
+            kind: 'date',
+            format: 'YYYY-MM-DD',
+            position: 'prefix',
+            separator: '_',
+            useCurrent: false,
+          },
+        ],
+      });
+      expect(plan[0].renamedName).toBe('2024-01-02_a.jpg');
+      expect(plan[1].renamedName).toBe('2024-01-03_b.jpg');
+    });
   });
 
   describe('sanitizeFileName', () => {
