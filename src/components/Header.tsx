@@ -62,8 +62,8 @@ const Header = () => {
       >
         <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
         <div className="container mx-auto flex h-12 items-center justify-between px-3 sm:px-4">
-          <a
-            href="#home"
+          <Link
+            to="/"
             className="flex items-center gap-1.5 group"
             aria-label="ImageSqueeze — home"
           >
@@ -83,22 +83,33 @@ const Header = () => {
             >
               ImageSqueeze
             </span>
-          </a>
+          </Link>
 
           <nav
             className="hidden items-center gap-0.5 md:flex"
             aria-label="Main navigation"
           >
-            {navLinks.map((l) => (
-              <a
-                key={l.href}
-                href={l.href}
-                onClick={(e) => handleNavClick(e, l.href)}
-                className="rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-primary/5"
-              >
-                {l.label}
-              </a>
-            ))}
+            {navLinks.map((l) =>
+              'isRoute' in l && l.isRoute ? (
+                <Link
+                  key={l.href}
+                  to={l.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-primary/5"
+                >
+                  {l.label}
+                </Link>
+              ) : (
+                <a
+                  key={l.href}
+                  href={l.href}
+                  onClick={(e) => handleNavClick(e, l.href)}
+                  className="rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-primary/5"
+                >
+                  {l.label}
+                </a>
+              )
+            )}
             <div className="ml-1.5 h-4 w-px bg-border" />
             <Button
               variant="ghost"
