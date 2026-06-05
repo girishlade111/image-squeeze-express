@@ -118,7 +118,7 @@ const HeroSection = ({ onFilesSelected, imageCount, maxFiles = 50, children }: H
               { emoji: '🔒', label: '100% Private' },
               { emoji: '⚡', label: 'Instant' },
               { emoji: '🆓', label: 'Free Forever' },
-              { emoji: '📦', label: 'Batch (10)' },
+              { emoji: '📦', label: `Batch (${maxFiles})` },
             ].map((badge) => (
               <div
                 key={badge.label}
@@ -139,7 +139,11 @@ const HeroSection = ({ onFilesSelected, imageCount, maxFiles = 50, children }: H
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            <UploadZone onFilesSelected={onFilesSelected} imageCount={imageCount} />
+            <UploadZone
+              onFilesSelected={onFilesSelected}
+              imageCount={imageCount}
+              maxFiles={maxFiles}
+            />
           </motion.div>
 
           {/* Queue / Settings injected via children */}
