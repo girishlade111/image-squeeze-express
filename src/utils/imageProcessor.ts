@@ -90,13 +90,32 @@ function toExt(mime: string): string {
   return '.jpg';
 }
 
+interface CropRect {
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+}
+
+interface CalcResult {
+  w: number;
+  h: number;
+  /**
+   * Source-image rectangle to sample from. When omitted, the full source is used.
+   * Returned when an explicit (w, h) target is requested whose aspect ratio differs
+   * from the source — the image is then center-cropped to match the target aspect
+   * ratio before being scaled to the target dimensions (e.g., social media presets).
+   */
+  crop?: CropRect;
+}
+
 function calcDimensions(
   origW: number,
   origH: number,
   targetW: number | null,
   targetH: number | null,
   lock: boolean
-): { w: number; h: number } {
+): CalcResult {
   // No resize requested
   if (!targetW && !targetH) return { w: origW, h: origH };
 
@@ -105,23 +124,54 @@ function calcDimensions(
   const safeH = targetH && targetH > 0 ? targetH : null;
   const aspect = origW > 0 && origH > 0 ? origW / origH : 1;
 
+  // When only one dimension is requested AND the aspect lock is on, derive the
+  // missing dimension from the source aspect ratio. This is the "lock" helper
+  // behavior for the manual width/height inputs in the settings panel.
   if (lock) {
-    if (safeW && safeH) {
-      // Both provided with lock on: honor width, derive height from aspect ratio
+    if (safeW && !safeH) {
       return { w: safeW, h: Math.max(1, Math.round(safeW / aspect)) };
     }
-    if (safeW) {
-      return { w: safeW, h: Math.max(1, Math.round(safeW / aspect)) };
-    }
-    if (safeH) {
+    if (safeH && !safeW) {
       return { w: Math.max(1, Math.round(safeH * aspect)), h: safeH };
     }
   }
 
-  return {
-    w: safeW || origW,
-    h: safeH || origH,
-  };
+  // Both target dimensions are explicitly known (e.g. a Social Media preset, or
+  // the user typed both width and height). Honor them as-is and, if the source
+  // aspect ratio differs, center-crop the source to match the target aspect so
+  // the output is exactly the requested size without distortion.
+  const w = safeW || origW;
+  const h = safeH || origH;
+
+  if (safeW && safeH && origW > 0 && origH > 0) {
+    const targetAspect = safeW / safeH;
+    const sourceAspect = origW / origH;
+
+    if (Math.abs(sourceAspect - targetAspect) > 0.001) {
+      let cropW: number;
+      let cropH: number;
+      let cropX: number;
+      let cropY: number;
+
+      if (sourceAspect > targetAspect) {
+        // Source is wider than target → crop the sides equally
+        cropH = origH;
+        cropW = origH * targetAspect;
+        cropX = (origW - cropW) / 2;
+        cropY = 0;
+      } else {
+        // Source is taller than target → crop top/bottom equally
+        cropW = origW;
+        cropH = origW / targetAspect;
+        cropX = 0;
+        cropY = (origH - cropH) / 2;
+      }
+
+      return { w, h, crop: { x: cropX, y: cropY, w: cropW, h: cropH } };
+    }
+  }
+
+  return { w, h };
 }
 
 function applyCanvasTransforms(
