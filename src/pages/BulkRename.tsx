@@ -260,6 +260,12 @@ const FeaturesRename = () => {
     { emoji: 'Aa', title: 'Case Conversion', desc: 'Switch between lowercase, UPPERCASE, Title, and Sentence case.' },
     { emoji: '📝', title: 'Prefix & Suffix', desc: 'Insert text at the start or end of every name. Extensions stay safe.' },
     { emoji: '🧹', title: 'Whitespace', desc: 'Replace spaces with dashes, underscores, or remove them entirely.' },
+    { emoji: '📅', title: 'Date Stamp', desc: 'Insert the file mtime as a prefix or suffix in 7 date formats.' },
+    { emoji: '✂️', title: 'Trim / Truncate', desc: 'Strip characters from the ends or cap names to a max length with ellipsis.' },
+    { emoji: '🧷', title: 'Insert At', desc: 'Inject text at any character index — negatives count from the end.' },
+    { emoji: '🔁', title: 'Counter From Name', desc: 'Re-sequence the number already in the filename (fixes broken sequences).' },
+    { emoji: '🪞', title: 'Reverse Name', desc: 'Flip the base name backwards — extensions are always preserved.' },
+    { emoji: '🗂️', title: 'Replace Extension', desc: 'Change, lowercase, uppercase, or strip the file extension.' },
     { emoji: '🛡️', title: 'Name Sanitisation', desc: 'Illegal characters are stripped so every OS can open the result.' },
   ];
   return (
