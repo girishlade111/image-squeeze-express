@@ -55,8 +55,10 @@ describe('imageProcessor helpers', () => {
     });
 
     it('returns lower quality for large reductions', () => {
-      expect(estimateQualityForSize(1000, 200)).toBe(50);
-      expect(estimateQualityForSize(1000, 100)).toBe(30);
+      // 1 MB original, target 200 KB → ratio ~0.2 → 30
+      expect(estimateQualityForSize(1024 * 1024, 200)).toBe(30);
+      // 1 MB original, target 400 KB → ratio ~0.4 → 50
+      expect(estimateQualityForSize(1024 * 1024, 400)).toBe(50);
     });
 
     it('handles invalid input', () => {
@@ -87,11 +89,12 @@ describe('computeAspectDimensions', () => {
     });
   });
 
-  it('uses width directly when both dims are set with lock on', () => {
-    // Locked + both provided: width takes precedence, height derived
+  it('honors both dims when explicitly set, even with lock on', () => {
+    // Lock is an auto-complete helper — if the user typed both, we respect both.
+    // Aspect enforcement happens in the image processor itself.
     expect(computeAspectDimensions(1920, 1080, 800, 500, true)).toEqual({
       width: 800,
-      height: 450, // 800 / (1920/1080) ≈ 450
+      height: 500,
     });
   });
 
