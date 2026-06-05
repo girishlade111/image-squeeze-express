@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ToolHero from '@/components/ToolHero';
 import PdfUploadZone from '@/components/PdfUploadZone';
 import PdfQueue from '@/components/PdfQueue';
 import PdfSettingsPanel from '@/components/PdfSettingsPanel';
