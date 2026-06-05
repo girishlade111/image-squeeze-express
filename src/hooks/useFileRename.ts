@@ -42,9 +42,18 @@ export function useFileRename() {
   const [zipProgress, setZipProgress] = useState(0);
 
   // Roll up live stats from the latest plan so the UI doesn't have to compute
-  // them itself.
+  // them itself. We map down to the minimal shape the engine needs (id, name,
+  // lastModified) and let it ignore the rest.
   const plan: RenamePlanEntry[] = useMemo(
-    () => buildRenamePlan({ files, rules }),
+    () =>
+      buildRenamePlan({
+        files: files.map((f) => ({
+          id: f.id,
+          name: f.name,
+          lastModified: f.file.lastModified,
+        })),
+        rules,
+      }),
     [files, rules]
   );
 

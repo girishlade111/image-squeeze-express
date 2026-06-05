@@ -1,14 +1,28 @@
 /**
  * Pure rule engine for bulk file renaming. The engine operates on the *base
- * name* only — file extensions are always preserved untouched.
+ * name* only — file extensions are preserved untouched by every base rule.
+ * Extension-only rules (`replaceExt`) are applied separately to the extension
+ * after all base rules have run.
  *
- * Rules are applied in the order they appear in the array. The numbering rule
- * has access to the file's index in the queue and the total count.
+ * Rules are applied in the order they appear in the array. The numbering and
+ * counter rules have access to the file's index in the queue and the total
+ * count. The date rule has access to the file's lastModified timestamp.
  */
 
 export type CaseMode = 'none' | 'lower' | 'upper' | 'title' | 'sentence';
 export type ReplaceMode = 'plain' | 'regex';
 export type WhitespaceMode = 'none' | 'dash' | 'underscore' | 'remove';
+export type DateFormat =
+  | 'YYYY-MM-DD'
+  | 'YYYYMMDD'
+  | 'YYYY-MM-DD_HHMMSS'
+  | 'YYYY-MM-DD HHMM'
+  | 'ISO'
+  | 'DD-MM-YYYY'
+  | 'MM-DD-YYYY';
+export type TrimMode = 'start' | 'end' | 'both' | 'truncate';
+export type ExtMode = 'set' | 'lower' | 'upper' | 'remove';
+export type CounterWhere = 'first' | 'last';
 
 export interface ReplaceRule {
   kind: 'replace';
@@ -26,13 +40,9 @@ export interface AffixRule {
 export interface NumberingRule {
   kind: 'numbering';
   enabled: boolean;
-  /** Position relative to the (already-affixed) base name. */
   position: 'start' | 'end';
-  /** Separator between the number and the name, e.g. "_" or "-". */
   separator: string;
-  /** Starting integer. */
   start: number;
-  /** Zero-pad width — 0 means no padding. */
   pad: number;
 }
 
@@ -51,13 +61,69 @@ export interface RemoveCharsRule {
   chars: string;
 }
 
+export interface DateRule {
+  kind: 'date';
+  format: DateFormat;
+  position: 'prefix' | 'suffix';
+  separator: string;
+  /** When true, the current date is used instead of the file's lastModified. */
+  useCurrent: boolean;
+}
+
+export interface InsertAtRule {
+  kind: 'insertAt';
+  /** Character index. Negative values count from the end (-1 = before last char). */
+  index: number;
+  text: string;
+}
+
+export interface TrimRule {
+  kind: 'trim';
+  mode: TrimMode;
+  /** Used by start / end / both — number of characters to strip. */
+  count: number;
+  /** Used by truncate — maximum total length. Takes precedence over `count`. */
+  maxLength: number;
+  /** Used by truncate — append "..." when the name is cut. */
+  ellipsis: boolean;
+}
+
+export interface ReplaceExtRule {
+  kind: 'replaceExt';
+  mode: ExtMode;
+  /** Required when mode is 'set'. Leading dot is optional. */
+  extension?: string;
+}
+
+export interface ExtractCounterRule {
+  kind: 'extractCounter';
+  /** Which number in the *original* name to use as the starting value. */
+  where: CounterWhere;
+  /** Where in the *new* name to place the re-numbered value. */
+  position: 'start' | 'end';
+  separator: string;
+  pad: number;
+  /** Used when the original name contains no digits at all. */
+  fallbackStart: number;
+}
+
+export interface ReverseRule {
+  kind: 'reverse';
+}
+
 export type RenameRule =
   | ReplaceRule
   | AffixRule
   | NumberingRule
   | CaseRule
   | WhitespaceRule
-  | RemoveCharsRule;
+  | RemoveCharsRule
+  | DateRule
+  | InsertAtRule
+  | TrimRule
+  | ReplaceExtRule
+  | ExtractCounterRule
+  | ReverseRule;
 
 export const DEFAULT_RULES: RenameRule[] = [];
 
@@ -69,8 +135,16 @@ export interface RenamePlanEntry {
 }
 
 export interface BuildPlanInput {
-  files: { id: string; name: string }[];
+  files: { id: string; name: string; lastModified?: number }[];
   rules: RenameRule[];
+}
+
+/** Optional metadata passed alongside the (base, rules, index, total) tuple. */
+export interface RenameContext {
+  /** The base name as it was on disk, before any rules ran. */
+  originalBase?: string;
+  /** The file's lastModified timestamp in ms, if known. */
+  lastModified?: number;
 }
 
 /** Split "photo.JPG" → { base: "photo", ext: ".JPG" } */
@@ -160,7 +234,7 @@ function applyNumbering(
   s: string,
   rule: NumberingRule,
   index: number,
-  total: number
+  _total: number
 ): string {
   if (!rule.enabled) return s;
   const n = rule.start + index;
@@ -172,17 +246,141 @@ function applyNumbering(
   return rule.position === 'start' ? `${padded}${rule.separator}${s}` : `${s}${rule.separator}${padded}`;
 }
 
+function formatDate(d: Date, format: DateFormat): string {
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, '0');
+  const dd = String(d.getDate()).padStart(2, '0');
+  const hh = String(d.getHours()).padStart(2, '0');
+  const mi = String(d.getMinutes()).padStart(2, '0');
+  const ss = String(d.getSeconds()).padStart(2, '0');
+  switch (format) {
+    case 'YYYY-MM-DD':
+      return `${yyyy}-${mm}-${dd}`;
+    case 'YYYYMMDD':
+      return `${yyyy}${mm}${dd}`;
+    case 'YYYY-MM-DD_HHMMSS':
+      return `${yyyy}-${mm}-${dd}_${hh}${mi}${ss}`;
+    case 'YYYY-MM-DD HHMM':
+      return `${yyyy}-${mm}-${dd} ${hh}${mi}`;
+    case 'ISO':
+      return d.toISOString();
+    case 'DD-MM-YYYY':
+      return `${dd}-${mm}-${yyyy}`;
+    case 'MM-DD-YYYY':
+      return `${mm}-${dd}-${yyyy}`;
+    default:
+      return `${yyyy}-${mm}-${dd}`;
+  }
+}
+
+function applyDate(rule: DateRule, lastModified: number | undefined): string {
+  const d =
+    rule.useCurrent || lastModified == null ? new Date() : new Date(lastModified);
+  return formatDate(d, rule.format);
+}
+
+function applyInsertAt(s: string, rule: InsertAtRule): string {
+  if (rule.text.length === 0) return s;
+  const len = s.length;
+  let idx = rule.index;
+  if (idx < 0) idx = Math.max(0, len + idx);
+  if (idx > len) idx = len;
+  return s.slice(0, idx) + rule.text + s.slice(idx);
+}
+
+function applyTrim(s: string, rule: TrimRule): string {
+  const n = Math.max(0, Math.floor(rule.count));
+  switch (rule.mode) {
+    case 'start':
+      return s.slice(Math.min(n, s.length));
+    case 'end':
+      return s.slice(0, Math.max(0, s.length - n));
+    case 'both': {
+      const half = Math.floor(n / 2);
+      const startRem = Math.min(half, s.length);
+      const endRem = Math.min(n - half, Math.max(0, s.length - startRem));
+      return s.slice(startRem, s.length - endRem);
+    }
+    case 'truncate': {
+      const max =
+        rule.maxLength != null
+          ? Math.max(0, Math.floor(rule.maxLength))
+          : n;
+      if (s.length <= max) return s;
+      if (rule.ellipsis && max > 3) return `${s.slice(0, max - 3)}...`;
+      return s.slice(0, max);
+    }
+    default:
+      return s;
+  }
+}
+
+function applyExtractCounter(
+  rule: ExtractCounterRule,
+  originalBase: string,
+  index: number
+): string {
+  const matches = originalBase.match(/\d+/g);
+  let startVal = rule.fallbackStart;
+  if (matches && matches.length > 0) {
+    const chosen =
+      rule.where === 'first' ? matches[0] : matches[matches.length - 1];
+    const parsed = parseInt(chosen, 10);
+    if (Number.isFinite(parsed)) startVal = parsed;
+  }
+  const n = startVal + index;
+  const padded = rule.pad > 0 ? String(n).padStart(rule.pad, '0') : String(n);
+  return rule.position === 'start'
+    ? `${padded}${rule.separator}`
+    : `${rule.separator}${padded}`;
+}
+
+function applyReverse(s: string): string {
+  return s.split('').reverse().join('');
+}
+
+function applyExtRules(ext: string, rules: ReplaceExtRule[]): string {
+  let out = ext;
+  for (const rule of rules) {
+    switch (rule.mode) {
+      case 'lower':
+        out = out.toLowerCase();
+        break;
+      case 'upper':
+        out = out.toUpperCase();
+        break;
+      case 'set': {
+        if (!rule.extension) break;
+        let e = rule.extension.trim();
+        if (e.length === 0) break;
+        if (!e.startsWith('.')) e = `.${e}`;
+        out = e;
+        break;
+      }
+      case 'remove':
+        out = '';
+        break;
+    }
+  }
+  return out;
+}
+
 /**
  * Applies the rules in order to a single base name. The caller is responsible
- * for stripping the extension first and re-attaching it after.
+ * for stripping the extension first and re-attaching it after. The optional
+ * `context` carries metadata (original base, lastModified) used by date and
+ * counter rules — pass it from `buildRenamePlan` for production use.
  */
 export function renameBase(
   base: string,
   rules: RenameRule[],
   index: number,
-  total: number
+  total: number,
+  context: RenameContext = {}
 ): string {
   let out = base;
+  const originalBase = context.originalBase ?? base;
+  const lastModified = context.lastModified;
 
   for (const rule of rules) {
     switch (rule.kind) {
@@ -207,6 +405,32 @@ export function renameBase(
       case 'removeChars':
         out = applyRemoveChars(out, rule.chars);
         break;
+      case 'date': {
+        const stamp = applyDate(rule, lastModified);
+        out =
+          rule.position === 'start'
+            ? `${stamp}${rule.separator}${out}`
+            : `${out}${rule.separator}${stamp}`;
+        break;
+      }
+      case 'insertAt':
+        out = applyInsertAt(out, rule);
+        break;
+      case 'trim':
+        out = applyTrim(out, rule);
+        break;
+      case 'extractCounter': {
+        const counter = applyExtractCounter(rule, originalBase, index);
+        out =
+          rule.position === 'start' ? `${counter}${out}` : `${out}${counter}`;
+        break;
+      }
+      case 'reverse':
+        out = applyReverse(out);
+        break;
+      case 'replaceExt':
+        // Extension rules are applied separately — skip here.
+        break;
     }
   }
 
@@ -220,14 +444,25 @@ export function renameBase(
  * collapses them).
  */
 export function buildRenamePlan({ files, rules }: BuildPlanInput): RenamePlanEntry[] {
+  // Split the rule list once so base- and ext-only rules run in their own
+  // pass. Both lists preserve the user's original ordering.
+  const baseRules = rules.filter((r) => r.kind !== 'replaceExt');
+  const extRules = rules.filter(
+    (r): r is ReplaceExtRule => r.kind === 'replaceExt'
+  );
+
   const total = files.length;
   const seen = new Map<string, number>();
   const entries: RenamePlanEntry[] = [];
 
   files.forEach((f, i) => {
-    const { base, ext } = splitExtension(f.name);
-    const newBase = renameBase(base, rules, i, total);
-    let candidate = `${newBase}${ext}`;
+    const split = splitExtension(f.name);
+    const newBase = renameBase(split.base, baseRules, i, total, {
+      originalBase: split.base,
+      lastModified: f.lastModified,
+    });
+    const newExt = applyExtRules(split.ext, extRules);
+    let candidate = `${newBase}${newExt}`;
 
     // De-duplicate to avoid silent file overwrites inside the ZIP. The
     // check runs on the *generated* name regardless of whether it changed,
