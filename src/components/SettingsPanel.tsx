@@ -19,6 +19,7 @@ import {
   RotateCcw,
 } from 'lucide-react';
 import { Settings, QualityPreset, Rotation } from '@/hooks/useSettings';
+import { isFormatSupported } from '@/utils/imageProcessor';
 
 interface SettingsPanelProps {
   settings: Settings;
