@@ -48,7 +48,7 @@ const SocialPresetsGrid = ({ onSelectPreset, selectedPreset = null }: SocialPres
     onSelectPreset(w, h, id);
     setHoveredPreset(null);
     toast.success(`${name} preset applied`, {
-      description: `Images will be resized to ${w}×${h}px. Drop your images below to start.`,
+      description: `Images will be cropped & resized to ${w}×${h}px. Add your images to start.`,
       duration: 3500,
     });
     const upload = document.getElementById('upload');
