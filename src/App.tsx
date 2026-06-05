@@ -12,6 +12,7 @@ const Contact = lazy(() => import("./pages/Contact"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const CompressPdf = lazy(() => import("./pages/CompressPdf"));
+const BulkRename = lazy(() => import("./pages/BulkRename"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
