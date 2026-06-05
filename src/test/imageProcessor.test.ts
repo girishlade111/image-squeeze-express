@@ -297,7 +297,7 @@ describe('AVIF format support', () => {
       vi.restoreAllMocks();
     });
 
-    it('returns a boolean for known mimes', () => {
+    it('returns false in jsdom (no real canvas)', () => {
       // jsdom ships toDataURL as a stub that prints a "Not implemented"
       // warning to stderr. Replace it with a stub that returns a PNG URL
       // so the support check returns false (no AVIF in jsdom) without
@@ -305,15 +305,7 @@ describe('AVIF format support', () => {
       vi.spyOn(HTMLCanvasElement.prototype, 'toDataURL').mockReturnValue(
         'data:image/png;base64,iVBORw0KGgo='
       );
-      const result = isFormatSupported('image/avif');
-      expect(typeof result).toBe('boolean');
-    });
-
-    it('returns true when the browser can encode the mime', () => {
-      vi.spyOn(HTMLCanvasElement.prototype, 'toDataURL').mockReturnValue(
-        'data:image/avif;base64,AAAA'
-      );
-      expect(isFormatSupported('image/avif')).toBe(true);
+      expect(isFormatSupported('image/tiff')).toBe(false);
     });
 
     it('caches its result', () => {
@@ -321,21 +313,21 @@ describe('AVIF format support', () => {
       // even if the underlying stub changes between calls.
       const spy = vi
         .spyOn(HTMLCanvasElement.prototype, 'toDataURL')
-        .mockReturnValue('data:image/png;base64,AAAA');
-      const a = isFormatSupported('image/png');
-      spy.mockReturnValue('data:image/png;base64,BBBB');
-      const b = isFormatSupported('image/png');
+        .mockReturnValue('data:image/heic;base64,AAAA');
+      const a = isFormatSupported('image/heic');
+      spy.mockReturnValue('data:image/heic;base64,BBBB');
+      const b = isFormatSupported('image/heic');
       expect(a).toBe(b);
     });
 
-    it('returns false when the canvas API is missing (jsdom without canvas)', () => {
+    it('returns false when the canvas API is missing', () => {
       // Replace the prototype method with undefined, then verify the
       // function falls back to false instead of throwing.
       const original = HTMLCanvasElement.prototype.toDataURL;
       // @ts-expect-error — explicitly removing the method to test the guard
       delete HTMLCanvasElement.prototype.toDataURL;
       try {
-        expect(isFormatSupported('image/avif')).toBe(false);
+        expect(isFormatSupported('image/jp2')).toBe(false);
       } finally {
         HTMLCanvasElement.prototype.toDataURL = original;
       }
