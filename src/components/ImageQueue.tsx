@@ -191,7 +191,15 @@ const ImageQueue = ({
         )}
       </AnimatePresence>
 
-      {/* Grid */}
+      {/* Grid (cards) or list (compact) — driven by viewMode */}
+      {isList ? (
+        <QueueList
+          files={files}
+          currentItem={currentItem}
+          onRemove={onRemove}
+          onRetry={onRetry}
+        />
+      ) : (
       <motion.div className="grid grid-cols-1 gap-2 sm:grid-cols-2" layout>
         <AnimatePresence mode="popLayout">
           {files.map((f, i) => {
