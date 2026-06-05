@@ -846,7 +846,7 @@ image-squeeze-express/
 │   ├── test/
 │   │   ├── setup.ts
 │   │   ├── example.test.ts
-│   │   ├── imageProcessor.test.ts    # 27 tests
+│   │   ├── imageProcessor.test.ts    # 41 tests
 │   │   ├── pdfProcessor.test.ts      # 12 tests
 │   │   └── fileRenamer.test.ts       # 66 tests
 │   ├── App.tsx                       # Router
