@@ -97,33 +97,52 @@ const Header = () => {
             className="hidden items-center gap-0.5 md:flex"
             aria-label="Main navigation"
           >
-            {navLinks.map((l) =>
-              'isRoute' in l && l.isRoute ? (
-                <Link
-                  key={l.href}
-                  to={l.href}
-                  onClick={() => setMobileOpen(false)}
-                  className="rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-primary/5"
-                >
-                  {l.label}
-                </Link>
-              ) : (
-                <a
-                  key={l.href}
-                  href={l.href}
-                  onClick={(e) => handleNavClick(e, l.href)}
-                  className="rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-primary/5"
-                >
-                  {l.label}
-                </a>
-              )
-            )}
-            <div className="ml-1.5 h-4 w-px bg-border" />
+            {navLinks.map((l) => (
+              <a
+                key={l.href}
+                href={l.href}
+                onClick={(e) => handleNavClick(e, l.href)}
+                className="rounded-full px-3 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground hover:bg-primary/5"
+              >
+                {l.label}
+              </a>
+            ))}
+            <div className="mx-1.5 h-4 w-px bg-border" />
+
+            {/* Tool switcher pill */}
+            <div
+              className="flex h-7 items-center gap-0.5 rounded-full border border-border/50 bg-foreground/[0.03] p-0.5"
+              role="group"
+              aria-label="Switch tool"
+            >
+              {tools.map((t) => {
+                const active = isToolActive(t.to);
+                const Icon = t.icon;
+                return (
+                  <Link
+                    key={t.to}
+                    to={t.to}
+                    onClick={() => setMobileOpen(false)}
+                    aria-current={active ? 'page' : undefined}
+                    title={t.label}
+                    className={`flex h-6 items-center gap-1 rounded-full px-2 text-[11px] font-medium transition-colors ${
+                      active
+                        ? 'bg-primary/15 text-primary'
+                        : 'text-muted-foreground hover:bg-foreground/5 hover:text-foreground'
+                    }`}
+                  >
+                    <Icon className="h-3 w-3" aria-hidden />
+                    <span className="hidden lg:inline">{t.label}</span>
+                  </Link>
+                );
+              })}
+            </div>
+
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleDarkMode}
-              className="h-7 w-7 rounded-full hover:bg-primary/5 hover:text-primary"
+              className="ml-1 h-7 w-7 rounded-full hover:bg-primary/5 hover:text-primary"
               aria-label={darkMode ? 'Switch to light mode' : 'Switch to dark mode'}
             >
               {darkMode ? (
