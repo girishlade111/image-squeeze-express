@@ -101,6 +101,7 @@ const BulkRename = () => {
       </main>
 
       <PageDropOverlay visible={isDragging} />
+      <ScrollToTop />
     </div>
   );
 };
