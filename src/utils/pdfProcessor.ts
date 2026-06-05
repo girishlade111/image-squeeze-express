@@ -32,7 +32,10 @@ export interface PdfProcessResult {
   durationMs: number;
 }
 
-pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
+// Worker file is served from /pdf.worker.min.mjs (copied from pdfjs-dist/build/).
+// This is the most reliable way to ship the worker — Vite won't try to bundle
+// the 1.2 MB minified file as JS.
+pdfjsLib.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
 
 export const PDF_QUALITY_PRESETS: Record<Exclude<PdfQualityPreset, 'custom'>, PdfProcessSettings> = {
   low: { quality: 0.4, scale: 1.25, maxWidth: 1100 },
