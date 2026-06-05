@@ -346,6 +346,7 @@ const ImageQueue = ({
           })}
         </AnimatePresence>
       </motion.div>
+      )}
 
       {/* Action buttons */}
       <AnimatePresence>
@@ -387,3 +388,125 @@ const ImageQueue = ({
 };
 
 export default ImageQueue;
+
+/**
+ * Compact row layout used when the queue has many files (default for > 20).
+ * Each row is a single 12-row-high strip with a small thumbnail, name, size,
+ * status, and action buttons — designed to fit 6-8 rows on a laptop screen.
+ */
+function QueueList({
+  files,
+  currentItem,
+  onRemove,
+  onRetry,
+}: {
+  files: UploadedFile[];
+  currentItem: string | null;
+  onRemove: (id: string) => void;
+  onRetry: (id: string) => void;
+}) {
+  return (
+    <motion.ul
+      className="divide-y divide-border/40 overflow-hidden rounded-xl border border-border/40 bg-card/40"
+      layout
+    >
+      <AnimatePresence mode="popLayout" initial={false}>
+        {files.map((f) => {
+          const isCurrent = currentItem === f.id && f.status === 'processing';
+          return (
+            <motion.li
+              key={f.id}
+              layout
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.15 }}
+              className={`group flex items-center gap-2.5 px-2.5 py-1.5 transition-colors ${
+                f.status === 'error'
+                  ? 'bg-red-500/5'
+                  : f.status === 'done'
+                  ? 'bg-emerald-500/[0.04]'
+                  : ''
+              }`}
+            >
+              <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded-md bg-secondary/30">
+                <img
+                  src={f.preview}
+                  alt={f.name}
+                  className="h-full w-full object-cover"
+                  loading="lazy"
+                />
+                {f.status === 'processing' && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-background/70">
+                    <motion.div
+                      className="h-3 w-3 rounded-full border-2 border-primary/30 border-t-primary"
+                      animate={{ rotate: 360 }}
+                      transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                    />
+                  </div>
+                )}
+                {f.status === 'done' && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-emerald-500/40">
+                    <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} />
+                  </div>
+                )}
+                {f.status === 'error' && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-red-500/40">
+                    <AlertCircle className="h-3.5 w-3.5 text-white" strokeWidth={3} />
+                  </div>
+                )}
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <p
+                  className="truncate text-[11px] font-medium"
+                  title={f.name}
+                >
+                  {truncate(f.name, 32)}
+                </p>
+                <p className="text-[9px] text-muted-foreground">
+                  {formatFileSize(f.originalSize)}
+                  {f.result && (
+                    <span className="text-emerald-300">
+                      {' '}→ {formatFileSize(f.result.sizeBytes)} ·{' '}
+                      {getCompressionRatio(f.originalSize, f.result.sizeBytes)}
+                    </span>
+                  )}
+                  {f.status === 'error' && f.error && (
+                    <span className="text-red-300"> · {f.error}</span>
+                  )}
+                </p>
+              </div>
+
+              <Badge
+                variant="outline"
+                className={`rounded-full px-1.5 py-0 text-[9px] font-semibold ${statusStyles[f.status]}`}
+              >
+                {isCurrent ? 'Processing' : statusLabel[f.status]}
+              </Badge>
+
+              <div className="flex items-center gap-0.5">
+                {f.status === 'error' && (
+                  <button
+                    onClick={() => onRetry(f.id)}
+                    className="flex h-6 w-6 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+                    aria-label={`Retry ${f.name}`}
+                  >
+                    <RotateCcw className="h-3 w-3" />
+                  </button>
+                )}
+                <button
+                  onClick={() => onRemove(f.id)}
+                  className="flex h-6 w-6 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive"
+                  aria-label={`Remove ${f.name}`}
+                >
+                  <X className="h-3 w-3" />
+                </button>
+              </div>
+            </motion.li>
+          );
+        })}
+      </AnimatePresence>
+    </motion.ul>
+  );
+}
