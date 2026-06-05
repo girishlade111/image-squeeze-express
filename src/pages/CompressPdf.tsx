@@ -6,6 +6,7 @@ import PdfUploadZone from '@/components/PdfUploadZone';
 import PdfQueue from '@/components/PdfQueue';
 import PdfSettingsPanel from '@/components/PdfSettingsPanel';
 import PdfResultsSection from '@/components/PdfResultsSection';
+import ScrollToTop from '@/components/ScrollToTop';
 import { usePdfUpload } from '@/hooks/usePdfUpload';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
 import { usePageDropZone } from '@/hooks/usePageDropZone';
@@ -118,6 +119,7 @@ const CompressPdf = () => {
       </main>
 
       <PageDropOverlayPdf visible={isDragging} />
+      <ScrollToTop />
     </div>
   );
 };
