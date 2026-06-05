@@ -36,8 +36,9 @@ function generateId(): string {
 async function getPdfPageCount(file: File): Promise<number> {
   // Lazy-load pdfjs so the heavy worker is only fetched when a PDF is dropped.
   const pdfjs = await import('pdfjs-dist');
-  // Worker URL is configured globally in pdfProcessor.ts; if the user opens
-  // this page directly the config has already run.
+  if (!pdfjs.GlobalWorkerOptions.workerSrc) {
+    pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
+  }
   const buffer = await file.arrayBuffer();
   const task = pdfjs.getDocument({ data: new Uint8Array(buffer.slice(0)) });
   try {
@@ -46,7 +47,7 @@ async function getPdfPageCount(file: File): Promise<number> {
     await doc.cleanup();
     await doc.destroy();
     return count;
-  } catch (err) {
+  } catch {
     throw new Error('Could not read PDF — file may be corrupted or password-protected.');
   }
 }
