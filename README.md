@@ -582,7 +582,7 @@ flowchart LR
 |--------|-------|
 | 🧠 **Memory Management** | Object URLs auto-revoked on unmount |
 | ⚡ **Lazy Loading** | Code-split by route & component (per-route chunks < 470 KB) |
-| 🧪 **Test Coverage** | 79 unit tests across 3 modules |
+| 🧪 **Test Coverage** | 106 unit tests across 3 modules |
 | 🚀 **Dev Server** | Port `8080` (HMR enabled) |
 
 ---
@@ -847,7 +847,7 @@ image-squeeze-express/
 │   │   ├── example.test.ts
 │   │   ├── imageProcessor.test.ts    # 27 tests
 │   │   ├── pdfProcessor.test.ts      # 12 tests
-│   │   └── fileRenamer.test.ts       # 39 tests
+│   │   └── fileRenamer.test.ts       # 66 tests
 │   ├── App.tsx                       # Router
 │   ├── main.tsx                      # Entry point
 │   └── index.css                     # Styles & design tokens
