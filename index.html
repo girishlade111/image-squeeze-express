@@ -197,50 +197,50 @@
       "mainEntity": [
         {
           "@type": "Question",
-          "name": "Is my image data safe with ImageSqueeze?",
+          "name": "Is my data safe with ImageSqueeze?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, 100% safe. All image processing happens directly in your browser using JavaScript and Canvas API. Your images are never uploaded to any server. No data leaves your device."
+            "text": "Yes. Every tool runs 100% in your browser — image compression, PDF re-rendering, and file renaming all happen on your device. Your files are never uploaded to a server."
           }
         },
         {
           "@type": "Question",
-          "name": "What image formats does ImageSqueeze support?",
+          "name": "What image formats are supported?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "ImageSqueeze supports JPG/JPEG, PNG, WebP, AVIF, GIF, and BMP input formats. You can convert to JPEG, PNG, or WebP output formats."
+            "text": "You can upload JPEG, PNG, WebP, AVIF, GIF, and BMP. For output, choose JPEG, PNG, WebP, AVIF, or keep the original format. AVIF output needs Chrome 85+, Firefox 113+, or Safari 16+."
           }
         },
         {
           "@type": "Question",
-          "name": "Is there a file size limit?",
+          "name": "How does PDF compression work?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "There is no strict file size limit. Files over 10MB will show a warning as processing may take longer. You can process up to 10 images at once."
+            "text": "Each page of your PDF is rasterized into a JPEG and rebuilt into a new PDF, fully in your browser. Three presets control the size/quality trade-off: Strong, Balanced, and Light. Text in the output is not selectable because pages become full-page images."
           }
         },
         {
           "@type": "Question",
-          "name": "Why should I use WebP format?",
+          "name": "How many files can I process at once?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "WebP images are approximately 30% smaller than JPEG at the same visual quality. They improve website load speed and Core Web Vitals scores, making them ideal for web use."
+            "text": "Up to 50 images per batch (750 MB total), up to 5 PDFs per batch (100 MB each), and up to 100 files per rename batch (200 MB each)."
           }
         },
         {
           "@type": "Question",
-          "name": "Do I need an account to use ImageSqueeze?",
+          "name": "Why use WebP or AVIF instead of JPEG?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "No account is needed. ImageSqueeze is completely free and anonymous. Just open the website and start compressing."
+            "text": "At the same visual quality, WebP is typically 25-35% smaller than JPEG and AVIF is 40-50% smaller. Both are supported by every modern browser, so the savings translate to faster page loads and lower bandwidth."
           }
         },
         {
           "@type": "Question",
-          "name": "Does ImageSqueeze work on mobile devices?",
+          "name": "Do I need to create an account? Is it really free?",
           "acceptedAnswer": {
             "@type": "Answer",
-            "text": "Yes, ImageSqueeze is fully responsive and works on all modern mobile browsers including Chrome, Safari, and Firefox on iOS and Android."
+            "text": "No account, no sign-up, no email, no watermarks, no hidden fees. Every tool is fully free and unlimited apart from the per-batch caps documented above."
           }
         }
       ]
