@@ -3,6 +3,7 @@ import {
   formatFileSize,
   getCompressionRatio,
   estimateQualityForSize,
+  calcDimensions,
 } from '../utils/imageProcessor';
 import { computeAspectDimensions } from '../hooks/useSettings';
 

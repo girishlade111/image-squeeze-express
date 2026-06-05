@@ -109,7 +109,7 @@ interface CalcResult {
   crop?: CropRect;
 }
 
-function calcDimensions(
+export function calcDimensions(
   origW: number,
   origH: number,
   targetW: number | null,
