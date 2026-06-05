@@ -198,6 +198,7 @@ async function canvasProcess(
     rotation?: Rotation;
     mirror?: boolean;
     grayscale?: boolean;
+    crop?: CropRect;
   }
 ): Promise<Blob> {
   const img = await loadImage(source);
@@ -226,20 +227,27 @@ async function canvasProcess(
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
   }
 
+  // Source rectangle to sample from (defaults to the full image).
+  // When a crop is provided, the cropped region is drawn at the requested size
+  // so the output exactly matches the target dimensions without distortion.
+  const crop = options.crop;
+  const srcX = crop ? crop.x : 0;
+  const srcY = crop ? crop.y : 0;
+  const srcW = crop ? crop.w : img.naturalWidth;
+  const srcH = crop ? crop.h : img.naturalHeight;
+
   // Move origin to the canvas center so rotation/mirror pivot around it
   if (options.rotation || options.mirror) {
     ctx.translate(canvasWidth / 2, canvasHeight / 2);
     applyCanvasTransforms(ctx, options.rotation || 0, options.mirror || false);
   }
 
-  // Draw image centered at the (now-centered) origin using pre-rotation dims
-  ctx.drawImage(
-    img,
-    options.rotation || options.mirror ? -width / 2 : 0,
-    options.rotation || options.mirror ? -height / 2 : 0,
-    width,
-    height
-  );
+  const drawWidth = options.rotation || options.mirror ? width : canvasWidth;
+  const drawHeight = options.rotation || options.mirror ? height : canvasHeight;
+  const drawX = options.rotation || options.mirror ? -width / 2 : 0;
+  const drawY = options.rotation || options.mirror ? -height / 2 : 0;
+
+  ctx.drawImage(img, srcX, srcY, srcW, srcH, drawX, drawY, drawWidth, drawHeight);
 
   if (options.grayscale) {
     applyGrayscale(ctx, canvasWidth, canvasHeight);
