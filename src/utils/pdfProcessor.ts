@@ -1,4 +1,3 @@
-import * as pdfjsLib from 'pdfjs-dist';
 import { PDFDocument } from 'pdf-lib';
 
 export type PdfQualityPreset = 'low' | 'medium' | 'high' | 'custom';
