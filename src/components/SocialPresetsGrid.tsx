@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { ImageIcon, Sparkles, Upload, Eye } from 'lucide-react';
+import { Sparkles, Upload, Eye } from 'lucide-react';
 
 interface SocialPresetsGridProps {
   onSelectPreset: (w: number, h: number, id: string) => void;
