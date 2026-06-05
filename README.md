@@ -190,7 +190,7 @@ All three tools share:
 
 > Pure string-manipulation engine with a live preview. Works for **any** file type — images, docs, archives, source code, anything.
 
-#### 🎛️ Seven Rule Types (stackable, reorderable)
+#### 🎛️ Thirteen Rule Types (stackable, reorderable)
 
 | Rule | What it does | Options |
 |------|--------------|---------|
@@ -201,6 +201,12 @@ All three tools share:
 | Aa **Change Case** | Transform case | `lower` / `UPPER` / `Title Case` / `Sentence case` |
 | 📏 **Whitespace** | Replace or strip spaces | `a-b` / `a_b` / `ab` (remove) |
 | 🧹 **Remove Chars** | Strip specific characters | Any character set |
+| 📅 **Date Stamp** | Insert the file's `lastModified` as prefix/suffix | 7 formats (`YYYY-MM-DD`, `YYYYMMDD`, `YYYY-MM-DD_HHMMSS`, `YYYY-MM-DD HHMM`, `DD-MM-YYYY`, `MM-DD-YYYY`, `ISO`), separator, "use now" override |
+| 🧷 **Insert At** | Inject text at a character index | Index (negative = from end), text |
+| ✂️ **Trim / Truncate** | Strip ends or cap to a max length | Mode: `start` / `end` / `both` / `truncate`; char count or max length; optional `…` |
+| 🗂️ **Replace Extension** | Set, lowercase, uppercase, or strip the extension | Mode: `set` (with optional leading dot) / `lower` / `upper` / `remove` |
+| 🔁 **Counter From Name** | Re-sequence the existing number in the filename | Where (`first`/`last`), place at (`start`/`end`), separator, pad, fallback start |
+| 🪞 **Reverse Name** | Flip the base name backwards | — |
 
 #### 👁️ Live Preview
 
