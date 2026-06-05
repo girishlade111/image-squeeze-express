@@ -287,4 +287,36 @@ const PdfResultsSection = ({ files, onReset }: PdfResultsSectionProps) => {
   );
 };
 
+function ConfettiBurst() {
+  const colors = ['#4F46E5', '#0D9488', '#F59E0B', '#EC4899', '#10B981'];
+  const particles = Array.from({ length: 24 }, (_, i) => ({
+    id: i,
+    color: colors[i % colors.length],
+    x: (Math.random() - 0.5) * 600,
+    delay: Math.random() * 0.2,
+    rotate: Math.random() * 720 - 360,
+    size: 6 + Math.random() * 6,
+  }));
+  return (
+    <div className="pointer-events-none absolute left-1/2 top-0 -z-10 h-0 w-0" aria-hidden>
+      {particles.map((p) => (
+        <motion.span
+          key={p.id}
+          initial={{ x: 0, y: 0, opacity: 1, rotate: 0, scale: 1 }}
+          animate={{ x: p.x, y: 220, opacity: 0, rotate: p.rotate, scale: 0.6 }}
+          transition={{ duration: 1.4, delay: p.delay, ease: 'easeOut' }}
+          style={{
+            position: 'absolute',
+            display: 'block',
+            width: p.size,
+            height: p.size * 0.4,
+            backgroundColor: p.color,
+            borderRadius: 2,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
 export default PdfResultsSection;
