@@ -173,17 +173,28 @@ const Header = () => {
           aria-label="Mobile navigation"
         >
           <div className="flex flex-col gap-1">
-            {navLinks.map((l, i) => (
-              <a
-                key={l.href}
-                ref={i === 0 ? firstMobileLinkRef : undefined}
-                href={l.href}
-                onClick={(e) => handleNavClick(e, l.href)}
-                className="rounded-xl px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              >
-                {l.label}
-              </a>
-            ))}
+            {navLinks.map((l, i) =>
+              'isRoute' in l && l.isRoute ? (
+                <Link
+                  key={l.href}
+                  to={l.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="rounded-xl px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  {l.label}
+                </Link>
+              ) : (
+                <a
+                  key={l.href}
+                  ref={i === 0 ? firstMobileLinkRef : undefined}
+                  href={l.href}
+                  onClick={(e) => handleNavClick(e, l.href)}
+                  className="rounded-xl px-4 py-3 text-sm font-medium text-foreground transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  {l.label}
+                </a>
+              )
+            )}
             <div className="my-3 h-px bg-border" />
             <Link
               to="/about"
