@@ -25,7 +25,7 @@ const faqs = [
   },
   {
     q: 'How many images can I compress at once?',
-    a: 'The free version supports up to 10 images in a single batch. The upcoming Pro version will support 50+ images at once with priority processing speed.',
+    a: 'The free version supports up to 50 images in a single batch (up to 750 MB total). For larger batches, run them in multiple rounds or wait for the upcoming Pro version which will support 200+ images at once with priority processing speed.',
   },
   {
     q: 'Do I need to create an account?',
