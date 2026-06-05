@@ -7,6 +7,7 @@ import FileRenameUploadZone from '@/components/FileRenameUploadZone';
 import FileRenameRuleBuilder from '@/components/FileRenameRuleBuilder';
 import FileRenamePreviewList from '@/components/FileRenamePreviewList';
 import PageDropOverlay from '@/components/PageDropOverlay';
+import ScrollToTop from '@/components/ScrollToTop';
 import { useFileRename } from '@/hooks/useFileRename';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
 import { usePageDropZone } from '@/hooks/usePageDropZone';
