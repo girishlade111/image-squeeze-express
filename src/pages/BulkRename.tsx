@@ -50,118 +50,46 @@ const BulkRename = () => {
     <div className="min-h-screen bg-background">
       <Header />
       <main>
-        <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden pt-12 pb-12">
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background: `
-                radial-gradient(ellipse 80% 50% at 50% 20%, hsl(var(--primary) / 0.18), transparent),
-                radial-gradient(ellipse 60% 40% at 80% 60%, hsl(var(--accent) / 0.12), transparent),
-                radial-gradient(ellipse 50% 50% at 20% 80%, hsl(var(--primary) / 0.1), transparent)
-              `,
-            }}
-            aria-hidden
-          />
-
-          <div className="container relative mx-auto px-4 sm:px-6">
-            <div className="mx-auto max-w-3xl text-center">
-              <motion.h1
-                className="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5 }}
-              >
-                Bulk File{' '}
-                <span
-                  style={{
-                    background:
-                      'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                  }}
-                >
-                  Rename
-                </span>
-                <br className="hidden sm:block" />
-                <span className="sm:hidden"> </span>
-                in Seconds
-              </motion.h1>
-
-              <motion.p
-                className="mx-auto mt-3 max-w-xl text-sm sm:text-base text-muted-foreground"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.1 }}
-              >
-                Rename hundreds of files at once with a live preview. Combine find
-                &amp; replace, prefix/suffix, sequential numbering, case changes,
-                date stamps, trim, insert-at, counter extraction, reverse, and
-                more — all in your browser.
-              </motion.p>
-
-              <motion.div
-                className="mt-5 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                {[
-                  { emoji: '🔒', label: '100% Private' },
-                  { emoji: '👁️', label: 'Live Preview' },
-                  { emoji: '🆓', label: 'Free Forever' },
-                  { emoji: '📦', label: 'ZIP Download' },
-                ].map((badge) => (
-                  <div
-                    key={badge.label}
-                    className="flex items-center gap-1 rounded-full border border-primary/20 bg-primary/[0.07] px-2.5 py-0.5 text-[11px] font-medium text-foreground"
-                  >
-                    <span className="text-xs" aria-hidden>
-                      {badge.emoji}
-                    </span>
-                    {badge.label}
-                  </div>
-                ))}
-              </motion.div>
-
-              <motion.div
-                className="mx-auto mt-6 max-w-xl"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-              >
-                <div ref={uploadRef}>
-                  <FileRenameUploadZone onFilesSelected={addFiles} fileCount={files.length} />
-                </div>
-              </motion.div>
-
-              {files.length > 0 && (
-                <FileRenameRuleBuilder
-                  rules={rules}
-                  onAdd={addRule}
-                  onUpdate={updateRule}
-                  onRemove={removeRule}
-                  onMove={moveRule}
-                  onReset={resetRules}
-                />
-              )}
-
-              <FileRenamePreviewList
-                files={files}
-                plan={plan}
-                changedCount={changedCount}
-                totalSize={totalSize}
-                formatBytes={formatBytes}
-                isZipping={isZipping}
-                zipProgress={zipProgress}
-                onRemove={removeFile}
-                onClearAll={clearAll}
-                onAddMore={handleAddMore}
-                onDownload={downloadZip}
-                onReset={resetRules}
-              />
-            </div>
+        <ToolHero
+          prefix="Bulk File"
+          highlight="Rename"
+          suffix="in Seconds"
+          subhead="Rename up to 100 files at once with a live preview. Combine find & replace, prefix/suffix, sequential numbering, case changes, date stamps, trim, insert-at, counter extraction, reverse, and more — all in your browser."
+          badges={[
+            { emoji: '🔒', label: '100% Private' },
+            { emoji: '👁️', label: 'Live Preview' },
+            { emoji: '🆓', label: 'Free Forever' },
+            { emoji: '📦', label: 'ZIP Download' },
+          ]}
+        >
+          <div ref={uploadRef}>
+            <FileRenameUploadZone onFilesSelected={addFiles} fileCount={files.length} />
           </div>
-        </section>
+          {files.length > 0 && (
+            <FileRenameRuleBuilder
+              rules={rules}
+              onAdd={addRule}
+              onUpdate={updateRule}
+              onRemove={removeRule}
+              onMove={moveRule}
+              onReset={resetRules}
+            />
+          )}
+          <FileRenamePreviewList
+            files={files}
+            plan={plan}
+            changedCount={changedCount}
+            totalSize={totalSize}
+            formatBytes={formatBytes}
+            isZipping={isZipping}
+            zipProgress={zipProgress}
+            onRemove={removeFile}
+            onClearAll={clearAll}
+            onAddMore={handleAddMore}
+            onDownload={downloadZip}
+            onReset={resetRules}
+          />
+        </ToolHero>
 
         {files.length > 0 && <StatsRow plan={plan} totalSize={totalSize} formatBytes={formatBytes} />}
 
