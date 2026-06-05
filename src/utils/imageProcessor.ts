@@ -340,7 +340,7 @@ export async function processImage(
   const outputMime = toMime(settings.outputFormat, file.type);
   const origDims = await getImageDimensions(file);
 
-  const { w: targetW, h: targetH } = calcDimensions(
+  const { w: targetW, h: targetH, crop } = calcDimensions(
     origDims.width,
     origDims.height,
     settings.width,
@@ -374,6 +374,7 @@ export async function processImage(
         rotation: settings.rotation,
         mirror: settings.mirror,
         grayscale: settings.grayscale,
+        crop,
       }
     );
 
@@ -398,6 +399,7 @@ export async function processImage(
             rotation: settings.rotation,
             mirror: settings.mirror,
             grayscale: settings.grayscale,
+            crop,
           }
         );
         result = iterResult;
