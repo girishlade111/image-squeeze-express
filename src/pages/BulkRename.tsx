@@ -1,8 +1,8 @@
 import { useCallback, useRef } from 'react';
-import { motion } from 'framer-motion';
 import { Sparkles, Eye, Download, Shield } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import ToolHero from '@/components/ToolHero';
 import FileRenameUploadZone from '@/components/FileRenameUploadZone';
 import FileRenameRuleBuilder from '@/components/FileRenameRuleBuilder';
 import FileRenamePreviewList from '@/components/FileRenamePreviewList';
