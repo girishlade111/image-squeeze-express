@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { Moon, Sun, Menu, X } from 'lucide-react';
+import { Link, useLocation } from 'react-router-dom';
+import { Moon, Sun, Menu, X, ImageIcon, FileText, FilePlus2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -8,8 +8,12 @@ const navLinks = [
   { label: 'How It Works', href: '#how-it-works' },
   { label: 'Features', href: '#features' },
   { label: 'FAQ', href: '#faq' },
-  { label: 'Compress PDF', href: '/compress-pdf', isRoute: true },
-  { label: 'Bulk Rename', href: '/bulk-rename', isRoute: true },
+];
+
+const tools = [
+  { label: 'Images', to: '/', icon: ImageIcon },
+  { label: 'PDF', to: '/compress-pdf', icon: FileText },
+  { label: 'Rename', to: '/bulk-rename', icon: FilePlus2 },
 ];
 
 const Header = () => {
