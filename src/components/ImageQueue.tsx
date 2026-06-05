@@ -1,41 +1,47 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Loader2, Check, AlertCircle } from 'lucide-react';
+import { X, Loader2, Check, AlertCircle, RotateCcw, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { UploadedFile } from '@/hooks/useImageUpload';
-import { formatFileSize } from '@/utils/imageProcessor';
+import { formatFileSize, getCompressionRatio } from '@/utils/imageProcessor';
 
 interface ImageQueueProps {
   files: UploadedFile[];
   isProcessing: boolean;
   progress: number;
   processingText: string;
+  currentItem: string | null;
   onRemove: (id: string) => void;
   onClearAll: () => void;
   onProcessAll: () => void;
+  onRetry: (id: string) => void;
+  onAddMore: () => void;
   allDone: boolean;
+  readyCount: number;
 }
 
 function truncate(str: string, max: number) {
   if (str.length <= max) return str;
-  const ext = str.lastIndexOf('.') >= 0 ? str.slice(str.lastIndexOf('.')) : '';
-  const base = str.slice(0, max - ext.length - 1);
+  const dot = str.lastIndexOf('.');
+  const ext = dot >= 0 ? str.slice(dot) : '';
+  const base = str.slice(0, Math.max(1, max - ext.length - 1));
   return `${base}…${ext}`;
 }
 
 const statusStyles = {
-  ready: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/25',
-  processing: 'bg-amber-500/15 text-amber-400 border-amber-500/25',
-  done: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/25',
-  error: 'bg-red-500/15 text-red-400 border-red-500/25',
+  ready: 'bg-slate-500/15 text-slate-300 border-slate-500/25',
+  processing: 'bg-amber-500/15 text-amber-300 border-amber-500/25',
+  done: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/25',
+  error: 'bg-red-500/15 text-red-300 border-red-500/25',
 };
 
 const statusLabel: Record<UploadedFile['status'], string> = {
   ready: 'Ready',
-  processing: 'Processing…',
+  processing: 'Processing',
   done: 'Done',
-  error: 'Error',
+  error: 'Failed',
 };
 
 const ImageQueue = ({
@@ -43,171 +49,289 @@ const ImageQueue = ({
   isProcessing,
   progress,
   processingText,
+  currentItem,
   onRemove,
   onClearAll,
   onProcessAll,
+  onRetry,
+  onAddMore,
   allDone,
+  readyCount,
 }: ImageQueueProps) => {
+  const [hoverId, setHoverId] = useState<string | null>(null);
+
   if (files.length === 0) return null;
 
+  const totalOriginal = files.reduce((s, f) => s + f.originalSize, 0);
+  const totalProcessed = files
+    .filter((f) => f.status === 'done')
+    .reduce((s, f) => s + (f.result?.sizeBytes || 0), 0);
+  const savedBytes = totalOriginal - totalProcessed;
+  const doneCount = files.filter((f) => f.status === 'done').length;
+  const errorCount = files.filter((f) => f.status === 'error').length;
+
   return (
-    <motion.div 
+    <motion.div
       className="mx-auto mt-6 max-w-xl"
       layout
+      role="region"
+      aria-label="Image queue"
     >
-      {/* Count */}
-      <motion.div 
-        className="flex items-center justify-between mb-3"
+      {/* Header */}
+      <motion.div
+        className="mb-3 flex items-center justify-between"
         layout
       >
-        <p className="text-xs font-medium text-foreground">
-          {files.length} file{files.length !== 1 ? 's' : ''} selected
-        </p>
-        {!isProcessing && !allDone && files.length > 0 && (
-          <Button 
-            variant="ghost" 
-            size="sm" 
-            className="h-6 rounded-full text-[10px] text-muted-foreground hover:text-destructive"
-            onClick={onClearAll}
-          >
-            Clear
-          </Button>
+        <div className="flex items-center gap-2">
+          <p className="text-xs font-semibold text-foreground">
+            {files.length} file{files.length !== 1 ? 's' : ''}
+          </p>
+          {doneCount > 0 && (
+            <Badge variant="outline" className="rounded-full border-emerald-500/30 bg-emerald-500/10 px-2 py-0 text-[9px] font-semibold text-emerald-300">
+              {doneCount} done
+            </Badge>
+          )}
+          {errorCount > 0 && (
+            <Badge variant="outline" className="rounded-full border-red-500/30 bg-red-500/10 px-2 py-0 text-[9px] font-semibold text-red-300">
+              {errorCount} failed
+            </Badge>
+          )}
+        </div>
+        {!isProcessing && files.length > 0 && (
+          <div className="flex items-center gap-1">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-6 rounded-full px-2 text-[10px] text-muted-foreground hover:text-foreground"
+              onClick={onAddMore}
+              aria-label="Add more images"
+            >
+              <Plus className="mr-0.5 h-2.5 w-2.5" /> Add
+            </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              className="h-6 rounded-full px-2 text-[10px] text-muted-foreground hover:text-destructive"
+              onClick={onClearAll}
+              aria-label="Clear all images"
+            >
+              Clear
+            </Button>
+          </div>
         )}
       </motion.div>
 
       {/* Progress bar */}
       <AnimatePresence>
         {isProcessing && (
-          <motion.div 
+          <motion.div
             className="mb-4"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
+            aria-live="polite"
           >
-            <div className="relative overflow-hidden rounded-full bg-secondary/50 h-2">
-              <motion.div 
+            <div className="relative overflow-hidden rounded-full bg-secondary/50 h-1.5">
+              <motion.div
                 className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary to-accent"
                 initial={{ width: 0 }}
                 animate={{ width: `${progress}%` }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.3, ease: 'easeOut' }}
+              />
+              <div
+                className="absolute inset-0 -translate-x-full animate-shimmer rounded-full"
+                style={{
+                  background:
+                    'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%)',
+                  backgroundSize: '200% 100%',
+                }}
+                aria-hidden
               />
             </div>
-            <p className="mt-1 text-center text-[10px] text-muted-foreground">
-              {processingText || `${progress}%`}
-            </p>
+            <div className="mt-1.5 flex items-center justify-between text-[10px] text-muted-foreground">
+              <span>{processingText || `${progress}%`}</span>
+              <span className="tabular-nums">{progress}%</span>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Grid */}
-      <motion.div 
-        className="grid grid-cols-1 gap-2 sm:grid-cols-2"
-        layout
-      >
+      <motion.div className="grid grid-cols-1 gap-2 sm:grid-cols-2" layout>
         <AnimatePresence mode="popLayout">
-          {files.map((f, i) => (
-            <motion.div
-              key={f.id}
-              layout
-              initial={{ opacity: 0, scale: 0.9, x: -20 }}
-              animate={{ opacity: 1, scale: 1, x: 0 }}
-              exit={{ opacity: 0, scale: 0.9, x: 20 }}
-              transition={{ duration: 0.2, delay: i * 0.03 }}
-              className="group relative flex items-center gap-2 rounded-lg border border-border/40 bg-card/60 p-2 transition-all duration-200 hover:border-primary/30"
-            >
-              {/* Thumbnail */}
-              <div className="relative h-12 w-12 flex-shrink-0 overflow-hidden rounded-lg">
-                <img
-                  src={f.preview}
-                  alt={f.name}
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-                {f.status === 'processing' && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-background/70">
-                    <motion.div 
-                      className="h-5 w-5 rounded-full border border-primary/30 border-t-primary"
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                    />
-                  </div>
-                )}
-                {f.status === 'done' && (
-                  <motion.div 
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    className="absolute inset-0 flex items-center justify-center bg-emerald-500/20"
-                  >
-                    <Check className="h-4 w-4 text-emerald-400" />
-                  </motion.div>
-                )}
-              </div>
-
-              {/* Info */}
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-xs font-medium" title={f.name}>
-                  {truncate(f.name, 20)}
-                </p>
-                <p className="text-[10px] text-muted-foreground">
-                  {formatFileSize(f.originalSize)} · {f.originalWidth}×{f.originalHeight}
-                </p>
-                <Badge
-                  variant="outline"
-                  className={`mt-1 rounded px-1.5 py-0 text-[9px] font-medium ${statusStyles[f.status]}`}
-                >
-                  {statusLabel[f.status]}
-                </Badge>
-              </div>
-
-              {/* Remove button */}
-              <motion.button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  onRemove(f.id);
-                }}
-                disabled={isProcessing}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                className="absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-destructive/90 text-destructive-foreground opacity-0 shadow-sm transition-all duration-150 group-hover:opacity-100 hover:bg-destructive disabled:opacity-0"
-                aria-label={`Remove ${f.name}`}
+          {files.map((f, i) => {
+            const isCurrent = currentItem === f.id && f.status === 'processing';
+            return (
+              <motion.div
+                key={f.id}
+                layout
+                initial={{ opacity: 0, scale: 0.9, y: -8 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.9, x: 20 }}
+                transition={{ duration: 0.2, delay: i * 0.02 }}
+                onMouseEnter={() => setHoverId(f.id)}
+                onMouseLeave={() => setHoverId(null)}
+                className={`group relative flex items-center gap-2.5 rounded-xl border bg-card/60 p-2 transition-all duration-200 ${
+                  f.status === 'error'
+                    ? 'border-red-500/30 hover:border-red-500/50'
+                    : f.status === 'done'
+                    ? 'border-emerald-500/20 hover:border-emerald-500/40'
+                    : 'border-border/40 hover:border-primary/30'
+                }`}
               >
-                <X className="h-3 w-3" />
-              </motion.button>
-            </motion.div>
-          ))}
+                {/* Thumbnail */}
+                <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-secondary/30">
+                  <img
+                    src={f.preview}
+                    alt={f.name}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                  {f.status === 'processing' && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+                      <motion.div
+                        className="h-5 w-5 rounded-full border-2 border-primary/30 border-t-primary"
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                        aria-label="Processing"
+                      />
+                    </div>
+                  )}
+                  {f.status === 'done' && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+                      className="absolute inset-0 flex items-center justify-center bg-emerald-500/30 backdrop-blur-[1px]"
+                    >
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 shadow-lg">
+                        <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} />
+                      </div>
+                    </motion.div>
+                  )}
+                  {f.status === 'error' && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute inset-0 flex items-center justify-center bg-red-500/30 backdrop-blur-[1px]"
+                    >
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-red-500 shadow-lg">
+                        <AlertCircle className="h-3.5 w-3.5 text-white" strokeWidth={3} />
+                      </div>
+                    </motion.div>
+                  )}
+                </div>
+
+                {/* Info */}
+                <div className="min-w-0 flex-1">
+                  <p
+                    className="truncate text-xs font-medium text-foreground"
+                    title={f.name}
+                  >
+                    {truncate(f.name, 22)}
+                  </p>
+                  <p className="mt-0.5 text-[10px] text-muted-foreground">
+                    {formatFileSize(f.originalSize)}
+                    {f.originalWidth > 0 && f.originalHeight > 0 && (
+                      <> · {f.originalWidth}×{f.originalHeight}</>
+                    )}
+                  </p>
+                  {f.status === 'done' && f.result && (
+                    <p className="mt-0.5 text-[10px] font-medium text-emerald-300">
+                      {formatFileSize(f.result.sizeBytes)} ·{' '}
+                      {getCompressionRatio(f.originalSize, f.result.sizeBytes)}
+                    </p>
+                  )}
+                  {f.status === 'error' && f.error && (
+                    <p
+                      className="mt-0.5 truncate text-[10px] text-red-300"
+                      title={f.error}
+                    >
+                      {f.error}
+                    </p>
+                  )}
+                  <Badge
+                    variant="outline"
+                    className={`mt-1 rounded-full px-1.5 py-0 text-[9px] font-semibold ${statusStyles[f.status]}`}
+                  >
+                    {isCurrent ? 'Processing now' : statusLabel[f.status]}
+                  </Badge>
+                </div>
+
+                {/* Action: retry on error */}
+                {f.status === 'error' && !isProcessing && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <motion.button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onRetry(f.id);
+                        }}
+                        whileHover={{ scale: 1.1 }}
+                        whileTap={{ scale: 0.9 }}
+                        className="flex h-7 w-7 items-center justify-center rounded-lg border border-red-500/30 bg-red-500/10 text-red-300 transition-colors hover:bg-red-500/20"
+                        aria-label={`Retry ${f.name}`}
+                      >
+                        <RotateCcw className="h-3.5 w-3.5" />
+                      </motion.button>
+                    </TooltipTrigger>
+                    <TooltipContent>Retry</TooltipContent>
+                  </Tooltip>
+                )}
+
+                {/* Remove button (visible on hover or when failed) */}
+                {!isProcessing && (
+                  <motion.button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onRemove(f.id);
+                    }}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    className={`absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-destructive-foreground shadow-sm transition-all duration-150 ${
+                      hoverId === f.id || f.status === 'error'
+                        ? 'opacity-100'
+                        : 'opacity-0 group-hover:opacity-100'
+                    }`}
+                    aria-label={`Remove ${f.name}`}
+                  >
+                    <X className="h-3 w-3" />
+                  </motion.button>
+                )}
+              </motion.div>
+            );
+          })}
         </AnimatePresence>
       </motion.div>
 
       {/* Action buttons */}
       <AnimatePresence>
-        {!allDone && (
-          <motion.div 
-            className="mt-4 flex justify-center gap-2"
+        {!allDone && readyCount > 0 && (
+          <motion.div
+            className="mt-4 flex flex-col items-center gap-2 sm:flex-row sm:justify-center"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
           >
-            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+            <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full sm:w-auto">
               <Button
-                size="sm"
+                size="default"
                 disabled={isProcessing}
                 onClick={onProcessAll}
-                className={`h-8 rounded-lg text-xs transition-all ${
-                  isProcessing ? 'animate-pulse' : ''
-                }`}
+                className="h-10 w-full rounded-xl text-sm font-semibold text-primary-foreground shadow-md sm:w-auto"
                 style={{
-                  background: isProcessing ? undefined : 'linear-gradient(135deg, #4F46E5, #0D9488)',
+                  background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
                 }}
               >
                 {isProcessing ? (
                   <>
-                    <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-                    Processing...
+                    <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
+                    Processing…
                   </>
                 ) : (
                   <>
-                    <span className="mr-1 text-xs">⚡</span>
-                    Compress
+                    <span className="mr-1">⚡</span>
+                    Compress {readyCount} image{readyCount !== 1 ? 's' : ''}
                   </>
                 )}
               </Button>
