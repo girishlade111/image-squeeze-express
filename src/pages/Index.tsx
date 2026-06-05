@@ -117,9 +117,6 @@ const Index = () => {
             <FeaturesGrid />
           </LazySection>
           <LazySection>
-            <ProTeaser />
-          </LazySection>
-          <LazySection>
             <FAQSection />
           </LazySection>
           <Footer />
