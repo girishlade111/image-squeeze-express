@@ -79,54 +79,56 @@ const Index = () => {
       <Header />
       <main>
         <ErrorBoundary label="Image Compressor">
-        <div ref={uploadRef} />
-        <HeroSection onFilesSelected={addFiles} imageCount={files.length}>
-          {hasFiles && (
-            <SettingsPanel
-              settings={settings}
-              files={sourceDims}
-              onUpdate={updateSettings}
-              onResetResize={resetResize}
-              onSetWidth={setWidth}
-              onSetHeight={setHeight}
-              onApplyPreset={applyQualityPreset}
-              onResetAll={resetAll}
+          <div ref={uploadRef} />
+          <HeroSection onFilesSelected={addFiles} imageCount={files.length}>
+            {hasFiles && (
+              <SettingsPanel
+                settings={settings}
+                files={sourceDims}
+                onUpdate={updateSettings}
+                onResetResize={resetResize}
+                onSetWidth={setWidth}
+                onSetHeight={setHeight}
+                onApplyPreset={applyQualityPreset}
+                onResetAll={resetAll}
+              />
+            )}
+            <ImageQueue
+              files={files}
+              isProcessing={isProcessing}
+              progress={progress}
+              processingText={processingText}
+              currentItem={currentItem}
+              onRemove={removeFile}
+              onClearAll={clearAll}
+              onProcessAll={() => processAll(settings)}
+              onRetry={(id) => processFiles([id], settings)}
+              onAddMore={handleAddMore}
+              allDone={allDone}
+              readyCount={readyCount}
             />
+          </HeroSection>
+
+          {allDone && processedFiles.length > 0 && (
+            <Suspense fallback={null}>
+              <ResultsSection files={processedFiles} onReset={clearAll} />
+            </Suspense>
           )}
-          <ImageQueue
-            files={files}
-            isProcessing={isProcessing}
-            progress={progress}
-            processingText={processingText}
-            currentItem={currentItem}
-            onRemove={removeFile}
-            onClearAll={clearAll}
-            onProcessAll={() => processAll(settings)}
-            onRetry={(id) => processFiles([id], settings)}
-            onAddMore={handleAddMore}
-            allDone={allDone}
-            readyCount={readyCount}
-          />
-        </HeroSection>
 
-        {allDone && processedFiles.length > 0 && (
           <Suspense fallback={null}>
-            <ResultsSection files={processedFiles} onReset={clearAll} />
+            <LazySection>
+              <HowItWorks />
+            </LazySection>
+            <LazySection>
+              <FeaturesGrid />
+            </LazySection>
+            <TrustBar />
+            <LazySection>
+              <FAQSection />
+            </LazySection>
+            <Footer />
           </Suspense>
-        )}
-
-        <Suspense fallback={null}>
-          <LazySection>
-            <HowItWorks />
-          </LazySection>
-          <LazySection>
-            <FeaturesGrid />
-          </LazySection>
-          <LazySection>
-            <FAQSection />
-          </LazySection>
-          <Footer />
-        </Suspense>
+        </ErrorBoundary>
       </main>
 
       <PageDropOverlay visible={isDragging} />
