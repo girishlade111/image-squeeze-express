@@ -52,7 +52,7 @@ const Footer = () => {
       />
 
       <div className="relative border-t border-border/20 bg-card/80 backdrop-blur-xl">
-        <div className="container mx-auto px-4 pb-6 pt-10">
+        <div className="container mx-auto px-4 pb-8 pb-safe pt-10 sm:pb-10 sm:pt-14">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-12">
             {/* Brand block */}
             <div className="lg:col-span-4">
