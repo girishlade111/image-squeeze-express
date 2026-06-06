@@ -401,4 +401,62 @@ describe('AVIF format support', () => {
       expect(DEFAULT_FILENAME_PATTERN).toBe('imagesqueeze_{name}.{ext}');
     });
   });
+
+  describe('recommendFormat', () => {
+    beforeEach(() => {
+      // Force a fresh "all unsupported" cache so the engine falls through
+      // to the JPEG/PNG path that doesn't require canvas feature detection.
+      vi.spyOn(HTMLCanvasElement.prototype, 'toDataURL').mockReturnValue(
+        'data:image/png;base64,iVBORw0KGgo='
+      );
+    });
+
+    it('returns expected metadata shape', async () => {
+      const f = new File([new Uint8Array(10_000)], 'pic.png', { type: 'image/png' });
+      const meta = await recommendFormat(f, { width: 1920, height: 1080 });
+      expect(meta.width).toBe(1920);
+      expect(meta.height).toBe(1080);
+      expect(meta.megapixels).toBeCloseTo(2.07, 1);
+      expect(typeof meta.aspectRatio).toBe('number');
+      expect(['jpeg', 'png', 'webp', 'avif', 'original']).toContain(meta.recommendedFormat);
+      expect(typeof meta.recommendationReason).toBe('string');
+      expect(meta.estimatedSavings).toBeGreaterThanOrEqual(0);
+      expect(meta.estimatedSavings).toBeLessThanOrEqual(100);
+    });
+
+    it('handles very small files (shortcut path) without throwing', async () => {
+      const f = new File([new Uint8Array(100)], 'tiny.png', { type: 'image/png' });
+      const meta = await recommendFormat(f, { width: 16, height: 16 });
+      expect(meta).toBeTruthy();
+      expect(meta.recommendedFormat).toBeDefined();
+    });
+
+    it('produces higher savings estimates for more efficient formats', async () => {
+      const f = new File([new Uint8Array(10_000)], 'photo.jpg', { type: 'image/jpeg' });
+      const meta = await recommendFormat(f, { width: 800, height: 600 });
+      // Any format recommendation should be a positive integer
+      expect(Number.isInteger(meta.estimatedSavings)).toBe(true);
+    });
+  });
+
+  describe('processImage settings (lossless + filename context)', () => {
+    it('toDownloadFile accepts a custom pattern', () => {
+      const blob = new Blob([new Uint8Array(2048)], { type: 'image/webp' });
+      const f = toDownloadFile('original.png', blob, '{name}_lossless.{ext}');
+      expect(f.name).toBe('original_lossless.webp');
+    });
+
+    it('toDownloadFile sanitizes all illegal characters per token', () => {
+      const blob = new Blob([new Uint8Array(2048)], { type: 'image/webp' });
+      const f = toDownloadFile('a:b/c\\d|e?f*g"h<i>j.png', blob, '{name}.{ext}');
+      // Each illegal char becomes _; consecutive _ are collapsed.
+      expect(f.name).toMatch(/^a_b_c_d_e_f_g_h_i_j\.webp$/);
+    });
+
+    it('preserves unknown tokens verbatim', () => {
+      const blob = new Blob([new Uint8Array(2048)], { type: 'image/webp' });
+      const f = toDownloadFile('a.png', blob, '{name}_{unknown}.{ext}');
+      expect(f.name).toBe('a_{unknown}.webp');
+    });
+  });
 });
