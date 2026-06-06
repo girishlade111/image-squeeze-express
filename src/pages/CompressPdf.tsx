@@ -16,7 +16,20 @@ import { useClipboardPaste } from '@/hooks/useClipboardPaste';
 import { usePageDropZone } from '@/hooks/usePageDropZone';
 import { saveAs } from 'file-saver';
 import { motion } from 'framer-motion';
-import { Sparkles, Zap, Shield } from 'lucide-react';
+import {
+  ShieldCheck,
+  Lightning,
+  Gift,
+  Stack,
+  UploadSimple,
+  Gear,
+  Shield,
+  Lock,
+  Rocket,
+  StackSimple,
+  Target,
+  MagnifyingGlass,
+} from '@phosphor-icons/react';
 import { toast } from 'sonner';
 import type {
   PdfProcessSettings,
