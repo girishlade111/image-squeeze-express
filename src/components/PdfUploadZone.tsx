@@ -139,8 +139,16 @@ const PdfUploadZone = ({ onFilesSelected, pdfCount, maxFiles = 5 }: PdfUploadZon
         {!full && (
           <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1">
             <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-              <Shield className="h-2.5 w-2.5" />
+              <ShieldCheck size={12} weight="duotone" />
               100% Private
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+              <Lightning size={12} weight="duotone" />
+              Instant
+            </span>
+            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+              <Sparkle size={12} weight="duotone" />
+              Up to 90% smaller
             </span>
             <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
               <Zap className="h-2.5 w-2.5" />
