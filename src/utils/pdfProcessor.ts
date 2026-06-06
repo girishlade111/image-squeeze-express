@@ -270,22 +270,47 @@ export async function compressPdf(
   const originalSize = file.size;
   const start = performance.now();
 
+  // dpi takes precedence over scale: 1 DPI unit = 1/72 inch in pdfjs space.
+  let effectiveScale = settings.scale;
+  if (settings.dpi && settings.dpi > 0) {
+    effectiveScale = settings.dpi / 72;
+  }
+  let effectiveQuality = Math.max(0.1, Math.min(1, settings.quality));
+
   const pdf = await loadPdfDocument(file);
   const totalPages = pdf.numPages;
 
-  const outDoc = await PDFDocument.create();
-  outDoc.setTitle('Compressed with ImageSqueeze');
-  outDoc.setProducer('ImageSqueeze PDF Compressor');
-  outDoc.setCreator('ImageSqueeze');
+  // Apply page range (1-based, inclusive)
+  const range = settings.pageRange && totalPages > 0
+    ? {
+        from: Math.max(1, Math.min(totalPages, Math.floor(settings.pageRange.from))),
+        to: Math.max(1, Math.min(totalPages, Math.floor(settings.pageRange.to))),
+      }
+    : { from: 1, to: totalPages };
+  if (range.to < range.from) {
+    range.to = range.from;
+  }
+  const pagesToProcess = range.to - range.from + 1;
 
-  for (let i = 1; i <= totalPages; i++) {
-    const page = await pdf.getPage(i);
+  const outDoc = await PDFDocument.create();
+  if (!settings.stripMetadata) {
+    outDoc.setTitle('Compressed with ImageSqueeze');
+    outDoc.setProducer('ImageSqueeze PDF Compressor');
+    outDoc.setCreator('ImageSqueeze');
+  }
+
+  let lastBlob: Blob | null = null;
+
+  for (let idx = 0; idx < pagesToProcess; idx++) {
+    const pageNum = range.from + idx;
+    const page = await pdf.getPage(pageNum);
 
     const { bytes, width, height } = await renderPageToJpeg(
       page,
-      settings.quality,
-      settings.scale,
-      settings.maxWidth
+      effectiveQuality,
+      effectiveScale,
+      settings.maxWidth,
+      { grayscale: settings.grayscale }
     );
 
     const jpeg = await outDoc.embedJpg(bytes);
@@ -297,21 +322,76 @@ export async function compressPdf(
       height,
     });
 
-    // Free the source page eagerly so memory usage stays bounded on large PDFs
     page.cleanup();
 
-    onProgress?.(i / totalPages, i, totalPages);
+    onProgress?.((idx + 1) / pagesToProcess, pageNum, totalPages);
 
-    // Yield to the event loop so the UI stays responsive on large docs
-    if (i % 3 === 0) await new Promise((r) => setTimeout(r, 0));
+    if ((idx + 1) % 3 === 0) await new Promise((r) => setTimeout(r, 0));
   }
 
   await pdf.cleanup();
 
-  const outBytes = await outDoc.save({ useObjectStreams: true });
-  // pdf-lib returns a Node Buffer / Uint8Array — normalise to Uint8Array.
-  const u8 = outBytes instanceof Uint8Array ? outBytes : new Uint8Array(outBytes);
-  const blob = new Blob([u8], { type: 'application/pdf' });
+  const buildBlob = async (): Promise<Blob> => {
+    const outBytes = await outDoc.save({ useObjectStreams: true });
+    const u8 = outBytes instanceof Uint8Array ? outBytes : new Uint8Array(outBytes);
+    return new Blob([u8], { type: 'application/pdf' });
+  };
+
+  let blob = await buildBlob();
+  lastBlob = blob;
+
+  // Iteratively reduce quality + scale when a target size is set
+  if (settings.targetSizeKB && settings.targetSizeKB > 0) {
+    const limit = settings.targetSizeKB * 1024;
+    let qualityIter = effectiveQuality;
+    let scaleIter = effectiveScale;
+
+    for (let i = 0; i < TARGET_SIZE_ITERATIONS; i++) {
+      if (blob.size <= limit) break;
+      if (qualityIter <= MIN_TARGET_QUALITY && scaleIter <= MIN_TARGET_SCALE) break;
+
+      if (qualityIter > MIN_TARGET_QUALITY) {
+        qualityIter = Math.max(MIN_TARGET_QUALITY, qualityIter - 0.1);
+      } else {
+        scaleIter = Math.max(MIN_TARGET_SCALE, scaleIter - 0.15);
+      }
+
+      // Rebuild a fresh output document at the new settings
+      const retryDoc = await PDFDocument.create();
+      if (!settings.stripMetadata) {
+        retryDoc.setTitle('Compressed with ImageSqueeze');
+        retryDoc.setProducer('ImageSqueeze PDF Compressor');
+      }
+      const retryPdf = await loadPdfDocument(file);
+      for (let idx = 0; idx < pagesToProcess; idx++) {
+        const pageNum = range.from + idx;
+        const page = await retryPdf.getPage(pageNum);
+        const { bytes, width, height } = await renderPageToJpeg(
+          page,
+          qualityIter,
+          scaleIter,
+          settings.maxWidth,
+          { grayscale: settings.grayscale }
+        );
+        const jpeg = await retryDoc.embedJpg(bytes);
+        const newPage = retryDoc.addPage([width, height]);
+        newPage.drawImage(jpeg, { x: 0, y: 0, width, height });
+        page.cleanup();
+        if ((idx + 1) % 5 === 0) await new Promise((r) => setTimeout(r, 0));
+      }
+      await retryPdf.cleanup();
+      blob = await (async () => {
+        const outBytes = await retryDoc.save({ useObjectStreams: true });
+        const u8 = outBytes instanceof Uint8Array ? outBytes : new Uint8Array(outBytes);
+        return new Blob([u8], { type: 'application/pdf' });
+      })();
+      lastBlob = blob;
+      effectiveQuality = qualityIter;
+      effectiveScale = scaleIter;
+    }
+  }
+
+  void lastBlob;
 
   const reduction = Math.max(
     0,
@@ -321,12 +401,163 @@ export async function compressPdf(
   return {
     blob,
     pageCount: totalPages,
+    pageRange: range,
     sizeBytes: blob.size,
     reduction,
-    quality: settings.quality,
-    scale: settings.scale,
+    quality: effectiveQuality,
+    scale: effectiveScale,
     durationMs: Math.round(performance.now() - start),
+    finalDpi: Math.round(effectiveScale * 72),
+    finalQuality: Math.round(effectiveQuality * 100),
+    pagesProcessed: pagesToProcess,
   };
+}
+
+/**
+ * Reads the first page of a PDF and returns a thumbnail as a data URL plus
+ * key metadata. The thumbnail is small (~240px on the long side) so it can
+ * be used in card previews without bloating the DOM.
+ */
+export async function getPdfMetadata(file: File | Blob): Promise<PdfMetadata> {
+  const pdf = await loadPdfDocument(file);
+  try {
+    const pageCount = pdf.numPages;
+    const firstPage = await pdf.getPage(1);
+    const baseViewport = firstPage.getViewport({ scale: 1 });
+    const pageWidth = baseViewport.width;
+    const pageHeight = baseViewport.height;
+
+    const thumbnail = await renderFirstPageThumbnail(firstPage, 240);
+
+    // Pull metadata from pdfjs (best-effort; not all PDFs populate it)
+    const meta = await pdf.getMetadata().catch(() => null);
+    const info = (meta?.info ?? {}) as Record<string, string | undefined>;
+
+    return {
+      pageCount,
+      pageWidth: Math.round(pageWidth),
+      pageHeight: Math.round(pageHeight),
+      pageRatio: pageWidth / pageHeight,
+      estimatedPageSize: formatEstimatedPageSize(pageWidth, pageHeight),
+      isImageHeavy: false,
+      isTextHeavy: false,
+      recommendedPreset: 'medium',
+      recommendedQuality: 0.6,
+      estimatedSavings: 50,
+      recommendationReason: 'Re-rendering as JPEG usually saves 40-70% on most PDFs.',
+      firstPageThumbnail: thumbnail,
+      title: info.Title ?? null,
+      author: info.Author ?? null,
+      creator: info.Creator ?? null,
+      producer: info.Producer ?? null,
+      fileVersion: typeof pdf.pdfFormatVersion === 'number' ? String(pdf.pdfFormatVersion) : null,
+    };
+  } finally {
+    await pdf.cleanup();
+  }
+}
+
+/**
+ * Heuristic recommendation engine for PDFs. Classifies the source as
+ * "image-heavy" or "text-heavy" by analyzing the first few pages' rendered
+ * thumbnails. Text-heavy pages (lots of edges, low color count) compress
+ * better at higher quality; image-heavy pages tolerate more aggressive
+ * JPEG encoding.
+ */
+export async function recommendPdf(file: File | Blob): Promise<PdfMetadata> {
+  const meta = await getPdfMetadata(file);
+  const pdf = await loadPdfDocument(file);
+  try {
+    const probe = await pdf.getPage(1);
+    const viewport = probe.getViewport({ scale: 0.25 });
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.floor(viewport.width));
+    canvas.height = Math.max(1, Math.floor(viewport.height));
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return meta;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    await probe.render({ canvasContext: ctx, viewport, canvas }).promise;
+
+    let data: Uint8ClampedArray;
+    try {
+      data = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+    } catch {
+      return meta;
+    }
+
+    let softEdges = 0;
+    let hardEdges = 0;
+    const colorSet = new Set<number>();
+    for (let i = 0; i < data.length; i += 4) {
+      const r = data[i];
+      const g = data[i + 1];
+      const b = data[i + 2];
+      const key = (r >> 4) * 1024 + (g >> 4) * 32 + (b >> 4);
+      colorSet.add(key);
+      if (i > 0) {
+        const dr = Math.abs(r - data[i - 4]);
+        const dg = Math.abs(g - data[i - 3]);
+        const db = Math.abs(b - data[i - 2]);
+        const sum = dr + dg + db;
+        if (sum > 30 && sum < 200) softEdges++;
+        else if (sum >= 200) hardEdges++;
+      }
+    }
+    const total = data.length / 4;
+    const softRatio = softEdges / total;
+    const hardRatio = hardEdges / total;
+    const colors = colorSet.size;
+
+    const isTextHeavy = hardRatio > 0.15 || (colors < 200 && hardRatio > 0.08);
+    const isImageHeavy = softRatio > 0.3 && colors > 1500;
+
+    let recommendedPreset: PdfQualityPreset;
+    let recommendedQuality: number;
+    let estimatedSavings: number;
+    let reason: string;
+
+    if (isTextHeavy) {
+      recommendedPreset = 'high';
+      recommendedQuality = 0.82;
+      estimatedSavings = 35;
+      reason = 'Mostly text — keep high quality so letters stay crisp';
+    } else if (isImageHeavy) {
+      recommendedPreset = 'low';
+      recommendedQuality = 0.4;
+      estimatedSavings = 70;
+      reason = 'Image-heavy — aggressive compression saves the most';
+    } else {
+      recommendedPreset = 'medium';
+      recommendedQuality = 0.6;
+      estimatedSavings = 55;
+      reason = 'Mixed content — balanced settings work best';
+    }
+
+    return {
+      ...meta,
+      isImageHeavy,
+      isTextHeavy,
+      recommendedPreset,
+      recommendedQuality,
+      estimatedSavings,
+      recommendationReason: reason,
+    };
+  } finally {
+    await pdf.cleanup();
+  }
+}
+
+function formatEstimatedPageSize(widthPt: number, heightPt: number): string {
+  const a4 = [595, 842];
+  const letter = [612, 792];
+  const w = Math.round(widthPt);
+  const h = Math.round(heightPt);
+  if (Math.abs(w - a4[0]) < 5 && Math.abs(h - a4[1]) < 5) return 'A4';
+  if (Math.abs(w - a4[1]) < 5 && Math.abs(h - a4[0]) < 5) return 'A4 (landscape)';
+  if (Math.abs(w - letter[0]) < 5 && Math.abs(h - letter[1]) < 5) return 'Letter';
+  if (Math.abs(w - letter[1]) < 5 && Math.abs(h - letter[0]) < 5) return 'Letter (landscape)';
+  return `${w}×${h} pt`;
 }
 
 export function toDownloadPdfFile(originalName: string, blob: Blob): File {
