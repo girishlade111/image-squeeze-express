@@ -15,6 +15,7 @@ import { useImageUpload, type UploadedFile } from '@/hooks/useImageUpload';
 import { useSettings } from '@/hooks/useSettings';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
 import { usePageDropZone } from '@/hooks/usePageDropZone';
+import { Lightning } from '@phosphor-icons/react';
 import { toast } from 'sonner';
 
 const ResultsSection = lazy(() => import('@/components/ResultsSection'));
@@ -183,7 +184,7 @@ const Index = () => {
         loading={isProcessing}
         loadingText="Compressing…"
         ctaLabel={`Compress ${readyCount} image${readyCount !== 1 ? 's' : ''}`}
-        ctaEmoji="⚡"
+        ctaIcon={Lightning}
         onCta={() => processAll(settings)}
       />
     </div>

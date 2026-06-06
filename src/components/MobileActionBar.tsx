@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Loader2 } from 'lucide-react';
+import type { Icon } from '@phosphor-icons/react';
 
 interface MobileActionBarProps {
   visible: boolean;
   loading?: boolean;
   loadingText?: string;
   ctaLabel: string;
-  ctaEmoji?: string;
+  ctaIcon?: Icon;
   onCta: () => void;
   disabled?: boolean;
 }
@@ -23,7 +24,7 @@ const MobileActionBar = ({
   loading = false,
   loadingText,
   ctaLabel,
-  ctaEmoji = '⚡',
+  ctaIcon: CtaIcon,
   onCta,
   disabled = false,
 }: MobileActionBarProps) => {
@@ -66,7 +67,7 @@ const MobileActionBar = ({
                 </>
               ) : (
                 <>
-                  <span aria-hidden>{ctaEmoji}</span>
+                  {CtaIcon && <CtaIcon size={18} weight="fill" aria-hidden />}
                   {ctaLabel}
                 </>
               )}
