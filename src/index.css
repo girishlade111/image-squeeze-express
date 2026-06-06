@@ -4,136 +4,150 @@
 
 @layer base {
   :root {
+    /* === Golden Hour palette: warm cream surfaces, amber+teal brand === */
+
     /* === Surfaces === */
-    --background: 210 20% 98%;
-    --foreground: 222 25% 11%;
+    --background: 38 32% 97%;
+    --foreground: 25 32% 12%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222 25% 11%;
+    --card-foreground: 25 32% 12%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222 25% 11%;
+    --popover-foreground: 25 32% 12%;
 
-    /* === Brand: Indigo === */
-    --primary: 229 80% 45%;
-    --primary-foreground: 0 0% 100%;
+    /* === Brand: Amber (rich, warm) === */
+    --primary: 22 90% 50%;
+    --primary-foreground: 38 50% 98%;
 
-    /* === Brand: Teal (accent) === */
-    --accent: 170 75% 35%;
-    --accent-foreground: 0 0% 100%;
+    /* === Brand: Deep Teal (cool, balanced) === */
+    --accent: 188 78% 36%;
+    --accent-foreground: 38 50% 98%;
 
-    /* === Neutrals === */
-    --secondary: 215 16% 95%;
-    --secondary-foreground: 222 25% 15%;
+    /* === Neutrals (warm) === */
+    --secondary: 35 28% 92%;
+    --secondary-foreground: 25 32% 18%;
 
-    --muted: 215 16% 95%;
-    --muted-foreground: 215 10% 45%;
+    --muted: 35 22% 94%;
+    --muted-foreground: 25 16% 40%;
 
     /* === Semantic === */
-    --destructive: 0 75% 50%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 72% 46%;
+    --destructive-foreground: 38 50% 98%;
 
-    --success: 158 70% 38%;
-    --success-foreground: 0 0% 100%;
+    --success: 145 55% 36%;
+    --success-foreground: 38 50% 98%;
 
-    --warning: 38 95% 50%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 35 92% 50%;
+    --warning-foreground: 25 32% 12%;
 
-    --info: 210 90% 50%;
-    --info-foreground: 0 0% 100%;
+    --info: 200 75% 42%;
+    --info-foreground: 38 50% 98%;
 
     /* === Lines & focus === */
-    --border: 215 16% 88%;
-    --input: 215 16% 88%;
-    --ring: 229 80% 45%;
+    --border: 35 22% 86%;
+    --input: 35 22% 86%;
+    --ring: 22 90% 50%;
 
     --radius: 0.625rem;
 
-    /* === Custom === */
-    --indigo: 229 80% 45%;
-    --teal: 170 75% 35%;
-    --slate: 215 10% 50%;
+    /* === Brand pair (for the signature gradient) === */
+    --brand: 22 90% 50%;
+    --brand-2: 188 78% 36%;
+
+    /* === Legacy aliases (kept so older refs compile) === */
+    --indigo: 22 90% 50%;
+    --teal: 188 78% 36%;
+    --violet: 22 90% 50%;
+    --cyan: 188 78% 36%;
+    --slate: 25 12% 48%;
 
     /* === Elevation (used by `.shadow-elev-*` utilities) === */
-    --elev-1: 0 1px 2px 0 rgb(15 23 42 / 0.04), 0 1px 1px 0 rgb(15 23 42 / 0.03);
-    --elev-2: 0 2px 4px -1px rgb(15 23 42 / 0.06), 0 1px 2px 0 rgb(15 23 42 / 0.04);
-    --elev-3: 0 8px 16px -4px rgb(15 23 42 / 0.08), 0 4px 8px -2px rgb(15 23 42 / 0.05);
-    --elev-4: 0 16px 32px -8px rgb(15 23 42 / 0.12), 0 8px 16px -4px rgb(15 23 42 / 0.06);
-    --elev-glow: 0 0 0 1px hsl(var(--primary) / 0.15), 0 8px 24px -4px hsl(var(--primary) / 0.18);
+    --elev-1: 0 1px 2px 0 rgb(42 33 27 / 0.04), 0 1px 1px 0 rgb(42 33 27 / 0.03);
+    --elev-2: 0 2px 4px -1px rgb(42 33 27 / 0.06), 0 1px 2px 0 rgb(42 33 27 / 0.04);
+    --elev-3: 0 8px 16px -4px rgb(42 33 27 / 0.08), 0 4px 8px -2px rgb(42 33 27 / 0.05);
+    --elev-4: 0 16px 32px -8px rgb(42 33 27 / 0.12), 0 8px 16px -4px rgb(42 33 27 / 0.06);
+    --elev-glow: 0 0 0 1px hsl(var(--brand) / 0.18), 0 8px 24px -4px hsl(var(--brand) / 0.22);
 
     /* === Sidebar === */
-    --sidebar-background: 0 0% 98%;
-    --sidebar-foreground: 222 25% 15%;
-    --sidebar-primary: 229 80% 45%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 215 16% 95%;
-    --sidebar-accent-foreground: 222 25% 15%;
-    --sidebar-border: 215 16% 88%;
-    --sidebar-ring: 229 80% 45%;
+    --sidebar-background: 38 28% 96%;
+    --sidebar-foreground: 25 32% 14%;
+    --sidebar-primary: 22 90% 50%;
+    --sidebar-primary-foreground: 38 50% 98%;
+    --sidebar-accent: 35 28% 92%;
+    --sidebar-accent-foreground: 25 32% 18%;
+    --sidebar-border: 35 22% 86%;
+    --sidebar-ring: 22 90% 50%;
   }
 
   .dark {
-    /* === Surfaces === */
-    --background: 222 30% 6%;
-    --foreground: 210 15% 96%;
+    /* === Surfaces (warm dark, not cold blue-black) === */
+    --background: 25 22% 7%;
+    --foreground: 38 28% 94%;
 
-    --card: 222 28% 9%;
-    --card-foreground: 210 15% 96%;
+    --card: 25 20% 10%;
+    --card-foreground: 38 28% 94%;
 
-    --popover: 222 28% 9%;
-    --popover-foreground: 210 15% 96%;
+    --popover: 25 20% 10%;
+    --popover-foreground: 38 28% 94%;
 
-    /* === Brand === */
-    --primary: 229 85% 65%;
-    --primary-foreground: 222 30% 6%;
+    /* === Brand: Amber (slightly brighter for dark) === */
+    --primary: 22 85% 60%;
+    --primary-foreground: 25 30% 8%;
 
-    --accent: 170 75% 50%;
-    --accent-foreground: 222 30% 6%;
+    /* === Brand: Teal (brighter for dark) === */
+    --accent: 188 68% 52%;
+    --accent-foreground: 25 30% 8%;
 
-    /* === Neutrals === */
-    --secondary: 222 22% 14%;
-    --secondary-foreground: 210 15% 96%;
+    /* === Neutrals (warm dark) === */
+    --secondary: 25 16% 15%;
+    --secondary-foreground: 38 28% 92%;
 
-    --muted: 222 22% 14%;
-    --muted-foreground: 215 12% 65%;
+    --muted: 25 14% 13%;
+    --muted-foreground: 35 16% 64%;
 
     /* === Semantic === */
-    --destructive: 0 75% 60%;
-    --destructive-foreground: 210 15% 96%;
+    --destructive: 0 72% 58%;
+    --destructive-foreground: 38 28% 94%;
 
-    --success: 158 70% 50%;
-    --success-foreground: 222 30% 6%;
+    --success: 145 50% 50%;
+    --success-foreground: 25 30% 8%;
 
-    --warning: 38 95% 60%;
-    --warning-foreground: 222 30% 6%;
+    --warning: 35 92% 60%;
+    --warning-foreground: 25 30% 8%;
 
-    --info: 210 95% 65%;
-    --info-foreground: 222 30% 6%;
+    --info: 200 75% 60%;
+    --info-foreground: 25 30% 8%;
 
     /* === Lines & focus === */
-    --border: 222 20% 18%;
-    --input: 222 20% 18%;
-    --ring: 229 85% 65%;
+    --border: 25 16% 18%;
+    --input: 25 16% 18%;
+    --ring: 22 85% 60%;
 
-    --indigo: 229 85% 65%;
-    --teal: 170 75% 50%;
-    --slate: 215 12% 65%;
+    --brand: 22 85% 60%;
+    --brand-2: 188 68% 52%;
+
+    --indigo: 22 85% 60%;
+    --teal: 188 68% 52%;
+    --violet: 22 85% 60%;
+    --cyan: 188 68% 52%;
+    --slate: 35 12% 60%;
 
     /* === Elevation === */
-    --elev-1: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-    --elev-2: 0 2px 4px -1px rgb(0 0 0 / 0.4), 0 1px 2px 0 rgb(0 0 0 / 0.3);
-    --elev-3: 0 8px 16px -4px rgb(0 0 0 / 0.5), 0 4px 8px -2px rgb(0 0 0 / 0.35);
-    --elev-4: 0 16px 32px -8px rgb(0 0 0 / 0.6), 0 8px 16px -4px rgb(0 0 0 / 0.4);
-    --elev-glow: 0 0 0 1px hsl(var(--primary) / 0.3), 0 8px 32px -4px hsl(var(--primary) / 0.4);
+    --elev-1: 0 1px 2px 0 rgb(0 0 0 / 0.35);
+    --elev-2: 0 2px 4px -1px rgb(0 0 0 / 0.45), 0 1px 2px 0 rgb(0 0 0 / 0.35);
+    --elev-3: 0 8px 16px -4px rgb(0 0 0 / 0.55), 0 4px 8px -2px rgb(0 0 0 / 0.4);
+    --elev-4: 0 16px 32px -8px rgb(0 0 0 / 0.65), 0 8px 16px -4px rgb(0 0 0 / 0.45);
+    --elev-glow: 0 0 0 1px hsl(var(--brand) / 0.32), 0 8px 32px -4px hsl(var(--brand) / 0.45);
 
-    --sidebar-background: 222 28% 8%;
-    --sidebar-foreground: 210 15% 96%;
-    --sidebar-primary: 229 85% 65%;
-    --sidebar-primary-foreground: 222 30% 6%;
-    --sidebar-accent: 222 22% 14%;
-    --sidebar-accent-foreground: 210 15% 96%;
-    --sidebar-border: 222 20% 18%;
-    --sidebar-ring: 229 85% 65%;
+    --sidebar-background: 25 20% 9%;
+    --sidebar-foreground: 38 28% 92%;
+    --sidebar-primary: 22 85% 60%;
+    --sidebar-primary-foreground: 25 30% 8%;
+    --sidebar-accent: 25 16% 15%;
+    --sidebar-accent-foreground: 38 28% 92%;
+    --sidebar-border: 25 16% 18%;
+    --sidebar-ring: 22 85% 60%;
   }
 }
 
