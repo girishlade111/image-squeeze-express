@@ -1,5 +1,10 @@
 import { Link } from 'react-router-dom';
-import { Instagram, Linkedin, Github, CodepenIcon, Mail, Globe, Zap } from 'lucide-react';
+import { Instagram, Linkedin, Github, Mail, Globe } from 'lucide-react';
+import {
+  Lightning,
+  CodepenLogo,
+  Heart,
+} from '@phosphor-icons/react';
 
 const socials = [
   { icon: Instagram, href: 'https://www.instagram.com/girish_lade_/', label: 'Instagram' },
