@@ -171,13 +171,17 @@ async function renderPageToJpeg(
   page: import('pdfjs-dist').PDFPageProxy,
   quality: number,
   scale: number,
-  maxWidth: number | null
+  maxWidth: number | null,
+  options?: { grayscale?: boolean; maxDim?: number }
 ): Promise<RenderedPage> {
   const baseViewport = page.getViewport({ scale: 1 });
 
   let effectiveScale = scale;
   if (maxWidth && maxWidth > 0 && baseViewport.width > maxWidth) {
     effectiveScale = Math.max(0.1, maxWidth / baseViewport.width);
+  }
+  if (options?.maxDim && effectiveScale * baseViewport.width > options.maxDim) {
+    effectiveScale = Math.max(0.1, options.maxDim / baseViewport.width);
   }
 
   const viewport = page.getViewport({ scale: effectiveScale });
@@ -188,12 +192,14 @@ async function renderPageToJpeg(
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('Canvas 2D context unavailable');
 
-  // White background so pages with transparent regions don't end up black
-  // in the JPEG output.
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   await page.render({ canvasContext: ctx, viewport, canvas }).promise;
+
+  if (options?.grayscale) {
+    applyGrayscale(ctx, canvas.width, canvas.height);
+  }
 
   const blob = await new Promise<Blob>((resolve, reject) => {
     canvas.toBlob(
@@ -205,6 +211,42 @@ async function renderPageToJpeg(
 
   const bytes = new Uint8Array(await blob.arrayBuffer());
   return { bytes, width: canvas.width, height: canvas.height };
+}
+
+function applyGrayscale(
+  ctx: CanvasRenderingContext2D,
+  width: number,
+  height: number
+): void {
+  const imgData = ctx.getImageData(0, 0, width, height);
+  const data = imgData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const gray = 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2];
+    data[i] = gray;
+    data[i + 1] = gray;
+    data[i + 2] = gray;
+  }
+  ctx.putImageData(imgData, 0, 0);
+}
+
+function renderFirstPageThumbnail(
+  page: import('pdfjs-dist').PDFPageProxy,
+  maxDim = 240
+): string | null {
+  if (typeof document === 'undefined') return null;
+  const baseViewport = page.getViewport({ scale: 1 });
+  const scale = Math.min(1, maxDim / Math.max(baseViewport.width, baseViewport.height));
+  const viewport = page.getViewport({ scale });
+  const canvas = document.createElement('canvas');
+  canvas.width = Math.max(1, Math.floor(viewport.width));
+  canvas.height = Math.max(1, Math.floor(viewport.height));
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return null;
+  ctx.fillStyle = '#ffffff';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  return page
+    .render({ canvasContext: ctx, viewport, canvas }).promise.then(() => canvas.toDataURL('image/jpeg', 0.6))
+    .catch(() => null) as unknown as string | null;
 }
 
 /**
