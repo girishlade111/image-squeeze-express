@@ -412,7 +412,8 @@ export function calculateOptimalQuality(
 export async function processImage(
   file: File,
   settings: ProcessSettings,
-  originalSize: number
+  originalSize: number,
+  indexInBatch?: number
 ): Promise<ProcessResult> {
   const outputMime = toMime(settings.outputFormat, file.type);
   const origDims = await getImageDimensions(file);
@@ -434,13 +435,20 @@ export async function processImage(
   const needsResize = targetW !== origDims.width || targetH !== origDims.height;
   const needsFormatChange = outputMime !== file.type;
 
-  const quality = settings.autoOptimize
+  // Lossless mode only applies to formats that support lossless encoding.
+  // JPEG and AVIF are inherently lossy; PNG is always lossless.
+  const losslessActive =
+    settings.lossless && (outputMime === 'image/png' || outputMime === 'image/webp');
+
+  const quality = losslessActive
+    ? 100
+    : settings.autoOptimize
     ? calculateOptimalQuality(originalSize, settings.targetSizeKB, settings.outputFormat, hasTransforms)
     : settings.quality;
 
   let result: Blob;
 
-  if (hasTransforms || needsResize || needsFormatChange) {
+  if (hasTransforms || needsResize || needsFormatChange || losslessActive) {
     result = await canvasProcess(
       file,
       targetW,
@@ -455,8 +463,7 @@ export async function processImage(
       }
     );
 
-    // Iteratively reduce quality if a target size is set
-    if (settings.targetSizeKB && settings.targetSizeKB > 0) {
+    if (settings.targetSizeKB && settings.targetSizeKB > 0 && !losslessActive) {
       const limit = settings.targetSizeKB * 1024;
       let iterQuality = quality;
       let iterResult = result;
@@ -489,7 +496,7 @@ export async function processImage(
       maxWidthOrHeight: Math.max(targetW, targetH),
       useWebWorker: true,
       fileType: outputMime,
-      initialQuality: quality / 100,
+      initialQuality: losslessActive ? 1 : quality / 100,
       alwaysKeepResolution: !needsResize,
     };
 
