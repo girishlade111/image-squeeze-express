@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Download, RefreshCw, Check, ImageIcon, FileArchive, Share2, Eye, X } from 'lucide-react';
+import { Confetti } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -117,12 +118,12 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
       >
         <div className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-primary/10 to-accent/10 px-5 py-2.5">
           <motion.span
-            className="text-2xl"
+            className="text-primary"
             initial={{ scale: 0, rotate: -180 }}
             animate={visible ? { scale: 1, rotate: 0 } : {}}
             transition={{ type: 'spring', stiffness: 200, damping: 12, delay: 0.2 }}
           >
-            🎉
+            <Confetti size={22} weight="duotone" />
           </motion.span>
           <h2 className="text-xl font-extrabold tracking-tight sm:text-2xl">
             Compression Complete!
