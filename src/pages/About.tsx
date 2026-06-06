@@ -83,6 +83,14 @@ function useCountUp(target: number, duration = 1200) {
   return value;
 }
 
+const formatCompact = (value: number, format: 'number' | 'decimal'): string => {
+  if (format === 'decimal') return value.toFixed(1);
+  if (value >= 1_000_000) return `${(value / 1_000_000).toFixed(1)}M`;
+  if (value >= 10_000) return `${Math.floor(value / 1_000)}K`;
+  if (value >= 1_000) return `${(value / 1_000).toFixed(1)}K`;
+  return Math.floor(value).toString();
+};
+
 const GRADIENT_TEXT = {
   background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
   WebkitBackgroundClip: 'text' as const,
@@ -246,20 +254,22 @@ const milestones = [
   },
 ];
 
-const stack = [
-  { name: 'React 18', desc: 'UI framework', icon: Code, group: 'Core' },
-  { name: 'TypeScript', desc: 'Type safety', icon: FileText, group: 'Core' },
-  { name: 'Vite', desc: 'Build & dev server', icon: Lightning, group: 'Core' },
-  { name: 'Tailwind CSS', desc: 'Utility-first styles', icon: PaintBrush, group: 'Core' },
-  { name: 'shadcn/ui', desc: 'Accessible primitives', icon: Cube, group: 'Core' },
-  { name: 'Framer Motion', desc: 'Animations', icon: Pulse, group: 'Core' },
+const stack: { name: string; desc: string; icon: typeof Code; group: string }[] = [
+  { name: 'React 18', desc: 'UI framework', icon: Code, group: 'Foundation' },
+  { name: 'TypeScript', desc: 'Type safety', icon: FileText, group: 'Foundation' },
+  { name: 'Vite', desc: 'Build & dev server', icon: Lightning, group: 'Foundation' },
+  { name: 'Tailwind CSS', desc: 'Utility-first styles', icon: PaintBrush, group: 'Interface' },
+  { name: 'shadcn/ui', desc: 'Accessible primitives', icon: Cube, group: 'Interface' },
+  { name: 'Framer Motion', desc: 'Animations', icon: Pulse, group: 'Interface' },
   { name: 'pdf-lib', desc: 'PDF rebuilder', icon: Bookmarks, group: 'Engines' },
   { name: 'pdfjs-dist', desc: 'PDF parser & rasterizer', icon: PenNib, group: 'Engines' },
-  { name: 'browser-image-compression', desc: 'Image encoder (Web Worker)', icon: Images, group: 'Engines' },
+  { name: 'browser-image-compression', desc: 'Image encoder', icon: Images, group: 'Engines' },
   { name: 'JSZip', desc: 'ZIP packing', icon: Stack, group: 'Engines' },
-  { name: 'Phosphor Icons', desc: '9,000+ duotone icons', icon: Sparkle, group: 'Design' },
-  { name: 'Vercel Edge', desc: 'Hosting & CDN', icon: Cloud, group: 'Infra' },
+  { name: 'Phosphor Icons', desc: '9,000+ duotone icons', icon: Sparkle, group: 'Delivery' },
+  { name: 'Vercel Edge', desc: 'Hosting & CDN', icon: Cloud, group: 'Delivery' },
 ];
+
+const STACK_LAYER_ORDER = ['Foundation', 'Interface', 'Engines', 'Delivery'];
 
 const pledge = [
   'We never see your files. Processing happens entirely in your browser using JavaScript.',
@@ -372,6 +382,20 @@ const About = () => {
     ],
     []
   );
+
+  const stackLayers = useMemo(() => {
+    const grouped = new Map<string, typeof stack>();
+    for (const tech of stack) {
+      const list = grouped.get(tech.group) ?? [];
+      list.push(tech);
+      grouped.set(tech.group, list);
+    }
+    return STACK_LAYER_ORDER.filter((g) => grouped.has(g)).map((label, i) => ({
+      label,
+      index: i + 1,
+      items: grouped.get(label)!,
+    }));
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">
@@ -539,33 +563,55 @@ const About = () => {
 
         {/* 02 — BY THE NUMBERS */}
         <section id="section-02" className="container mx-auto px-4 py-8 sm:px-6 sm:py-12">
-          <SectionHeader
-            number="02"
-            title="By the numbers"
-            subtitle="The kind of things that matter to a small team — quietly compounding, one user at a time."
-          />
+          <div className="text-center">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.4 }}
+              className="mb-2 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400 sm:mb-3"
+            >
+              <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500 sm:h-2 sm:w-2" />
+              </span>
+              Live Dashboard · Tracking since 2024
+            </motion.div>
+            <SectionHeader
+              number="02"
+              title="By the numbers"
+              subtitle="The kind of things that matter to a small team — quietly compounding, one user at a time."
+            />
+          </div>
 
           <div className="relative mt-10">
-            {/* Background pattern — subtle dot grid */}
-            <div
-              className="pointer-events-none absolute inset-0 -z-10 opacity-50"
-              aria-hidden
-              style={{
-                backgroundImage:
-                  'radial-gradient(circle, hsl(var(--primary) / 0.12) 1px, transparent 1px)',
-                backgroundSize: '24px 24px',
-                maskImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent)',
-                WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent)',
-              }}
-            />
+            {/* Background — soft gradient mesh */}
+            <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden>
+              <div
+                className="absolute -left-20 top-0 h-72 w-72 rounded-full"
+                style={{ background: 'radial-gradient(circle, hsl(var(--primary) / 0.12), transparent 70%)', filter: 'blur(40px)' }}
+              />
+              <div
+                className="absolute -right-20 bottom-0 h-72 w-72 rounded-full"
+                style={{ background: 'radial-gradient(circle, hsl(var(--accent) / 0.12), transparent 70%)', filter: 'blur(40px)' }}
+              />
+              {/* Subtle grid lines */}
+              <div
+                className="absolute inset-0 opacity-30"
+                style={{
+                  backgroundImage:
+                    'linear-gradient(hsl(var(--primary) / 0.06) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / 0.06) 1px, transparent 1px)',
+                  backgroundSize: '48px 48px',
+                  maskImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent)',
+                  WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent)',
+                }}
+              />
+            </div>
 
             {/* Floating sparkles */}
             <FloatingSparkles />
 
-            <div
-              ref={statsRef}
-              className="grid gap-3 sm:gap-4 lg:grid-cols-3"
-            >
+            <div ref={statsRef} className="grid gap-3 sm:gap-4 lg:grid-cols-3">
               {/* Featured stat — spans 2 cols on lg */}
               <motion.div
                 initial={{ opacity: 0, y: 24 }}
@@ -650,57 +696,211 @@ const About = () => {
             subtitle="A short history of ImageSqueeze — from a weekend script to a privacy-first toolkit serving thousands."
           />
 
-          <div className="relative mx-auto mt-12 max-w-3xl">
+          <div className="relative mx-auto mt-14 max-w-3xl">
+            {/* Background dot grid */}
             <div
-              className="pointer-events-none absolute left-3.5 top-2 bottom-2 w-px sm:left-1/2 sm:-translate-x-1/2"
+              className="pointer-events-none absolute inset-0 -z-10 opacity-50"
+              aria-hidden
+              style={{
+                backgroundImage:
+                  'radial-gradient(circle, hsl(var(--primary) / 0.1) 1px, transparent 1px)',
+                backgroundSize: '22px 22px',
+                maskImage:
+                  'radial-gradient(ellipse 70% 80% at 50% 50%, black, transparent)',
+                WebkitMaskImage:
+                  'radial-gradient(ellipse 70% 80% at 50% 50%, black, transparent)',
+              }}
+            />
+
+            {/* Spine glow (blurred backdrop) */}
+            <div
+              className="pointer-events-none absolute left-3.5 top-0 bottom-0 w-4 -translate-x-1/2 sm:left-1/2 sm:translate-x-0"
               style={{
                 background:
-                  'linear-gradient(to bottom, transparent, hsl(var(--primary) / 0.4), hsl(var(--accent) / 0.4), transparent)',
+                  'linear-gradient(to bottom, transparent 5%, hsl(var(--primary) / 0.3), hsl(var(--accent) / 0.3), transparent 95%)',
+                filter: 'blur(8px)',
               }}
               aria-hidden
             />
 
-            <ol className="space-y-8 sm:space-y-10">
-              {milestones.map((m, idx) => (
-                <motion.li
-                  key={m.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.3 }}
-                  transition={{ duration: 0.5, delay: idx * 0.05 }}
-                  className={cn(
-                    'relative flex gap-4 pl-10 sm:gap-8 sm:pl-0 sm:items-center',
-                    idx % 2 === 0 ? 'sm:flex-row' : 'sm:flex-row-reverse'
-                  )}
-                >
-                  <div
-                    className="absolute left-0 top-0 z-10 flex h-7 w-7 items-center justify-center rounded-full border-2 border-background sm:left-1/2 sm:-translate-x-1/2"
-                    style={{ background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))' }}
-                    aria-hidden
+            {/* Spine line */}
+            <div
+              className="pointer-events-none absolute left-3.5 top-0 bottom-0 w-px sm:left-1/2 sm:-translate-x-px"
+              style={{
+                background:
+                  'linear-gradient(to bottom, transparent, hsl(var(--primary) / 0.5) 10%, hsl(var(--accent) / 0.5) 90%, transparent)',
+              }}
+              aria-hidden
+            />
+
+            <ol className="space-y-10 sm:space-y-14">
+              {milestones.map((m, idx) => {
+                const isLatest = idx === milestones.length - 1;
+                const isLeft = idx % 2 === 0;
+                return (
+                  <motion.li
+                    key={m.title}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.25 }}
+                    transition={{ duration: 0.6, delay: idx * 0.08, ease: 'easeOut' }}
+                    className={cn(
+                      'relative pl-12 sm:pl-0',
+                      isLeft
+                        ? 'sm:flex sm:flex-row sm:items-center sm:gap-10'
+                        : 'sm:flex sm:flex-row-reverse sm:items-center sm:gap-10'
+                    )}
                   >
-                    <m.icon size={14} weight="fill" className="h-3.5 w-3.5 text-primary-foreground" />
-                  </div>
+                    {/* Latest milestone pulsing aura */}
+                    {isLatest && (
+                      <span
+                        className="absolute left-0 top-1 z-0 h-12 w-12 -translate-x-1/2 rounded-full sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2"
+                        style={{
+                          background:
+                            'radial-gradient(circle, hsl(var(--primary) / 0.5), transparent 65%)',
+                          filter: 'blur(6px)',
+                        }}
+                        aria-hidden
+                      />
+                    )}
 
-                  <div className={cn('flex-1', idx % 2 === 0 ? 'sm:pr-10 sm:text-right' : 'sm:pl-10')}>
-                    <GradientCard hover={true}>
+                    {/* Milestone node */}
+                    <div
+                      className="absolute left-0 top-1 z-10 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border-2 border-background sm:left-1/2 sm:top-1/2 sm:-translate-x-1/2 sm:-translate-y-1/2"
+                      style={{
+                        background:
+                          'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
+                        boxShadow:
+                          '0 0 20px hsl(var(--primary) / 0.4), 0 0 0 4px hsl(var(--background))',
+                      }}
+                      aria-hidden
+                    >
+                      <m.icon
+                        size={18}
+                        weight="duotone"
+                        className="h-4 w-4 text-primary-foreground"
+                      />
+                    </div>
+
+                    {/* Card */}
+                    <motion.div
+                      whileHover={{ y: -3 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+                      className={cn(
+                        'group relative overflow-hidden rounded-2xl border border-border/40 bg-card/70 p-5 backdrop-blur-sm transition-all duration-300 hover:border-primary/40 sm:p-6 sm:flex-1',
+                        isLeft ? 'sm:text-right' : 'sm:text-left'
+                      )}
+                      style={{
+                        boxShadow: '0 4px 24px -8px hsl(var(--primary) / 0.12)',
+                      }}
+                    >
+                      {/* Hover gradient overlay */}
                       <div
-                        className={cn(
-                          'flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-primary',
-                          idx % 2 === 0 ? 'sm:justify-end' : ''
-                        )}
-                      >
-                        <Calendar size={12} weight="duotone" />
-                        {m.year}
-                      </div>
-                      <h3 className="mt-1.5 text-base font-bold tracking-tight sm:text-lg">{m.title}</h3>
-                      <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{m.desc}</p>
-                    </GradientCard>
-                  </div>
+                        className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                        style={{
+                          background:
+                            'linear-gradient(135deg, hsl(var(--primary) / 0.06), transparent 50%, hsl(var(--accent) / 0.06))',
+                        }}
+                        aria-hidden
+                      />
 
-                  <div className="hidden flex-1 sm:block" />
-                </motion.li>
-              ))}
+                      {/* Side accent bar (faces the timeline) */}
+                      <span
+                        className={cn(
+                          'absolute top-0 h-full w-1 transition-all duration-300 group-hover:w-1.5',
+                          isLeft ? 'right-0' : 'left-0'
+                        )}
+                        style={{
+                          background:
+                            'linear-gradient(to bottom, hsl(var(--primary)), hsl(var(--accent)))',
+                        }}
+                        aria-hidden
+                      />
+
+                      <div className="relative">
+                        {/* Year pill + Now badge */}
+                        <div
+                          className={cn(
+                            'flex flex-wrap items-center gap-2',
+                            isLeft ? 'sm:justify-end' : 'sm:justify-start'
+                          )}
+                        >
+                          <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/[0.08] px-2.5 py-0.5 font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
+                            <Calendar size={11} weight="duotone" />
+                            {m.year}
+                          </span>
+                          {isLatest && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">
+                              <span className="relative flex h-1.5 w-1.5">
+                                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-70" />
+                                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                              </span>
+                              Now
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Title row with icon tile */}
+                        <div
+                          className={cn(
+                            'mt-3 flex items-start gap-3',
+                            isLeft ? 'sm:flex-row-reverse' : 'sm:flex-row'
+                          )}
+                        >
+                          <div
+                            className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl"
+                            style={{
+                              background:
+                                'linear-gradient(135deg, hsl(var(--primary) / 0.18), hsl(var(--accent) / 0.18))',
+                              boxShadow:
+                                'inset 0 0 0 1px hsl(var(--primary) / 0.18)',
+                            }}
+                          >
+                            <m.icon
+                              size={20}
+                              weight="duotone"
+                              className="h-5 w-5 text-primary"
+                            />
+                          </div>
+                          <h3 className="flex-1 text-base font-bold tracking-tight sm:text-lg">
+                            {m.title}
+                          </h3>
+                        </div>
+
+                        {/* Description */}
+                        <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+                          {m.desc}
+                        </p>
+                      </div>
+                    </motion.div>
+
+                    {/* Empty side (alternating layout balance) */}
+                    <div className="hidden sm:block sm:flex-1" aria-hidden />
+                  </motion.li>
+                );
+              })}
             </ol>
+
+            {/* Today indicator at end of timeline */}
+            <div className="relative mt-6 flex flex-col items-center sm:mt-10">
+              <div
+                className="relative flex h-12 w-12 items-center justify-center rounded-full border-2 border-background"
+                style={{
+                  background:
+                    'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
+                  boxShadow:
+                    '0 0 24px hsl(var(--primary) / 0.5), 0 0 0 4px hsl(var(--background))',
+                }}
+              >
+                <span className="relative flex h-3 w-3">
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-70" />
+                  <span className="relative inline-flex h-3 w-3 rounded-full bg-white" />
+                </span>
+              </div>
+              <span className="mt-2 font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+                Today
+              </span>
+            </div>
           </div>
         </section>
 
@@ -719,20 +919,71 @@ const About = () => {
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
             variants={fadeUpStagger}
-            className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4"
+            className="mx-auto mt-12 grid max-w-5xl grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-4"
           >
-            {stack.map((tech) => (
-              <motion.div key={tech.name} variants={fadeUp}>
-                <GradientCard className="h-full">
-                  <tech.icon size={24} weight="duotone" className="h-6 w-6 text-primary" />
-                  <h3 className="mt-2.5 text-sm font-bold tracking-tight">{tech.name}</h3>
-                  <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">{tech.desc}</p>
-                  <div className="mt-2.5 inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">
-                    {tech.group}
+            {stackLayers.map((layer) => (
+              <motion.div
+                key={layer.label}
+                variants={fadeUp}
+                className="rounded-2xl border border-border/40 bg-card/30 p-5 backdrop-blur-sm transition-colors duration-300 hover:border-primary/30 hover:bg-card/55 sm:p-6"
+              >
+                <div className="flex items-baseline justify-between">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="h-1.5 w-1.5 rounded-full"
+                      style={{ background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))' }}
+                      aria-hidden
+                    />
+                    <h3 className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-foreground/80">
+                      {layer.label}
+                    </h3>
                   </div>
-                </GradientCard>
+                  <span className="font-mono text-[10px] text-muted-foreground/60 tabular-nums">
+                    {String(layer.index).padStart(2, '0')}
+                  </span>
+                </div>
+
+                <div className="mt-4 divide-y divide-border/30">
+                  {layer.items.map((tech) => (
+                    <div
+                      key={tech.name}
+                      className="group/tech flex items-start gap-3 py-2.5 first:pt-0 last:pb-0"
+                    >
+                      <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10 transition-colors duration-200 group-hover/tech:bg-primary/15">
+                        <tech.icon size={15} weight="duotone" className="h-3.5 w-3.5 text-primary" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-[13px] font-semibold tracking-tight text-foreground/90">
+                          {tech.name}
+                        </div>
+                        <div className="mt-0.5 text-[11px] leading-snug text-muted-foreground">
+                          {tech.desc}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </motion.div>
             ))}
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.6 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mx-auto mt-10 flex max-w-2xl flex-wrap items-center justify-center gap-x-2.5 gap-y-1.5 text-center"
+          >
+            <span className="font-mono text-[11px] font-semibold text-foreground/70 tabular-nums">
+              {stack.length}
+            </span>
+            <span className="text-[11px] text-muted-foreground">dependencies</span>
+            <span className="text-muted-foreground/30" aria-hidden>·</span>
+            <span className="font-mono text-[11px] font-semibold text-foreground/70 tabular-nums">0</span>
+            <span className="text-[11px] text-muted-foreground">trackers</span>
+            <span className="text-muted-foreground/30" aria-hidden>·</span>
+            <span className="font-mono text-[11px] font-semibold text-foreground/70 tabular-nums">100%</span>
+            <span className="text-[11px] text-muted-foreground">open source</span>
           </motion.div>
         </section>
 
@@ -1011,30 +1262,32 @@ const StatCard = ({
   wide?: boolean;
 }) => {
   const animated = useCountUp(active ? stat.value : 0, 1400);
-  const formatted = stat.format === 'decimal' ? animated.toFixed(1) : Math.floor(animated).toLocaleString();
+  const formatted = formatCompact(animated, stat.format);
   const ringSize = 64;
 
   return (
     <GradientCard hover={true} className="h-full overflow-hidden p-0">
       <div className={`flex h-full flex-col gap-4 p-5 ${wide ? 'sm:flex-row sm:items-center sm:gap-5 sm:p-6' : ''}`}>
-        {/* Circular progress ring + icon */}
+        {/* Circular progress ring + icon with halo */}
         <div className="relative flex-shrink-0" style={{ width: ringSize, height: ringSize }}>
           <CircularProgress progress={stat.progress} size={ringSize} active={active} />
-          <div
-            className="absolute inset-0 m-auto flex h-10 w-10 items-center justify-center rounded-full"
-            style={{
-              background: 'linear-gradient(135deg, hsl(var(--primary) / 0.2), hsl(var(--accent) / 0.2))',
-            }}
-          >
-            <stat.icon size={22} weight="duotone" className="h-5 w-5 text-primary" />
-          </div>
+          <IconHalo>
+            <div
+              className="flex h-10 w-10 items-center justify-center rounded-full"
+              style={{
+                background: 'linear-gradient(135deg, hsl(var(--primary) / 0.25), hsl(var(--accent) / 0.25))',
+              }}
+            >
+              <stat.icon size={22} weight="duotone" className="h-5 w-5 text-primary" />
+            </div>
+          </IconHalo>
         </div>
 
         {/* Content */}
         <div className="min-w-0 flex-1">
           <div className="flex items-baseline gap-0.5">
             <span
-              className="text-2xl font-black tracking-tight tabular-nums sm:text-3xl"
+              className="text-3xl font-black tracking-tight tabular-nums sm:text-4xl"
               style={{
                 background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
                 WebkitBackgroundClip: 'text',
@@ -1054,7 +1307,7 @@ const StatCard = ({
               {stat.trend}
             </span>
             <div className="flex-1 opacity-90">
-              <Sparkline data={stat.sparkline} active={active} width={wide ? 120 : 72} height={20} />
+              <Sparkline data={stat.sparkline} active={active} width={wide ? 140 : 84} height={22} />
             </div>
           </div>
         </div>
@@ -1065,76 +1318,91 @@ const StatCard = ({
 
 const FeaturedStatCard = ({ stat, active }: { stat: (typeof stats)[number]; active: boolean }) => {
   const animated = useCountUp(active ? stat.value : 0, 1600);
-  const formatted = stat.format === 'decimal' ? animated.toFixed(1) : Math.floor(animated).toLocaleString();
+  const formatted = formatCompact(animated, stat.format);
   const ringSize = 140;
 
   return (
-    <GradientCard hover={true} className="relative h-full overflow-hidden p-0">
-      {/* Decorative orbs */}
-      <div
-        className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full"
-        style={{ background: 'radial-gradient(circle, hsl(var(--primary) / 0.2), transparent)', filter: 'blur(50px)' }}
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute -bottom-16 -left-16 h-56 w-56 rounded-full"
-        style={{ background: 'radial-gradient(circle, hsl(var(--accent) / 0.2), transparent)', filter: 'blur(50px)' }}
-        aria-hidden
-      />
+    <div className="relative h-full overflow-hidden rounded-2xl p-px">
+      {/* Animated gradient border */}
+      <div className="animated-gradient-border absolute inset-0 rounded-2xl" aria-hidden />
+      <div className="relative h-full overflow-hidden rounded-[15px] border border-border/40 bg-card/70 backdrop-blur-sm">
+        {/* Decorative orbs */}
+        <div
+          className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full"
+          style={{ background: 'radial-gradient(circle, hsl(var(--primary) / 0.18), transparent)', filter: 'blur(50px)' }}
+          aria-hidden
+        />
+        <div
+          className="pointer-events-none absolute -bottom-16 -left-16 h-56 w-56 rounded-full"
+          style={{ background: 'radial-gradient(circle, hsl(var(--accent) / 0.18), transparent)', filter: 'blur(50px)' }}
+          aria-hidden
+        />
 
-      <div className="relative flex h-full flex-col gap-5 p-5 sm:flex-row sm:items-center sm:gap-6 sm:p-6">
-        {/* Large circular ring + icon */}
-        <div className="relative flex-shrink-0 self-center sm:self-auto" style={{ width: ringSize, height: ringSize }}>
-          <CircularProgress progress={stat.progress} size={ringSize} active={active} strokeWidth={5} />
-          <div
-            className="absolute inset-0 m-auto flex h-20 w-20 items-center justify-center rounded-full"
-            style={{
-              background: 'linear-gradient(135deg, hsl(var(--primary) / 0.25), hsl(var(--accent) / 0.25))',
-            }}
-          >
-            <stat.icon size={40} weight="duotone" className="h-9 w-9 text-primary" />
-          </div>
+        {/* Live indicator */}
+        <div className="absolute right-4 top-4 z-10 flex items-center gap-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 sm:right-5 sm:top-5 sm:text-[10px]">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500" />
+          </span>
+          Live
         </div>
 
-        {/* Content */}
-        <div className="min-w-0 flex-1 text-center sm:text-left">
-          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
-            The headline number
-          </p>
-          <div className="mt-1.5 flex items-baseline justify-center gap-1 sm:justify-start">
-            <span
-              className="text-5xl font-black tracking-tight tabular-nums sm:text-6xl"
-              style={{
-                background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
-              {formatted}
-            </span>
-            <span className="text-2xl font-bold text-primary sm:text-3xl">{stat.suffix}</span>
+        <div className="relative flex h-full flex-col gap-5 p-5 sm:flex-row sm:items-center sm:gap-6 sm:p-6 lg:p-7">
+          {/* Large circular ring + icon with halo */}
+          <div className="relative flex-shrink-0 self-center sm:self-auto" style={{ width: ringSize, height: ringSize }}>
+            <CircularProgress progress={stat.progress} size={ringSize} active={active} strokeWidth={5} />
+            <IconHalo size="lg">
+              <div
+                className="flex h-20 w-20 items-center justify-center rounded-full"
+                style={{
+                  background: 'linear-gradient(135deg, hsl(var(--primary) / 0.3), hsl(var(--accent) / 0.3))',
+                }}
+              >
+                <stat.icon size={40} weight="duotone" className="h-9 w-9 text-primary" />
+              </div>
+            </IconHalo>
           </div>
-          <div className="mt-1 text-sm font-semibold sm:text-base">{stat.label}</div>
 
-          {stat.description && (
-            <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-muted-foreground sm:text-sm">
-              {stat.description}
+          {/* Content */}
+          <div className="min-w-0 flex-1 text-center sm:text-left">
+            <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
+              The headline number
             </p>
-          )}
+            <div className="mt-1 flex items-baseline justify-center gap-1 sm:justify-start">
+              <span
+                className="text-5xl font-black tracking-tight tabular-nums sm:text-6xl"
+                style={{
+                  background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                {formatted}
+              </span>
+              <span className="text-2xl font-bold text-primary sm:text-3xl">{stat.suffix}</span>
+            </div>
+            <div className="mt-1 text-sm font-semibold sm:text-base">{stat.label}</div>
 
-          {/* Trend + sparkline */}
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/12 px-2 py-0.5 text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
-              <TrendUp size={11} weight="bold" />
-              {stat.trend} vs last month
-            </span>
-            <div className="flex-shrink-0">
-              <Sparkline data={stat.sparkline} active={active} width={180} height={28} />
+            {stat.description && (
+              <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                {stat.description}
+              </p>
+            )}
+
+            {/* Trend + sparkline */}
+            <div className="mt-3 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/12 px-2 py-0.5 text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
+                <TrendUp size={11} weight="bold" />
+                {stat.trend} vs last month
+              </span>
+              <div className="flex-shrink-0">
+                <Sparkline data={stat.sparkline} active={active} width={180} height={28} />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </GradientCard>
+    </div>
   );
 };
 
@@ -1206,7 +1474,8 @@ const Sparkline = ({
   width?: number;
   height?: number;
 }) => {
-  const gradientId = useId();
+  const fillGradId = useId();
+  const strokeGradId = useId();
   const max = Math.max(...data);
   const min = Math.min(...data);
   const range = max - min || 1;
@@ -1224,22 +1493,41 @@ const Sparkline = ({
   return (
     <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="overflow-visible" aria-hidden>
       <defs>
-        <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
+        <linearGradient id={fillGradId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.35" />
           <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
         </linearGradient>
+        <linearGradient id={strokeGradId} x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="hsl(var(--primary))" />
+          <stop offset="100%" stopColor="hsl(var(--accent))" />
+        </linearGradient>
       </defs>
+
+      {/* Baseline grid */}
+      <line
+        x1={pad}
+        y1={height - pad}
+        x2={width - pad}
+        y2={height - pad}
+        stroke="hsl(var(--border) / 0.3)"
+        strokeWidth="0.5"
+        strokeDasharray="1.5 1.5"
+      />
+
+      {/* Fill area */}
       <motion.path
         d={fillPath}
-        fill={`url(#${gradientId})`}
+        fill={`url(#${fillGradId})`}
         initial={{ opacity: 0 }}
         animate={active ? { opacity: 1 } : { opacity: 0 }}
         transition={{ duration: 0.5, delay: 1 }}
       />
+
+      {/* Gradient stroke line */}
       <motion.path
         d={linePath}
         fill="none"
-        stroke="hsl(var(--primary))"
+        stroke={`url(#${strokeGradId})`}
         strokeWidth="1.75"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -1247,16 +1535,65 @@ const Sparkline = ({
         animate={active ? { pathLength: 1 } : { pathLength: 0 }}
         transition={{ duration: 1.2, delay: 0.4, ease: 'easeOut' }}
       />
+
+      {/* Data point dots */}
+      {points.map(([x, y], i) => (
+        <motion.circle
+          key={i}
+          cx={x}
+          cy={y}
+          r="1.25"
+          fill="hsl(var(--primary))"
+          initial={{ scale: 0, opacity: 0 }}
+          animate={active ? { scale: 1, opacity: 0.7 } : { scale: 0, opacity: 0 }}
+          transition={{ duration: 0.25, delay: 0.5 + i * 0.04 }}
+        />
+      ))}
+
+      {/* Endpoint dot with pulse */}
       <motion.circle
         cx={points[points.length - 1][0]}
         cy={points[points.length - 1][1]}
-        r="2.5"
-        fill="hsl(var(--primary))"
+        r="3"
+        fill="hsl(var(--accent))"
         initial={{ scale: 0, opacity: 0 }}
         animate={active ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
         transition={{ duration: 0.3, delay: 1.5 }}
       />
+      <motion.circle
+        cx={points[points.length - 1][0]}
+        cy={points[points.length - 1][1]}
+        r="3"
+        fill="hsl(var(--accent))"
+        initial={{ scale: 0.5, opacity: 0 }}
+        animate={
+          active
+            ? { scale: [0.5, 2.5, 2.5], opacity: [0, 0.5, 0] }
+            : { scale: 0.5, opacity: 0 }
+        }
+        transition={{ duration: 2, delay: 1.8, repeat: Infinity, ease: 'easeOut' }}
+      />
     </svg>
+  );
+};
+
+const IconHalo = ({ children, size = 'sm' }: { children: React.ReactNode; size?: 'sm' | 'lg' }) => {
+  const sizeClass = size === 'lg' ? 'h-20 w-20' : 'h-10 w-10';
+  return (
+    <div className="absolute inset-0 flex items-center justify-center">
+      {/* Outer pulsing halo */}
+      <motion.div
+        className={`absolute rounded-full ${sizeClass}`}
+        style={{
+          background: 'radial-gradient(circle, hsl(var(--primary) / 0.25), transparent 70%)',
+        }}
+        animate={{ scale: [1, 1.3, 1], opacity: [0.4, 0.7, 0.4] }}
+        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+        aria-hidden
+      />
+      {/* Inner content */}
+      <div className="relative">{children}</div>
+    </div>
   );
 };
 

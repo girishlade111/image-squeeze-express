@@ -247,6 +247,22 @@
   }
   .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
 
+  @keyframes gradient-pan {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  .animated-gradient-border {
+    background: linear-gradient(
+      135deg,
+      hsl(var(--primary) / 0.55),
+      hsl(var(--accent) / 0.55),
+      hsl(var(--primary) / 0.3),
+      hsl(var(--accent) / 0.55)
+    );
+    background-size: 300% 300%;
+    animation: gradient-pan 8s ease-in-out infinite;
+  }
+
   @keyframes shimmer {
     0% { background-position: -200% 0; }
     100% { background-position: 200% 0; }
