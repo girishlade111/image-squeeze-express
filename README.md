@@ -597,7 +597,7 @@ flowchart LR
 |--------|-------|
 | 🧠 **Memory Management** | Object URLs auto-revoked on unmount |
 | ⚡ **Lazy Loading** | Code-split by route & component (per-route chunks < 470 KB) |
-| 🧪 **Test Coverage** | 134 unit tests across 4 modules |
+| 🧪 **Test Coverage** | 157 unit tests across 5 modules |
 | 🚀 **Dev Server** | Port `8080` (HMR enabled) |
 
 ---
@@ -885,14 +885,14 @@ image-squeeze-express/
 
 ## 🧪 Testing
 
-The project ships with **134 unit tests** across 4 modules, all in pure-function form so they run in jsdom without any browser shim.
+The project ships with **157 unit tests** across 5 modules, all in pure-function form so they run in jsdom without any browser shim.
 
 ### 📋 Test Coverage
 
 | Module | Tests | What it covers |
 |--------|-------|----------------|
-| `imageProcessor.test.ts` | 41 | `formatFileSize`, `getCompressionRatio`, `estimateQualityForSize`, `computeAspectDimensions`, **`calcDimensions` (with center-crop logic)**, AVIF format support |
-| `pdfProcessor.test.ts` | 12 | `formatBytes`, `getReductionRatio`, `getQualityPresetSettings`, preset bounds |
+| `imageProcessor.test.ts` | 56 | `formatFileSize`, `getCompressionRatio`, `estimateQualityForSize`, `computeAspectDimensions`, **`calcDimensions` (with center-crop logic)**, AVIF format support, **smart-recommendation engine**, **filename-pattern token replacement** |
+| `pdfProcessor.test.ts` | 20 | `formatBytes`, `getReductionRatio`, `getQualityPresetSettings`, preset bounds, **filename pattern + token replacement**, **filename sanitization** |
 | `fileRenamer.test.ts` | 66 | `splitExtension`, all **13** rule types, rule ordering, dedup with collisions, `sanitizeFileName` |
 | `batchValidation.test.ts` | 14 | overflow, oversized skip, GIF/extension detection, total-cap warning, FIFO order, dedup-safety with identical metadata |
 
