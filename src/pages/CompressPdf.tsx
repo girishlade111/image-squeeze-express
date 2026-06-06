@@ -1,4 +1,4 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useRef, useState, useMemo } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ToolHero from '@/components/ToolHero';
@@ -6,15 +6,32 @@ import PdfUploadZone from '@/components/PdfUploadZone';
 import PdfQueue from '@/components/PdfQueue';
 import PdfSettingsPanel from '@/components/PdfSettingsPanel';
 import PdfResultsSection from '@/components/PdfResultsSection';
+import PdfInspector from '@/components/PdfInspector';
 import ScrollToTop from '@/components/ScrollToTop';
 import DocumentTitle from '@/components/DocumentTitle';
+import ErrorBoundary from '@/components/ErrorBoundary';
 import { usePdfUpload } from '@/hooks/usePdfUpload';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
 import { usePageDropZone } from '@/hooks/usePageDropZone';
+import { saveAs } from 'file-saver';
 import { motion } from 'framer-motion';
 import { Sparkles, Zap, Shield } from 'lucide-react';
-import type { PdfQualityPreset } from '@/utils/pdfProcessor';
+import { toast } from 'sonner';
+import type {
+  PdfProcessSettings,
+  PdfQualityPreset,
+} from '@/utils/pdfProcessor';
 import { PDF_QUALITY_PRESETS } from '@/utils/pdfProcessor';
+
+const DEFAULT_PDF_SETTINGS: PdfProcessSettings = {
+  ...PDF_QUALITY_PRESETS.medium,
+  targetSizeKB: null,
+  grayscale: false,
+  stripMetadata: false,
+  dpi: null,
+  filenamePattern: '{name}_compressed.pdf',
+  pageRange: null,
+};
 
 const CompressPdf = () => {
   const {
@@ -25,10 +42,12 @@ const CompressPdf = () => {
     processAll,
     processFiles,
     retryFile,
+    previewOne,
     isProcessing,
     progress,
     processingText,
     currentItem,
+    stats,
     hasFiles,
     allDone,
     processedFiles,
@@ -36,12 +55,13 @@ const CompressPdf = () => {
   } = usePdfUpload();
 
   const [preset, setPreset] = useState<PdfQualityPreset>('medium');
-  const [quality, setQuality] = useState<number>(PDF_QUALITY_PRESETS.medium.quality);
+  const [quality, setQuality] = useState<number>(DEFAULT_PDF_SETTINGS.quality);
+  const [settings, setSettings] = useState<PdfProcessSettings>(DEFAULT_PDF_SETTINGS);
+  const [inspectorId, setInspectorId] = useState<string | null>(null);
   const uploadRef = useRef<HTMLDivElement>(null);
 
   useClipboardPaste({
     onPaste: (pasted) => {
-      // Filter to PDFs only when pasting on this page
       const pdfs = pasted.filter(
         (f) => f.type === 'application/pdf' || f.name.toLowerCase().endsWith('.pdf')
       );
@@ -64,7 +84,67 @@ const CompressPdf = () => {
     input?.click();
   }, []);
 
-  const settings = { quality, scale: PDF_QUALITY_PRESETS.medium.scale, maxWidth: PDF_QUALITY_PRESETS.medium.maxWidth };
+  const buildSettings = useCallback((): PdfProcessSettings => {
+    const presetCfg = preset !== 'custom' ? PDF_QUALITY_PRESETS[preset] : null;
+    return {
+      ...presetCfg,
+      ...settings,
+      quality,
+    };
+  }, [preset, settings, quality]);
+
+  const handleProcessAll = useCallback(() => {
+    processAll(buildSettings());
+  }, [processAll, buildSettings]);
+
+  const handleRetry = useCallback(
+    (id: string) => processFiles([id], buildSettings()),
+    [processFiles, buildSettings]
+  );
+
+  const handleInspect = useCallback((id: string) => setInspectorId(id), []);
+  const handlePreviewOne = useCallback(
+    (id: string) => previewOne(id, buildSettings()),
+    [previewOne, buildSettings]
+  );
+
+  const handleApplyRecommendation = useCallback(
+    (id: string, recPreset: PdfQualityPreset, recQuality: number) => {
+      const recCfg = recPreset !== 'custom' ? PDF_QUALITY_PRESETS[recPreset] : null;
+      setPreset(recPreset);
+      setQuality(recQuality);
+      if (recCfg) {
+        setSettings((prev) => ({
+          ...prev,
+          ...recCfg,
+          quality: recQuality,
+        }));
+      }
+      const file = files.find((f) => f.id === id);
+      if (file) {
+        toast.success(`✨ Applied recommendation to ${file.name}`, {
+          description: `${recPreset.toUpperCase()} · q=${Math.round(recQuality * 100)}%`,
+        });
+      }
+    },
+    [files]
+  );
+
+  const handleDownload = useCallback(
+    (id: string) => {
+      const file = files.find((f) => f.id === id);
+      if (file?.processedFile) {
+        saveAs(file.processedFile, file.processedFile.name);
+        toast.success(`Downloading ${file.processedFile.name}`);
+      }
+    },
+    [files]
+  );
+
+  const inspectorFile = useMemo(
+    () => files.find((f) => f.id === inspectorId) ?? null,
+    [files, inspectorId]
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -87,27 +167,36 @@ const CompressPdf = () => {
             <PdfUploadZone onFilesSelected={addFiles} pdfCount={files.length} />
           </div>
           {hasFiles && (
-            <PdfSettingsPanel
-              preset={preset}
-              onPresetChange={setPreset}
-              quality={quality}
-              onQualityChange={setQuality}
-            />
+            <ErrorBoundary label="PDF settings">
+              <PdfSettingsPanel
+                preset={preset}
+                onPresetChange={setPreset}
+                quality={quality}
+                onQualityChange={setQuality}
+                settings={settings}
+                onSettingsChange={setSettings}
+              />
+            </ErrorBoundary>
           )}
-          <PdfQueue
-            files={files}
-            isProcessing={isProcessing}
-            progress={progress}
-            processingText={processingText}
-            currentItem={currentItem}
-            onRemove={removeFile}
-            onClearAll={clearAll}
-            onProcessAll={() => processAll(settings)}
-            onRetry={(id) => processFiles([id], settings)}
-            onAddMore={handleAddMore}
-            allDone={allDone}
-            readyCount={readyCount}
-          />
+          <ErrorBoundary label="PDF queue">
+            <PdfQueue
+              files={files}
+              isProcessing={isProcessing}
+              progress={progress}
+              processingText={processingText}
+              currentItem={currentItem}
+              onRemove={removeFile}
+              onClearAll={clearAll}
+              onProcessAll={handleProcessAll}
+              onRetry={handleRetry}
+              onAddMore={handleAddMore}
+              allDone={allDone}
+              readyCount={readyCount}
+              onInspect={handleInspect}
+              onApplyRecommendation={handleApplyRecommendation}
+              stats={stats}
+            />
+          </ErrorBoundary>
         </ToolHero>
 
         {allDone && processedFiles.length > 0 && (
@@ -122,6 +211,16 @@ const CompressPdf = () => {
 
       <PageDropOverlayPdf visible={isDragging} />
       <ScrollToTop />
+
+      <PdfInspector
+        file={inspectorFile}
+        open={inspectorId !== null}
+        onOpenChange={(o) => !o && setInspectorId(null)}
+        onApplyRecommendation={handleApplyRecommendation}
+        onPreviewOne={handlePreviewOne}
+        onDownload={handleDownload}
+        getSettings={buildSettings}
+      />
     </div>
   );
 };
@@ -136,7 +235,7 @@ const HowItWorksPdf = () => {
     {
       icon: <Zap className="h-4 w-4 text-primary" />,
       title: '2. Pick a level',
-      desc: 'Choose Strong, Balanced, or Light. Adjust the slider for fine control.',
+      desc: 'Choose Strong, Balanced, or Light. Adjust DPI, target size, B&W, and more.',
     },
     {
       icon: <Shield className="h-4 w-4 text-primary" />,
@@ -173,10 +272,12 @@ const FeaturesPdf = () => {
     { emoji: '⚡', title: 'Fast', desc: 'Re-renders each page in parallel-friendly chunks.' },
     { emoji: '📦', title: 'Batch', desc: 'Compress up to 5 PDFs at once. ZIP download included.' },
     { emoji: '🎚️', title: 'Three levels', desc: 'Strong, Balanced, or Light — pick what fits.' },
+    { emoji: '🎯', title: 'Target size', desc: 'Iteratively reduce quality/DPI to hit a KB target.' },
+    { emoji: '🔍', title: 'Inspector', desc: 'First-page thumbnail, smart recommendation, metadata.' },
   ];
   return (
     <section className="container mx-auto mt-16 px-4">
-      <div className="mx-auto grid max-w-3xl grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
+      <div className="mx-auto grid max-w-4xl grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
         {features.map((f) => (
           <div
             key={f.title}
@@ -201,6 +302,14 @@ const FaqPdf = () => {
     {
       q: 'Will my text remain selectable?',
       a: 'No — pages become image-only PDFs after compression. If you need searchable text, use a server-side tool or a different compression strategy.',
+    },
+    {
+      q: 'What is the "target size" feature?',
+      a: 'When set, the engine iteratively reduces JPEG quality and DPI (down to safe minimums) until the output fits the target size in KB. Useful for email attachment limits.',
+    },
+    {
+      q: 'Can I compress only specific pages?',
+      a: 'Yes — use the page range inputs in the Advanced section to compress a subset of pages (e.g. 1-5 or 12-20).',
     },
     {
       q: 'Is there a file size limit?',
@@ -236,7 +345,6 @@ const FaqPdf = () => {
   );
 };
 
-// Inline import to avoid creating a new component file for this thin wrapper
 import PageDropOverlay from '@/components/PageDropOverlay';
 const PageDropOverlayPdf = ({ visible }: { visible: boolean }) => (
   <PageDropOverlay visible={visible} />
