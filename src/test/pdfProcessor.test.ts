@@ -4,6 +4,9 @@ import {
   getReductionRatio,
   getQualityPresetSettings,
   PDF_QUALITY_PRESETS,
+  toDownloadPdfFile,
+  DEFAULT_PDF_FILENAME_PATTERN,
+  getPdfFilenameTokenDocs,
 } from '../utils/pdfProcessor';
 
 describe('pdfProcessor helpers', () => {
@@ -79,6 +82,78 @@ describe('pdfProcessor helpers', () => {
           expect(p.maxWidth).toBeGreaterThan(0);
         }
       }
+    });
+  });
+
+  describe('power features', () => {
+    it('all preset configs expose the new fields with sane defaults', () => {
+      for (const p of Object.values(PDF_QUALITY_PRESETS)) {
+        expect(p.targetSizeKB).toBeNull();
+        expect(p.grayscale).toBe(false);
+        expect(p.stripMetadata).toBe(false);
+        expect(p.dpi).toBeNull();
+        expect(p.filenamePattern).toBe(DEFAULT_PDF_FILENAME_PATTERN);
+        expect(p.pageRange).toBeNull();
+      }
+    });
+
+    it('getPdfFilenameTokenDocs lists all supported tokens', () => {
+      const docs = getPdfFilenameTokenDocs();
+      expect(docs.length).toBeGreaterThanOrEqual(8);
+      const tokens = docs.map((d) => d.token);
+      expect(tokens).toContain('{name}');
+      expect(tokens).toContain('{ext}');
+      expect(tokens).toContain('{pages}');
+      expect(tokens).toContain('{size}');
+      expect(tokens).toContain('{date}');
+      expect(tokens).toContain('{q}');
+      expect(tokens).toContain('{index}');
+    });
+
+    it('toDownloadPdfFile replaces tokens in the pattern', () => {
+      const blob = new Blob([new Uint8Array(2048)], { type: 'application/pdf' });
+      const file = toDownloadPdfFile(
+        'mydoc.pdf',
+        blob,
+        '{name}_q{q}_p{pages}.{ext}',
+        { quality: 0.6, pageCount: 12, index: 3 }
+      );
+      expect(file.name).toBe('mydoc_q60_p12.pdf');
+      expect(file.type).toBe('application/pdf');
+    });
+
+    it('toDownloadPdfFile falls back to default when pattern strips to empty', () => {
+      const blob = new Blob([new Uint8Array(1024)], { type: 'application/pdf' });
+      const file = toDownloadPdfFile('foo.pdf', blob, '////');
+      expect(file.name).toMatch(/_compressed\.pdf$/);
+    });
+
+    it('toDownloadPdfFile strips illegal characters and collapses underscores', () => {
+      const blob = new Blob([new Uint8Array(1024)], { type: 'application/pdf' });
+      const file = toDownloadPdfFile('hello.pdf', blob, 'a<>:"/\\|?*b/./pdf');
+      expect(file.name).not.toMatch(/[<>:"/\\|?*\x00-\x1f]/);
+      expect(file.name).not.toMatch(/_+/);
+    });
+
+    it('toDownloadPdfFile appends .pdf when pattern has no extension', () => {
+      const blob = new Blob([new Uint8Array(1024)], { type: 'application/pdf' });
+      const file = toDownloadPdfFile('doc.pdf', blob, '{name}');
+      expect(file.name.toLowerCase()).toMatch(/\.pdf$/);
+    });
+
+    it('toDownloadPdfFile caps the filename at 200 characters', () => {
+      const blob = new Blob([new Uint8Array(1024)], { type: 'application/pdf' });
+      const longName = 'a'.repeat(300);
+      const file = toDownloadPdfFile(`${longName}.pdf`, blob, '{name}');
+      expect(file.name.length).toBeLessThanOrEqual(200);
+      expect(file.name.toLowerCase()).toMatch(/\.pdf$/);
+    });
+
+    it('toDownloadPdfFile handles missing context (no index/quality/etc.)', () => {
+      const blob = new Blob([new Uint8Array(1024)], { type: 'application/pdf' });
+      const file = toDownloadPdfFile('foo.pdf', blob, '{name}_{q}_{pages}_{index}');
+      expect(file.name).toMatch(/^foo_/);
+      expect(file.name.toLowerCase()).toMatch(/\.pdf$/);
     });
   });
 });
