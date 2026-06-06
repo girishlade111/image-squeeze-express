@@ -52,7 +52,7 @@ const NotFound = () => {
           <h1 className="mt-6 text-6xl font-black tracking-tight sm:text-7xl">
             <span
               style={{
-                background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
+                background: 'linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand-2)))',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
               }}

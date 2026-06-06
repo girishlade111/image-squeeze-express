@@ -54,7 +54,7 @@ const Contact = () => (
       <div className="mx-auto max-w-3xl">
         <h1 className="text-4xl font-black tracking-tight">
           Get in{' '}
-          <span style={{ background: 'linear-gradient(135deg, #4F46E5, #0D9488)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          <span style={{ background: 'linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand-2)))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             Touch
           </span>
         </h1>

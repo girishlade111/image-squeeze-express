@@ -53,7 +53,7 @@ const Footer = () => {
     <footer className="relative mt-12 overflow-hidden sm:mt-20">
       <div
         className="h-px w-full"
-        style={{ background: 'linear-gradient(90deg, transparent, #4F46E5, #0D9488, transparent)' }}
+        style={{ background: 'linear-gradient(90deg, transparent, hsl(var(--brand)), hsl(var(--brand-2)), transparent)' }}
       />
 
       <div className="relative border-t border-border/20 bg-card/80 backdrop-blur-xl">
@@ -68,7 +68,7 @@ const Footer = () => {
                 <span
                   className="text-base font-bold tracking-tight"
                   style={{
-                    background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
+                    background: 'linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand-2)))',
                     WebkitBackgroundClip: 'text',
                     WebkitTextFillColor: 'transparent',
                   }}
