@@ -320,10 +320,10 @@ const FileRenameRuleBuilder = ({
                         <button
                           onClick={() => onMove(index, -1)}
                           disabled={index === 0}
-                          className="flex h-6 w-6 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary disabled:opacity-30"
+                          className="flex h-8 w-8 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary disabled:opacity-30 sm:h-6 sm:w-6"
                           aria-label="Move rule up"
                         >
-                          <ArrowUp className="h-3 w-3" />
+                          <ArrowUp className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
                         </button>
                       </TooltipTrigger>
                       <TooltipContent>Move up</TooltipContent>
@@ -333,10 +333,10 @@ const FileRenameRuleBuilder = ({
                         <button
                           onClick={() => onMove(index, 1)}
                           disabled={index === rules.length - 1}
-                          className="flex h-6 w-6 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary disabled:opacity-30"
+                          className="flex h-8 w-8 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary disabled:opacity-30 sm:h-6 sm:w-6"
                           aria-label="Move rule down"
                         >
-                          <ArrowDown className="h-3 w-3" />
+                          <ArrowDown className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
                         </button>
                       </TooltipTrigger>
                       <TooltipContent>Move down</TooltipContent>
@@ -345,7 +345,7 @@ const FileRenameRuleBuilder = ({
                       <TooltipTrigger asChild>
                         <button
                           onClick={() => onRemove(index)}
-                          className="flex h-6 w-6 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive"
+                          className="flex h-8 w-8 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive sm:h-6 sm:w-6"
                           aria-label="Remove rule"
                         >
                           <Trash2 className="h-3 w-3" />
