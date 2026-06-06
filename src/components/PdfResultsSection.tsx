@@ -291,7 +291,7 @@ const PdfResultsSection = ({ files, onReset }: PdfResultsSectionProps) => {
 };
 
 function ConfettiBurst() {
-  const colors = ['#4F46E5', '#0D9488', '#F59E0B', '#EC4899', '#10B981'];
+  const colors = ['#F0620F', '#178EA1', '#E8A92B', '#D85F4A', '#5A9E6F'];
   const particles = Array.from({ length: 24 }, (_, i) => ({
     id: i,
     color: colors[i % colors.length],
