@@ -8,6 +8,13 @@ import { ThemeProvider } from "@/contexts/ThemeContext";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
 
+if (import.meta.env.PROD) {
+  void Promise.all([
+    import("@vercel/analytics").then((m) => m.inject()),
+    import("@vercel/speed-insights").then((m) => m.inject()),
+  ]);
+}
+
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
