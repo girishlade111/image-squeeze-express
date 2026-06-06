@@ -27,7 +27,7 @@ const TrustBar = () => (
       className="mx-auto max-w-5xl rounded-2xl border border-border/50 bg-card/60 p-5 shadow-elev-1 backdrop-blur-xl sm:p-7"
     >
       <p className="text-center text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground">
-        Why teams trust ImageSqueeze
+        Why teams trust LS Image Compressor
       </p>
       <div className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
         {trustItems.map(({ icon: Icon, label, desc }, i) => (

@@ -179,7 +179,7 @@ const faqs = [
     a: "Absolutely — the most-requested features usually ship first. Tell us the problem you're trying to solve rather than the specific solution, and we'll figure out the right tool together.",
   },
   {
-    q: 'Is ImageSqueeze hiring or open to collaboration?',
+    q: 'Is LS Image Compressor hiring or open to collaboration?',
     a: "We're a one-person studio, but always open to conversations with designers, developers, and indie hackers who care about privacy-first tools. Drop us a line if that sounds like you.",
   },
 ];

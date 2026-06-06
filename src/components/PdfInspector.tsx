@@ -398,7 +398,7 @@ const PdfInspector = ({
               </Badge>
               {getSettings().stripMetadata
                 ? 'Output metadata will be stripped on the next run.'
-                : 'Output will keep an "ImageSqueeze" producer tag.'}
+                : 'Output will keep an "LS Image Compressor" producer tag.'}
             </div>
           </div>
         </div>

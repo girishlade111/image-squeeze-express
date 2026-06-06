@@ -96,7 +96,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
   }, [files]);
 
   const shareText = encodeURIComponent(
-    'I just compressed my images with ImageSqueeze — 100% free & private! 🚀'
+    'I just compressed my images with LS Image Compressor — 100% free & private! 🚀'
   );
   const shareUrl = encodeURIComponent('https://img.ladestack.in');
 
@@ -301,7 +301,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
       >
         <p className="mb-3 flex items-center justify-center gap-1.5 text-xs font-semibold text-muted-foreground">
           <Share2 className="h-3.5 w-3.5" />
-          Share ImageSqueeze
+          Share LS Image Compressor
         </p>
         <div className="flex justify-center gap-2">
           <a
