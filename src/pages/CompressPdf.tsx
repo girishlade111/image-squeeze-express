@@ -163,7 +163,9 @@ const CompressPdf = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <DocumentTitle title="Compress PDF — Up to 90% Smaller, Free & Private" />
+      <Suspense fallback={null}>
+        <DocumentTitle title="Compress PDF — Up to 90% Smaller, Free & Private" />
+      </Suspense>
       <Header />
       <main>
         <ToolHero
@@ -182,7 +184,7 @@ const CompressPdf = () => {
             <PdfUploadZone onFilesSelected={addFiles} pdfCount={files.length} />
           </div>
           {hasFiles && (
-            <ErrorBoundary label="PDF settings">
+            <Suspense fallback={<BlockSkeleton height={260} />}>
               <PdfSettingsPanel
                 preset={preset}
                 onPresetChange={setPreset}
@@ -191,9 +193,16 @@ const CompressPdf = () => {
                 settings={settings}
                 onSettingsChange={setSettings}
               />
-            </ErrorBoundary>
+            </Suspense>
           )}
-          <ErrorBoundary label="PDF queue">
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-1 gap-3">
+                <CardSkeleton height={100} />
+                <CardSkeleton height={100} />
+              </div>
+            }
+          >
             <PdfQueue
               files={files}
               isProcessing={isProcessing}
@@ -211,40 +220,50 @@ const CompressPdf = () => {
               onApplyRecommendation={handleApplyRecommendation}
               stats={stats}
             />
-          </ErrorBoundary>
+          </Suspense>
         </ToolHero>
 
         {allDone && processedFiles.length > 0 && (
-          <PdfResultsSection files={processedFiles} onReset={clearAll} />
+          <Suspense fallback={<BlockSkeleton height={500} />}>
+            <PdfResultsSection files={processedFiles} onReset={clearAll} />
+          </Suspense>
         )}
 
         <HowItWorksPdf />
         <FeaturesPdf />
         <FaqPdf />
-        <Footer />
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
       </main>
 
-      <PageDropOverlayPdf visible={isDragging} />
-      <ScrollToTop />
+      <Suspense fallback={null}>
+        <PageDropOverlay visible={isDragging} />
+        <ScrollToTop />
+      </Suspense>
 
-      <PdfInspector
-        file={inspectorFile}
-        open={inspectorId !== null}
-        onOpenChange={(o) => !o && setInspectorId(null)}
-        onApplyRecommendation={handleApplyRecommendation}
-        onPreviewOne={handlePreviewOne}
-        onDownload={handleDownload}
-        getSettings={buildSettings}
-      />
+      <Suspense fallback={null}>
+        <PdfInspector
+          file={inspectorFile}
+          open={inspectorId !== null}
+          onOpenChange={(o) => !o && setInspectorId(null)}
+          onApplyRecommendation={handleApplyRecommendation}
+          onPreviewOne={handlePreviewOne}
+          onDownload={handleDownload}
+          getSettings={buildSettings}
+        />
+      </Suspense>
 
-      <MobileActionBar
-        visible={hasFiles && !allDone && readyCount > 0}
-        loading={isProcessing}
-        loadingText="Compressing…"
-        ctaLabel={`Compress ${readyCount} PDF${readyCount !== 1 ? 's' : ''}`}
-        ctaIcon={Lightning}
-        onCta={handleProcessAll}
-      />
+      <Suspense fallback={null}>
+        <MobileActionBar
+          visible={hasFiles && !allDone && readyCount > 0}
+          loading={isProcessing}
+          loadingText="Compressing…"
+          ctaLabel={`Compress ${readyCount} PDF${readyCount !== 1 ? 's' : ''}`}
+          ctaIcon={Lightning}
+          onCta={handleProcessAll}
+        />
+      </Suspense>
     </div>
   );
 };
