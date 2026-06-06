@@ -1,6 +1,16 @@
 import { PDFDocument } from 'pdf-lib';
 
-export type PdfQualityPreset = 'low' | 'medium' | 'high' | 'custom';
+export {
+  PDF_QUALITY_PRESETS,
+  getQualityPresetSettings,
+  getPdfFilenameTokenDocs,
+  formatBytes,
+  getReductionRatio,
+  toDownloadPdfFile,
+  DEFAULT_PDF_FILENAME_PATTERN,
+} from './pdfFormat';
+
+export type { PdfQualityPreset } from './pdfFormat';
 
 export interface PdfProcessSettings {
   /**
