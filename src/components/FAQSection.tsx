@@ -73,7 +73,7 @@ const FAQSection = () => {
   }, []);
 
   return (
-    <section id="faq" className="container mx-auto mt-16 max-w-2xl px-4 sm:mt-24" ref={ref}>
+    <section id="faq" className="container mx-auto mt-12 max-w-2xl px-4 sm:mt-24" ref={ref}>
       <h2
         className={`mb-10 text-center text-3xl font-extrabold tracking-tight sm:text-4xl transition-all duration-700 ${
           visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'

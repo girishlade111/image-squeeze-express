@@ -11,7 +11,7 @@ const trustItems = [
 ];
 
 const TrustBar = () => (
-  <section className="container mx-auto mt-12 px-4 sm:mt-16">
+  <section className="container mx-auto mt-12 px-4 sm:mt-20">
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
