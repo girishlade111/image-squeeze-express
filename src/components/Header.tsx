@@ -263,28 +263,48 @@ const Header = () => {
               <Link
                 to="/about"
                 onClick={() => setMobileOpen(false)}
-                className="flex min-h-[48px] items-center rounded-xl px-3 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground"
+                aria-current={location.pathname === '/about' ? 'page' : undefined}
+                className={`flex min-h-[48px] items-center rounded-xl px-3 py-3 text-sm font-medium transition-colors ${
+                  location.pathname === '/about'
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:bg-foreground/5 hover:text-foreground'
+                }`}
               >
                 About
               </Link>
               <Link
                 to="/privacy"
                 onClick={() => setMobileOpen(false)}
-                className="flex min-h-[48px] items-center rounded-xl px-3 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground"
+                aria-current={location.pathname === '/privacy' ? 'page' : undefined}
+                className={`flex min-h-[48px] items-center rounded-xl px-3 py-3 text-sm font-medium transition-colors ${
+                  location.pathname === '/privacy'
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:bg-foreground/5 hover:text-foreground'
+                }`}
               >
                 Privacy Policy
               </Link>
               <Link
                 to="/terms"
                 onClick={() => setMobileOpen(false)}
-                className="flex min-h-[48px] items-center rounded-xl px-3 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground"
+                aria-current={location.pathname === '/terms' ? 'page' : undefined}
+                className={`flex min-h-[48px] items-center rounded-xl px-3 py-3 text-sm font-medium transition-colors ${
+                  location.pathname === '/terms'
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:bg-foreground/5 hover:text-foreground'
+                }`}
               >
                 Terms of Service
               </Link>
               <Link
                 to="/contact"
                 onClick={() => setMobileOpen(false)}
-                className="flex min-h-[48px] items-center rounded-xl px-3 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-foreground/5 hover:text-foreground"
+                aria-current={location.pathname === '/contact' ? 'page' : undefined}
+                className={`flex min-h-[48px] items-center rounded-xl px-3 py-3 text-sm font-medium transition-colors ${
+                  location.pathname === '/contact'
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-muted-foreground hover:bg-foreground/5 hover:text-foreground'
+                }`}
               >
                 Contact
               </Link>
