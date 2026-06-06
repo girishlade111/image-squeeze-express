@@ -153,6 +153,9 @@ const Header = () => {
                     key={t.to}
                     to={t.to}
                     onClick={() => setMobileOpen(false)}
+                    onPointerEnter={() => prefetchOnInteract(t.load)}
+                    onFocus={() => prefetchOnInteract(t.load)}
+                    onTouchStart={() => prefetchOnInteract(t.load)}
                     aria-current={active ? 'page' : undefined}
                     title={t.label}
                     className={`flex h-6 items-center gap-1 rounded-full px-2 text-[11px] font-medium transition-colors ${
@@ -254,6 +257,9 @@ const Header = () => {
                     key={t.to}
                     to={t.to}
                     onClick={() => setMobileOpen(false)}
+                    onPointerEnter={() => prefetchOnInteract(t.load)}
+                    onFocus={() => prefetchOnInteract(t.load)}
+                    onTouchStart={() => prefetchOnInteract(t.load)}
                     aria-current={active ? 'page' : undefined}
                     className={`flex min-h-[48px] items-center gap-3 rounded-xl px-3 py-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary ${
                       active
