@@ -116,38 +116,40 @@ const SettingsPanel = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="rounded-2xl border border-border/40 bg-card/80 backdrop-blur-xl p-4 shadow-lg">
+      <div className="rounded-2xl border border-border/40 bg-card/80 backdrop-blur-xl p-3 shadow-lg sm:p-4">
         <Tabs defaultValue="compress">
-          <TabsList className="grid w-full grid-cols-4 rounded-xl bg-secondary/60 p-1">
-            <TabsTrigger
-              value="compress"
-              className="rounded-lg text-[11px] font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"
-            >
-              <Sparkles className="mr-1 h-3 w-3" />
-              Compress
-            </TabsTrigger>
-            <TabsTrigger
-              value="resize"
-              className="rounded-lg text-[11px] font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"
-            >
-              <ImageIcon className="mr-1 h-3 w-3" />
-              Resize
-            </TabsTrigger>
-            <TabsTrigger
-              value="convert"
-              className="rounded-lg text-[11px] font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"
-            >
-              <Layers className="mr-1 h-3 w-3" />
-              Format
-            </TabsTrigger>
-            <TabsTrigger
-              value="advanced"
-              className="rounded-lg text-[11px] font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"
-            >
-              <RotateCw className="mr-1 h-3 w-3" />
-              More
-            </TabsTrigger>
-          </TabsList>
+          <div className="scrollbar-hide -mx-1 overflow-x-auto">
+            <TabsList className="inline-flex w-max min-w-full rounded-xl bg-secondary/60 p-1 sm:grid sm:w-full sm:grid-cols-4">
+              <TabsTrigger
+                value="compress"
+                className="rounded-lg text-[11px] font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"
+              >
+                <Sparkles className="mr-1 h-3 w-3" />
+                Compress
+              </TabsTrigger>
+              <TabsTrigger
+                value="resize"
+                className="rounded-lg text-[11px] font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"
+              >
+                <ImageIcon className="mr-1 h-3 w-3" />
+                Resize
+              </TabsTrigger>
+              <TabsTrigger
+                value="convert"
+                className="rounded-lg text-[11px] font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"
+              >
+                <Layers className="mr-1 h-3 w-3" />
+                Format
+              </TabsTrigger>
+              <TabsTrigger
+                value="advanced"
+                className="rounded-lg text-[11px] font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"
+              >
+                <RotateCw className="mr-1 h-3 w-3" />
+                More
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
           {/* ── COMPRESS ── */}
           <TabsContent value="compress" className="mt-4 space-y-4">
