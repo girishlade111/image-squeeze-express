@@ -10,10 +10,10 @@ import {
   LayoutGrid,
   List,
   Eye,
-  Sparkles,
   Lightbulb,
   Gauge,
 } from 'lucide-react';
+import { Lightning, Sparkle } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
@@ -497,7 +497,7 @@ const ImageQueue = ({
                   </>
                 ) : (
                   <>
-                    <span className="mr-1">⚡</span>
+                    <Lightning size={16} weight="duotone" className="mr-1.5" />
                     Compress {readyCount} image{readyCount !== 1 ? 's' : ''}
                   </>
                 )}
