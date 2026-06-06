@@ -1,13 +1,20 @@
 import { motion } from 'framer-motion';
-import { Shield, Lock, ServerOff, Eye, Code2, Globe } from 'lucide-react';
+import {
+  ShieldCheck,
+  Cookie,
+  CloudSlash,
+  Eye,
+  Code,
+  DeviceMobile,
+} from '@phosphor-icons/react';
 
 const trustItems = [
-  { icon: Shield, label: '100% Private', desc: 'No servers, no uploads' },
-  { icon: Lock, label: 'Zero Tracking', desc: 'No cookies, no analytics' },
-  { icon: ServerOff, label: 'Offline-Ready', desc: 'Works after first load' },
+  { icon: ShieldCheck, label: '100% Private', desc: 'No servers, no uploads' },
+  { icon: Cookie, label: 'Zero Tracking', desc: 'No cookies, no analytics' },
+  { icon: CloudSlash, label: 'Offline-Ready', desc: 'Works after first load' },
   { icon: Eye, label: 'Open Workflow', desc: 'Inspect in DevTools' },
-  { icon: Code2, label: 'Standard Libraries', desc: 'pdf.js, pdf-lib, JSZip' },
-  { icon: Globe, label: 'Any Device', desc: 'Phone, tablet, desktop' },
+  { icon: Code, label: 'Standard Libraries', desc: 'pdf.js, pdf-lib, JSZip' },
+  { icon: DeviceMobile, label: 'Any Device', desc: 'Phone, tablet, desktop' },
 ];
 
 const TrustBar = () => (
@@ -33,7 +40,7 @@ const TrustBar = () => (
             className="group flex items-center gap-3 rounded-xl border border-border/40 bg-background/40 p-3 transition-colors hover:border-primary/40 hover:bg-primary/[0.04]"
           >
             <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-transform group-hover:scale-105">
-              <Icon className="h-4 w-4" aria-hidden />
+              <Icon size={20} weight="duotone" aria-hidden />
             </div>
             <div className="min-w-0">
               <p className="text-xs font-semibold leading-tight">{label}</p>
