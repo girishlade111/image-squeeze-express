@@ -229,7 +229,7 @@ const FeaturesRename = () => {
     { icon: ArrowsLeftRight, title: 'Insert At', desc: 'Inject text at any character index - negatives count from the end.' },
     { icon: Stamp, title: 'Counter From Name', desc: 'Re-sequence the number already in the filename (fixes broken sequences).' },
     { icon: ArrowsClockwise, title: 'Reverse Name', desc: 'Flip the base name backwards - extensions are always preserved.' },
-    { icon: TextTShirt, title: 'Replace Extension', desc: 'Change, lowercase, uppercase, or strip the file extension.' },
+    { icon: TextT, title: 'Replace Extension', desc: 'Change, lowercase, uppercase, or strip the file extension.' },
     { icon: Shield, title: 'Name Sanitisation', desc: 'Illegal characters are stripped so every OS can open the result.' },
   ];
   return (
