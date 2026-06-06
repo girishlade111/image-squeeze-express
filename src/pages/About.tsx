@@ -12,7 +12,6 @@ import {
   Sparkle,
   Stack,
   Code,
-  Lightning as Lightning2,
   Cloud,
   Users,
   GithubLogo,
@@ -35,7 +34,6 @@ import {
   PenNib,
   ChartLineUp,
   Images,
-  Pulse as Pulse2,
 } from '@phosphor-icons/react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -195,7 +193,7 @@ const milestones = [
 const techStack = [
   { name: 'React 18', desc: 'UI framework', icon: Code },
   { name: 'TypeScript', desc: 'Type safety', icon: FileText },
-  { name: 'Vite', desc: 'Build & dev server', icon: Lightning2 },
+  { name: 'Vite', desc: 'Build & dev server', icon: Lightning },
   { name: 'Tailwind CSS', desc: 'Utility-first styles', icon: PaintBrush },
   { name: 'shadcn/ui', desc: 'Accessible primitives', icon: Stack },
   { name: 'Framer Motion', desc: 'Animations', icon: Pulse },
@@ -729,7 +727,7 @@ const About = () => {
                   className="group inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-[1.02]"
                   style={{ background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))' }}
                 >
-                  <Lightning2 size={16} weight="duotone" />
+                  <Lightning size={16} weight="duotone" />
                   Compress Images
                 </Link>
                 <Link
