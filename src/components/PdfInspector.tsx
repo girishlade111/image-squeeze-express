@@ -81,8 +81,8 @@ const PdfInspector = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl gap-0 overflow-hidden p-0">
-        <DialogHeader className="flex-row items-center justify-between gap-2 border-b border-border/40 bg-card/60 px-5 py-3">
+      <DialogContent className="max-w-4xl gap-0 overflow-hidden p-0 sm:rounded-lg max-sm:left-0 max-sm:top-0 max-sm:h-[100dvh] max-sm:max-w-none max-sm:translate-x-0 max-sm:translate-y-0 sm:max-h-[90vh]">
+        <DialogHeader className="flex-row items-center justify-between gap-2 border-b border-border/40 bg-card/60 px-3 py-2.5 sm:px-5 sm:py-3">
           <div className="min-w-0 flex-1">
             <DialogTitle className="truncate text-sm font-semibold">{file.name}</DialogTitle>
             <DialogDescription className="text-[11px] text-muted-foreground">
