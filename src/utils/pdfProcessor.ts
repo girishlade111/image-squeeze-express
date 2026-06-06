@@ -229,24 +229,27 @@ function applyGrayscale(
   ctx.putImageData(imgData, 0, 0);
 }
 
-function renderFirstPageThumbnail(
+async function renderFirstPageThumbnail(
   page: import('pdfjs-dist').PDFPageProxy,
   maxDim = 240
-): string | null {
+): Promise<string | null> {
   if (typeof document === 'undefined') return null;
-  const baseViewport = page.getViewport({ scale: 1 });
-  const scale = Math.min(1, maxDim / Math.max(baseViewport.width, baseViewport.height));
-  const viewport = page.getViewport({ scale });
-  const canvas = document.createElement('canvas');
-  canvas.width = Math.max(1, Math.floor(viewport.width));
-  canvas.height = Math.max(1, Math.floor(viewport.height));
-  const ctx = canvas.getContext('2d');
-  if (!ctx) return null;
-  ctx.fillStyle = '#ffffff';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  return page
-    .render({ canvasContext: ctx, viewport, canvas }).promise.then(() => canvas.toDataURL('image/jpeg', 0.6))
-    .catch(() => null) as unknown as string | null;
+  try {
+    const baseViewport = page.getViewport({ scale: 1 });
+    const scale = Math.min(1, maxDim / Math.max(baseViewport.width, baseViewport.height));
+    const viewport = page.getViewport({ scale });
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.max(1, Math.floor(viewport.width));
+    canvas.height = Math.max(1, Math.floor(viewport.height));
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return null;
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    await page.render({ canvasContext: ctx, viewport, canvas }).promise;
+    return canvas.toDataURL('image/jpeg', 0.6);
+  } catch {
+    return null;
+  }
 }
 
 /**
