@@ -171,10 +171,10 @@ const CompressPdf = () => {
           suffix="Smaller & Free"
           subhead="Shrink PDF files right in your browser. We re-render every page as a compressed image and rebuild the document — no uploads, no login, no watermarks."
           badges={[
-            { emoji: '🔒', label: '100% Private' },
-            { emoji: '⚡', label: 'Runs Locally' },
-            { emoji: '🆓', label: 'Free Forever' },
-            { emoji: '📦', label: 'Batch (5)' },
+            { icon: ShieldCheck, label: '100% Private' },
+            { icon: Lightning, label: 'Runs Locally' },
+            { icon: Gift, label: 'Free Forever' },
+            { icon: Stack, label: 'Batch (5)' },
           ]}
         >
           <div ref={uploadRef}>
