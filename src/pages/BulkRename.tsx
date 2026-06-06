@@ -175,17 +175,17 @@ const StatsRow = ({
 const HowItWorksRename = () => {
   const steps = [
     {
-      icon: <Sparkles className="h-4 w-4 text-primary" />,
+      icon: Sparkle,
       title: '1. Add files',
       desc: 'Drop up to 100 files of any type. Nothing leaves your device.',
     },
     {
-      icon: <Eye className="h-4 w-4 text-primary" />,
+      icon: Eye,
       title: '2. Build rules',
-      desc: 'Stack 13 rule types — find/replace, prefixes, numbers, case, dates, trim, and more. Preview updates live.',
+      desc: 'Stack 13 rule types - find/replace, prefixes, numbers, case, dates, trim, and more. Preview updates live.',
     },
     {
-      icon: <Download className="h-4 w-4 text-primary" />,
+      icon: DownloadSimple,
       title: '3. Download',
       desc: 'Hit the button to get a ZIP of all your renamed files, ready to use.',
     },
@@ -196,18 +196,59 @@ const HowItWorksRename = () => {
         How it works
       </h2>
       <div className="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
-        {steps.map((s) => (
-          <div
-            key={s.title}
-            className="rounded-2xl border border-border/40 bg-card/60 p-4 text-center"
-          >
-            <div className="mx-auto mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-              {s.icon}
+        {steps.map((s) => {
+          const StepIcon = s.icon;
+          return (
+            <div
+              key={s.title}
+              className="rounded-2xl border border-border/40 bg-card/60 p-4 text-center"
+            >
+              <div className="mx-auto mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <StepIcon size={20} weight="duotone" aria-hidden />
+              </div>
+              <p className="text-sm font-semibold">{s.title}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{s.desc}</p>
             </div>
-            <p className="text-sm font-semibold">{s.title}</p>
-            <p className="mt-1 text-xs text-muted-foreground">{s.desc}</p>
-          </div>
-        ))}
+          );
+        })}
+      </div>
+    </section>
+  );
+};
+
+const FeaturesRename = () => {
+  const features = [
+    { icon: MagnifyingGlass, title: 'Find & Replace', desc: 'Plain text or full regex support with case sensitivity toggle.' },
+    { icon: Hash, title: 'Sequential Numbers', desc: 'Add 001_, 002_, . with custom position, separator, and padding.' },
+    { icon: TextAa, title: 'Case Conversion', desc: 'Switch between lowercase, UPPERCASE, Title, and Sentence case.' },
+    { icon: TextAUnderline, title: 'Prefix & Suffix', desc: 'Insert text at the start or end of every name. Extensions stay safe.' },
+    { icon: ArrowsHorizontal, title: 'Whitespace', desc: 'Replace spaces with dashes, underscores, or remove them entirely.' },
+    { icon: CalendarBlank, title: 'Date Stamp', desc: 'Insert the file mtime as a prefix or suffix in 7 date formats.' },
+    { icon: Scissors, title: 'Trim / Truncate', desc: 'Strip characters from the ends or cap names to a max length with ellipsis.' },
+    { icon: ArrowsLeftRight, title: 'Insert At', desc: 'Inject text at any character index - negatives count from the end.' },
+    { icon: Stamp, title: 'Counter From Name', desc: 'Re-sequence the number already in the filename (fixes broken sequences).' },
+    { icon: ArrowsClockwise, title: 'Reverse Name', desc: 'Flip the base name backwards - extensions are always preserved.' },
+    { icon: TextTShirt, title: 'Replace Extension', desc: 'Change, lowercase, uppercase, or strip the file extension.' },
+    { icon: Shield, title: 'Name Sanitisation', desc: 'Illegal characters are stripped so every OS can open the result.' },
+  ];
+  return (
+    <section className="container mx-auto mt-16 px-4">
+      <div className="mx-auto grid max-w-3xl grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
+        {features.map((f) => {
+          const Icon = f.icon;
+          return (
+            <div
+              key={f.title}
+              className="rounded-2xl border border-border/40 bg-card/60 p-3 text-center"
+            >
+              <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <Icon size={22} weight="duotone" aria-hidden />
+              </div>
+              <p className="mt-2 text-xs font-semibold">{f.title}</p>
+              <p className="mt-0.5 text-[10px] text-muted-foreground">{f.desc}</p>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
