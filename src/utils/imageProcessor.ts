@@ -169,7 +169,7 @@ async function analyzeImageContent(
   }
 
   let transparentPixels = 0;
-  let colorSet = new Set<number>();
+  const colorSet = new Set<number>();
   let photoScore = 0;
 
   for (let i = 0; i < data.length; i += 4) {
