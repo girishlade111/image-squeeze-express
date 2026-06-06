@@ -396,9 +396,4 @@ const FaqPdf = () => {
   );
 };
 
-import PageDropOverlay from '@/components/PageDropOverlay';
-const PageDropOverlayPdf = ({ visible }: { visible: boolean }) => (
-  <PageDropOverlay visible={visible} />
-);
-
 export default CompressPdf;
