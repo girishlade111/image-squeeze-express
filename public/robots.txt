@@ -1,123 +1,323 @@
-# Robots.txt for ImageSqueeze
-# Full access allowed to all search engines and crawlers
+# ============================================================
+#  robots.txt for ImageSqueeze — imagesqueeze.com
+#  Generated: June 6, 2026
+#
+#  Policy: ALL well-behaved crawlers, AI bots, and social-media
+#  scrapers are ALLOWED to crawl the entire site. The only
+#  restricted path is a non-existent /api/ which is reserved
+#  defensively for any future backend endpoint.
+# ============================================================
 
-# ========================================
-# GENERAL SETTINGS
-# ========================================
-
+# ============================================================
+# DEFAULT POLICY — applies to any crawler that does not match
+# a more specific User-agent block below.
+# ============================================================
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /_next/static/
-Disallow: /_next/data/
+Disallow: /*.json$
+Disallow: /*?ref=*
 
-# Crawl-delay: 1 second between requests
-Crawl-delay: 1
+# ============================================================
+# AI & LLM CRAWLERS — explicitly allowed (used by ChatGPT,
+# Claude, Perplexity, Google SGE, Copilot, etc. for citations)
+# ============================================================
+User-agent: GPTBot
+Allow: /
 
-# ========================================
-# SEARCH ENGINE BOTS
-# ========================================
+User-agent: ChatGPT-User
+Allow: /
 
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
+Allow: /
+
+User-agent: Google-NotebookLM
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: meta-webindexer
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: cohere-training-data-crawler
+Allow: /
+
+User-agent: Diffbot
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: ImagesiftBot
+Allow: /
+
+User-agent: TimpiBot
+Allow: /
+
+User-agent: Andibot
+Allow: /
+
+# ============================================================
+# MAJOR SEARCH ENGINES
+# ============================================================
 User-agent: Googlebot
 Allow: /
-Disallow: /api/
+
 User-agent: Googlebot-Image
 Allow: /
+
 User-agent: Googlebot-Video
 Allow: /
+
 User-agent: Googlebot-News
 Allow: /
-User-agent: Googlebot-Other
+
+User-agent: AdsBot-Google
+Allow: /
+
+User-agent: Mediapartners-Google
 Allow: /
 
 User-agent: Bingbot
 Allow: /
-Disallow: /api/
+
 User-agent: msnbot
 Allow: /
+
 User-agent: msnbot-media
 Allow: /
-User-agent: bingbot
+
+User-agent: BingPreview
 Allow: /
-Disallow: /api/
 
 User-agent: Slurp
-Allow: /
-Disallow: /api/
-User-agent: Yahoo! Slurp
 Allow: /
 
 User-agent: DuckDuckBot
 Allow: /
+
 User-agent: DuckBot
 Allow: /
 
 User-agent: YandexBot
 Allow: /
-Disallow: /api/
-User-agent: YandexImagesBot
+
+User-agent: YandexImages
 Allow: /
-User-agent: YandexVideoBot
+
+User-agent: YandexVideoParser
 Allow: /
 
 User-agent: Baiduspider
 Allow: /
-Disallow: /api/
+
 User-agent: BaiduImagespider
 Allow: /
-User-agent: Baiduuspider
+
+User-agent: Applebot
 Allow: /
 
-User-agent: Exabot
+User-agent: AppleNewsBot
 Allow: /
-Disallow: /api/
 
-User-agent: Soso Spider
-Allow: /
-User-agent: Sosospider
+User-agent: Naverbot
 Allow: /
 
 User-agent: Yeti
 Allow: /
-Disallow: /api/
 
-User-agent: purebot
+User-agent: Seznambot
 Allow: /
 
-User-agent: ScipmBot
+User-agent: Exabot
 Allow: /
 
-User-agent: Gaisbot
+User-agent: Sogou
+Allow: /
+
+User-agent: Sosospider
 Allow: /
 
 User-agent: coccocbot
 Allow: /
-Disallow: /api/
 
 User-agent: coccocbot-image
 Allow: /
 
-# ========================================
-# SOCIAL MEDIA BOTS
-# ========================================
+User-agent: ia_archiver
+Allow: /
 
+User-agent: archive.org_bot
+Allow: /
+
+# ============================================================
+# SEO TOOL CRAWLERS (Ahrefs, Semrush, Moz, etc.)
+# ============================================================
+User-agent: AhrefsBot
+Allow: /
+
+User-agent: AhrefsSiteAudit
+Allow: /
+
+User-agent: SemrushBot
+Allow: /
+
+User-agent: SemrushBot-SA
+Allow: /
+
+User-agent: SemrushBot-BM
+Allow: /
+
+User-agent: SemrushBot-OB
+Allow: /
+
+User-agent: SemrushBot-CT
+Allow: /
+
+User-agent: SemrushBot-SI
+Allow: /
+
+User-agent: DotBot
+Allow: /
+
+User-agent: MJ12bot
+Allow: /
+
+User-agent: Rogerbot
+Allow: /
+
+User-agent: BLEXBot
+Allow: /
+
+User-agent: SeekportBot
+Allow: /
+
+User-agent: SerendeputyBot
+Allow: /
+
+User-agent: YandexAntivirus
+Allow: /
+
+User-agent: YandexCalendar
+Allow: /
+
+User-agent: YandexDirect
+Allow: /
+
+User-agent: YandexFavicons
+Allow: /
+
+User-agent: YandexForDomain
+Allow: /
+
+User-agent: YandexMetrika
+Allow: /
+
+User-agent: YandexMobileBot
+Allow: /
+
+User-agent: YandexMobileScreenShotBot
+Allow: /
+
+User-agent: YandexNews
+Allow: /
+
+User-agent: YandexOntoDB
+Allow: /
+
+User-agent: YandexPagechecker
+Allow: /
+
+User-agent: YandexRCA
+Allow: /
+
+User-agent: YandexSprav
+Allow: /
+
+User-agent: YandexTracker
+Allow: /
+
+User-agent: YandexTurboParser
+Allow: /
+
+User-agent: YandexVertis
+Allow: /
+
+User-agent: YandexWebmaster
+Allow: /
+
+User-agent: PetalBot
+Allow: /
+
+User-agent: Pingdom
+Allow: /
+
+User-agent: UptimeRobot
+Allow: /
+
+User-agent: StatusCake
+Allow: /
+
+User-agent: GTmetrix
+Allow: /
+
+# ============================================================
+# SOCIAL MEDIA PLATFORMS
+# ============================================================
 User-agent: Twitterbot
 Allow: /
-Disallow: /api/
 
 User-agent: facebookexternalhit
 Allow: /
-Disallow: /api/
+
 User-agent: Facebot
 Allow: /
 
 User-agent: LinkedInBot
 Allow: /
-Disallow: /api/
+
+User-agent: Pinterestbot
+Allow: /
 
 User-agent: Pinterest
 Allow: /
-Disallow: /api/
 
 User-agent: WhatsApp
 Allow: /
@@ -131,132 +331,129 @@ Allow: /
 User-agent: Slackbot
 Allow: /
 
+User-agent: SkypeUriPreview
+Allow: /
+
 User-agent: SkypePreview
 Allow: /
 
-# ========================================
-# AI & ML CRAWLERS
-# ========================================
-
-User-agent: GPTBot
-Allow: /
-Disallow: /api/
-Allow: /*?ref=chatgpt
-Disallow: /*?ref=openai
-
-User-agent: ChatGPT-User
-Allow: /
-Disallow: /api/
-
-User-agent: Google-Extended
-Allow: /
-Disallow: /api/
-
-User-agent: GoogleOther
+User-agent: Viber
 Allow: /
 
-User-agent: GoogleVertexBot
+User-agent: Line
 Allow: /
 
-User-agent: ClaudeBot
-Allow: /
-Disallow: /api/
-
-User-agent: anthropic-ai
-Allow: /
-Disallow: /api/
-
-User-agent: Amazonbot
-Allow: /
-Disallow: /api/
-
-User-agent: Amazon-Device
+User-agent: WeChat
 Allow: /
 
-User-agent: Applebot
-Allow: /
-Disallow: /api/
-
-User-agent: AppleNewsBot
+User-agent: Embedly
 Allow: /
 
-User-agent: AhrefsBot
-Allow: /
-Disallow: /api/
-
-User-agent: SemrushBot
-Allow: /
-Disallow: /api/
-
-User-agent: Moz
+User-agent: Outbrain
 Allow: /
 
-User-agent: seoscanners
+User-agent: Taboola
 Allow: /
 
-# ========================================
-# FEED & MEDIA BOTS
-# ========================================
-
-User-agent: FeedBurner
-Allow: /
-
+# ============================================================
+# MEDIA, ADS, AND FEED BOTS
+# ============================================================
 User-agent: Mediapartners-Google
 Allow: /
 
-User-agent: GoogleAdsense
+User-agent: GoogleAdSense
 Allow: /
 
 User-agent: GoogleMediapartners
 Allow: /
 
-User-agent: AdSense bot
+User-agent: GooglePublisherCenter
 Allow: /
 
-User-agent: BingPreview
+User-agent: Google-Podcast
 Allow: /
 
-User-agent: Bingbot
+User-agent: Google-Read-Aloud
 Allow: /
 
-User-agent: Fasterbot
+User-agent: AdsBot-Google-Mobile
 Allow: /
 
+User-agent: AdsBot-Google-Mobile-Apps
+Allow: /
+
+User-agent: FeedFetcher
+Allow: /
+
+User-agent: Feedlybot
+Allow: /
+
+User-agent: Inoreader
+Allow: /
+
+User-agent: NetNewsWire
+Allow: /
+
+User-agent: NewsBlur
+Allow: /
+
+# ============================================================
+# DEVELOPER, MONITORING, AND PERFORMANCE BOTS
+# ============================================================
 User-agent: CloudflareAlwaysOnline
 Allow: /
 
 User-agent: CloudflareSpeedTest
 Allow: /
 
-User-agent: CCBot
-Allow: /
-Disallow: /api/
-
-User-agent: CommonCrawl
+User-agent: Cloudflare-Healthchecks
 Allow: /
 
 User-agent: DatadogSynthetics
 Allow: /
 
-User-agent: DuckDuckBot
+User-agent: NewRelicPinger
 Allow: /
 
-# ========================================
-# SITEMAP LOCATION
-# ========================================
+User-agent: Uptimebot
+Allow: /
 
+User-agent: W3C_Validator
+Allow: /
+
+User-agent: W3C-checklink
+Allow: /
+
+User-agent: W3C-mobileOK
+Allow: /
+
+User-agent: Loader
+Allow: /
+
+User-agent: HttpUrlConnection
+Allow: /
+
+User-agent: Checkly
+Allow: /
+
+User-agent: netzcheck
+Allow: /
+
+User-agent: ZoomBot
+Allow: /
+
+# ============================================================
+# SITEMAP LOCATIONS — list every sitemap you publish
+# ============================================================
 Sitemap: https://imagesqueeze.com/sitemap.xml
 Sitemap: https://imagesqueeze.com/sitemap-index.xml
 
-# ========================================
-# HOST DIRECTIVE
-# ========================================
-
+# ============================================================
+# CANONICAL HOST
+# ============================================================
 Host: https://imagesqueeze.com
 
-# ========================================
-# SOURCE
-# ========================================
-
-# Generated for ImageSqueeze - Free Online Image Compressor
-# Last Updated: April 2026
+# ============================================================
+# Crawl-delay: 1 second is polite and is ignored by Google.
+# ============================================================
+Crawl-delay: 1
