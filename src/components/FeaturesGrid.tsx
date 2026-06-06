@@ -244,7 +244,7 @@ const FeatureCard = ({
               <Icon
                 size={28}
                 weight="duotone"
-                className={isAccent ? 'h-7 w-7 text-accent' : 'h-7 w-7 text-primary'}
+                className={isAccent ? 'h-7 w-7 text-primary/80' : 'h-7 w-7 text-primary'}
               />
             </div>
           </div>
@@ -258,7 +258,7 @@ const FeatureCard = ({
               className={cn(
                 'rounded-full border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider transition-colors duration-500',
                 isAccent
-                  ? 'border-accent/25 bg-accent/10 text-accent'
+                  ? 'border-primary/30 bg-primary/10 text-primary/80'
                   : 'border-primary/25 bg-primary/10 text-primary'
               )}
             >

@@ -836,7 +836,7 @@ const Contact = () => {
                 <Sparkle size={20} weight="fill" />
               </motion.div>
               <motion.div
-                className="absolute bottom-6 left-8 text-accent/30"
+                className="absolute bottom-6 left-8 text-primary/40"
                 animate={{ rotate: [0, -10, 0], scale: [1, 1.15, 1] }}
                 transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
               >
