@@ -34,6 +34,7 @@
 - [📊 Performance Stats](#-performance-stats)
 - [🚀 Getting Started](#-getting-started)
 - [⚙️ Configuration](#️-configuration)
+- [☁️ Deploy to Vercel](#️-deploy-to-vercel)
 - [📁 Project Structure](#-project-structure)
 - [🧪 Testing](#-testing)
 - [♿ Accessibility](#-accessibility)
