@@ -95,7 +95,7 @@ const PdfUploadZone = ({ onFilesSelected, pdfCount, maxFiles = 5 }: PdfUploadZon
             aria-hidden
           />
           <motion.div
-            className={`relative flex h-14 w-14 items-center justify-center rounded-2xl transition-colors ${
+            className={`relative flex h-12 w-12 items-center justify-center rounded-2xl transition-colors sm:h-14 sm:w-14 ${
               dragOver ? 'bg-primary/25' : 'bg-primary/[0.1] group-hover:bg-primary/[0.15]'
             }`}
             animate={
@@ -109,15 +109,15 @@ const PdfUploadZone = ({ onFilesSelected, pdfCount, maxFiles = 5 }: PdfUploadZon
                 : { duration: 3, repeat: Infinity, ease: 'easeInOut' }
             }
           >
-            <FileText className="h-7 w-7 text-primary" strokeWidth={1.75} aria-hidden="true" />
+            <FileText className="h-6 w-6 text-primary sm:h-7 sm:w-7" strokeWidth={1.75} aria-hidden="true" />
           </motion.div>
         </div>
 
         <div className="space-y-1">
-          <p className="text-base sm:text-lg font-semibold text-foreground">
+          <p className="text-sm font-semibold text-foreground sm:text-base md:text-lg">
             {full ? `Maximum ${maxFiles} PDFs reached` : 'Drag & drop PDFs here'}
           </p>
-          <p className="text-xs sm:text-sm text-muted-foreground">
+          <p className="text-xs text-muted-foreground sm:text-sm">
             {full ? (
               'Remove some PDFs to add more'
             ) : (
