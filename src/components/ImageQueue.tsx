@@ -216,9 +216,11 @@ const ImageQueue = ({
                 onMouseLeave={() => setHoverId(null)}
                 className={`group relative flex items-center gap-2.5 rounded-xl border bg-card/60 p-2 transition-all duration-200 ${
                   f.status === 'error'
-                    ? 'border-red-500/30 hover:border-red-500/50'
+                    ? 'border-destructive/30 bg-destructive/[0.04] hover:border-destructive/50'
                     : f.status === 'done'
-                    ? 'border-emerald-500/20 hover:border-emerald-500/40'
+                    ? 'border-success/25 bg-success/[0.04] hover:border-success/45'
+                    : f.status === 'processing' && isCurrent
+                    ? 'border-warning/40 bg-warning/[0.05] shadow-elev-1'
                     : 'border-border/40 hover:border-primary/30'
                 }`}
               >
