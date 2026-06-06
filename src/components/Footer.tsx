@@ -97,7 +97,7 @@ const Footer = () => {
 
               <p className="mt-4 text-[10px] text-muted-foreground/70">
                 Made with{' '}
-                <span className="text-red-400" aria-label="love">❤️</span>{' '}
+                <Heart size={12} weight="fill" className="inline align-[-2px] text-red-400" aria-label="love" />{' '}
                 in India by{' '}
                 <a
                   href="https://ladestack.in"
