@@ -211,7 +211,7 @@ const PdfResultsSection = ({ files, onReset }: PdfResultsSectionProps) => {
                         variant="ghost"
                         size="sm"
                         onClick={() => setPreviewFile(f)}
-                        className="h-7 rounded-full px-2 text-[10px]"
+                        className="h-9 rounded-full px-2.5 text-[11px] sm:h-7 sm:px-2 sm:text-[10px]"
                         aria-label={`Preview ${f.name}`}
                       >
                         Preview
@@ -219,10 +219,10 @@ const PdfResultsSection = ({ files, onReset }: PdfResultsSectionProps) => {
                       <Button
                         size="sm"
                         onClick={() => downloadSingle(f)}
-                        className="h-7 rounded-full bg-emerald-500 px-2.5 text-[10px] font-semibold text-white hover:bg-emerald-600"
+                        className="h-9 rounded-full bg-emerald-500 px-3 text-[11px] font-semibold text-white hover:bg-emerald-600 sm:h-7 sm:px-2.5 sm:text-[10px]"
                         aria-label={`Download ${f.name}`}
                       >
-                        <Download className="mr-1 h-3 w-3" />
+                        <Download className="mr-1 h-3.5 w-3.5 sm:mr-1 sm:h-3 sm:w-3" />
                         Save
                       </Button>
                     </>
