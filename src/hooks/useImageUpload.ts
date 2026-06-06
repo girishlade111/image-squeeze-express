@@ -1,21 +1,18 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { toast } from 'sonner';
-import {
-  processImage,
-  toDownloadFile,
-  getImageDimensions,
-  recommendFormat,
-  type ProcessResult,
-  type ProcessSettings,
-  type ImageMetadata,
-} from '@/utils/imageProcessor';
-import { validateBatch } from '@/utils/batchValidation';
+import type { ProcessResult, ProcessSettings, ImageMetadata } from '@/utils/imageProcessor';
 import {
   MAX_FILES,
   MAX_FILE_SIZE,
   MAX_TOTAL_BATCH_SIZE,
 } from '@/hooks/imageUploadLimits';
 import type { Settings } from '@/hooks/useSettings';
+
+// browser-image-compression is ~50 KB. We defer loading the image engine
+// (and the pure batch-validator) until the user actually interacts with the
+// queue, so the landing page stays lean on first paint.
+const loadImageEngine = () => import('@/utils/imageProcessor');
+const loadBatchValidator = () => import('@/utils/batchValidation');
 
 export interface UploadedFile {
   id: string;
@@ -162,6 +159,7 @@ export function useImageUpload() {
             filenamePattern: settings.filenamePattern,
           };
 
+          const { processImage, toDownloadFile } = await loadImageEngine();
           const result = await processImage(item.file, ps, item.originalSize, completed + 1);
           const processedFile = toDownloadFile(item.name, result.blob, settings.filenamePattern, {
             width: result.width,
@@ -261,6 +259,25 @@ export function useImageUpload() {
     }));
 
     setFiles((prev) => {
+      // Defer batch validation to first use so the validator + its tiny
+      // import graph (imageUploadLimits, a few types) is not pulled into the
+      // first paint chunk of the landing page.
+      void loadBatchValidator().then(({ validateBatch }) => {
+        runValidation(validateBatch, prev);
+      });
+      return prev;
+    });
+  }, []);
+
+  const runValidation = useCallback(
+    async (
+      validateBatch: typeof import('@/utils/batchValidation').validateBatch,
+      prev: UploadedFile[]
+    ) => {
+      const incomingFiles = (runValidation as unknown as { _lastIncoming?: File[] })._lastIncoming;
+      if (!incomingFiles) return;
+      const incomingMeta = (runValidation as unknown as { _lastMeta?: Array<{ name: string; size: number; type: string }> })._lastMeta;
+      if (!incomingMeta) return;
       const report = validateBatch(incomingMeta, prev.length);
 
       // Surface warnings for special cases (the validator reports, the hook

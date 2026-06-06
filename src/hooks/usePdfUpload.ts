@@ -446,5 +446,5 @@ export function usePdfUpload() {
 }
 
 // Re-export the size helpers so consumers don't have to import from the processor
-export { formatBytes, getReductionRatio, getPdfMetadata };
+export { formatBytes, getReductionRatio };
 export type { PdfMetadata };
