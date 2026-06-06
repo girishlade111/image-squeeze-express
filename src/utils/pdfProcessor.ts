@@ -590,6 +590,7 @@ export function toDownloadPdfFile(
 
   // Strip illegal characters and collapse underscores.
   const cleaned = sanitized
+    // eslint-disable-next-line no-control-regex
     .replace(/[<>:"/\\|?*\x00-\x1f]/g, '_')
     .replace(/_+/g, '_')
     .replace(/^_+|_+$/g, '')

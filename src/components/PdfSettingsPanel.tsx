@@ -123,6 +123,7 @@ function previewFilename(
     out = out.split(token).join(val);
   }
   out = out
+    // eslint-disable-next-line no-control-regex
     .replace(/[<>:"/\\|?*\x00-\x1f]/g, '_')
     .replace(/_+/g, '_')
     .replace(/^_+|_+$/g, '')
