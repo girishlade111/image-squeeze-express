@@ -462,7 +462,9 @@ const SettingsPanel = ({
             <div>
               <Label className="text-xs font-semibold">Social Media Presets</Label>
               <div className="mt-2 grid grid-cols-2 gap-1.5 sm:grid-cols-3">
-                {presets.map((p) => (
+                {presets.map((p) => {
+                  const PresetIcon = p.icon;
+                  return (
                   <button
                     key={p.id}
                     onClick={() =>
@@ -476,9 +478,7 @@ const SettingsPanel = ({
                         : 'border-border/40 hover:border-primary/30 hover:bg-primary/5'
                     }`}
                   >
-                    <span className="text-lg" aria-hidden>
-                      {p.emoji}
-                    </span>
+                    <PresetIcon size={18} weight="duotone" aria-hidden />
                     <span className="text-[10px] font-semibold">{p.name}</span>
                     <span className="text-[9px] text-muted-foreground">
                       {p.w}×{p.h}
