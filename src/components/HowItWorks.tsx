@@ -70,11 +70,11 @@ const HowItWorks = () => {
               style={{ animationDelay: visible ? `${i * 200}ms` : '0ms' }}
             >
               <div className="relative mb-5">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-primary/30 bg-primary/10 text-primary shadow-[0_0_20px_hsl(var(--violet)/0.15)]">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-primary/30 bg-primary/10 text-primary shadow-[0_0_20px_hsl(var(--brand)/0.18)]">
                   <StepIcon size={42} weight="duotone" aria-hidden />
                 </div>
                 <div className="absolute -top-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-primary-foreground"
-                  style={{ background: 'linear-gradient(135deg, #4F46E5, #0D9488)' }}
+                  style={{ background: 'linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand-2)))' }}
                 >
                   {s.num}
                 </div>
