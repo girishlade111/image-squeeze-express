@@ -45,7 +45,7 @@ const Footer = () => {
   };
 
   return (
-    <footer className="relative mt-16 overflow-hidden">
+    <footer className="relative mt-12 overflow-hidden sm:mt-20">
       <div
         className="h-px w-full"
         style={{ background: 'linear-gradient(90deg, transparent, #4F46E5, #0D9488, transparent)' }}

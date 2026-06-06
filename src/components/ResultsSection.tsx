@@ -101,7 +101,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
 
   return (
     <section
-      className="container relative mx-auto mt-16 max-w-3xl px-4"
+      className="container relative mx-auto mt-10 max-w-3xl px-4 sm:mt-16"
       ref={ref}
       aria-label="Compression results"
     >
