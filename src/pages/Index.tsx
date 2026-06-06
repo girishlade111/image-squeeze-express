@@ -113,45 +113,58 @@ const Index = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <DocumentTitle title="Free Online Image Compressor — Up to 90% Smaller & Private" />
+      <Suspense fallback={null}>
+        <DocumentTitle title="Free Online Image Compressor — Up to 90% Smaller & Private" />
+      </Suspense>
       <Header />
       <main>
         <ErrorBoundary label="Image Compressor">
           <div ref={uploadRef} />
           <HeroSection onFilesSelected={addFiles} imageCount={files.length}>
             {hasFiles && (
-              <SettingsPanel
-                settings={settings}
-                files={sourceDims}
-                onUpdate={updateSettings}
-                onResetResize={resetResize}
-                onSetWidth={setWidth}
-                onSetHeight={setHeight}
-                onApplyPreset={applyQualityPreset}
-                onResetAll={resetAll}
-              />
+              <Suspense fallback={<BlockSkeleton height={400} />}>
+                <SettingsPanel
+                  settings={settings}
+                  files={sourceDims}
+                  onUpdate={updateSettings}
+                  onResetResize={resetResize}
+                  onSetWidth={setWidth}
+                  onSetHeight={setHeight}
+                  onApplyPreset={applyQualityPreset}
+                  onResetAll={resetAll}
+                />
+              </Suspense>
             )}
-            <ImageQueue
-              files={files}
-              isProcessing={isProcessing}
-              progress={progress}
-              processingText={processingText}
-              currentItem={currentItem}
-              stats={stats}
-              onRemove={removeFile}
-              onClearAll={clearAll}
-              onProcessAll={() => processAll(settings)}
-              onRetry={(id) => processFiles([id], settings)}
-              onPreviewOne={(id) => previewOne(id, settings)}
-              onInspect={handleInspect}
-              onAddMore={handleAddMore}
-              allDone={allDone}
-              readyCount={readyCount}
-            />
+            <Suspense
+              fallback={
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                  <CardSkeleton height={120} />
+                  <CardSkeleton height={120} />
+                </div>
+              }
+            >
+              <ImageQueue
+                files={files}
+                isProcessing={isProcessing}
+                progress={progress}
+                processingText={processingText}
+                currentItem={currentItem}
+                stats={stats}
+                onRemove={removeFile}
+                onClearAll={clearAll}
+                onProcessAll={() => processAll(settings)}
+                onRetry={(id) => processFiles([id], settings)}
+                onPreviewOne={(id) => previewOne(id, settings)}
+                onInspect={handleInspect}
+                onAddMore={handleAddMore}
+                allDone={allDone}
+                readyCount={readyCount}
+              />
+            </Suspense>
           </HeroSection>
 
           {allDone && processedFiles.length > 0 && (
-            <Suspense fallback={null}>
+            <Suspense fallback={<BlockSkeleton height={500} />}>
               <ResultsSection files={processedFiles} onReset={clearAll} />
             </Suspense>
           )}
@@ -163,7 +176,9 @@ const Index = () => {
             <LazySection>
               <FeaturesGrid />
             </LazySection>
-            <TrustBar />
+            <LazySection>
+              <TrustBar />
+            </LazySection>
             <LazySection>
               <FAQSection />
             </LazySection>
@@ -172,24 +187,28 @@ const Index = () => {
         </ErrorBoundary>
       </main>
 
-      <ImageInspector
-        file={inspectorFile}
-        open={!!inspectorFile}
-        onOpenChange={(o) => !o && setInspectorFileId(null)}
-        onApplyRecommendation={handleApplyRecommendation}
-        onPreviewOne={(id) => previewOne(id, settings)}
-      />
+      <Suspense fallback={null}>
+        <ImageInspector
+          file={inspectorFile}
+          open={!!inspectorFile}
+          onOpenChange={(o) => !o && setInspectorFileId(null)}
+          onApplyRecommendation={handleApplyRecommendation}
+          onPreviewOne={(id) => previewOne(id, settings)}
+        />
+      </Suspense>
 
-      <PageDropOverlay visible={isDragging} />
-      <ScrollToTop />
-      <MobileActionBar
-        visible={hasFiles && !allDone && readyCount > 0}
-        loading={isProcessing}
-        loadingText="Compressing…"
-        ctaLabel={`Compress ${readyCount} image${readyCount !== 1 ? 's' : ''}`}
-        ctaIcon={Lightning}
-        onCta={() => processAll(settings)}
-      />
+      <Suspense fallback={null}>
+        <PageDropOverlay visible={isDragging} />
+        <ScrollToTop />
+        <MobileActionBar
+          visible={hasFiles && !allDone && readyCount > 0}
+          loading={isProcessing}
+          loadingText="Compressing…"
+          ctaLabel={`Compress ${readyCount} image${readyCount !== 1 ? 's' : ''}`}
+          ctaIcon={Lightning}
+          onCta={() => processAll(settings)}
+        />
+      </Suspense>
     </div>
   );
 };
