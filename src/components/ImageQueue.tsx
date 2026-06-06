@@ -399,7 +399,7 @@ const ImageQueue = ({
                           className="flex h-9 w-9 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 text-primary transition-colors hover:bg-primary/20 sm:h-7 sm:w-7"
                           aria-label={`Try settings on ${f.name}`}
                         >
-                          <Sparkles className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
+                          <Sparkle size={16} weight="duotone" className="sm:!h-3.5 sm:!w-3.5" />
                         </motion.button>
                       </TooltipTrigger>
                       <TooltipContent>Try current settings on this image</TooltipContent>
@@ -648,7 +648,7 @@ function QueueList({
                     className="flex h-6 w-6 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
                     aria-label={`Try settings on ${f.name}`}
                   >
-                    <Sparkles className="h-3 w-3" />
+                    <Sparkle size={12} weight="duotone" />
                   </button>
                 )}
                 {f.status === 'error' && (
