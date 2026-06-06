@@ -249,37 +249,40 @@ const PdfResultsSection = ({ files, onReset }: PdfResultsSectionProps) => {
       </motion.div>
 
       <Dialog open={previewFile !== null} onOpenChange={(open) => !open && setPreviewFile(null)}>
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 pr-6">
+        <DialogContent className="max-w-4xl gap-3 overflow-hidden p-0 sm:p-6 max-sm:left-0 max-sm:top-0 max-sm:h-[100dvh] max-sm:max-w-none max-sm:translate-x-0 max-sm:translate-y-0">
+          <DialogHeader className="border-b border-border/40 pb-3 max-sm:px-4 max-sm:pt-4 sm:border-0 sm:pb-0">
+            <DialogTitle className="flex items-center gap-2 pr-6 text-sm">
               <FileText className="h-4 w-4 text-primary" />
               <span className="truncate">{previewFile?.name}</span>
             </DialogTitle>
           </DialogHeader>
-          {previewFile?.processedFile && (
-            <div className="overflow-hidden rounded-xl border border-border/40 bg-secondary/30">
-              <iframe
-                src={URL.createObjectURL(previewFile.processedFile)}
-                title="Compressed PDF preview"
-                className="h-[60vh] w-full"
-              />
+          <div className="overflow-y-auto max-sm:px-4 max-sm:pb-4 sm:max-h-[calc(90vh-4rem)]">
+            {previewFile?.processedFile && (
+              <div className="overflow-hidden rounded-xl border border-border/40 bg-secondary/30">
+                <iframe
+                  src={URL.createObjectURL(previewFile.processedFile)}
+                  title="Compressed PDF preview"
+                  className="h-[55vh] w-full sm:h-[60vh]"
+                />
+              </div>
+            )}
+            <div className="mt-3 flex items-center justify-end gap-2 max-sm:flex-col-reverse max-sm:items-stretch">
+              <Button
+                variant="ghost"
+                onClick={() => setPreviewFile(null)}
+                className="h-11 sm:h-9"
+                aria-label="Close preview"
+              >
+                <X className="mr-1.5 h-3.5 w-3.5" /> Close
+              </Button>
+              <Button
+                onClick={() => previewFile && downloadSingle(previewFile)}
+                className="h-11 bg-emerald-500 text-white hover:bg-emerald-600 sm:h-9"
+                aria-label="Download from preview"
+              >
+                <Download className="mr-1.5 h-3.5 w-3.5" /> Download
+              </Button>
             </div>
-          )}
-          <div className="flex items-center justify-end gap-2">
-            <Button
-              variant="ghost"
-              onClick={() => setPreviewFile(null)}
-              aria-label="Close preview"
-            >
-              <X className="mr-1.5 h-3.5 w-3.5" /> Close
-            </Button>
-            <Button
-              onClick={() => previewFile && downloadSingle(previewFile)}
-              className="bg-emerald-500 text-white hover:bg-emerald-600"
-              aria-label="Download from preview"
-            >
-              <Download className="mr-1.5 h-3.5 w-3.5" /> Download
-            </Button>
           </div>
         </DialogContent>
       </Dialog>
