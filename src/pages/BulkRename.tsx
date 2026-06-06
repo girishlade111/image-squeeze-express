@@ -73,7 +73,9 @@ const BulkRename = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <DocumentTitle title="Bulk File Rename — 13 Rule Types, Live Preview & ZIP" />
+      <Suspense fallback={null}>
+        <DocumentTitle title="Bulk File Rename — 13 Rule Types, Live Preview & ZIP" />
+      </Suspense>
       <Header />
       <main>
         <ToolHero
@@ -92,29 +94,40 @@ const BulkRename = () => {
             <FileRenameUploadZone onFilesSelected={addFiles} fileCount={files.length} />
           </div>
           {files.length > 0 && (
-            <FileRenameRuleBuilder
-              rules={rules}
-              onAdd={addRule}
-              onUpdate={updateRule}
-              onRemove={removeRule}
-              onMove={moveRule}
+            <Suspense fallback={<BlockSkeleton height={400} />}>
+              <FileRenameRuleBuilder
+                rules={rules}
+                onAdd={addRule}
+                onUpdate={updateRule}
+                onRemove={removeRule}
+                onMove={moveRule}
+                onReset={resetRules}
+              />
+            </Suspense>
+          )}
+          <Suspense
+            fallback={
+              <div className="grid grid-cols-1 gap-3">
+                <CardSkeleton height={100} />
+                <CardSkeleton height={100} />
+              </div>
+            }
+          >
+            <FileRenamePreviewList
+              files={files}
+              plan={plan}
+              changedCount={changedCount}
+              totalSize={totalSize}
+              formatBytes={formatBytes}
+              isZipping={isZipping}
+              zipProgress={zipProgress}
+              onRemove={removeFile}
+              onClearAll={clearAll}
+              onAddMore={handleAddMore}
+              onDownload={downloadZip}
               onReset={resetRules}
             />
-          )}
-          <FileRenamePreviewList
-            files={files}
-            plan={plan}
-            changedCount={changedCount}
-            totalSize={totalSize}
-            formatBytes={formatBytes}
-            isZipping={isZipping}
-            zipProgress={zipProgress}
-            onRemove={removeFile}
-            onClearAll={clearAll}
-            onAddMore={handleAddMore}
-            onDownload={downloadZip}
-            onReset={resetRules}
-          />
+          </Suspense>
         </ToolHero>
 
         {files.length > 0 && <StatsRow plan={plan} totalSize={totalSize} formatBytes={formatBytes} />}
@@ -122,19 +135,23 @@ const BulkRename = () => {
         <HowItWorksRename />
         <FeaturesRename />
         <FaqRename />
-        <Footer />
+        <Suspense fallback={null}>
+          <Footer />
+        </Suspense>
       </main>
 
-      <PageDropOverlay visible={isDragging} />
-      <ScrollToTop />
-      <MobileActionBar
-        visible={files.length > 0 && changedCount > 0}
-        loading={isZipping}
-        loadingText={`Zipping. ${zipProgress}%`}
-        ctaLabel={`Download ${changedCount} renamed file${changedCount !== 1 ? 's' : ''}`}
-        ctaIcon={DownloadSimple}
-        onCta={downloadZip}
-      />
+      <Suspense fallback={null}>
+        <PageDropOverlay visible={isDragging} />
+        <ScrollToTop />
+        <MobileActionBar
+          visible={files.length > 0 && changedCount > 0}
+          loading={isZipping}
+          loadingText={`Zipping. ${zipProgress}%`}
+          ctaLabel={`Download ${changedCount} renamed file${changedCount !== 1 ? 's' : ''}`}
+          ctaIcon={DownloadSimple}
+          onCta={downloadZip}
+        />
+      </Suspense>
     </div>
   );
 };
