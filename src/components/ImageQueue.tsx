@@ -314,7 +314,7 @@ const ImageQueue = ({
                         }}
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
-                        className="flex h-7 w-7 items-center justify-center rounded-lg border border-red-500/30 bg-red-500/10 text-red-300 transition-colors hover:bg-red-500/20"
+                        className="flex h-7 w-7 items-center justify-center rounded-lg border border-destructive/30 bg-destructive/10 text-destructive transition-colors hover:bg-destructive/20"
                         aria-label={`Retry ${f.name}`}
                       >
                         <RotateCcw className="h-3.5 w-3.5" />
