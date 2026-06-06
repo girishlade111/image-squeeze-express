@@ -219,6 +219,7 @@ export function usePdfUpload() {
         return;
       }
       try {
+        const { compressPdf, toDownloadPdfFile } = await loadPdfEngine();
         const result = await compressPdf(target.file, settings);
         const processedFile = toDownloadPdfFile(target.name, result.blob, settings.filenamePattern, {
           index: 1,
@@ -290,6 +291,7 @@ export function usePdfUpload() {
         setProcessingText(`Compressing ${completed + 1} of ${total}…`);
 
         try {
+          const { compressPdf, toDownloadPdfFile } = await loadPdfEngine();
           const result = await compressPdf(item.file, settings, (ratio, page, totalPages) => {
             setFiles((prev) =>
               prev.map((f) => (f.id === item.id ? { ...f, progress: ratio } : f))
