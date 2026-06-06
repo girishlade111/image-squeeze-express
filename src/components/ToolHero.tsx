@@ -36,7 +36,7 @@ const ToolHero = ({ prefix, highlight, suffix, subhead, badges, children }: Tool
 
   return (
     <section
-      className="relative flex min-h-[100svh] items-center justify-center overflow-hidden pt-[calc(3.5rem+env(safe-area-inset-top))] pb-12 sm:pt-[calc(3rem+env(safe-area-inset-top))] md:pt-12"
+      className="relative flex min-h-[100svh] items-center justify-center overflow-hidden pt-[calc(3.5rem+env(safe-area-inset-top))] pb-12 sm:pt-[calc(3.5rem+env(safe-area-inset-top))] md:pt-20"
     >
       {/* Animated gradient mesh background */}
       <div
