@@ -450,12 +450,12 @@ function QueueList({
                   </div>
                 )}
                 {f.status === 'done' && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-emerald-500/40">
+                  <div className="absolute inset-0 flex items-center justify-center bg-success/40">
                     <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} />
                   </div>
                 )}
                 {f.status === 'error' && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-red-500/40">
+                  <div className="absolute inset-0 flex items-center justify-center bg-destructive/40">
                     <AlertCircle className="h-3.5 w-3.5 text-white" strokeWidth={3} />
                   </div>
                 )}
