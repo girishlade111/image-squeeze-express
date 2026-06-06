@@ -352,7 +352,7 @@ const SettingsPanel = ({
               <Input
                 value={settings.filenamePattern}
                 onChange={(e) => onUpdate({ filenamePattern: e.target.value })}
-                placeholder="imagesqueeze_{name}.{ext}"
+                placeholder="ls-image-compressor_{name}.{ext}"
                 className="rounded-lg font-mono text-[11px]"
                 aria-label="Output filename pattern"
               />

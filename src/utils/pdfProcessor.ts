@@ -258,9 +258,9 @@ export async function compressPdf(
 
   const outDoc = await PDFDocument.create();
   if (!settings.stripMetadata) {
-    outDoc.setTitle('Compressed with ImageSqueeze');
-    outDoc.setProducer('ImageSqueeze PDF Compressor');
-    outDoc.setCreator('ImageSqueeze');
+    outDoc.setTitle('Compressed with LS Image Compressor');
+    outDoc.setProducer('LS Image Compressor');
+    outDoc.setCreator('LS Image Compressor');
   }
 
   let lastBlob: Blob | null = null;
@@ -323,8 +323,8 @@ export async function compressPdf(
       // Rebuild a fresh output document at the new settings
       const retryDoc = await PDFDocument.create();
       if (!settings.stripMetadata) {
-        retryDoc.setTitle('Compressed with ImageSqueeze');
-        retryDoc.setProducer('ImageSqueeze PDF Compressor');
+        retryDoc.setTitle('Compressed with LS Image Compressor');
+        retryDoc.setProducer('LS Image Compressor');
       }
       const retryPdf = await loadPdfDocument(file);
       for (let idx = 0; idx < pagesToProcess; idx++) {

@@ -49,7 +49,7 @@ export interface ImageMetadata {
   recommendationReason: string;
 }
 
-export const DEFAULT_FILENAME_PATTERN = 'imagesqueeze_{name}.{ext}';
+export const DEFAULT_FILENAME_PATTERN = 'ls-image-compressor_{name}.{ext}';
 
 const FILENAME_TOKENS: Record<string, string> = {
   '{name}': 'Original file name without extension',
@@ -767,7 +767,7 @@ export function toDownloadFile(
     .trim();
   if (out.length === 0) {
     // Everything was stripped — fall back to the safe default
-    out = `imagesqueeze_${baseName}`;
+    out = `ls-image-compressor_${baseName}`;
   }
 
   // Cap the base name BEFORE appending the extension so the final length

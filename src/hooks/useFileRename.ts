@@ -180,7 +180,7 @@ export function useFileRename() {
         (meta) => setZipProgress(90 + Math.round(meta.percent / 10))
       );
 
-      saveAs(blob, 'imagesqueeze_renamed.zip');
+      saveAs(blob, 'ls-image-compressor_renamed.zip');
       setZipProgress(100);
       toast.success(
         `✅ Renamed ${changedCount === 0 ? files.length : changedCount} of ${files.length} files. ZIP downloaded.`
