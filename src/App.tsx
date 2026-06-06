@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -9,6 +9,8 @@ import { SpeedInsights } from "@vercel/speed-insights/react";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
+import { RouteSkeleton } from "@/components/Skeleton";
+import { prefetchOnIdle } from "@/lib/prefetch";
 
 const About = lazy(() => import("./pages/About"));
 const Contact = lazy(() => import("./pages/Contact"));
@@ -20,33 +22,53 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Suspense fallback={<div className="min-h-screen bg-background" />}>
-            <ErrorBoundary>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/compress-pdf" element={<CompressPdf />} />
-                <Route path="/bulk-rename" element={<BulkRename />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route path="/privacy" element={<PrivacyPolicy />} />
-                <Route path="/terms" element={<TermsOfService />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </ErrorBoundary>
-          </Suspense>
-          <Analytics />
-          <SpeedInsights />
-        </BrowserRouter>
-      </TooltipProvider>
-    </ThemeProvider>
-  </QueryClientProvider>
-);
+const loadAbout = () => import("./pages/About");
+const loadCompressPdf = () => import("./pages/CompressPdf");
+const loadBulkRename = () => import("./pages/BulkRename");
+const loadContact = () => import("./pages/Contact");
+const loadPrivacy = () => import("./pages/PrivacyPolicy");
+const loadTerms = () => import("./pages/TermsOfService");
+
+const App = () => {
+  useEffect(() => {
+    prefetchOnIdle([
+      loadCompressPdf,
+      loadBulkRename,
+      loadAbout,
+      loadContact,
+      loadPrivacy,
+      loadTerms,
+    ]);
+  }, []);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Suspense fallback={<RouteSkeleton />}>
+              <ErrorBoundary>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/compress-pdf" element={<CompressPdf />} />
+                  <Route path="/bulk-rename" element={<BulkRename />} />
+                  <Route path="/about" element={<About />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route path="/privacy" element={<PrivacyPolicy />} />
+                  <Route path="/terms" element={<TermsOfService />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </ErrorBoundary>
+            </Suspense>
+            <Analytics />
+            <SpeedInsights />
+          </BrowserRouter>
+        </TooltipProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
