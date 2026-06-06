@@ -31,10 +31,10 @@ function truncate(str: string, max: number) {
 }
 
 const statusStyles = {
-  ready: 'bg-slate-500/15 text-slate-300 border-slate-500/25',
-  processing: 'bg-amber-500/15 text-amber-300 border-amber-500/25',
-  done: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/25',
-  error: 'bg-red-500/15 text-red-300 border-red-500/25',
+  ready: 'bg-muted text-muted-foreground border-border/60',
+  processing: 'bg-warning/15 text-warning-foreground border-warning/30',
+  done: 'bg-success/15 text-success-foreground border-success/30',
+  error: 'bg-destructive/15 text-destructive-foreground border-destructive/30',
 };
 
 const statusLabel: Record<UploadedFile['status'], string> = {
