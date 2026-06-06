@@ -383,67 +383,6 @@ const ImageQueue = ({
                     )}
                   </div>
                 </div>
-                  )}
-                  {f.status === 'done' && (
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      transition={{ type: 'spring', stiffness: 500, damping: 25 }}
-                      className="absolute inset-0 flex items-center justify-center bg-emerald-500/30 backdrop-blur-[1px]"
-                    >
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 shadow-lg">
-                        <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} />
-                      </div>
-                    </motion.div>
-                  )}
-                  {f.status === 'error' && (
-                    <motion.div
-                      initial={{ scale: 0 }}
-                      animate={{ scale: 1 }}
-                      className="absolute inset-0 flex items-center justify-center bg-red-500/30 backdrop-blur-[1px]"
-                    >
-                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-red-500 shadow-lg">
-                        <AlertCircle className="h-3.5 w-3.5 text-white" strokeWidth={3} />
-                      </div>
-                    </motion.div>
-                  )}
-                </div>
-
-                {/* Info */}
-                <div className="min-w-0 flex-1">
-                  <p
-                    className="truncate text-xs font-medium text-foreground"
-                    title={f.name}
-                  >
-                    {truncate(f.name, 22)}
-                  </p>
-                  <p className="mt-0.5 text-[10px] text-muted-foreground">
-                    {formatFileSize(f.originalSize)}
-                    {f.originalWidth > 0 && f.originalHeight > 0 && (
-                      <> · {f.originalWidth}×{f.originalHeight}</>
-                    )}
-                  </p>
-                  {f.status === 'done' && f.result && (
-                    <p className="mt-0.5 text-[10px] font-medium text-success">
-                      {formatFileSize(f.result.sizeBytes)} ·{' '}
-                      {getCompressionRatio(f.originalSize, f.result.sizeBytes)}
-                    </p>
-                  )}
-                  {f.status === 'error' && f.error && (
-                    <p
-                      className="mt-0.5 truncate text-[10px] text-destructive"
-                      title={f.error}
-                    >
-                      {f.error}
-                    </p>
-                  )}
-                  <Badge
-                    variant="outline"
-                    className={`mt-1 rounded-full px-1.5 py-0 text-[9px] font-semibold ${statusStyles[f.status]}`}
-                  >
-                    {isCurrent ? 'Processing now' : statusLabel[f.status]}
-                  </Badge>
-                </div>
 
                 {/* Action buttons cluster: inspect / preview / retry */}
                 <div className="flex flex-col items-center gap-1">
