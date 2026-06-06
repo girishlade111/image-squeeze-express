@@ -204,6 +204,64 @@
 }
 
 @layer utilities {
+  /* === Soft metallic finish === */
+
+  /* Polished metal text — vertical highlight gradient */
+  .metallic-text {
+    background-image: linear-gradient(
+      180deg,
+      hsl(0 0% 25%) 0%,
+      hsl(0 0% 5%) 40%,
+      hsl(0 0% 25%) 60%,
+      hsl(0 0% 5%) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+  .dark .metallic-text {
+    background-image: linear-gradient(
+      180deg,
+      hsl(0 0% 85%) 0%,
+      hsl(0 0% 100%) 40%,
+      hsl(0 0% 85%) 60%,
+      hsl(0 0% 100%) 100%
+    );
+  }
+
+  /* Top rim highlight + bottom shadow (simulates polished metal edge) */
+  .metallic-rim {
+    box-shadow:
+      inset 0 1px 0 0 hsl(0 0% 100% / 0.35),
+      inset 0 -1px 0 0 hsl(0 0% 0% / 0.08);
+  }
+  .dark .metallic-rim {
+    box-shadow:
+      inset 0 1px 0 0 hsl(0 0% 30% / 0.5),
+      inset 0 -1px 0 0 hsl(0 0% 0% / 0.3);
+  }
+
+  /* Vertical brushed surface — cylindrical reflection */
+  .metallic-surface {
+    background-image: linear-gradient(
+      180deg,
+      hsl(0 0% 100% / 0.05) 0%,
+      hsl(0 0% 100% / 0) 25%,
+      hsl(0 0% 0% / 0) 75%,
+      hsl(0 0% 0% / 0.04) 100%
+    );
+  }
+  .dark .metallic-surface {
+    background-image: linear-gradient(
+      180deg,
+      hsl(0 0% 100% / 0.06) 0%,
+      hsl(0 0% 100% / 0) 25%,
+      hsl(0 0% 0% / 0) 75%,
+      hsl(0 0% 0% / 0.15) 100%
+    );
+  }
+
   /* === Surfaces === */
   .glass-card {
     background: hsl(var(--card) / 0.6);
