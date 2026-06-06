@@ -6,6 +6,7 @@ import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import {
   Link2,
   Unlink2,
@@ -17,9 +18,11 @@ import {
   RotateCw,
   Sparkles,
   RotateCcw,
+  FileText,
+  Hash,
 } from 'lucide-react';
 import { Settings, QualityPreset, Rotation } from '@/hooks/useSettings';
-import { isFormatSupported } from '@/utils/imageProcessor';
+import { isFormatSupported, getFilenameTokenDocs } from '@/utils/imageProcessor';
 
 interface SettingsPanelProps {
   settings: Settings;
