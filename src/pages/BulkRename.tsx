@@ -1,14 +1,8 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef, lazy, Suspense } from 'react';
 import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import ToolHero from '@/components/ToolHero';
 import FileRenameUploadZone from '@/components/FileRenameUploadZone';
-import FileRenameRuleBuilder from '@/components/FileRenameRuleBuilder';
-import FileRenamePreviewList from '@/components/FileRenamePreviewList';
-import PageDropOverlay from '@/components/PageDropOverlay';
-import ScrollToTop from '@/components/ScrollToTop';
-import DocumentTitle from '@/components/DocumentTitle';
-import MobileActionBar from '@/components/MobileActionBar';
+import { BlockSkeleton, CardSkeleton } from '@/components/Skeleton';
 import { useFileRename } from '@/hooks/useFileRename';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
 import { usePageDropZone } from '@/hooks/usePageDropZone';
@@ -33,6 +27,14 @@ import {
   Shield,
   MagnifyingGlass,
 } from '@phosphor-icons/react';
+
+const Footer = lazy(() => import('@/components/Footer'));
+const FileRenameRuleBuilder = lazy(() => import('@/components/FileRenameRuleBuilder'));
+const FileRenamePreviewList = lazy(() => import('@/components/FileRenamePreviewList'));
+const PageDropOverlay = lazy(() => import('@/components/PageDropOverlay'));
+const ScrollToTop = lazy(() => import('@/components/ScrollToTop'));
+const DocumentTitle = lazy(() => import('@/components/DocumentTitle'));
+const MobileActionBar = lazy(() => import('@/components/MobileActionBar'));
 
 const BulkRename = () => {
   const {
