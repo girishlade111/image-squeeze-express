@@ -759,15 +759,12 @@ export function toDownloadFile(
     out = out.split(token).join(replacements[token]);
   }
 
-  // Sanitize illegal characters and collapse repeats
   out = out
+    // eslint-disable-next-line no-control-regex
     .replace(/[<>:"/\\|?*\x00-\x1f]/g, '_')
     .replace(/_+/g, '_')
     .replace(/^_+|_+$/g, '')
     .trim();
-  // The literal newline / control-character replacement is intentional — we
-  // want to neutralize NULL bytes and other control chars in filenames. The
-  // no-control-regex rule is suppressed inline so the lint job stays clean.
   if (out.length === 0) {
     // Everything was stripped — fall back to the safe default
     out = `imagesqueeze_${baseName}`;
