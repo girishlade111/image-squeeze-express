@@ -10,7 +10,7 @@ const socials = [
   { icon: Instagram, href: 'https://www.instagram.com/girish_lade_/', label: 'Instagram' },
   { icon: Linkedin, href: 'https://www.linkedin.com/in/girish-lade-075bba201/', label: 'LinkedIn' },
   { icon: Github, href: 'https://github.com/girishlade111', label: 'GitHub' },
-  { icon: CodepenIcon, href: 'https://codepen.io/Girish-Lade-the-looper', label: 'CodePen' },
+  { icon: CodepenLogo, href: 'https://codepen.io/Girish-Lade-the-looper', label: 'CodePen' },
   { icon: Mail, href: 'mailto:admin@ladestack.in', label: 'Email' },
   { icon: Globe, href: 'https://ladestack.in', label: 'Website' },
 ];
@@ -62,8 +62,8 @@ const Footer = () => {
             {/* Brand block */}
             <div className="lg:col-span-4">
               <Link to="/" className="inline-flex items-center gap-2 group">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/20 bg-gradient-to-br from-primary/20 to-accent/20">
-                  <Zap className="h-4 w-4 text-primary" />
+                <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/20 bg-gradient-to-br from-primary/20 to-accent/20 text-primary">
+                  <Lightning size={18} weight="duotone" />
                 </div>
                 <span
                   className="text-base font-bold tracking-tight"
