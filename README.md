@@ -6,7 +6,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://typescriptlang.org)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
 [![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
-[![Tests](https://img.shields.io/badge/Tests-134_passing-brightgreen)](#-testing)
+[![Tests](https://img.shields.io/badge/Tests-157_passing-brightgreen)](#-testing)
 [![License](https://img.shields.io/badge/License-MIT-green)](https://choosealicense.com/licenses/mit/)
 [![Platform](https://img.shields.io/badge/Platform-Web-brightgreen)](#)
 [![Architecture](https://img.shields.io/badge/Architecture-100%25_Client_Side-blueviolet)](#-system-architecture)
