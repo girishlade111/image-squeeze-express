@@ -4,7 +4,14 @@
     <script>
       (function(){
         try {
-          var t = localStorage.getItem('imagesqueeze-theme');
+          var OLD_KEY = 'imagesqueeze-theme';
+          var NEW_KEY = 'ls-image-compressor-theme';
+          var old = localStorage.getItem(OLD_KEY);
+          if (old !== null && localStorage.getItem(NEW_KEY) === null) {
+            localStorage.setItem(NEW_KEY, old);
+            localStorage.removeItem(OLD_KEY);
+          }
+          var t = localStorage.getItem(NEW_KEY);
           var dark = t ? t === 'dark' : true;
           document.documentElement.classList.toggle('dark', dark);
         } catch(e) {
