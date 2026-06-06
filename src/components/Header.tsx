@@ -82,10 +82,11 @@ const Header = () => {
             aria-label="ImageSqueeze — home"
           >
             <span
-              className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 text-lg transition-transform group-hover:scale-110 md:h-7 md:w-7 md:text-base"
+              className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 text-primary transition-transform group-hover:scale-110 md:h-7 md:w-7"
               aria-hidden
             >
-              ⚡
+              <Lightning size={20} weight="duotone" className="md:hidden" />
+              <Lightning size={16} weight="duotone" className="hidden md:block" />
             </span>
             <span
               className="text-base font-bold tracking-tight sm:text-lg md:text-base"
