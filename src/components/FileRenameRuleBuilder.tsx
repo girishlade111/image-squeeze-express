@@ -214,7 +214,7 @@ const FileRenameRuleBuilder = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="rounded-2xl border border-border/40 bg-card/80 backdrop-blur-xl p-4 shadow-lg space-y-3">
+      <div className="rounded-2xl border border-border/40 bg-card/80 backdrop-blur-xl p-3 shadow-lg space-y-3 sm:p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
             <Label className="text-xs font-semibold">Rename Rules</Label>
