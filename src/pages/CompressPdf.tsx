@@ -26,7 +26,7 @@ import type {
   PdfProcessSettings,
   PdfQualityPreset,
 } from '@/utils/pdfProcessor';
-import { PDF_QUALITY_PRESETS } from '@/utils/pdfProcessor';
+import { PDF_QUALITY_PRESETS } from '@/utils/pdfFormat';
 
 const Footer = lazy(() => import('@/components/Footer'));
 const PdfQueue = lazy(() => import('@/components/PdfQueue'));
