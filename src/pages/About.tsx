@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import {
@@ -42,6 +42,7 @@ import {
   GraduationCap,
   Briefcase,
   Share,
+  TrendUp,
 } from '@phosphor-icons/react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -129,10 +130,48 @@ const pillars = [
 ];
 
 const stats = [
-  { icon: Users, value: 25000, suffix: '+', label: 'Active Users', format: 'number' as const },
-  { icon: Images, value: 1.2, suffix: 'M+', label: 'Images Compressed', format: 'decimal' as const },
-  { icon: FileText, value: 85000, suffix: '+', label: 'PDFs Optimized', format: 'number' as const },
-  { icon: Stack, value: 100, suffix: '%', label: 'Client-Side', format: 'number' as const },
+  {
+    icon: Users,
+    value: 25000,
+    suffix: '+',
+    label: 'Active Users',
+    format: 'number' as const,
+    progress: 85,
+    trend: '+18%',
+    sparkline: [12, 18, 25, 32, 40, 52, 65, 78, 85, 95],
+    description: 'People who trust ImageSqueeze to handle their images every month — and tell their friends.',
+    featured: true,
+  },
+  {
+    icon: Images,
+    value: 1.2,
+    suffix: 'M+',
+    label: 'Images Compressed',
+    format: 'decimal' as const,
+    progress: 92,
+    trend: '+24%',
+    sparkline: [5, 8, 12, 18, 25, 35, 48, 60, 75, 92],
+  },
+  {
+    icon: FileText,
+    value: 85000,
+    suffix: '+',
+    label: 'PDFs Optimized',
+    format: 'number' as const,
+    progress: 78,
+    trend: '+12%',
+    sparkline: [10, 14, 20, 28, 35, 45, 55, 62, 70, 78],
+  },
+  {
+    icon: Stack,
+    value: 100,
+    suffix: '%',
+    label: 'Client-Side',
+    format: 'number' as const,
+    progress: 100,
+    trend: 'Always',
+    sparkline: [95, 96, 97, 98, 99, 99, 100, 100, 100, 100],
+  },
 ];
 
 const values = [
@@ -506,18 +545,68 @@ const About = () => {
             subtitle="The kind of things that matter to a small team — quietly compounding, one user at a time."
           />
 
-          <motion.div
-            ref={statsRef}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.2 }}
-            variants={fadeUpStagger}
-            className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4"
-          >
-            {stats.map((stat) => (
-              <StatCard key={stat.label} stat={stat} active={statsVisible} />
-            ))}
-          </motion.div>
+          <div className="relative mt-10">
+            {/* Background pattern — subtle dot grid */}
+            <div
+              className="pointer-events-none absolute inset-0 -z-10 opacity-50"
+              aria-hidden
+              style={{
+                backgroundImage:
+                  'radial-gradient(circle, hsl(var(--primary) / 0.12) 1px, transparent 1px)',
+                backgroundSize: '24px 24px',
+                maskImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent)',
+                WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 50%, black, transparent)',
+              }}
+            />
+
+            {/* Floating sparkles */}
+            <FloatingSparkles />
+
+            <div
+              ref={statsRef}
+              className="grid gap-3 sm:gap-4 lg:grid-cols-3"
+            >
+              {/* Featured stat — spans 2 cols on lg */}
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5 }}
+                className="lg:col-span-2"
+              >
+                <FeaturedStatCard stat={stats[0]} active={statsVisible} />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                <StatCard stat={stats[3]} active={statsVisible} />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="lg:col-span-1"
+              >
+                <StatCard stat={stats[1]} active={statsVisible} />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="lg:col-span-2"
+              >
+                <StatCard stat={stats[2]} active={statsVisible} wide />
+              </motion.div>
+            </div>
+          </div>
         </section>
 
         {SECTION_DIVIDER}
@@ -912,29 +1001,301 @@ const About = () => {
   );
 };
 
-const StatCard = ({ stat, active }: { stat: typeof stats[number]; active: boolean }) => {
-  const animated = useCountUp(active ? stat.value : 0, 1200);
+const StatCard = ({
+  stat,
+  active,
+  wide = false,
+}: {
+  stat: (typeof stats)[number];
+  active: boolean;
+  wide?: boolean;
+}) => {
+  const animated = useCountUp(active ? stat.value : 0, 1400);
   const formatted = stat.format === 'decimal' ? animated.toFixed(1) : Math.floor(animated).toLocaleString();
+  const ringSize = 64;
 
   return (
-    <motion.div variants={fadeUp} className="h-full">
-      <GradientCard hover={true} className="h-full">
-        <div className="flex items-start gap-3">
-          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10">
+    <GradientCard hover={true} className="h-full overflow-hidden p-0">
+      <div className={`flex h-full flex-col gap-4 p-5 ${wide ? 'sm:flex-row sm:items-center sm:gap-5 sm:p-6' : ''}`}>
+        {/* Circular progress ring + icon */}
+        <div className="relative flex-shrink-0" style={{ width: ringSize, height: ringSize }}>
+          <CircularProgress progress={stat.progress} size={ringSize} active={active} />
+          <div
+            className="absolute inset-0 m-auto flex h-10 w-10 items-center justify-center rounded-full"
+            style={{
+              background: 'linear-gradient(135deg, hsl(var(--primary) / 0.2), hsl(var(--accent) / 0.2))',
+            }}
+          >
             <stat.icon size={22} weight="duotone" className="h-5 w-5 text-primary" />
           </div>
-          <div className="min-w-0 flex-1">
-            <div className="flex items-baseline gap-0.5">
-              <span className="text-2xl font-black tracking-tight tabular-nums sm:text-3xl">
-                {formatted}
-              </span>
-              <span className="text-lg font-bold text-primary sm:text-xl">{stat.suffix}</span>
+        </div>
+
+        {/* Content */}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-baseline gap-0.5">
+            <span
+              className="text-2xl font-black tracking-tight tabular-nums sm:text-3xl"
+              style={{
+                background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              {formatted}
+            </span>
+            <span className="text-lg font-bold text-primary sm:text-xl">{stat.suffix}</span>
+          </div>
+          <div className="mt-0.5 text-[11px] font-medium text-muted-foreground sm:text-xs">{stat.label}</div>
+
+          {/* Trend + sparkline */}
+          <div className="mt-2.5 flex items-center gap-2">
+            <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-500/12 px-1.5 py-0.5 text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
+              <TrendUp size={10} weight="bold" />
+              {stat.trend}
+            </span>
+            <div className="flex-1 opacity-90">
+              <Sparkline data={stat.sparkline} active={active} width={wide ? 120 : 72} height={20} />
             </div>
-            <div className="text-[11px] font-medium text-muted-foreground sm:text-xs">{stat.label}</div>
           </div>
         </div>
-      </GradientCard>
-    </motion.div>
+      </div>
+    </GradientCard>
+  );
+};
+
+const FeaturedStatCard = ({ stat, active }: { stat: (typeof stats)[number]; active: boolean }) => {
+  const animated = useCountUp(active ? stat.value : 0, 1600);
+  const formatted = stat.format === 'decimal' ? animated.toFixed(1) : Math.floor(animated).toLocaleString();
+  const ringSize = 140;
+
+  return (
+    <GradientCard hover={true} className="relative h-full overflow-hidden p-0">
+      {/* Decorative orbs */}
+      <div
+        className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full"
+        style={{ background: 'radial-gradient(circle, hsl(var(--primary) / 0.2), transparent)', filter: 'blur(50px)' }}
+        aria-hidden
+      />
+      <div
+        className="pointer-events-none absolute -bottom-16 -left-16 h-56 w-56 rounded-full"
+        style={{ background: 'radial-gradient(circle, hsl(var(--accent) / 0.2), transparent)', filter: 'blur(50px)' }}
+        aria-hidden
+      />
+
+      <div className="relative flex h-full flex-col gap-5 p-5 sm:flex-row sm:items-center sm:gap-6 sm:p-6">
+        {/* Large circular ring + icon */}
+        <div className="relative flex-shrink-0 self-center sm:self-auto" style={{ width: ringSize, height: ringSize }}>
+          <CircularProgress progress={stat.progress} size={ringSize} active={active} strokeWidth={5} />
+          <div
+            className="absolute inset-0 m-auto flex h-20 w-20 items-center justify-center rounded-full"
+            style={{
+              background: 'linear-gradient(135deg, hsl(var(--primary) / 0.25), hsl(var(--accent) / 0.25))',
+            }}
+          >
+            <stat.icon size={40} weight="duotone" className="h-9 w-9 text-primary" />
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="min-w-0 flex-1 text-center sm:text-left">
+          <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
+            The headline number
+          </p>
+          <div className="mt-1.5 flex items-baseline justify-center gap-1 sm:justify-start">
+            <span
+              className="text-5xl font-black tracking-tight tabular-nums sm:text-6xl"
+              style={{
+                background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+              }}
+            >
+              {formatted}
+            </span>
+            <span className="text-2xl font-bold text-primary sm:text-3xl">{stat.suffix}</span>
+          </div>
+          <div className="mt-1 text-sm font-semibold sm:text-base">{stat.label}</div>
+
+          {stat.description && (
+            <p className="mx-auto mt-2 max-w-md text-xs leading-relaxed text-muted-foreground sm:text-sm">
+              {stat.description}
+            </p>
+          )}
+
+          {/* Trend + sparkline */}
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/12 px-2 py-0.5 text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
+              <TrendUp size={11} weight="bold" />
+              {stat.trend} vs last month
+            </span>
+            <div className="flex-shrink-0">
+              <Sparkline data={stat.sparkline} active={active} width={180} height={28} />
+            </div>
+          </div>
+        </div>
+      </div>
+    </GradientCard>
+  );
+};
+
+const CircularProgress = ({
+  progress,
+  size,
+  active,
+  strokeWidth = 3,
+}: {
+  progress: number;
+  size: number;
+  active: boolean;
+  strokeWidth?: number;
+}) => {
+  const gradientId = useId();
+  const radius = (size - strokeWidth * 2) / 2;
+  const circumference = 2 * Math.PI * radius;
+
+  return (
+    <svg
+      width={size}
+      height={size}
+      className="absolute inset-0 -rotate-90"
+      aria-hidden
+    >
+      <defs>
+        <linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stopColor="hsl(var(--primary))" />
+          <stop offset="100%" stopColor="hsl(var(--accent))" />
+        </linearGradient>
+      </defs>
+      <circle
+        cx={size / 2}
+        cy={size / 2}
+        r={radius}
+        fill="none"
+        stroke="hsl(var(--border) / 0.4)"
+        strokeWidth={strokeWidth}
+      />
+      <motion.circle
+        cx={size / 2}
+        cy={size / 2}
+        r={radius}
+        fill="none"
+        stroke={`url(#${gradientId})`}
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+        strokeDasharray={circumference}
+        initial={{ strokeDashoffset: circumference }}
+        animate={
+          active
+            ? { strokeDashoffset: circumference - (circumference * progress) / 100 }
+            : { strokeDashoffset: circumference }
+        }
+        transition={{ duration: 1.5, ease: 'easeOut', delay: 0.2 }}
+      />
+    </svg>
+  );
+};
+
+const Sparkline = ({
+  data,
+  active,
+  width = 80,
+  height = 24,
+}: {
+  data: number[];
+  active: boolean;
+  width?: number;
+  height?: number;
+}) => {
+  const gradientId = useId();
+  const max = Math.max(...data);
+  const min = Math.min(...data);
+  const range = max - min || 1;
+  const pad = 2;
+
+  const points = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * (width - pad * 2) + pad;
+    const y = height - pad - ((v - min) / range) * (height - pad * 2);
+    return [x, y] as const;
+  });
+
+  const linePath = `M ${points.map(([x, y]) => `${x.toFixed(2)},${y.toFixed(2)}`).join(' L ')}`;
+  const fillPath = `${linePath} L ${(width - pad).toFixed(2)},${height} L ${pad},${height} Z`;
+
+  return (
+    <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="overflow-visible" aria-hidden>
+      <defs>
+        <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      <motion.path
+        d={fillPath}
+        fill={`url(#${gradientId})`}
+        initial={{ opacity: 0 }}
+        animate={active ? { opacity: 1 } : { opacity: 0 }}
+        transition={{ duration: 0.5, delay: 1 }}
+      />
+      <motion.path
+        d={linePath}
+        fill="none"
+        stroke="hsl(var(--primary))"
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        initial={{ pathLength: 0 }}
+        animate={active ? { pathLength: 1 } : { pathLength: 0 }}
+        transition={{ duration: 1.2, delay: 0.4, ease: 'easeOut' }}
+      />
+      <motion.circle
+        cx={points[points.length - 1][0]}
+        cy={points[points.length - 1][1]}
+        r="2.5"
+        fill="hsl(var(--primary))"
+        initial={{ scale: 0, opacity: 0 }}
+        animate={active ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+        transition={{ duration: 0.3, delay: 1.5 }}
+      />
+    </svg>
+  );
+};
+
+const FloatingSparkles = () => {
+  const sparkles = useMemo(
+    () => [
+      { left: '8%', top: '15%', size: 12, delay: '0s', duration: '6s' },
+      { left: '88%', top: '25%', size: 10, delay: '-2s', duration: '7s' },
+      { left: '12%', top: '70%', size: 14, delay: '-4s', duration: '8s' },
+      { left: '85%', top: '80%', size: 11, delay: '-1s', duration: '6.5s' },
+      { left: '50%', top: '5%', size: 9, delay: '-3s', duration: '7.5s' },
+      { left: '45%', top: '92%', size: 10, delay: '-5s', duration: '8.5s' },
+    ],
+    []
+  );
+
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
+      {sparkles.map((s, i) => (
+        <motion.div
+          key={i}
+          className="absolute text-primary/40"
+          style={{ left: s.left, top: s.top }}
+          animate={{
+            y: [0, -12, 0],
+            opacity: [0.3, 0.8, 0.3],
+            scale: [0.8, 1.1, 0.8],
+          }}
+          transition={{
+            duration: parseFloat(s.duration),
+            delay: parseFloat(s.delay),
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        >
+          <Sparkle size={s.size} weight="fill" />
+        </motion.div>
+      ))}
+    </div>
   );
 };
 
