@@ -1,5 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
+import { Zap, Sparkles } from 'lucide-react';
 import {
   FilePdf,
   Sparkle,
