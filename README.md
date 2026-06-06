@@ -178,12 +178,26 @@ All three tools share:
 
 > ⚠️ **Trade-off note**: pages become image-only PDFs, so text is no longer selectable. Document *appearance* is preserved; the search/copy-text workflow is not.
 
+#### ✨ Power Features
+
+- **🔍 PDF Inspector** — click the first-page thumbnail (or the 👁 *Inspect* button) to open a full preview dialog with: first-page thumbnail, side-by-side original/processed iframe, zoom controls (50–400%), document metadata (page count, page size, aspect ratio, title, author, PDF version), and the smart recommendation card.
+- **💡 Smart Recommendation** — when a PDF is dropped, the engine samples the first page and classifies it as text-heavy / image-heavy / mixed, then suggests a preset + quality + estimated savings. A `smart` badge appears next to the file name — click it to apply the suggestion.
+- **🎯 Target Size (KB)** — set a max output size and the engine iteratively reduces JPEG quality (in 10% steps) and scale (in 15% steps) to fit, with a 5-iteration safety floor.
+- **📐 DPI Override** — choose 72 / 96 / 150 / 300 DPI (1 DPI = 1/72 in pdfjs space). Overrides the preset's render scale; a higher DPI keeps text crisp at the cost of file size.
+- **⚫ Grayscale** — converts every page to B&W (BT.601 luma). Saves ~25% on color image-heavy PDFs with no text loss.
+- **🕵️ Strip Metadata** — drops title, author, producer, creator from the output. Useful for sharing without leaking the original authoring tool.
+- **📑 Page Range** — compress only the pages you need (e.g. `1-5` or `12-20`). The other pages are dropped from the output.
+- **🏷️ Filename Pattern** — token-based output naming with 8 tokens: `{name}`, `{ext}`, `{format}`, `{pages}`, `{size}` (KB), `{date}` (YYYY-MM-DD), `{q}` (final quality 0–100), `{index}` (1-based in batch). Click the `Tokens` button in the panel for a one-click picker. Sanitized against OS-illegal characters.
+- **⚡ Live Throughput** — per-batch progress bar shows real-time speed (KB/s / MB/s) and ETA, computed from a rolling 200 ms window.
+
 #### ⚙️ Engine Details
 
 - **Parser**: `pdfjs-dist` v6 (lazy-loaded with a code-split chunk — never fetched unless the user visits this page)
 - **Builder**: `pdf-lib` v1.17
 - **Worker**: pdfjs 1.2 MB minified worker is served as a static file from `public/pdf.worker.min.mjs`
 - **Output**: `image/jpeg` per page, embedded via `outDoc.embedJpg()`, with `useObjectStreams: true` for smaller files
+- **Thumbnail**: 240 px JPEG data-URL of page 1, generated on drop, used by the queue card and the inspector
+- **Recommendation engine**: edge + color analysis of a 0.25× scale render (soft-edge ratio, hard-edge ratio, 4-bit quantized color count) — text-heavy if `hardRatio > 0.15` or `(colors < 200 && hardRatio > 0.08)`; image-heavy if `softRatio > 0.3 && colors > 1500`
 
 ---
 
