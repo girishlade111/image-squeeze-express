@@ -333,16 +333,16 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
 
       {/* Preview dialog */}
       <Dialog open={!!previewFile} onOpenChange={(open) => !open && setPreviewFile(null)}>
-        <DialogContent className="max-w-3xl rounded-2xl">
-          <DialogHeader>
+        <DialogContent className="max-w-3xl gap-3 overflow-hidden p-0 sm:rounded-2xl sm:p-6 max-sm:left-0 max-sm:top-0 max-sm:h-[100dvh] max-sm:max-w-none max-sm:translate-x-0 max-sm:translate-y-0">
+          <DialogHeader className="border-b border-border/40 pb-3 max-sm:px-4 max-sm:pt-4 sm:border-0 sm:pb-0">
             <DialogTitle className="flex items-center gap-2 text-sm">
               <ImageIcon className="h-4 w-4 text-primary" />
               {previewFile?.name}
             </DialogTitle>
           </DialogHeader>
-          {previewFile && (
-            <ComparisonView file={previewFile} />
-          )}
+          <div className="overflow-y-auto max-sm:px-4 max-sm:pb-4 sm:max-h-[calc(90vh-4rem)]">
+            {previewFile && <ComparisonView file={previewFile} />}
+          </div>
         </DialogContent>
       </Dialog>
     </section>
