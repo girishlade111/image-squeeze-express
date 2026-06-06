@@ -10,6 +10,7 @@ import DocumentTitle from '@/components/DocumentTitle';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import TrustBar from '@/components/TrustBar';
 import ImageInspector from '@/components/ImageInspector';
+import MobileActionBar from '@/components/MobileActionBar';
 import { useImageUpload, type UploadedFile } from '@/hooks/useImageUpload';
 import { useSettings } from '@/hooks/useSettings';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
@@ -177,6 +178,14 @@ const Index = () => {
 
       <PageDropOverlay visible={isDragging} />
       <ScrollToTop />
+      <MobileActionBar
+        visible={hasFiles && !allDone && readyCount > 0}
+        loading={isProcessing}
+        loadingText="Compressing…"
+        ctaLabel={`Compress ${readyCount} image${readyCount !== 1 ? 's' : ''}`}
+        ctaEmoji="⚡"
+        onCta={() => processAll(settings)}
+      />
     </div>
   );
 };
