@@ -760,7 +760,11 @@ export function toDownloadFile(
   }
 
   // Sanitize illegal characters and collapse repeats
-  out = out.replace(/[<>:"/\\|?*\x00-\x1f]/g, '_').replace(/_+/g, '_').trim();
+  out = out
+    .replace(/[<>:"/\\|?*\x00-\x1f]/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .trim();
   if (out.length === 0) {
     // Everything was stripped — fall back to the safe default
     out = `imagesqueeze_${baseName}`;
