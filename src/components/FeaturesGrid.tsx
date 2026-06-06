@@ -1,11 +1,38 @@
 import { useEffect, useRef, useState } from 'react';
+import {
+  ShieldCheck,
+  Lightning,
+  Stack,
+  ArrowsClockwise,
+  Gift,
+} from '@phosphor-icons/react';
 
 const features = [
-  { icon: '🔒', title: '100% Private', desc: 'Images processed in your browser. Zero server uploads.' },
-  { icon: '⚡', title: 'Lightning Fast', desc: 'No upload wait times. Compression starts instantly.' },
-  { icon: '📦', title: 'Batch Processing', desc: 'Compress up to 50 images at once (up to 750 MB) for free.' },
-  { icon: '🔄', title: 'Format Conversion', desc: 'Convert to WebP (30% smaller), AVIF (50% smaller), PNG, or JPEG instantly.' },
-  { icon: '🆓', title: 'Free Forever', desc: 'No account, no hidden fees, no watermarks. Ever.' },
+  {
+    icon: ShieldCheck,
+    title: '100% Private',
+    desc: 'Images processed in your browser. Zero server uploads.',
+  },
+  {
+    icon: Lightning,
+    title: 'Lightning Fast',
+    desc: 'No upload wait times. Compression starts instantly.',
+  },
+  {
+    icon: Stack,
+    title: 'Batch Processing',
+    desc: 'Compress up to 50 images at once (up to 750 MB) for free.',
+  },
+  {
+    icon: ArrowsClockwise,
+    title: 'Format Conversion',
+    desc: 'Convert to WebP (30% smaller), AVIF (50% smaller), PNG, or JPEG instantly.',
+  },
+  {
+    icon: Gift,
+    title: 'Free Forever',
+    desc: 'No account, no hidden fees, no watermarks. Ever.',
+  },
 ];
 
 const FeaturesGrid = () => {
@@ -40,7 +67,9 @@ const FeaturesGrid = () => {
       </h2>
 
       <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {features.map((f, i) => (
+        {features.map((f, i) => {
+          const Icon = f.icon;
+          return (
           <div
             key={f.title}
             className={`group rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-6 transition-all duration-700 hover:border-primary/40 hover:shadow-[0_0_24px_hsl(var(--violet)/0.12)] ${
@@ -48,15 +77,15 @@ const FeaturesGrid = () => {
             }`}
             style={{ animationDelay: visible ? `${i * 100}ms` : '0ms' }}
           >
-            {/* Icon circle */}
-            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-2xl transition-transform duration-300 group-hover:scale-110">
-              {f.icon}
+            <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-full border border-primary/20 bg-primary/10 text-primary transition-transform duration-300 group-hover:scale-110">
+              <Icon size={26} weight="duotone" aria-hidden />
             </div>
 
             <h3 className="text-base font-bold">{f.title}</h3>
             <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{f.desc}</p>
           </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
