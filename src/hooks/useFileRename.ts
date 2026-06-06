@@ -1,6 +1,4 @@
 import { useState, useCallback, useMemo } from 'react';
-import JSZip from 'jszip';
-import { saveAs } from 'file-saver';
 import { toast } from 'sonner';
 import {
   buildRenamePlan,
@@ -9,6 +7,11 @@ import {
   type RenameRule,
   type RenamePlanEntry,
 } from '@/utils/fileRenamer';
+
+// JSZip (~100 KB) and file-saver (~3 KB) are only needed when the user
+// actually downloads a renamed archive. We defer both to first download.
+const loadZip = () => import('jszip');
+const loadSaver = () => import('file-saver');
 
 export interface RenameFile {
   id: string;
