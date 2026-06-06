@@ -560,7 +560,47 @@ function formatEstimatedPageSize(widthPt: number, heightPt: number): string {
   return `${w}×${h} pt`;
 }
 
-export function toDownloadPdfFile(originalName: string, blob: Blob): File {
-  const baseName = originalName.replace(/\.pdf$/i, '') || 'document';
-  return new File([blob], `${baseName}_compressed.pdf`, { type: 'application/pdf' });
+export function toDownloadPdfFile(
+  originalName: string,
+  blob: Blob,
+  pattern: string = DEFAULT_PDF_FILENAME_PATTERN,
+  context?: { index?: number; quality?: number; pageCount?: number; date?: Date }
+): File {
+  const base = originalName.replace(/\.pdf$/i, '') || 'document';
+  const ext = 'pdf';
+  const date = context?.date ?? new Date();
+  const dateStr = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  const sizeKB = Math.max(0, Math.round(blob.size / 1024));
+
+  const replacements: Record<string, string> = {
+    '{name}': base,
+    '{ext}': ext,
+    '{format}': 'pdf',
+    '{pages}': String(context?.pageCount ?? 0),
+    '{size}': String(sizeKB),
+    '{date}': dateStr,
+    '{q}': String(context?.quality ?? 0),
+    '{index}': String(context?.index ?? 1),
+  };
+
+  const sanitized = Object.entries(replacements).reduce(
+    (acc, [token, value]) => acc.split(token).join(value),
+    pattern
+  );
+
+  // Strip illegal characters and collapse underscores.
+  const cleaned = sanitized
+    .replace(/[<>:"/\\|?*\x00-\x1f]/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .trim();
+
+  let finalName = cleaned || `${base}_compressed.${ext}`;
+  if (!finalName.toLowerCase().endsWith('.pdf')) {
+    finalName = `${finalName}.${ext}`;
+  }
+  if (finalName.length > 200) {
+    finalName = `${finalName.slice(0, 195)}.${ext}`;
+  }
+  return new File([blob], finalName, { type: 'application/pdf' });
 }
