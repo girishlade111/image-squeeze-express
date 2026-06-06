@@ -431,7 +431,7 @@ function RuleEditor({
 
   if (rule.kind === 'numbering') {
     return (
-      <div className="grid grid-cols-4 gap-1.5">
+      <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
         <div>
           <label className="text-[9px] text-muted-foreground">Position</label>
           <select
