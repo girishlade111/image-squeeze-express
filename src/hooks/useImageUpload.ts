@@ -316,10 +316,13 @@ export function useImageUpload() {
         };
       });
 
-      // Resolve original dimensions asynchronously (best-effort)
+      // Resolve original dimensions + smart recommendation asynchronously.
+      // Dimensions are best-effort; the recommendation runs the
+      // analyze-then-classify pipeline in imageProcessor.ts and may
+      // take a few hundred ms per image on big batches.
       newFiles.forEach((nf) => {
         getImageDimensions(nf.file)
-          .then((dims) => {
+          .then(async (dims) => {
             setFiles((p) =>
               p.map((f) =>
                 f.id === nf.id
@@ -327,6 +330,14 @@ export function useImageUpload() {
                   : f
               )
             );
+            try {
+              const meta = await recommendFormat(nf.file, dims);
+              setFiles((p) =>
+                p.map((f) => (f.id === nf.id ? { ...f, metadata: meta } : f))
+              );
+            } catch {
+              /* recommendation is best-effort */
+            }
           })
           .catch(() => {
             /* ignore — dimensions are informational */
