@@ -164,7 +164,8 @@ export function usePdfUpload() {
               toast.error(`Could not read ${nf.name}: ${err.message}`);
             });
 
-          getPdfMetadata(nf.file)
+          loadPdfEngine()
+            .then(({ getPdfMetadata }) => getPdfMetadata(nf.file))
             .then((meta) => {
               setFiles((p) =>
                 p.map((f) => (f.id === nf.id ? { ...f, metadata: meta } : f))
