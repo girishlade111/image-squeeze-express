@@ -73,7 +73,7 @@ const Footer = () => {
                     WebkitTextFillColor: 'transparent',
                   }}
                 >
-                  ImageSqueeze
+                  LS Image Compressor
                 </span>
               </Link>
               <p className="mt-3 max-w-xs text-xs leading-relaxed text-muted-foreground">
@@ -212,7 +212,7 @@ const Footer = () => {
           {/* Bottom strip */}
           <div className="mt-8 flex flex-col items-center gap-2 border-t border-foreground/[0.06] pt-6 sm:flex-row sm:justify-between">
             <p className="text-[10px] text-muted-foreground/70">
-              © 2026 ImageSqueeze. All rights reserved.
+              © 2026 LS Image Compressor. All rights reserved.
             </p>
             <p className="text-[10px] text-muted-foreground/70">
               100% client-side · No servers · No tracking

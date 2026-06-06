@@ -98,21 +98,22 @@ const Header = () => {
         }`}
       >
         <div className="h-px w-full bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-        <div className="container mx-auto flex h-14 items-center justify-between px-4 sm:px-5 md:h-12 md:px-4">
+        <div className="container mx-auto flex h-14 items-center justify-between gap-2 px-3 sm:px-5 md:h-12 md:gap-4 md:px-4">
           <Link
             to="/"
-            className="flex items-center gap-2 group min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 md:gap-1.5"
-            aria-label="ImageSqueeze — home"
+            className="flex min-w-0 items-center gap-1.5 group min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 md:gap-1.5"
+            aria-label="LS Image Compressor — home"
           >
             <span
-              className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 text-primary transition-transform group-hover:scale-110 md:h-7 md:w-7"
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 text-primary transition-transform group-hover:scale-110 md:h-7 md:w-7"
               aria-hidden
             >
               <Lightning size={20} weight="duotone" className="md:hidden" />
               <Lightning size={16} weight="duotone" className="hidden md:block" />
             </span>
-            <span className="text-base font-bold tracking-tight sm:text-lg md:text-base metallic-text">
-              ImageSqueeze
+            <span className="truncate text-sm font-bold tracking-tight sm:text-base md:text-base metallic-text">
+              <span className="sm:hidden">LS Compressor</span>
+              <span className="hidden sm:inline">LS Image Compressor</span>
             </span>
           </Link>
 

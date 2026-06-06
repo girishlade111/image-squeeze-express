@@ -145,7 +145,7 @@ const FeaturesGrid = () => {
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.1 }}
         >
-          Why Choose <span style={GRADIENT_TEXT}>ImageSqueeze</span>?
+          Why Choose <span style={GRADIENT_TEXT}>LS Image Compressor</span>?
         </motion.h2>
 
         <motion.p

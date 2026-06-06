@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 interface DocumentTitleProps {
   title: string;
-  /** Optional suffix. Defaults to "ImageSqueeze". */
+  /** Optional suffix. Defaults to "LS Image Compressor". */
   suffix?: string;
   /** When true, the title is set even if it's already the same. Defaults to false. */
   force?: boolean;
@@ -13,7 +13,7 @@ interface DocumentTitleProps {
  * Falls back to the original title on unmount so navigation back to a page that
  * doesn't set its own title doesn't leave a stale one behind.
  */
-const DocumentTitle = ({ title, suffix = 'ImageSqueeze', force = false }: DocumentTitleProps) => {
+const DocumentTitle = ({ title, suffix = 'LS Image Compressor', force = false }: DocumentTitleProps) => {
   useEffect(() => {
     const previous = document.title;
     const next = suffix && !title.includes(suffix) ? `${title} · ${suffix}` : title;
