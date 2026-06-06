@@ -97,7 +97,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
   const shareText = encodeURIComponent(
     'I just compressed my images with ImageSqueeze — 100% free & private! 🚀'
   );
-  const shareUrl = encodeURIComponent('https://imagesqueeze.com');
+  const shareUrl = encodeURIComponent('https://img.ladestack.in');
 
   return (
     <section
@@ -321,7 +321,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
           </a>
           <button
             onClick={() => {
-              navigator.clipboard.writeText('https://imagesqueeze.com');
+              navigator.clipboard.writeText('https://img.ladestack.in');
               toast.success('Link copied to clipboard!');
             }}
             className="rounded-full border border-border/40 bg-secondary/50 px-4 py-1.5 text-xs font-medium transition-all hover:border-primary/40 hover:bg-primary/5"

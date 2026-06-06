@@ -4,7 +4,7 @@
 >
 > **Project Name (internal):** `vite_react_shadcn_ts` (in `package.json`), but branded as **ImageSqueeze**.
 >
-> **Domain:** `https://imagesqueeze.com`
+> **Domain:** `https://img.ladestack.in`
 >
 > **Author / Owner:** Lade Stack (Girish Lade) — `https://ladestack.in`
 
@@ -1038,7 +1038,7 @@ Heavy SEO setup since this is a content-driven marketing site:
 - **Robots meta** — `index, follow, max-image-preview:large, max-snippet:50, ...` and similar lines for `googlebot`, `bingbot`, `slurp`, `duckduckbot`, `yandex`, `baiduspider`, `exabot`, `sosospider`, `facebookexternalhit`, `twitterbot`
 - **Geotagging** — `IN / India`
 - **Mobile / PWA** — `theme-color: #7C3AED`, `apple-mobile-web-app-capable`, viewport-fit, etc.
-- **Canonical** — `https://imagesqueeze.com/`
+- **Canonical** — `https://img.ladestack.in/`
 - **Favicons** — inline data-URI SVG with the ⚡ emoji (no actual favicon file, just inline `<link rel="icon" href="data:image/svg+xml,...">`)
 - **Open Graph + Twitter** — full set with the `lovable.dev/opengraph-image-p98pqg.png` placeholder image
 - **JSON-LD structured data** — 4 blocks:

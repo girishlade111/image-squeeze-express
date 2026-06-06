@@ -15,7 +15,7 @@ const TermsOfService = () => (
 
         <p className="mt-6 text-muted-foreground leading-relaxed">
           Welcome to <strong className="text-foreground">ImageSqueeze</strong>. By accessing or using our website at{' '}
-          <a href="https://imagesqueeze.com" className="text-primary hover:underline">imagesqueeze.com</a>, you agree to be bound by these Terms of Service. If you do not agree, please do not use the service.
+          <a href="https://img.ladestack.in" className="text-primary hover:underline">img.ladestack.in</a>, you agree to be bound by these Terms of Service. If you do not agree, please do not use the service.
         </p>
 
         <section className="mt-10">

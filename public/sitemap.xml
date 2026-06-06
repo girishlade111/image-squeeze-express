@@ -10,14 +10,14 @@
        HOMEPAGE — Image Compressor (highest priority)
        ========================================================= -->
   <url>
-    <loc>https://imagesqueeze.com/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://imagesqueeze.com/" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://imagesqueeze.com/" />
+    <loc>https://img.ladestack.in/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://img.ladestack.in/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://img.ladestack.in/" />
     <lastmod>2026-06-06</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://imagesqueeze.com/og-image.png</image:loc>
+      <image:loc>https://img.ladestack.in/og-image.png</image:loc>
       <image:title>ImageSqueeze — Free Online Image Compressor</image:title>
       <image:caption>Compress images up to 90% smaller in your browser. 100% private, no upload.</image:caption>
     </image:image>
@@ -27,14 +27,14 @@
        PDF COMPRESSOR TOOL — high priority
        ========================================================= -->
   <url>
-    <loc>https://imagesqueeze.com/compress-pdf</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://imagesqueeze.com/compress-pdf" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://imagesqueeze.com/compress-pdf" />
+    <loc>https://img.ladestack.in/compress-pdf</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://img.ladestack.in/compress-pdf" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://img.ladestack.in/compress-pdf" />
     <lastmod>2026-06-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>https://imagesqueeze.com/og-pdf.png</image:loc>
+      <image:loc>https://img.ladestack.in/og-pdf.png</image:loc>
       <image:title>ImageSqueeze PDF Compressor</image:title>
       <image:caption>Compress PDF files up to 90% smaller in your browser. Strong, Balanced, and Light presets.</image:caption>
     </image:image>
@@ -44,14 +44,14 @@
        BULK RENAME TOOL — high priority
        ========================================================= -->
   <url>
-    <loc>https://imagesqueeze.com/bulk-rename</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://imagesqueeze.com/bulk-rename" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://imagesqueeze.com/bulk-rename" />
+    <loc>https://img.ladestack.in/bulk-rename</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://img.ladestack.in/bulk-rename" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://img.ladestack.in/bulk-rename" />
     <lastmod>2026-06-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image>
-      <image:loc>https://imagesqueeze.com/og-rename.png</image:loc>
+      <image:loc>https://img.ladestack.in/og-rename.png</image:loc>
       <image:title>ImageSqueeze Bulk File Renamer</image:title>
       <image:caption>Rename hundreds of files at once with 13 live rules. Download as a ZIP.</image:caption>
     </image:image>
@@ -61,9 +61,9 @@
        ABOUT PAGE
        ========================================================= -->
   <url>
-    <loc>https://imagesqueeze.com/about</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://imagesqueeze.com/about" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://imagesqueeze.com/about" />
+    <loc>https://img.ladestack.in/about</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://img.ladestack.in/about" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://img.ladestack.in/about" />
     <lastmod>2026-06-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -73,9 +73,9 @@
        CONTACT PAGE
        ========================================================= -->
   <url>
-    <loc>https://imagesqueeze.com/contact</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://imagesqueeze.com/contact" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://imagesqueeze.com/contact" />
+    <loc>https://img.ladestack.in/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://img.ladestack.in/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://img.ladestack.in/contact" />
     <lastmod>2026-06-06</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -85,9 +85,9 @@
        PRIVACY POLICY
        ========================================================= -->
   <url>
-    <loc>https://imagesqueeze.com/privacy</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://imagesqueeze.com/privacy" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://imagesqueeze.com/privacy" />
+    <loc>https://img.ladestack.in/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://img.ladestack.in/privacy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://img.ladestack.in/privacy" />
     <lastmod>2026-06-06</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
@@ -97,9 +97,9 @@
        TERMS OF SERVICE
        ========================================================= -->
   <url>
-    <loc>https://imagesqueeze.com/terms</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://imagesqueeze.com/terms" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://imagesqueeze.com/terms" />
+    <loc>https://img.ladestack.in/terms</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://img.ladestack.in/terms" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://img.ladestack.in/terms" />
     <lastmod>2026-06-06</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
