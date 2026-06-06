@@ -289,54 +289,27 @@ const Header = () => {
               ))}
 
               <div className="my-3 h-px bg-border" />
-              <Link
-                to="/about"
-                onClick={() => setMobileOpen(false)}
-                aria-current={location.pathname === '/about' ? 'page' : undefined}
-                className={`flex min-h-[48px] items-center rounded-xl px-3 py-3 text-sm font-medium transition-colors ${
-                  location.pathname === '/about'
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-muted-foreground hover:bg-foreground/5 hover:text-foreground'
-                }`}
-              >
-                About
-              </Link>
-              <Link
-                to="/privacy"
-                onClick={() => setMobileOpen(false)}
-                aria-current={location.pathname === '/privacy' ? 'page' : undefined}
-                className={`flex min-h-[48px] items-center rounded-xl px-3 py-3 text-sm font-medium transition-colors ${
-                  location.pathname === '/privacy'
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-muted-foreground hover:bg-foreground/5 hover:text-foreground'
-                }`}
-              >
-                Privacy Policy
-              </Link>
-              <Link
-                to="/terms"
-                onClick={() => setMobileOpen(false)}
-                aria-current={location.pathname === '/terms' ? 'page' : undefined}
-                className={`flex min-h-[48px] items-center rounded-xl px-3 py-3 text-sm font-medium transition-colors ${
-                  location.pathname === '/terms'
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-muted-foreground hover:bg-foreground/5 hover:text-foreground'
-                }`}
-              >
-                Terms of Service
-              </Link>
-              <Link
-                to="/contact"
-                onClick={() => setMobileOpen(false)}
-                aria-current={location.pathname === '/contact' ? 'page' : undefined}
-                className={`flex min-h-[48px] items-center rounded-xl px-3 py-3 text-sm font-medium transition-colors ${
-                  location.pathname === '/contact'
-                    ? 'bg-primary/10 text-primary'
-                    : 'text-muted-foreground hover:bg-foreground/5 hover:text-foreground'
-                }`}
-              >
-                Contact
-              </Link>
+              {resources.map((r) => {
+                const active = location.pathname === r.to;
+                return (
+                  <Link
+                    key={r.to}
+                    to={r.to}
+                    onClick={() => setMobileOpen(false)}
+                    onPointerEnter={() => prefetchOnInteract(r.load)}
+                    onFocus={() => prefetchOnInteract(r.load)}
+                    onTouchStart={() => prefetchOnInteract(r.load)}
+                    aria-current={active ? 'page' : undefined}
+                    className={`flex min-h-[48px] items-center rounded-xl px-3 py-3 text-sm font-medium transition-colors ${
+                      active
+                        ? 'bg-primary/10 text-primary'
+                        : 'text-muted-foreground hover:bg-foreground/5 hover:text-foreground'
+                    }`}
+                  >
+                    {r.label === 'Privacy' ? 'Privacy Policy' : r.label === 'Terms' ? 'Terms of Service' : r.label}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </nav>
