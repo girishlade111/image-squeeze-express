@@ -377,7 +377,7 @@ function RuleEditor({
   if (rule.kind === 'replace') {
     return (
       <div className="space-y-1.5">
-        <div className="flex items-center gap-1.5">
+        <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
           <Input
             value={rule.find}
             onChange={(e) => onChange({ find: e.target.value })}
@@ -393,7 +393,7 @@ function RuleEditor({
             aria-label="Replacement text"
           />
         </div>
-        <div className="flex items-center gap-1.5 text-[10px]">
+        <div className="flex flex-wrap items-center gap-1.5 text-[10px]">
           <label className="flex items-center gap-1 text-muted-foreground">
             <input
               type="checkbox"
