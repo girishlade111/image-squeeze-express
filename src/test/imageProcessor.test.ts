@@ -367,10 +367,13 @@ describe('AVIF format support', () => {
       expect(f.name).toBe('my_photo.png');
     });
 
-    it('sanitizes illegal characters', () => {
+    it('sanitizes illegal characters (and collapses runs of underscores)', () => {
       const blob = new Blob(['x'], { type: 'image/webp' });
       const f = toDownloadFile('photo<bad>.jpg', blob, '{name}_v1.{ext}');
-      expect(f.name).toBe('photo_bad__v1.webp');
+      // `photo<bad>` → `photo_bad` (single underscore), so the result is
+      // `photo_bad_v1.webp` — NOT `photo_bad__v1.webp` because consecutive
+      // underscores are collapsed by `replace(/_+/g, '_')`.
+      expect(f.name).toBe('photo_bad_v1.webp');
     });
 
     it('caps output at 200 characters', () => {

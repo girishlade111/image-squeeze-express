@@ -759,14 +759,21 @@ export function toDownloadFile(
     out = out.split(token).join(replacements[token]);
   }
 
-  // Sanitize illegal characters and trim
+  // Sanitize illegal characters and collapse repeats
   out = out.replace(/[<>:"/\\|?*\x00-\x1f]/g, '_').replace(/_+/g, '_').trim();
-  if (out.length === 0) out = `imagesqueeze_${baseName}${toExt(blob.type)}`;
-  if (out.length > 200) out = out.slice(0, 200);
+  if (out.length === 0) {
+    // Everything was stripped — fall back to the safe default
+    out = `imagesqueeze_${baseName}`;
+  }
+
+  // Cap the base name BEFORE appending the extension so the final length
+  // stays predictable. The extension itself is 5 chars max (.webp/.avif).
+  const dotExt = toExt(blob.type);
+  if (out.length > 195) out = out.slice(0, 195);
 
   // Guarantee the right extension is appended when the pattern omits it
-  if (!out.toLowerCase().endsWith(toExt(blob.type).toLowerCase())) {
-    out = out + toExt(blob.type);
+  if (!out.toLowerCase().endsWith(dotExt.toLowerCase())) {
+    out = out + dotExt;
   }
 
   return new File([blob], out, { type: blob.type });
