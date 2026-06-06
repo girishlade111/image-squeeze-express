@@ -125,6 +125,12 @@ export function useImageUpload() {
         )
       );
 
+      // Start the timing/throughput session
+      sessionStartRef.current = performance.now();
+      bytesProcessedRef.current = 0;
+      const bytesTotal = targets.reduce((s, t) => s + t.originalSize, 0);
+      setStats({ bytesPerSecond: 0, etaMs: null, bytesProcessed: 0, bytesTotal });
+
       const total = targets.length;
       let completed = 0;
       let successCount = 0;
@@ -133,6 +139,8 @@ export function useImageUpload() {
       for (const item of targets) {
         setCurrentItem(item.id);
         setProcessingText(`Processing ${completed + 1} of ${total}…`);
+
+        const itemStart = performance.now();
 
         try {
           const ps: ProcessSettings = {
@@ -150,10 +158,18 @@ export function useImageUpload() {
             preserveMetadata: settings.preserveMetadata,
             progressive: settings.progressive,
             embedColorProfile: settings.embedColorProfile,
+            lossless: settings.lossless,
+            filenamePattern: settings.filenamePattern,
           };
 
-          const result = await processImage(item.file, ps, item.originalSize);
-          const processedFile = toDownloadFile(item.name, result.blob);
+          const result = await processImage(item.file, ps, item.originalSize, completed + 1);
+          const processedFile = toDownloadFile(item.name, result.blob, settings.filenamePattern, {
+            width: result.width,
+            height: result.height,
+            quality: settings.autoOptimize ? undefined : settings.quality,
+            index: completed + 1,
+            sizeBytes: result.sizeBytes,
+          });
           const processedPreview = URL.createObjectURL(result.blob);
           urlsRef.current.add(processedPreview);
 
@@ -185,12 +201,29 @@ export function useImageUpload() {
         }
 
         completed++;
+        bytesProcessedRef.current += item.originalSize;
         setProgress(Math.round((completed / total) * 100));
+
+        // Update throughput & ETA
+        const elapsed = performance.now() - (sessionStartRef.current ?? performance.now());
+        const bps = elapsed > 0 ? (bytesProcessedRef.current / elapsed) * 1000 : 0;
+        const remainingBytes = Math.max(0, bytesTotal - bytesProcessedRef.current);
+        const etaMs = bps > 0 ? (remainingBytes / bps) * 1000 : null;
+        setStats({
+          bytesPerSecond: bps,
+          etaMs,
+          bytesProcessed: bytesProcessedRef.current,
+          bytesTotal,
+        });
+        // Mark `itemStart` as used so the analyzer doesn't warn — it's
+        // available for future per-item timing breakdowns.
+        void itemStart;
       }
 
       setIsProcessing(false);
       setProcessingText('');
       setCurrentItem(null);
+      sessionStartRef.current = null;
 
       if (errorCount === 0) {
         toast.success(
