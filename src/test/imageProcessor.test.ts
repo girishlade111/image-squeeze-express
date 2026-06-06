@@ -335,4 +335,69 @@ describe('AVIF format support', () => {
       }
     });
   });
+
+  describe('toDownloadFile with filename pattern', () => {
+    it('uses the default pattern when none is provided', () => {
+      const blob = new Blob(['x'], { type: 'image/webp' });
+      const f = toDownloadFile('photo.jpg', blob);
+      expect(f.name).toBe('imagesqueeze_photo.webp');
+    });
+
+    it('replaces {name} and {ext} tokens', () => {
+      const blob = new Blob(['x'], { type: 'image/webp' });
+      const f = toDownloadFile('photo.jpg', blob, '{name}_optimized.{ext}');
+      expect(f.name).toBe('photo_optimized.webp');
+    });
+
+    it('replaces {format}, {w}, {h}, {q}, {index}, {size}, {date} tokens', () => {
+      const blob = new Blob(['x'], { type: 'image/webp' });
+      const f = toDownloadFile(
+        'photo.jpg',
+        blob,
+        '{name}_{w}x{h}_q{q}_{format}_{index}_{size}kb_{date}.{ext}',
+        { width: 1920, height: 1080, quality: 75, index: 3, sizeBytes: 1024 * 200 }
+      );
+      expect(f.name).toMatch(/^photo_1920x1080_q75_webp_3_200kb_\d{4}-\d{2}-\d{2}\.webp$/);
+    });
+
+    it('always appends the right extension if pattern omits it', () => {
+      const blob = new Blob(['x'], { type: 'image/png' });
+      const f = toDownloadFile('photo.jpg', blob, 'my_{name}');
+      expect(f.name).toBe('my_photo.png');
+    });
+
+    it('sanitizes illegal characters', () => {
+      const blob = new Blob(['x'], { type: 'image/webp' });
+      const f = toDownloadFile('photo<bad>.jpg', blob, '{name}_v1.{ext}');
+      expect(f.name).toBe('photo_bad__v1.webp');
+    });
+
+    it('caps output at 200 characters', () => {
+      const blob = new Blob(['x'], { type: 'image/webp' });
+      const longName = 'a'.repeat(500) + '.jpg';
+      const f = toDownloadFile(longName, blob, '{name}.{ext}');
+      expect(f.name.length).toBeLessThanOrEqual(200);
+    });
+
+    it('falls back when the pattern is empty or all illegal chars', () => {
+      const blob = new Blob(['x'], { type: 'image/webp' });
+      const f = toDownloadFile('photo.jpg', blob, '<>:"|?*');
+      expect(f.name).toMatch(/^imagesqueeze_photo\.webp$/);
+    });
+  });
+
+  describe('getFilenameTokenDocs', () => {
+    it('returns at least the 9 standard tokens', () => {
+      const tokens = getFilenameTokenDocs();
+      expect(tokens.length).toBeGreaterThanOrEqual(9);
+      const labels = tokens.map((t) => t.token);
+      for (const t of ['{name}', '{ext}', '{format}', '{w}', '{h}', '{q}', '{index}', '{date}', '{size}']) {
+        expect(labels).toContain(t);
+      }
+    });
+
+    it('exposes the default pattern', () => {
+      expect(DEFAULT_FILENAME_PATTERN).toBe('imagesqueeze_{name}.{ext}');
+    });
+  });
 });
