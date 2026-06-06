@@ -135,7 +135,7 @@ const SettingsPanel = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="rounded-2xl border border-border/40 bg-card/80 backdrop-blur-xl p-3 shadow-lg sm:p-4">
+      <div className="rounded-2xl border border-border/40 bg-card/80 backdrop-blur-xl p-3 shadow-lg metallic-rim metallic-surface sm:p-4">
         <Tabs defaultValue="compress">
           <div className="scrollbar-hide -mx-1 overflow-x-auto">
             <TabsList className="inline-flex w-max min-w-full rounded-xl bg-secondary/60 p-1 sm:grid sm:w-full sm:grid-cols-4">

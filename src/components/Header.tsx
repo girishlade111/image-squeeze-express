@@ -93,7 +93,7 @@ const Header = () => {
   return (
     <>
       <header
-        className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-background/80 transition-all duration-300 pt-safe ${
+        className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-xl bg-background/80 metallic-rim metallic-surface transition-all duration-300 pt-safe ${
           scrolled ? 'shadow-sm border-b border-border/20' : ''
         }`}
       >
@@ -111,14 +111,7 @@ const Header = () => {
               <Lightning size={20} weight="duotone" className="md:hidden" />
               <Lightning size={16} weight="duotone" className="hidden md:block" />
             </span>
-            <span
-              className="text-base font-bold tracking-tight sm:text-lg md:text-base"
-              style={{
-                background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-              }}
-            >
+            <span className="text-base font-bold tracking-tight sm:text-lg md:text-base metallic-text">
               ImageSqueeze
             </span>
           </Link>

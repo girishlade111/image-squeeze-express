@@ -56,7 +56,7 @@ const Footer = () => {
         style={{ background: 'linear-gradient(90deg, transparent, hsl(var(--brand)), hsl(var(--brand-2)), transparent)' }}
       />
 
-      <div className="relative border-t border-border/20 bg-card/80 backdrop-blur-xl">
+      <div className="relative border-t border-border/20 bg-card/80 backdrop-blur-xl metallic-rim metallic-surface">
         <div className="container mx-auto px-4 pb-8 pb-safe pt-10 sm:pb-10 sm:pt-14">
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-12">
             {/* Brand block */}
