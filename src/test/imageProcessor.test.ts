@@ -9,6 +9,8 @@ import {
   calculateOptimalQuality,
   isFormatSupported,
   toDownloadFile,
+  getFilenameTokenDocs,
+  DEFAULT_FILENAME_PATTERN,
   type ImageFormat,
   type ProcessSettings,
 } from '../utils/imageProcessor';
