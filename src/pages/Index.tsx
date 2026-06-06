@@ -78,6 +78,7 @@ const Index = () => {
       <DocumentTitle title="Free Online Image Compressor — Up to 90% Smaller & Private" />
       <Header />
       <main>
+        <ErrorBoundary label="Image Compressor">
         <div ref={uploadRef} />
         <HeroSection onFilesSelected={addFiles} imageCount={files.length}>
           {hasFiles && (
