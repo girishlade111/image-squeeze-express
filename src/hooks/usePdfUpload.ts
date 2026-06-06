@@ -3,10 +3,12 @@ import { toast } from 'sonner';
 import {
   compressPdf,
   toDownloadPdfFile,
+  getPdfMetadata,
   formatBytes,
   getReductionRatio,
   type PdfProcessSettings,
   type PdfProcessResult,
+  type PdfMetadata,
 } from '@/utils/pdfProcessor';
 
 export interface UploadedPdf {
@@ -21,6 +23,14 @@ export interface UploadedPdf {
   result?: PdfProcessResult;
   processedFile?: File;
   progress: number;
+  metadata?: PdfMetadata;
+}
+
+export interface ProcessingStats {
+  bytesPerSecond: number;
+  etaMs: number | null;
+  bytesProcessed: number;
+  bytesTotal: number;
 }
 
 export const MAX_PDF_FILES = 5;
@@ -34,7 +44,6 @@ function generateId(): string {
 }
 
 async function getPdfPageCount(file: File): Promise<number> {
-  // Lazy-load pdfjs so the heavy worker is only fetched when a PDF is dropped.
   const pdfjs = await import('pdfjs-dist');
   if (!pdfjs.GlobalWorkerOptions.workerSrc) {
     pdfjs.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs';
@@ -57,6 +66,12 @@ export function usePdfUpload() {
   const [progress, setProgress] = useState(0);
   const [processingText, setProcessingText] = useState('');
   const [currentItem, setCurrentItem] = useState<string | null>(null);
+  const [stats, setStats] = useState<ProcessingStats>({
+    bytesPerSecond: 0,
+    etaMs: null,
+    bytesProcessed: 0,
+    bytesTotal: 0,
+  });
   const urlsRef = useRef<Set<string>>(new Set());
 
   const revokeUrl = useCallback((url: string | null | undefined) => {
@@ -108,13 +123,13 @@ export function usePdfUpload() {
       setFiles((prev) => {
         const remaining = MAX_PDF_FILES - prev.length;
         if (remaining <= 0) {
-          toast.warning('⚠️ Free version supports up to 5 PDFs at once.');
+          toast.warning(`⚠️ Up to ${MAX_PDF_FILES} PDFs at once.`);
           return prev;
         }
         const toAdd = valid.slice(0, remaining);
         if (valid.length > remaining) {
           toast.warning(
-            `⚠️ Only ${remaining} PDF${remaining > 1 ? 's' : ''} added — free version supports up to 5 at once.`
+            `⚠️ Only ${remaining} PDF${remaining > 1 ? 's' : ''} added — up to ${MAX_PDF_FILES} at once.`
           );
         }
 
@@ -146,6 +161,16 @@ export function usePdfUpload() {
               );
               toast.error(`Could not read ${nf.name}: ${err.message}`);
             });
+
+          getPdfMetadata(nf.file)
+            .then((meta) => {
+              setFiles((p) =>
+                p.map((f) => (f.id === nf.id ? { ...f, metadata: meta } : f))
+              );
+            })
+            .catch(() => {
+              /* non-fatal: metadata is optional */
+            });
         });
 
         return [...prev, ...newFiles];
@@ -175,7 +200,42 @@ export function usePdfUpload() {
     setProgress(0);
     setProcessingText('');
     setCurrentItem(null);
+    setStats({ bytesPerSecond: 0, etaMs: null, bytesProcessed: 0, bytesTotal: 0 });
   }, [revokeUrl]);
+
+  const previewOne = useCallback(
+    async (id: string, settings: PdfProcessSettings) => {
+      let target: UploadedPdf | null = null;
+      setFiles((current) => {
+        target = current.find((f) => f.id === id) ?? null;
+        return current;
+      });
+      await Promise.resolve();
+      if (!target) {
+        toast.error('Could not find that PDF.');
+        return;
+      }
+      try {
+        const result = await compressPdf(target.file, settings);
+        const processedFile = toDownloadPdfFile(target.name, result.blob, settings.filenamePattern, {
+          index: 1,
+          quality: result.finalQuality,
+          pageCount: result.pagesProcessed,
+        });
+        const url = URL.createObjectURL(processedFile);
+        urlsRef.current.add(url);
+        setFiles((prev) =>
+          prev.map((f) =>
+            f.id === id ? { ...f, preview: url } : f
+          )
+        );
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        toast.error(`Preview failed: ${message}`);
+      }
+    },
+    []
+  );
 
   const processFiles = useCallback(
     async (ids: string[], settings: PdfProcessSettings) => {
@@ -198,6 +258,7 @@ export function usePdfUpload() {
       }
 
       const idSet = new Set(targets.map((t) => t.id));
+      const bytesTotal = targets.reduce((s, t) => s + t.originalSize, 0);
       setFiles((prev) =>
         prev.map((f) =>
           idSet.has(f.id)
@@ -206,6 +267,7 @@ export function usePdfUpload() {
                 status: 'processing' as const,
                 error: undefined,
                 progress: 0,
+                preview: f.preview ? revokeUrl(f.preview) as unknown as string : f.preview,
               }
             : f
         )
@@ -215,6 +277,10 @@ export function usePdfUpload() {
       let completed = 0;
       let successCount = 0;
       let errorCount = 0;
+      let bytesProcessed = 0;
+      const startTime = performance.now();
+      let lastSpeedUpdate = startTime;
+      let lastBytesAtUpdate = 0;
 
       for (const item of targets) {
         setCurrentItem(item.id);
@@ -228,9 +294,14 @@ export function usePdfUpload() {
             setProcessingText(
               `Compressing ${completed + 1} of ${total} — page ${page}/${totalPages}`
             );
+            bytesProcessed += 0;
           });
 
-          const processedFile = toDownloadPdfFile(item.name, result.blob);
+          const processedFile = toDownloadPdfFile(item.name, result.blob, settings.filenamePattern, {
+            index: completed + 1,
+            quality: result.finalQuality,
+            pageCount: result.pagesProcessed,
+          });
 
           setFiles((prev) =>
             prev.map((f) =>
@@ -247,6 +318,25 @@ export function usePdfUpload() {
             )
           );
           successCount++;
+          bytesProcessed += result.sizeBytes;
+
+          // Update throughput stats
+          const now = performance.now();
+          const deltaMs = now - lastSpeedUpdate;
+          if (deltaMs > 200) {
+            const deltaBytes = bytesProcessed - lastBytesAtUpdate;
+            const bps = deltaBytes / (deltaMs / 1000);
+            const remainingBytes = bytesTotal - bytesProcessed;
+            const eta = bps > 0 ? (remainingBytes / bps) * 1000 : null;
+            setStats({
+              bytesPerSecond: bps,
+              etaMs: eta,
+              bytesProcessed,
+              bytesTotal,
+            });
+            lastSpeedUpdate = now;
+            lastBytesAtUpdate = bytesProcessed;
+          }
         } catch (err) {
           const message = err instanceof Error ? err.message : String(err);
           setFiles((prev) =>
@@ -266,6 +356,7 @@ export function usePdfUpload() {
       setIsProcessing(false);
       setProcessingText('');
       setCurrentItem(null);
+      setStats({ bytesPerSecond: 0, etaMs: null, bytesProcessed, bytesTotal });
 
       if (errorCount === 0) {
         toast.success(
@@ -279,7 +370,7 @@ export function usePdfUpload() {
         toast.error(`❌ All ${errorCount} PDFs failed to compress.`);
       }
     },
-    []
+    [revokeUrl]
   );
 
   const processAll = useCallback(
@@ -336,10 +427,12 @@ export function usePdfUpload() {
     processAll,
     processFiles,
     retryFile,
+    previewOne,
     isProcessing,
     progress,
     processingText,
     currentItem,
+    stats,
     hasFiles,
     allDone,
     processedFiles,
@@ -348,4 +441,5 @@ export function usePdfUpload() {
 }
 
 // Re-export the size helpers so consumers don't have to import from the processor
-export { formatBytes, getReductionRatio };
+export { formatBytes, getReductionRatio, getPdfMetadata };
+export type { PdfMetadata };
