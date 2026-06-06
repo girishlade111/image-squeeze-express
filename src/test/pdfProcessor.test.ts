@@ -132,7 +132,8 @@ describe('pdfProcessor helpers', () => {
       const blob = new Blob([new Uint8Array(1024)], { type: 'application/pdf' });
       const file = toDownloadPdfFile('hello.pdf', blob, 'a<<<b.pdf');
       expect(file.name).not.toMatch(/[<>:"/\\|?*\x00-\x1f]/);
-      expect(file.name).not.toMatch(/_+/);
+      // 3 illegal chars collapse to 1 underscore
+      expect(file.name).toBe('a_b.pdf');
     });
 
     it('toDownloadPdfFile appends .pdf when pattern has no extension', () => {
