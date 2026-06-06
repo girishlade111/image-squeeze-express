@@ -184,7 +184,11 @@ const SettingsPanel = ({
                   <InfoTip>Higher = better quality, larger file. Lower = smaller file, slight quality loss.</InfoTip>
                 </div>
                 <span className="text-xs font-bold tabular-nums text-primary">
-                  {settings.autoOptimize ? 'Auto' : `${settings.quality}%`}
+                  {settings.lossless
+                    ? 'Lossless'
+                    : settings.autoOptimize
+                    ? 'Auto'
+                    : `${settings.quality}%`}
                 </span>
               </div>
               <Slider
@@ -194,14 +198,19 @@ const SettingsPanel = ({
                 max={100}
                 step={1}
                 className="mt-2"
+                disabled={settings.lossless}
                 aria-label="Compression quality"
               />
               <div className="mt-1.5 flex items-center justify-between text-[10px] text-muted-foreground">
                 <span>
-                  {hint.emoji} {hint.text}
+                  {settings.lossless ? '🟢 No quality loss' : `${hint.emoji} ${hint.text}`}
                 </span>
                 <span className="tabular-nums">
-                  {settings.autoOptimize ? 'Auto-optimizing' : `${settings.quality}%`}
+                  {settings.lossless
+                    ? '100% (lossless)'
+                    : settings.autoOptimize
+                    ? 'Auto-optimizing'
+                    : `${settings.quality}%`}
                 </span>
               </div>
             </div>
@@ -245,6 +254,83 @@ const SettingsPanel = ({
                 className="rounded-lg"
                 aria-label="Target file size in KB"
               />
+            </div>
+
+            {/* Lossless mode */}
+            <div className="flex items-center justify-between rounded-xl bg-secondary/50 px-3 py-2.5">
+              <div className="flex items-center gap-1.5">
+                <FileText className="h-3.5 w-3.5 text-primary" />
+                <div>
+                  <div className="flex items-center gap-1">
+                    <Label className="text-xs font-semibold">Lossless</Label>
+                    <InfoTip>
+                      Skip quality reduction and encode without any quality loss. Only applies to WebP
+                      and PNG output — JPEG and AVIF are always lossy.
+                    </InfoTip>
+                  </div>
+                  <p className="text-[10px] text-muted-foreground">
+                    No quality loss · larger files
+                  </p>
+                </div>
+              </div>
+              <Switch
+                checked={settings.lossless}
+                onCheckedChange={(checked) => onUpdate({ lossless: checked })}
+                aria-label="Toggle lossless mode"
+              />
+            </div>
+
+            {/* Filename pattern */}
+            <div>
+              <div className="mb-1.5 flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <Label className="text-xs font-semibold">Output Filename</Label>
+                  <InfoTip>
+                    Customize how renamed files are named. Tokens like{' '}
+                    <code className="rounded bg-foreground/10 px-1 text-[10px]">{'{name}'}</code> are
+                    replaced with the file's actual values.
+                  </InfoTip>
+                </div>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button
+                      type="button"
+                      className="inline-flex h-6 items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 text-[10px] font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    >
+                      <Hash className="h-2.5 w-2.5" />
+                      Tokens
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-72 p-3" align="end">
+                    <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                      Available tokens
+                    </p>
+                    <ul className="space-y-1.5 text-[11px]">
+                      {getFilenameTokenDocs().map(({ token, description }) => (
+                        <li key={token} className="flex items-start gap-2">
+                          <code className="mt-0.5 inline-flex flex-shrink-0 rounded bg-primary/15 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-primary">
+                            {token}
+                          </code>
+                          <span className="text-muted-foreground">{description}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <Input
+                value={settings.filenamePattern}
+                onChange={(e) => onUpdate({ filenamePattern: e.target.value })}
+                placeholder="imagesqueeze_{name}.{ext}"
+                className="rounded-lg font-mono text-[11px]"
+                aria-label="Output filename pattern"
+              />
+              <p className="mt-1 text-[10px] text-muted-foreground">
+                e.g.{' '}
+                <code className="rounded bg-foreground/10 px-1 text-[10px]">
+                  {settings.filenamePattern.replace('{name}', 'photo').replace('{ext}', 'webp')}
+                </code>
+              </p>
             </div>
           </TabsContent>
 

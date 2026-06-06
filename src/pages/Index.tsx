@@ -1,4 +1,4 @@
-import { lazy, Suspense, useCallback, useRef } from 'react';
+import { lazy, Suspense, useCallback, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import ImageQueue from '@/components/ImageQueue';
@@ -9,10 +9,12 @@ import ScrollToTop from '@/components/ScrollToTop';
 import DocumentTitle from '@/components/DocumentTitle';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import TrustBar from '@/components/TrustBar';
-import { useImageUpload } from '@/hooks/useImageUpload';
+import ImageInspector from '@/components/ImageInspector';
+import { useImageUpload, type UploadedFile } from '@/hooks/useImageUpload';
 import { useSettings } from '@/hooks/useSettings';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
 import { usePageDropZone } from '@/hooks/usePageDropZone';
+import { toast } from 'sonner';
 
 const ResultsSection = lazy(() => import('@/components/ResultsSection'));
 const HowItWorks = lazy(() => import('@/components/HowItWorks'));
@@ -29,10 +31,12 @@ const Index = () => {
     processAll,
     processFiles,
     retryFile,
+    previewOne,
     isProcessing,
     progress,
     processingText,
     currentItem,
+    stats,
     hasFiles,
     allDone,
     processedFiles,
@@ -49,6 +53,7 @@ const Index = () => {
     setHeight,
   } = useSettings();
 
+  const [inspectorFileId, setInspectorFileId] = useState<string | null>(null);
   const uploadRef = useRef<HTMLDivElement>(null);
 
   // Page-level paste support
@@ -68,10 +73,38 @@ const Index = () => {
     input?.click();
   }, []);
 
+  // Open the inspector for a file by id (looks up the current file)
+  const handleInspect = useCallback(
+    (id: string) => setInspectorFileId(id),
+    []
+  );
+
+  // Apply the smart recommendation to the *settings* (so the next batch run
+  // uses the suggested format and quality). Toast to confirm.
+  const handleApplyRecommendation = useCallback(
+    (id: string, format: UploadedFile['metadata'] extends { recommendedFormat: infer F } ? F : never, quality: number) => {
+      updateSettings({
+        outputFormat: format,
+        quality,
+        autoOptimize: false,
+        qualityPreset: 'custom',
+      });
+      toast.success(`✨ Settings updated to ${String(format).toUpperCase()} @ ${quality}%`, {
+        description: 'Click "Compress" to process all images with these settings.',
+      });
+      void id;
+    },
+    [updateSettings]
+  );
+
   // Provide the source-image dims to the settings panel so aspect ratio can auto-compute
   const sourceDims = files
     .filter((f) => f.originalWidth > 0 && f.originalHeight > 0)
     .map((f) => ({ width: f.originalWidth, height: f.originalHeight }));
+
+  const inspectorFile = inspectorFileId
+    ? files.find((f) => f.id === inspectorFileId) || null
+    : null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -99,10 +132,13 @@ const Index = () => {
               progress={progress}
               processingText={processingText}
               currentItem={currentItem}
+              stats={stats}
               onRemove={removeFile}
               onClearAll={clearAll}
               onProcessAll={() => processAll(settings)}
               onRetry={(id) => processFiles([id], settings)}
+              onPreviewOne={(id) => previewOne(id, settings)}
+              onInspect={handleInspect}
               onAddMore={handleAddMore}
               allDone={allDone}
               readyCount={readyCount}
@@ -130,6 +166,14 @@ const Index = () => {
           </Suspense>
         </ErrorBoundary>
       </main>
+
+      <ImageInspector
+        file={inspectorFile}
+        open={!!inspectorFile}
+        onOpenChange={(o) => !o && setInspectorFileId(null)}
+        onApplyRecommendation={handleApplyRecommendation}
+        onPreviewOne={(id) => previewOne(id, settings)}
+      />
 
       <PageDropOverlay visible={isDragging} />
       <ScrollToTop />
