@@ -1,22 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, UploadSimple, Gear, DownloadSimple } from '@phosphor-icons/react';
 
 const steps = [
   {
     num: 1,
-    icon: '📤',
+    icon: UploadSimple,
     title: 'Upload',
     desc: 'Select or drag your images. They stay 100% on your device.',
   },
   {
     num: 2,
-    icon: '⚙️',
+    icon: Gear,
     title: 'Configure',
     desc: 'Set compression quality, resize dimensions, and output format.',
   },
   {
     num: 3,
-    icon: '⬇️',
+    icon: DownloadSimple,
     title: 'Download',
     desc: 'Get your optimized images instantly. No waiting, no signup.',
   },
@@ -59,21 +59,20 @@ const HowItWorks = () => {
       </h2>
 
       <div className="mx-auto flex max-w-4xl flex-col items-center gap-8 sm:flex-row sm:items-start sm:gap-0">
-        {steps.map((s, i) => (
+        {steps.map((s, i) => {
+          const StepIcon = s.icon;
+          return (
           <div key={s.num} className="flex items-center sm:flex-1">
-            {/* Step card */}
             <div
               className={`flex w-full flex-col items-center text-center transition-all duration-700 ${
                 visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
               }`}
               style={{ animationDelay: visible ? `${i * 200}ms` : '0ms' }}
             >
-              {/* Circle with number + icon */}
               <div className="relative mb-5">
-                <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-primary/30 bg-primary/10 shadow-[0_0_20px_hsl(var(--violet)/0.15)]">
-                  <span className="text-3xl">{s.icon}</span>
+                <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-primary/30 bg-primary/10 text-primary shadow-[0_0_20px_hsl(var(--violet)/0.15)]">
+                  <StepIcon size={42} weight="duotone" aria-hidden />
                 </div>
-                {/* Number badge */}
                 <div className="absolute -top-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold text-primary-foreground"
                   style={{ background: 'linear-gradient(135deg, #4F46E5, #0D9488)' }}
                 >
@@ -87,7 +86,6 @@ const HowItWorks = () => {
               </p>
             </div>
 
-            {/* Arrow connector — hidden on mobile & after last step */}
             {i < steps.length - 1 && (
               <div
                 className={`hidden flex-shrink-0 px-4 sm:flex transition-all duration-700 ${
@@ -95,11 +93,12 @@ const HowItWorks = () => {
                 }`}
                 style={{ animationDelay: visible ? `${i * 200 + 100}ms` : '0ms', transitionDelay: `${i * 200 + 300}ms` }}
               >
-                <ArrowRight className="h-5 w-5 text-muted-foreground/40" />
+                <ArrowRight size={20} weight="bold" className="text-muted-foreground/40" aria-hidden />
               </div>
             )}
           </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
