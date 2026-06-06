@@ -426,7 +426,7 @@ function ComparisonView({ file }: { file: UploadedFile }) {
  * `prefers-reduced-motion` by skipping the animation entirely.
  */
 function ConfettiBurst() {
-  const colors = ['#F0620F', '#178EA1', '#E8A92B', '#D85F4A', '#5A9E6F'];
+  const colors = ['#FFFFFF', '#A3A3A3', '#525252', '#D4D4D4', '#737373'];
   const particles = Array.from({ length: 24 }, (_, i) => ({
     id: i,
     color: colors[i % colors.length],
