@@ -657,122 +657,122 @@ const About = () => {
             subtitle="ImageSqueeze is a one-person studio. Here's who's behind the pixels."
           />
 
-          <div className="mx-auto mt-10 grid max-w-4xl gap-4 sm:gap-5 lg:grid-cols-5">
-            {/* Founder card */}
+          <div className="mx-auto mt-10 max-w-5xl">
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.5 }}
-              className="lg:col-span-3"
             >
-              <GradientCard hover={false} className="overflow-hidden">
-                <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-start sm:gap-6">
-                  <ProfileImage
-                    src={profileImg}
-                    alt="Girish Lade, founder of ImageSqueeze"
-                    className="w-32 sm:w-40 lg:w-44"
-                    fallbackInitials="GL"
-                    naturalWidth={1024}
-                    naturalHeight={1536}
-                    showStatus
+              <GradientCard hover={false} className="overflow-hidden p-0">
+                {/* HERO — image + name + pull quote */}
+                <div className="relative overflow-hidden border-b border-border/30 bg-gradient-to-br from-primary/[0.12] via-card/40 to-accent/[0.12] p-6 sm:p-8 lg:p-10">
+                  <div
+                    className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full"
+                    style={{ background: 'radial-gradient(circle, hsl(var(--primary) / 0.2), transparent)', filter: 'blur(60px)' }}
+                    aria-hidden
+                  />
+                  <div
+                    className="pointer-events-none absolute -bottom-24 -left-24 h-72 w-72 rounded-full"
+                    style={{ background: 'radial-gradient(circle, hsl(var(--accent) / 0.2), transparent)', filter: 'blur(60px)' }}
+                    aria-hidden
                   />
 
-                  <div className="min-w-0 flex-1 text-center sm:text-left">
-                    <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-                      <h3 className="text-xl font-extrabold tracking-tight sm:text-2xl">Girish Lade</h3>
-                      <span className="rounded-full border border-primary/25 bg-primary/[0.08] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
-                        Founder &amp; Solo Dev
-                      </span>
-                    </div>
-                    <p className="mt-1 flex items-center justify-center gap-1.5 text-xs text-muted-foreground sm:justify-start">
-                      <MapPin size={12} weight="duotone" />
-                      India · Building for the world
-                    </p>
+                  <div className="relative flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:gap-8">
+                    <ProfileImage
+                      src={profileImg}
+                      alt="Girish Lade, founder of ImageSqueeze"
+                      className="w-40 sm:w-52 lg:w-56"
+                      fallbackInitials="GL"
+                      naturalWidth={1024}
+                      naturalHeight={1536}
+                      showStatus
+                    />
 
-                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                      Web developer, indie hacker, and privacy enthusiast. I built ImageSqueeze because I was tired of
-                      uploading my own photos to a dozen different compression sites just to ship a product page. After
-                      one weekend it became a tool I used every day — so I polished it and shared it.
-                    </p>
-                    <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
-                      I also run{' '}
-                      <a
-                        href="https://ladestack.in"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="font-semibold text-primary hover:underline"
-                      >
-                        Lade Stack
-                      </a>
-                      , a small studio focused on local-first, privacy-respecting web tools.
-                    </p>
+                    <div className="min-w-0 flex-1 text-center sm:text-left">
+                      <h3 className="text-3xl font-black tracking-tight sm:text-4xl lg:text-[2.75rem]">
+                        <span style={GRADIENT_TEXT}>Girish</span>{' '}
+                        <span className="text-foreground">Lade</span>
+                      </h3>
 
-                    <div className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-                      <SocialChip href="https://github.com/girishlade111" icon={GithubLogo} label="GitHub" />
-                      <SocialChip href="https://www.linkedin.com/in/girish-lade-075bba201/" icon={LinkedinLogo} label="LinkedIn" />
-                      <SocialChip href="https://www.instagram.com/girish_lade_/" icon={InstagramLogo} label="Instagram" />
-                      <SocialChip href="mailto:admin@ladestack.in" icon={Envelope} label="Email" />
-                      <SocialChip href="https://ladestack.in" icon={Globe} label="ladestack.in" />
+                      <div className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1.5 text-xs sm:justify-start">
+                        <span className="rounded-full border border-primary/25 bg-primary/[0.08] px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
+                          Founder &amp; Solo Dev
+                        </span>
+                        <span className="text-muted-foreground/40">·</span>
+                        <span className="inline-flex items-center gap-1 text-muted-foreground">
+                          <MapPin size={12} weight="duotone" />
+                          India
+                        </span>
+                        <span className="text-muted-foreground/40">·</span>
+                        <span className="inline-flex items-center gap-1 text-muted-foreground">
+                          <span className="relative flex h-2 w-2">
+                            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
+                            <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                          </span>
+                          Active
+                        </span>
+                      </div>
+
+                      <blockquote className="relative mt-5 sm:mt-6">
+                        <Quotes
+                          size={32}
+                          weight="fill"
+                          className="absolute -left-1 -top-3 h-7 w-7 text-primary/15 sm:-left-1.5 sm:-top-4 sm:h-8 sm:w-8"
+                          aria-hidden
+                        />
+                        <p className="pl-6 text-base font-medium leading-relaxed text-foreground/90 italic sm:pl-8 sm:text-lg">
+                          The best software is the kind that respects its users — no dark patterns, no data harvesting,
+                          no unnecessary complexity.
+                        </p>
+                      </blockquote>
+
+                      <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                        Web developer, indie hacker, and privacy enthusiast. Built ImageSqueeze after a tired weekend of
+                        uploading his own photos to a dozen different compression sites. He also runs{' '}
+                        <a
+                          href="https://ladestack.in"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="font-semibold text-primary hover:underline"
+                        >
+                          Lade Stack
+                        </a>
+                        , a small studio focused on local-first web tools.
+                      </p>
                     </div>
                   </div>
                 </div>
-              </GradientCard>
-            </motion.div>
 
-            {/* Pull quote + skills */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="space-y-4 sm:space-y-5 lg:col-span-2"
-            >
-              <GradientCard hover={false} className="h-full">
-                <Quotes size={28} weight="duotone" className="h-7 w-7 text-primary" />
-                <p className="mt-3 text-base font-medium leading-relaxed text-foreground/90">
-                  The best software is the kind that respects its users. No dark patterns, no data harvesting, no
-                  unnecessary complexity.
-                </p>
-                <p className="mt-3 flex items-center gap-2 text-xs font-semibold text-muted-foreground">
-                  <span
-                    className="h-px w-6"
-                    style={{
-                      background: 'linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)))',
-                    }}
-                  />
-                  Girish Lade
-                </p>
-              </GradientCard>
+                {/* FOOTER — skills + social */}
+                <div className="grid gap-5 p-5 sm:grid-cols-2 sm:gap-6 sm:p-7 lg:p-8">
+                  <div>
+                    <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
+                      <Briefcase size={12} weight="duotone" />
+                      What I do
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      <SkillChip icon={Cpu} label="Design &amp; build" />
+                      <SkillChip icon={Briefcase} label="Run Lade Stack" />
+                      <SkillChip icon={GraduationCap} label="Ship small" />
+                      <SkillChip icon={Wrench} label="Lean stack" />
+                    </div>
+                  </div>
 
-              <GradientCard hover={false}>
-                <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-primary">What I do</p>
-                <ul className="mt-3 space-y-2.5">
-                  <li className="flex items-center gap-2.5 text-xs">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10">
-                      <Cpu size={14} weight="duotone" className="h-3.5 w-3.5 text-primary" />
-                    </span>
-                    <span className="text-foreground/90">Design &amp; build web tools</span>
-                  </li>
-                  <li className="flex items-center gap-2.5 text-xs">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10">
-                      <Briefcase size={14} weight="duotone" className="h-3.5 w-3.5 text-primary" />
-                    </span>
-                    <span className="text-foreground/90">Run Lade Stack studio</span>
-                  </li>
-                  <li className="flex items-center gap-2.5 text-xs">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10">
-                      <GraduationCap size={14} weight="duotone" className="h-3.5 w-3.5 text-primary" />
-                    </span>
-                    <span className="text-foreground/90">Ship small, learn fast</span>
-                  </li>
-                  <li className="flex items-center gap-2.5 text-xs">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10">
-                      <Wrench size={14} weight="duotone" className="h-3.5 w-3.5 text-primary" />
-                    </span>
-                    <span className="text-foreground/90">Maintain a lean stack</span>
-                  </li>
-                </ul>
+                  <div>
+                    <p className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.18em] text-primary">
+                      <Share size={12} weight="duotone" />
+                      Find me on
+                    </p>
+                    <div className="mt-3 flex flex-wrap items-center gap-1.5">
+                      <SocialLink href="https://github.com/girishlade111" icon={GithubLogo} label="GitHub" />
+                      <SocialLink href="https://www.linkedin.com/in/girish-lade-075bba201/" icon={LinkedinLogo} label="LinkedIn" />
+                      <SocialLink href="https://www.instagram.com/girish_lade_/" icon={InstagramLogo} label="Instagram" />
+                      <SocialLink href="mailto:admin@ladestack.in" icon={Envelope} label="Email" />
+                      <SocialLink href="https://ladestack.in" icon={Globe} label="ladestack.in" />
+                    </div>
+                  </div>
+                </div>
               </GradientCard>
             </motion.div>
           </div>
