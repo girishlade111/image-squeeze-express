@@ -354,8 +354,8 @@ const SettingsPanel = ({
                   </Button>
                 )}
               </div>
-              <div className="flex items-end gap-2">
-                <div className="flex-1">
+              <div className="flex flex-wrap items-end gap-2">
+                <div className="min-w-0 flex-1 basis-[calc(50%-1rem)]">
                   <Input
                     type="number"
                     inputMode="numeric"
@@ -402,7 +402,7 @@ const SettingsPanel = ({
                   </TooltipContent>
                 </Tooltip>
 
-                <div className="flex-1">
+                <div className="min-w-0 flex-1 basis-[calc(50%-1rem)]">
                   <Input
                     type="number"
                     inputMode="numeric"
@@ -432,7 +432,7 @@ const SettingsPanel = ({
             {/* Presets */}
             <div>
               <Label className="text-xs font-semibold">Social Media Presets</Label>
-              <div className="mt-2 grid grid-cols-3 gap-1.5">
+              <div className="mt-2 grid grid-cols-2 gap-1.5 sm:grid-cols-3">
                 {presets.map((p) => (
                   <button
                     key={p.id}
