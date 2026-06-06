@@ -19,17 +19,85 @@ export interface PdfProcessSettings {
    * resolution scaled by `scale`.
    */
   maxWidth: number | null;
+  /**
+   * Target output size in KB. When set, the engine iteratively reduces the
+   * JPEG quality and DPI until the output fits the target (or floors at
+   * the minimum quality / DPI).
+   */
+  targetSizeKB: number | null;
+  /**
+   * Convert all pages to grayscale before JPEG encoding. Saves ~25% on
+   * image-heavy color PDFs at the same quality.
+   */
+  grayscale: boolean;
+  /**
+   * Strip the output PDF's metadata (title, author, producer, etc.).
+   */
+  stripMetadata: boolean;
+  /**
+   * Custom DPI override (1 DPI = 1/72 in pdfjs terms). If non-null, takes
+   * precedence over `scale`. Common values: 72, 96, 150, 300.
+   */
+  dpi: number | null;
+  /**
+   * Filename pattern with tokens. See `FILENAME_TOKENS` in imageProcessor
+   * for the full list — both engines share the same token vocabulary.
+   * `{name}` (without extension) and `{ext}` are guaranteed to work.
+   */
+  filenamePattern: string;
+  /**
+   * Optional 1-based inclusive page range. When set, only those pages are
+   * rendered. Other pages in the source are dropped.
+   */
+  pageRange: { from: number; to: number } | null;
 }
 
 export interface PdfProcessResult {
   blob: Blob;
   pageCount: number;
+  pageRange: { from: number; to: number };
   sizeBytes: number;
   reduction: number;
   quality: number;
   scale: number;
   durationMs: number;
+  finalDpi: number;
+  finalQuality: number;
+  pagesProcessed: number;
 }
+
+export interface PdfMetadata {
+  pageCount: number;
+  pageWidth: number;
+  pageHeight: number;
+  pageRatio: number;
+  estimatedPageSize: string;
+  isImageHeavy: boolean;
+  isTextHeavy: boolean;
+  recommendedPreset: PdfQualityPreset;
+  recommendedQuality: number;
+  estimatedSavings: number;
+  recommendationReason: string;
+  firstPageThumbnail: string | null;
+  title: string | null;
+  author: string | null;
+  creator: string | null;
+  producer: string | null;
+  fileVersion: string | null;
+}
+
+export const DEFAULT_PDF_FILENAME_PATTERN = '{name}_compressed.pdf';
+
+const PDF_FILENAME_TOKENS: Record<string, string> = {
+  '{name}': 'Original file name without .pdf',
+  '{ext}': 'Always "pdf"',
+  '{format}': 'Always "pdf"',
+  '{pages}': 'Page count in the output',
+  '{size}': 'Output file size in KB',
+  '{date}': 'Current date (YYYY-MM-DD)',
+  '{q}': 'Final JPEG quality (0-100)',
+  '{index}': 'Index in the batch (1-based)',
+};
 
 // Lazy-load pdfjs so its ~700 KB bundle (which needs `DOMMatrix` etc.) is only
 // fetched on first use and is excluded from the test environment entirely.
@@ -48,17 +116,25 @@ async function getPdfjs() {
 }
 
 export const PDF_QUALITY_PRESETS: Record<Exclude<PdfQualityPreset, 'custom'>, PdfProcessSettings> = {
-  low: { quality: 0.4, scale: 1.25, maxWidth: 1100 },
-  medium: { quality: 0.6, scale: 1.75, maxWidth: 1700 },
-  high: { quality: 0.82, scale: 2.25, maxWidth: 2400 },
+  low: { quality: 0.4, scale: 1.25, maxWidth: 1100, targetSizeKB: null, grayscale: false, stripMetadata: false, dpi: null, filenamePattern: DEFAULT_PDF_FILENAME_PATTERN, pageRange: null },
+  medium: { quality: 0.6, scale: 1.75, maxWidth: 1700, targetSizeKB: null, grayscale: false, stripMetadata: false, dpi: null, filenamePattern: DEFAULT_PDF_FILENAME_PATTERN, pageRange: null },
+  high: { quality: 0.82, scale: 2.25, maxWidth: 2400, targetSizeKB: null, grayscale: false, stripMetadata: false, dpi: null, filenamePattern: DEFAULT_PDF_FILENAME_PATTERN, pageRange: null },
 };
 
 export function getQualityPresetSettings(preset: PdfQualityPreset): PdfProcessSettings {
   if (preset === 'custom') {
-    return { quality: 0.6, scale: 1.75, maxWidth: 1700 };
+    return { quality: 0.6, scale: 1.75, maxWidth: 1700, targetSizeKB: null, grayscale: false, stripMetadata: false, dpi: null, filenamePattern: DEFAULT_PDF_FILENAME_PATTERN, pageRange: null };
   }
   return PDF_QUALITY_PRESETS[preset];
 }
+
+export function getPdfFilenameTokenDocs(): Array<{ token: string; description: string }> {
+  return Object.entries(PDF_FILENAME_TOKENS).map(([token, description]) => ({ token, description }));
+}
+
+const MIN_TARGET_QUALITY = 0.2;
+const MIN_TARGET_SCALE = 0.5;
+const TARGET_SIZE_ITERATIONS = 5;
 
 export function formatBytes(bytes: number): string {
   if (!Number.isFinite(bytes) || bytes < 0) return '0 B';
