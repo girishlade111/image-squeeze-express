@@ -436,6 +436,35 @@ export function useImageUpload() {
     [processFiles, revokeUrl]
   );
 
+  /**
+   * Process a single image with the current settings — used for the "Try
+   * settings" preview action. Reuses the same per-file pipeline as the
+   * full batch run, so the preview is identical to what the user would
+   * get from `processAll`.
+   */
+  const previewOne = useCallback(
+    (id: string, settings: Settings) => {
+      setFiles((currentFiles) => {
+        const target = currentFiles.find((f) => f.id === id);
+        if (target?.processedPreview) revokeUrl(target.processedPreview);
+        return currentFiles.map((f) =>
+          f.id === id
+            ? {
+                ...f,
+                status: 'processing' as const,
+                result: undefined,
+                processedFile: undefined,
+                processedPreview: undefined,
+                error: undefined,
+              }
+            : f
+        );
+      });
+      void processFiles([id], settings);
+    },
+    [processFiles, revokeUrl]
+  );
+
   const hasFiles = files.length > 0;
   const allDone = useMemo(
     () => files.length > 0 && files.every((f) => f.status === 'done' || f.status === 'error'),
@@ -457,10 +486,12 @@ export function useImageUpload() {
     processFiles,
     retryFile,
     resetFile,
+    previewOne,
     isProcessing,
     progress,
     processingText,
     currentItem,
+    stats,
     hasFiles,
     allDone,
     processedFiles,
