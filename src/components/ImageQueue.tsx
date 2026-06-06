@@ -425,9 +425,11 @@ function QueueList({
               transition={{ duration: 0.15 }}
               className={`group flex items-center gap-2.5 px-2.5 py-1.5 transition-colors ${
                 f.status === 'error'
-                  ? 'bg-red-500/5'
+                  ? 'bg-destructive/5'
                   : f.status === 'done'
-                  ? 'bg-emerald-500/[0.04]'
+                  ? 'bg-success/[0.05]'
+                  : f.status === 'processing' && isCurrent
+                  ? 'bg-warning/[0.06]'
                   : ''
               }`}
             >
