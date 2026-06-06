@@ -260,17 +260,17 @@ export function usePdfUpload() {
       const idSet = new Set(targets.map((t) => t.id));
       const bytesTotal = targets.reduce((s, t) => s + t.originalSize, 0);
       setFiles((prev) =>
-        prev.map((f) =>
-          idSet.has(f.id)
-            ? {
-                ...f,
-                status: 'processing' as const,
-                error: undefined,
-                progress: 0,
-                preview: f.preview ? revokeUrl(f.preview) as unknown as string : f.preview,
-              }
-            : f
-        )
+        prev.map((f) => {
+          if (!idSet.has(f.id)) return f;
+          if (f.preview) revokeUrl(f.preview);
+          return {
+            ...f,
+            status: 'processing' as const,
+            error: undefined,
+            progress: 0,
+            preview: null,
+          };
+        })
       );
 
       const total = targets.length;
