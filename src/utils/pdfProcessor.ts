@@ -579,7 +579,7 @@ export function toDownloadPdfFile(
     '{pages}': String(context?.pageCount ?? 0),
     '{size}': String(sizeKB),
     '{date}': dateStr,
-    '{q}': String(context?.quality ?? 0),
+    '{q}': String(Math.round((context?.quality ?? 0) * 100)),
     '{index}': String(context?.index ?? 1),
   };
 
