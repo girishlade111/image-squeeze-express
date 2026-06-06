@@ -13,13 +13,13 @@ import { prefetchOnIdle } from "@/lib/prefetch";
 // Vercel Analytics + Speed Insights each ship a small runtime. We mount them
 // only after the first paint is committed (via requestIdleCallback when
 // available) so they never appear in the critical render path.
-type VercelComponents = typeof import('./VercelAnalytics');
+type VercelModule = typeof import('./VercelAnalytics');
 
 const VercelAnalyticsLazy = () => {
-  const [Mod, setMod] = useState<VercelComponents | null>(null);
+  const [Mod, setMod] = useState<VercelModule | null>(null);
   useEffect(() => {
     const load = () => {
-      void import('./VercelAnalytics').then((m) => setMod(() => m));
+      void import('./VercelAnalytics').then((m) => setMod(m));
     };
     if (typeof window === 'undefined') return;
     if ('requestIdleCallback' in window) {
