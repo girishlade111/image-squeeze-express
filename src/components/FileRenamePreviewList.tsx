@@ -214,12 +214,12 @@ const FileRenamePreviewList = ({
                     onClick={() => onRemove(f.id)}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-destructive text-destructive-foreground shadow-sm transition-opacity ${
-                      hoverId === f.id ? 'opacity-100' : 'opacity-0 group-hover:opacity-100'
+                    className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-destructive text-destructive-foreground shadow-sm transition-opacity sm:h-6 sm:w-6 ${
+                      hoverId === f.id ? 'opacity-100' : 'opacity-100 sm:opacity-0 sm:group-hover:opacity-100'
                     }`}
                     aria-label={`Remove ${f.name}`}
                   >
-                    <X className="h-3 w-3" />
+                    <X className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
                   </motion.button>
                 </div>
               </motion.div>
