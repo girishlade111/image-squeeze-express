@@ -1,6 +1,11 @@
 import { useCallback, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FileText, Sparkles, Zap, Shield } from 'lucide-react';
+import {
+  FilePdf,
+  Sparkle,
+  Lightning,
+  ShieldCheck,
+} from '@phosphor-icons/react';
 
 interface PdfUploadZoneProps {
   onFilesSelected: (files: FileList | File[]) => void;
@@ -109,7 +114,7 @@ const PdfUploadZone = ({ onFilesSelected, pdfCount, maxFiles = 5 }: PdfUploadZon
                 : { duration: 3, repeat: Infinity, ease: 'easeInOut' }
             }
           >
-            <FileText className="h-6 w-6 text-primary sm:h-7 sm:w-7" strokeWidth={1.75} aria-hidden="true" />
+            <FilePdf size={28} weight="duotone" className="text-primary sm:!h-8 sm:!w-8" aria-hidden="true" />
           </motion.div>
         </div>
 
