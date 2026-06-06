@@ -143,7 +143,7 @@ const SettingsPanel = ({
                 value="compress"
                 className="rounded-lg text-[11px] font-semibold data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary data-[state=active]:to-accent data-[state=active]:text-primary-foreground data-[state=active]:shadow-md transition-all"
               >
-                <Sparkles className="mr-1 h-3 w-3" />
+                <Sparkle size={12} weight="duotone" className="mr-1" />
                 Compress
               </TabsTrigger>
               <TabsTrigger
