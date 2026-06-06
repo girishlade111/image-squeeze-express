@@ -1,8 +1,8 @@
 import type { PdfProcessSettings, PdfQualityPreset } from './pdfProcessor';
 
-export { DEFAULT_PDF_FILENAME_PATTERN } from './pdfProcessor';
-
 export type { PdfProcessSettings, PdfQualityPreset };
+
+export const DEFAULT_PDF_FILENAME_PATTERN = '{name}_compressed.pdf';
 
 const PDF_FILENAME_TOKENS: Record<string, string> = {
   '{name}': 'Original file name without .pdf',
