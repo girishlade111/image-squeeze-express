@@ -103,6 +103,210 @@ export function getImageDimensions(file: File | Blob): Promise<{ width: number; 
   });
 }
 
+/**
+ * Heuristic content analyzer. Renders a small thumbnail of the image and
+ * inspects it to guess three things: is it photographic or graphical
+ * (continuous tones vs. flat colors / sharp edges)? Does it have any
+ * non-opaque pixels (transparency / alpha)? And how many distinct colors
+ * does it appear to use?
+ *
+ * The numbers produced are rough on purpose — this is a fast classifier
+ * that runs on a 64×64 thumbnail so it stays cheap even for a 50-image
+ * batch. It exists to feed the format-recommendation engine.
+ */
+async function analyzeImageContent(
+  file: Blob
+): Promise<{ isPhoto: boolean; hasTransparency: boolean; estimatedColors: number }> {
+  const SAMPLE = 64;
+  let img: HTMLImageElement;
+  let url: string;
+  try {
+    url = URL.createObjectURL(file);
+    img = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const i = new Image();
+      i.onload = () => resolve(i);
+      i.onerror = () => reject(new Error('Failed to load image'));
+      i.src = url;
+    });
+  } catch {
+    return { isPhoto: true, hasTransparency: false, estimatedColors: 0 };
+  } finally {
+    try {
+      if (url!) URL.revokeObjectURL(url);
+    } catch {
+      /* noop */
+    }
+  }
+
+  const canvas = document.createElement('canvas');
+  canvas.width = SAMPLE;
+  canvas.height = SAMPLE;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return { isPhoto: true, hasTransparency: false, estimatedColors: 0 };
+
+  // Draw the source fitted into a square, preserving aspect ratio
+  const aspect = img.naturalWidth / img.naturalHeight;
+  let dw = SAMPLE;
+  let dh = SAMPLE;
+  let dx = 0;
+  let dy = 0;
+  if (aspect > 1) {
+    dh = Math.round(SAMPLE / aspect);
+    dy = Math.floor((SAMPLE - dh) / 2);
+  } else if (aspect < 1) {
+    dw = Math.round(SAMPLE * aspect);
+    dx = Math.floor((SAMPLE - dw) / 2);
+  }
+  ctx.fillStyle = '#000';
+  ctx.fillRect(0, 0, SAMPLE, SAMPLE);
+  ctx.drawImage(img, dx, dy, dw, dh);
+
+  let data: Uint8ClampedArray;
+  try {
+    data = ctx.getImageData(0, 0, SAMPLE, SAMPLE).data;
+  } catch {
+    return { isPhoto: true, hasTransparency: false, estimatedColors: 0 };
+  }
+
+  let transparentPixels = 0;
+  let colorSet = new Set<number>();
+  let photoScore = 0;
+
+  for (let i = 0; i < data.length; i += 4) {
+    const r = data[i];
+    const g = data[i + 1];
+    const b = data[i + 2];
+    const a = data[i + 3];
+
+    if (a < 250) transparentPixels++;
+
+    // Quantize to 4 bits per channel for color counting
+    const key = (r >> 4) * 1024 + (g >> 4) * 32 + (b >> 4);
+    colorSet.add(key);
+
+    // Measure local variance: compare each pixel to a neighbor to count edges.
+    // A photo has lots of low-amplitude edges, a graphic has fewer but
+    // higher-amplitude edges.
+    if (i > 4) {
+      const dr = Math.abs(r - data[i - 4]);
+      const dg = Math.abs(g - data[i - 3]);
+      const db = Math.abs(b - data[i - 2]);
+      const sum = dr + dg + db;
+      if (sum > 30 && sum < 200) photoScore++;
+      else if (sum >= 200) photoScore += 0.2;
+    }
+  }
+
+  const totalPixels = SAMPLE * SAMPLE;
+  const transparencyRatio = transparentPixels / totalPixels;
+  const photoRatio = photoScore / totalPixels;
+  // Heuristic: if more than 35% of edges are "soft" (low amplitude), it's
+  // probably a photo. Graphics / screenshots have fewer soft edges.
+  const isPhoto = photoRatio > 0.35;
+  const hasTransparency = transparencyRatio > 0.005;
+  const estimatedColors = colorSet.size * 16; // back-of-envelope
+
+  return { isPhoto, hasTransparency, estimatedColors };
+}
+
+/**
+ * Suggests the best output format, quality, and projected savings for a
+ * given image. Pure metadata-only when possible, falls back to a 64×64
+ * thumbnail analysis for the transparency / photo detection.
+ *
+ * The reasoning string is short and friendly so it can be surfaced in the UI.
+ */
+export async function recommendFormat(
+  file: File,
+  dims: { width: number; height: number }
+): Promise<ImageMetadata> {
+  const mp = (dims.width * dims.height) / 1_000_000;
+  const aspect = dims.width / dims.height;
+
+  // Cheap shortcut: GIF/BMP can never be smaller as anything other than
+  // PNG (for graphics) or WebP/AVIF (for photos). Skip the analysis for
+  // tiny files (< 5 KB) where the savings would be negligible.
+  let content: { isPhoto: boolean; hasTransparency: boolean; estimatedColors: number };
+  if (file.size < 5 * 1024) {
+    content = { isPhoto: true, hasTransparency: false, estimatedColors: 256 };
+  } else {
+    try {
+      content = await analyzeImageContent(file);
+    } catch {
+      content = { isPhoto: true, hasTransparency: false, estimatedColors: 0 };
+    }
+  }
+
+  let recommendedFormat: ImageFormat;
+  let recommendedQuality = 75;
+  let reason: string;
+
+  if (content.hasTransparency) {
+    // Transparency-bearing images compress best as WebP (lossless alpha at
+    // small size) or stay as PNG when lossless matters more than size.
+    if (isFormatSupported('image/webp')) {
+      recommendedFormat = 'webp';
+      recommendedQuality = 80;
+      reason = 'Transparency detected — WebP preserves alpha with great compression';
+    } else {
+      recommendedFormat = 'png';
+      recommendedQuality = 100;
+      reason = 'Transparency detected — PNG preserves alpha losslessly';
+    }
+  } else if (!content.isPhoto) {
+    // Graphics, screenshots, line art — few colors, lots of flat regions
+    if (isFormatSupported('image/webp')) {
+      recommendedFormat = 'webp';
+      recommendedQuality = 90;
+      reason = 'Graphic/screenshot detected — WebP keeps edges crisp at small size';
+    } else {
+      recommendedFormat = 'png';
+      recommendedQuality = 100;
+      reason = 'Graphic detected — PNG is lossless and ideal for sharp edges';
+    }
+  } else {
+    // Photographic content
+    if (isFormatSupported('image/avif')) {
+      recommendedFormat = 'avif';
+      recommendedQuality = 65;
+      reason = 'Photo detected — AVIF gives the smallest files at great quality';
+    } else if (isFormatSupported('image/webp')) {
+      recommendedFormat = 'webp';
+      recommendedQuality = 75;
+      reason = 'Photo detected — WebP is ~30% smaller than JPEG at the same quality';
+    } else {
+      recommendedFormat = 'jpeg';
+      recommendedQuality = 80;
+      reason = 'Photo detected — JPEG is the most widely supported format';
+    }
+  }
+
+  // Projected savings — rough, based on the format's typical compression
+  // ratio for the detected content type. Used to show "save ~60%" in the UI.
+  const ratioFor: Record<ImageFormat, number> = {
+    avif: content.isPhoto ? 0.25 : 0.45,
+    webp: content.isPhoto ? 0.35 : 0.55,
+    jpeg: content.isPhoto ? 0.55 : 0.85,
+    png: content.hasTransparency ? 0.65 : 0.95,
+    original: 1,
+  };
+  const estimatedSavings = Math.round((1 - ratioFor[recommendedFormat]) * 100);
+
+  return {
+    width: dims.width,
+    height: dims.height,
+    megapixels: mp,
+    aspectRatio: aspect,
+    isPhoto: content.isPhoto,
+    hasTransparency: content.hasTransparency,
+    estimatedColors: content.estimatedColors,
+    recommendedFormat,
+    recommendedQuality,
+    estimatedSavings: Math.max(0, estimatedSavings),
+    recommendationReason: reason,
+  };
+}
+
 export function toMime(format: ProcessSettings['outputFormat'], originalType: string): string {
   if (format === 'original') {
     // Round-trip the original format for the formats the browser can re-encode
