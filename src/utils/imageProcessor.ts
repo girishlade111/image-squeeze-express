@@ -22,6 +22,9 @@ export interface ProcessSettings {
   preserveMetadata: boolean;
   progressive: boolean;
   embedColorProfile: boolean;
+
+  lossless: boolean;
+  filenamePattern: string;
 }
 
 export interface ProcessResult {
@@ -31,6 +34,34 @@ export interface ProcessResult {
   sizeBytes: number;
   reduction: number;
 }
+
+export interface ImageMetadata {
+  width: number;
+  height: number;
+  megapixels: number;
+  aspectRatio: number;
+  isPhoto: boolean;
+  hasTransparency: boolean;
+  estimatedColors: number;
+  recommendedFormat: ImageFormat;
+  recommendedQuality: number;
+  estimatedSavings: number;
+  recommendationReason: string;
+}
+
+export const DEFAULT_FILENAME_PATTERN = 'imagesqueeze_{name}.{ext}';
+
+const FILENAME_TOKENS: Record<string, string> = {
+  '{name}': 'Original file name without extension',
+  '{ext}': 'Output extension (webp, jpg, png, avif)',
+  '{format}': 'Output format (lowercase)',
+  '{w}': 'Output width in pixels',
+  '{h}': 'Output height in pixels',
+  '{q}': 'Output quality (rounded)',
+  '{index}': 'Index in the batch (1-based)',
+  '{date}': 'Current date (YYYY-MM-DD)',
+  '{size}': 'Output file size in KB',
+};
 
 export function formatFileSize(bytes: number): string {
   if (!Number.isFinite(bytes) || bytes < 0) return '0 B';
