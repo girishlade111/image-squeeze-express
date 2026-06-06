@@ -534,7 +534,7 @@ const SettingsPanel = ({
                     <div className="flex items-center gap-1.5">
                       <span className="text-xs font-semibold">{f.label}</span>
                       {f.recommended && (
-                        <span className="inline-flex items-center gap-0.5 rounded-full bg-accent/20 px-1.5 py-0.5 text-[9px] font-bold text-accent">
+                        <span className="inline-flex items-center gap-0.5 rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-bold text-primary-foreground">
                           <Star size={9} weight="fill" />
                           Best
                         </span>
