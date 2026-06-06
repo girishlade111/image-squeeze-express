@@ -222,6 +222,15 @@ const CompressPdf = () => {
         onDownload={handleDownload}
         getSettings={buildSettings}
       />
+
+      <MobileActionBar
+        visible={hasFiles && !allDone && readyCount > 0}
+        loading={isProcessing}
+        loadingText="Compressing…"
+        ctaLabel={`Compress ${readyCount} PDF${readyCount !== 1 ? 's' : ''}`}
+        ctaEmoji="⚡"
+        onCta={handleProcessAll}
+      />
     </div>
   );
 };

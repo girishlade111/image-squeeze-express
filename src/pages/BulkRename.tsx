@@ -9,6 +9,7 @@ import FileRenamePreviewList from '@/components/FileRenamePreviewList';
 import PageDropOverlay from '@/components/PageDropOverlay';
 import ScrollToTop from '@/components/ScrollToTop';
 import DocumentTitle from '@/components/DocumentTitle';
+import MobileActionBar from '@/components/MobileActionBar';
 import { useFileRename } from '@/hooks/useFileRename';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
 import { usePageDropZone } from '@/hooks/usePageDropZone';
@@ -104,6 +105,14 @@ const BulkRename = () => {
 
       <PageDropOverlay visible={isDragging} />
       <ScrollToTop />
+      <MobileActionBar
+        visible={files.length > 0 && changedCount > 0}
+        loading={isZipping}
+        loadingText={`Zipping… ${zipProgress}%`}
+        ctaLabel={`Download ${changedCount} renamed file${changedCount !== 1 ? 's' : ''}`}
+        ctaEmoji="📦"
+        onCta={downloadZip}
+      />
     </div>
   );
 };
