@@ -98,8 +98,16 @@ const PdfUploadZone = ({ onFilesSelected, pdfCount, maxFiles = 5 }: PdfUploadZon
             className={`relative flex h-14 w-14 items-center justify-center rounded-2xl transition-colors ${
               dragOver ? 'bg-primary/25' : 'bg-primary/[0.1] group-hover:bg-primary/[0.15]'
             }`}
-            animate={{ scale: dragOver ? 1.1 : 1, rotate: dragOver ? -6 : 0 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            animate={
+              dragOver
+                ? { scale: 1.1, rotate: -6 }
+                : { scale: 1, rotate: 0, y: [0, -2, 0] }
+            }
+            transition={
+              dragOver
+                ? { type: 'spring', stiffness: 300, damping: 20 }
+                : { duration: 3, repeat: Infinity, ease: 'easeInOut' }
+            }
           >
             <FileText className="h-7 w-7 text-primary" strokeWidth={1.75} aria-hidden="true" />
           </motion.div>
