@@ -127,9 +127,9 @@ const BulkRename = () => {
       <MobileActionBar
         visible={files.length > 0 && changedCount > 0}
         loading={isZipping}
-        loadingText={`Zipping… ${zipProgress}%`}
+        loadingText={`Zipping. ${zipProgress}%`}
         ctaLabel={`Download ${changedCount} renamed file${changedCount !== 1 ? 's' : ''}`}
-        ctaEmoji="📦"
+        ctaIcon={DownloadSimple}
         onCta={downloadZip}
       />
     </div>
