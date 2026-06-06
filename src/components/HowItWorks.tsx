@@ -49,7 +49,7 @@ const HowItWorks = () => {
         How It{' '}
         <span
           style={{
-            background: 'linear-gradient(135deg, #4F46E5, #0D9488)',
+            background: 'linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand-2)))',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
           }}
