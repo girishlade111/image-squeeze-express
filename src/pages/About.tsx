@@ -34,13 +34,22 @@ import {
   PenNib,
   ChartLineUp,
   Images,
+  Quotes,
+  Buildings,
+  Cpu,
+  Cube,
+  Wrench,
+  GraduationCap,
+  Briefcase,
+  Code as CodeIcon,
+  Heart as Heart2,
 } from '@phosphor-icons/react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DocumentTitle from '@/components/DocumentTitle';
 import { cn } from '@/lib/utils';
 
-function useCountUp(target: number, duration = 1000) {
+function useCountUp(target: number, duration = 1200) {
   const [value, setValue] = useState(0);
   const startRef = useRef<number | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -51,7 +60,6 @@ function useCountUp(target: number, duration = 1000) {
       return;
     }
     startRef.current = null;
-
     const tick = (now: number) => {
       if (startRef.current === null) startRef.current = now;
       const elapsed = now - startRef.current;
@@ -64,7 +72,6 @@ function useCountUp(target: number, duration = 1000) {
         setValue(target);
       }
     };
-
     rafRef.current = requestAnimationFrame(tick);
     return () => {
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
@@ -80,8 +87,17 @@ const GRADIENT_TEXT = {
   WebkitTextFillColor: 'transparent' as const,
 };
 
-const SECTION_TITLE = 'text-2xl font-bold tracking-tight sm:text-3xl';
-const SECTION_DESC = 'mx-auto mt-2 max-w-2xl text-sm text-muted-foreground text-pretty sm:text-base';
+const SECTION_DIVIDER = (
+  <div className="mx-auto my-12 h-px w-full max-w-3xl sm:my-16">
+    <div
+      className="h-full w-full"
+      style={{
+        background:
+          'linear-gradient(90deg, transparent, hsl(var(--primary) / 0.25), hsl(var(--accent) / 0.25), transparent)',
+      }}
+    />
+  </div>
+);
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -92,39 +108,6 @@ const fadeUpStagger = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.08 } },
 };
-
-const values = [
-  {
-    icon: ShieldCheck,
-    title: 'Privacy First',
-    desc: 'Your images, PDFs, and renamed files never leave your browser. Zero servers, zero uploads, zero tracking. We don\'t even have a backend.',
-  },
-  {
-    icon: Lightning,
-    title: 'Speed Obsessed',
-    desc: 'Web Workers, Canvas API, and lazy-loaded engines deliver results in milliseconds. We benchmark every release so you don\'t wait.',
-  },
-  {
-    icon: Handshake,
-    title: 'Forever Free',
-    desc: 'No accounts. No paywalls. No "Pro" tier. ImageSqueeze will always be free for personal and commercial use.',
-  },
-  {
-    icon: Sparkle,
-    title: 'Delightful UX',
-    desc: 'Smooth animations, dark mode, keyboard shortcuts, and instant feedback. Tools should feel as polished as the apps you use every day.',
-  },
-  {
-    icon: Code,
-    title: 'Open Foundations',
-    desc: 'We build on the shoulders of giants — React, Vite, pdf-lib, browser-image-compression. Open standards all the way down.',
-  },
-  {
-    icon: Heart,
-    title: 'No Dark Patterns',
-    desc: 'No cookie banners, no email harvesting, no upsells, no fake urgency. Just a tool that does its job, with respect for your time.',
-  },
-];
 
 const pillars = [
   {
@@ -151,6 +134,39 @@ const stats = [
   { icon: Stack, value: 100, suffix: '%', label: 'Client-Side', format: 'number' as const },
 ];
 
+const values = [
+  {
+    icon: ShieldCheck,
+    title: 'Privacy First',
+    desc: 'Your images, PDFs, and renamed files never leave your browser. Zero servers, zero uploads, zero tracking.',
+  },
+  {
+    icon: Lightning,
+    title: 'Speed Obsessed',
+    desc: 'Web Workers, Canvas API, and lazy-loaded engines deliver results in milliseconds. We benchmark every release.',
+  },
+  {
+    icon: Handshake,
+    title: 'Forever Free',
+    desc: 'No accounts. No paywalls. No "Pro" tier. ImageSqueeze will always be free for personal and commercial use.',
+  },
+  {
+    icon: Sparkle,
+    title: 'Delightful UX',
+    desc: 'Smooth animations, dark mode, keyboard shortcuts, and instant feedback. Tools that feel as polished as the apps you use daily.',
+  },
+  {
+    icon: Code,
+    title: 'Open Foundations',
+    desc: 'Built on React, Vite, pdf-lib, browser-image-compression. Open standards all the way down — no proprietary black boxes.',
+  },
+  {
+    icon: Heart,
+    title: 'No Dark Patterns',
+    desc: 'No cookie banners, no email harvesting, no upsells, no fake urgency. Just a tool that does its job, with respect for your time.',
+  },
+];
+
 const milestones = [
   {
     year: '2024',
@@ -162,7 +178,7 @@ const milestones = [
     year: '2025',
     icon: Plant,
     title: 'Rebuild & Open Beta',
-    desc: 'Full rewrite in React + Vite + TypeScript. Added 9 social-media presets, advanced transforms (rotate, mirror, grayscale), and a real quality-vs-size iteration loop.',
+    desc: 'Full rewrite in React + Vite + TypeScript. Added 9 social-media presets, advanced transforms, and a real quality-vs-size iteration loop.',
   },
   {
     year: '2025',
@@ -174,7 +190,7 @@ const milestones = [
     year: '2026',
     icon: ArrowsClockwise,
     title: 'Bulk File Renamer',
-    desc: 'Third tool. 13-rule rename engine, live preview with diff highlight, ZIP download. Power-user features: regex, numbering, case conversion, date stamping.',
+    desc: 'Third tool. 13-rule rename engine, live preview with diff highlight, ZIP download. Regex, numbering, case conversion, date stamping.',
   },
   {
     year: '2026',
@@ -190,19 +206,19 @@ const milestones = [
   },
 ];
 
-const techStack = [
-  { name: 'React 18', desc: 'UI framework', icon: Code },
-  { name: 'TypeScript', desc: 'Type safety', icon: FileText },
-  { name: 'Vite', desc: 'Build & dev server', icon: Lightning },
-  { name: 'Tailwind CSS', desc: 'Utility-first styles', icon: PaintBrush },
-  { name: 'shadcn/ui', desc: 'Accessible primitives', icon: Stack },
-  { name: 'Framer Motion', desc: 'Animations', icon: Pulse },
-  { name: 'pdf-lib', desc: 'PDF rebuilder', icon: Bookmarks },
-  { name: 'pdfjs-dist', desc: 'PDF parser & rasterizer', icon: PenNib },
-  { name: 'browser-image-compression', desc: 'Image encoder (Web Worker)', icon: Images },
-  { name: 'JSZip', desc: 'ZIP packing', icon: Stack },
-  { name: 'Phosphor Icons', desc: '9,000+ duotone icons', icon: Sparkle },
-  { name: 'Vercel Edge', desc: 'Hosting & CDN', icon: Cloud },
+const stack = [
+  { name: 'React 18', desc: 'UI framework', icon: Code, group: 'Core' },
+  { name: 'TypeScript', desc: 'Type safety', icon: FileText, group: 'Core' },
+  { name: 'Vite', desc: 'Build & dev server', icon: Lightning, group: 'Core' },
+  { name: 'Tailwind CSS', desc: 'Utility-first styles', icon: PaintBrush, group: 'Core' },
+  { name: 'shadcn/ui', desc: 'Accessible primitives', icon: Cube, group: 'Core' },
+  { name: 'Framer Motion', desc: 'Animations', icon: Pulse, group: 'Core' },
+  { name: 'pdf-lib', desc: 'PDF rebuilder', icon: Bookmarks, group: 'Engines' },
+  { name: 'pdfjs-dist', desc: 'PDF parser & rasterizer', icon: PenNib, group: 'Engines' },
+  { name: 'browser-image-compression', desc: 'Image encoder (Web Worker)', icon: Images, group: 'Engines' },
+  { name: 'JSZip', desc: 'ZIP packing', icon: Stack, group: 'Engines' },
+  { name: 'Phosphor Icons', desc: '9,000+ duotone icons', icon: Sparkle, group: 'Design' },
+  { name: 'Vercel Edge', desc: 'Hosting & CDN', icon: Cloud, group: 'Infra' },
 ];
 
 const pledge = [
@@ -213,6 +229,90 @@ const pledge = [
   'We honor the "Do Not Track" browser setting. If you enable it, even our cookieless analytics stay silent.',
   'We\'ll never sell the project, the domain, or the user base to a data-broker ad network. We\'d rather shut it down.',
 ];
+
+const quickFacts = [
+  { icon: Calendar, label: 'Founded', value: '2024' },
+  { icon: MapPin, label: 'Based in', value: 'India' },
+  { icon: Users, label: 'Team size', value: '1 (solo)' },
+  { icon: Buildings, label: 'Status', value: 'Active' },
+];
+
+const SectionHeader = ({
+  number,
+  title,
+  subtitle,
+  align = 'center',
+}: {
+  number: string;
+  title: string;
+  subtitle?: string;
+  align?: 'center' | 'left';
+}) => (
+  <motion.div
+    initial={{ opacity: 0, y: 16 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true, amount: 0.4 }}
+    transition={{ duration: 0.5 }}
+    className={cn(align === 'center' && 'text-center')}
+  >
+    <div
+      className={cn(
+        'flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-[0.18em] text-primary sm:text-xs',
+        align === 'center' ? 'justify-center' : ''
+      )}
+    >
+      <span
+        className="font-mono text-base font-black"
+        style={GRADIENT_TEXT}
+      >
+        {number}
+      </span>
+      <span className="h-px w-8 bg-gradient-to-r from-primary/40 to-transparent sm:w-10" />
+      <span>Section</span>
+    </div>
+    <h2 className="mt-3 text-2xl font-extrabold tracking-tight sm:text-3xl md:text-4xl text-balance">
+      {title}
+    </h2>
+    {subtitle && (
+      <p
+        className={cn(
+          'mt-3 text-sm text-muted-foreground text-pretty sm:text-base',
+          align === 'center' ? 'mx-auto max-w-2xl' : 'max-w-2xl'
+        )}
+      >
+        {subtitle}
+      </p>
+    )}
+  </motion.div>
+);
+
+const GradientCard = ({
+  children,
+  className,
+  hover = true,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  hover?: boolean;
+}) => (
+  <div
+    className={cn(
+      'group relative rounded-2xl p-px transition-all duration-300',
+      hover && 'hover:shadow-[0_0_30px_rgba(124,58,237,0.12)]',
+      className
+    )}
+    style={{
+      background:
+        'linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--accent) / 0.1), hsl(var(--primary) / 0.05))',
+    }}
+  >
+    <div
+      className="rounded-[15px] border border-border/40 bg-card/70 p-5 backdrop-blur-sm transition-colors group-hover:bg-card/85 sm:p-6"
+    >
+      {children}
+    </div>
+  </div>
+);
 
 const About = () => {
   const [statsVisible, setStatsVisible] = useState(false);
@@ -324,7 +424,7 @@ const About = () => {
                 transition={{ duration: 0.5, delay: 0.25 }}
               >
                 <a
-                  href="#mission"
+                  href="#section-01"
                   className="group inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-[1.02]"
                   style={{ background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))' }}
                 >
@@ -332,25 +432,86 @@ const About = () => {
                   <ArrowRight size={16} weight="bold" className="transition-transform group-hover:translate-x-0.5" />
                 </a>
                 <Link
-                  to="/contact"
+                  to="/"
                   className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-card/60 px-4 py-2 text-sm font-semibold backdrop-blur-sm transition-colors hover:border-primary/40 hover:bg-card"
                 >
-                  <Envelope size={16} weight="duotone" />
-                  Get in touch
+                  <Lightning size={16} weight="duotone" />
+                  Try the tools
                 </Link>
+              </motion.div>
+
+              {/* Quick facts strip */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.35 }}
+                className="mt-10 grid grid-cols-2 gap-2 sm:mt-14 sm:grid-cols-4 sm:gap-3"
+              >
+                {quickFacts.map((f) => (
+                  <div
+                    key={f.label}
+                    className="rounded-xl border border-border/40 bg-card/50 px-3 py-3 backdrop-blur-sm transition-colors hover:border-primary/30 hover:bg-card/70"
+                  >
+                    <f.icon size={18} weight="duotone" className="mx-auto h-4 w-4 text-primary" />
+                    <div className="mt-1.5 text-base font-bold tracking-tight sm:text-lg">{f.value}</div>
+                    <div className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground sm:text-[11px]">
+                      {f.label}
+                    </div>
+                  </div>
+                ))}
               </motion.div>
             </div>
           </div>
         </section>
 
-        {/* BY THE NUMBERS */}
-        <section ref={statsRef} className="container mx-auto px-4 py-12 sm:px-6 sm:py-16">
+        {SECTION_DIVIDER}
+
+        {/* 01 — WHO WE ARE */}
+        <section id="section-01" className="container mx-auto px-4 py-8 sm:px-6 sm:py-12">
+          <SectionHeader
+            number="01"
+            title="Who we are"
+            subtitle="Three short statements that guide every feature, every line of code, and every decision we make."
+          />
+
           <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+            variants={fadeUpStagger}
+            className="mt-10 grid gap-4 sm:grid-cols-3 sm:gap-5"
+          >
+            {pillars.map((p) => (
+              <motion.div key={p.title} variants={fadeUp}>
+                <GradientCard className="h-full">
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/25 to-accent/25">
+                    <p.icon size={28} weight="duotone" className="h-6 w-6 text-primary" />
+                  </div>
+                  <h3 className="mt-4 text-lg font-bold tracking-tight">{p.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{p.desc}</p>
+                </GradientCard>
+              </motion.div>
+            ))}
+          </motion.div>
+        </section>
+
+        {SECTION_DIVIDER}
+
+        {/* 02 — BY THE NUMBERS */}
+        <section id="section-02" className="container mx-auto px-4 py-8 sm:px-6 sm:py-12">
+          <SectionHeader
+            number="02"
+            title="By the numbers"
+            subtitle="The kind of things that matter to a small team — quietly compounding, one user at a time."
+          />
+
+          <motion.div
+            ref={statsRef}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
             variants={fadeUpStagger}
-            className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4"
+            className="mt-10 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4"
           >
             {stats.map((stat) => (
               <StatCard key={stat.label} stat={stat} active={statsVisible} />
@@ -358,65 +519,15 @@ const About = () => {
           </motion.div>
         </section>
 
-        {/* MISSION / VISION / STORY */}
-        <section id="mission" className="container mx-auto px-4 py-12 sm:px-6 sm:py-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5 }}
-            className="text-center"
-          >
-            <h2 className={SECTION_TITLE}>What we believe</h2>
-            <p className={SECTION_DESC}>
-              Three short statements that guide every feature, every line of code, and every decision.
-            </p>
-          </motion.div>
+        {SECTION_DIVIDER}
 
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.15 }}
-            variants={fadeUpStagger}
-            className="mt-10 grid gap-4 sm:grid-cols-3 sm:gap-5"
-          >
-            {pillars.map((pillar) => (
-              <motion.div
-                key={pillar.title}
-                variants={fadeUp}
-                className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card/60 p-6 backdrop-blur-sm transition-all hover:border-primary/40 hover:shadow-[0_0_25px_rgba(124,58,237,0.12)]"
-              >
-                <div
-                  className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-                  style={{ background: 'radial-gradient(circle, hsl(var(--primary) / 0.2), transparent)', filter: 'blur(30px)' }}
-                  aria-hidden
-                />
-                <div className="relative">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary/20 to-accent/20">
-                    <pillar.icon size={28} weight="duotone" className="h-6 w-6 text-primary" />
-                  </div>
-                  <h3 className="mt-4 text-lg font-bold tracking-tight">{pillar.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{pillar.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </section>
-
-        {/* OUR VALUES */}
-        <section className="container mx-auto px-4 py-12 sm:px-6 sm:py-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5 }}
-            className="text-center"
-          >
-            <h2 className={SECTION_TITLE}>How we work</h2>
-            <p className={SECTION_DESC}>
-              Six principles we hold ourselves to. If we ever violate one, you can call us out in public.
-            </p>
-          </motion.div>
+        {/* 03 — OUR VALUES */}
+        <section id="section-03" className="container mx-auto px-4 py-8 sm:px-6 sm:py-12">
+          <SectionHeader
+            number="03"
+            title="How we work"
+            subtitle="Six principles we hold ourselves to. If we ever violate one, you can call us out in public."
+          />
 
           <motion.div
             initial="hidden"
@@ -425,41 +536,37 @@ const About = () => {
             variants={fadeUpStagger}
             className="mt-10 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3"
           >
-            {values.map((value) => (
-              <motion.div
-                key={value.title}
-                variants={fadeUp}
-                className="group rounded-2xl border border-border/50 bg-card/60 p-5 backdrop-blur-sm transition-all hover:border-primary/40 hover:shadow-[0_0_20px_rgba(124,58,237,0.1)]"
-              >
-                <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 transition-colors group-hover:bg-primary/20">
-                  <value.icon size={22} weight="duotone" className="h-5 w-5 text-primary" />
-                </div>
-                <h3 className="mt-3 text-sm font-bold tracking-tight">{value.title}</h3>
-                <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{value.desc}</p>
+            {values.map((v) => (
+              <motion.div key={v.title} variants={fadeUp}>
+                <GradientCard className="h-full">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10">
+                    <v.icon size={22} weight="duotone" className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="mt-3 text-sm font-bold tracking-tight sm:text-base">{v.title}</h3>
+                  <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground sm:text-[13px]">{v.desc}</p>
+                </GradientCard>
               </motion.div>
             ))}
           </motion.div>
         </section>
 
-        {/* TIMELINE */}
-        <section className="container mx-auto px-4 py-12 sm:px-6 sm:py-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5 }}
-            className="text-center"
-          >
-            <h2 className={SECTION_TITLE}>How we got here</h2>
-            <p className={SECTION_DESC}>
-              A short history of ImageSqueeze — from a weekend script to a privacy-first toolkit serving thousands.
-            </p>
-          </motion.div>
+        {SECTION_DIVIDER}
+
+        {/* 04 — THE JOURNEY */}
+        <section id="section-04" className="container mx-auto px-4 py-8 sm:px-6 sm:py-12">
+          <SectionHeader
+            number="04"
+            title="The journey"
+            subtitle="A short history of ImageSqueeze — from a weekend script to a privacy-first toolkit serving thousands."
+          />
 
           <div className="relative mx-auto mt-12 max-w-3xl">
             <div
               className="pointer-events-none absolute left-3.5 top-2 bottom-2 w-px sm:left-1/2 sm:-translate-x-1/2"
-              style={{ background: 'linear-gradient(to bottom, transparent, hsl(var(--primary) / 0.4), hsl(var(--accent) / 0.4), transparent)' }}
+              style={{
+                background:
+                  'linear-gradient(to bottom, transparent, hsl(var(--primary) / 0.4), hsl(var(--accent) / 0.4), transparent)',
+              }}
               aria-hidden
             />
 
@@ -472,8 +579,7 @@ const About = () => {
                   viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.5, delay: idx * 0.05 }}
                   className={cn(
-                    'relative flex gap-4 pl-10 sm:gap-8 sm:pl-0',
-                    'sm:items-center',
+                    'relative flex gap-4 pl-10 sm:gap-8 sm:pl-0 sm:items-center',
                     idx % 2 === 0 ? 'sm:flex-row' : 'sm:flex-row-reverse'
                   )}
                 >
@@ -486,15 +592,10 @@ const About = () => {
                   </div>
 
                   <div className={cn('flex-1', idx % 2 === 0 ? 'sm:pr-10 sm:text-right' : 'sm:pl-10')}>
-                    <div
-                      className={cn(
-                        'rounded-2xl border border-border/50 bg-card/60 p-5 backdrop-blur-sm transition-all hover:border-primary/40',
-                        'sm:p-6'
-                      )}
-                    >
+                    <GradientCard hover={true}>
                       <div
                         className={cn(
-                          'flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-primary',
+                          'flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-primary',
                           idx % 2 === 0 ? 'sm:justify-end' : ''
                         )}
                       >
@@ -503,7 +604,7 @@ const About = () => {
                       </div>
                       <h3 className="mt-1.5 text-base font-bold tracking-tight sm:text-lg">{m.title}</h3>
                       <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{m.desc}</p>
-                    </div>
+                    </GradientCard>
                   </div>
 
                   <div className="hidden flex-1 sm:block" />
@@ -513,24 +614,15 @@ const About = () => {
           </div>
         </section>
 
-        {/* TECH STACK */}
-        <section className="container mx-auto px-4 py-12 sm:px-6 sm:py-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5 }}
-            className="text-center"
-          >
-            <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border/50 bg-card/60 px-3 py-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground backdrop-blur-sm">
-              <Code size={12} weight="duotone" className="h-3 w-3" />
-              The tech behind it
-            </div>
-            <h2 className={SECTION_TITLE}>Built on the shoulders of giants</h2>
-            <p className={SECTION_DESC}>
-              ImageSqueeze is assembled from best-in-class open-source libraries. We don&apos;t reinvent the wheel — we compose it beautifully.
-            </p>
-          </motion.div>
+        {SECTION_DIVIDER}
+
+        {/* 05 — THE STACK */}
+        <section id="section-05" className="container mx-auto px-4 py-8 sm:px-6 sm:py-12">
+          <SectionHeader
+            number="05"
+            title="The stack"
+            subtitle="ImageSqueeze is assembled from best-in-class open-source libraries. We don't reinvent the wheel — we compose it beautifully."
+          />
 
           <motion.div
             initial="hidden"
@@ -539,160 +631,231 @@ const About = () => {
             variants={fadeUpStagger}
             className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4"
           >
-            {techStack.map((tech) => (
-              <motion.div
-                key={tech.name}
-                variants={fadeUp}
-                className="group rounded-2xl border border-border/50 bg-card/60 p-4 backdrop-blur-sm transition-all hover:border-primary/40 hover:shadow-[0_0_15px_rgba(124,58,237,0.1)]"
-              >
-                <tech.icon size={24} weight="duotone" className="h-6 w-6 text-primary transition-transform group-hover:scale-110" />
-                <h3 className="mt-2.5 text-sm font-bold tracking-tight">{tech.name}</h3>
-                <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">{tech.desc}</p>
+            {stack.map((tech) => (
+              <motion.div key={tech.name} variants={fadeUp}>
+                <GradientCard className="h-full">
+                  <tech.icon size={24} weight="duotone" className="h-6 w-6 text-primary" />
+                  <h3 className="mt-2.5 text-sm font-bold tracking-tight">{tech.name}</h3>
+                  <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">{tech.desc}</p>
+                  <div className="mt-2.5 inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">
+                    {tech.group}
+                  </div>
+                </GradientCard>
               </motion.div>
             ))}
           </motion.div>
         </section>
 
-        {/* MEET THE FOUNDER */}
-        <section className="container mx-auto px-4 py-12 sm:px-6 sm:py-16">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5 }}
-            className="mx-auto max-w-3xl"
-          >
-            <div className="relative overflow-hidden rounded-3xl border border-border/50 bg-card/60 p-6 backdrop-blur-sm sm:p-8">
-              <div
-                className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full"
-                style={{ background: 'radial-gradient(circle, hsl(var(--primary) / 0.15), transparent)', filter: 'blur(40px)' }}
-                aria-hidden
-              />
-              <div
-                className="pointer-events-none absolute -bottom-20 -left-20 h-64 w-64 rounded-full"
-                style={{ background: 'radial-gradient(circle, hsl(var(--accent) / 0.15), transparent)', filter: 'blur(40px)' }}
-                aria-hidden
-              />
+        {SECTION_DIVIDER}
 
-              <div className="relative flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:gap-8">
-                <div className="flex-shrink-0">
+        {/* 06 — MEET THE FOUNDER */}
+        <section id="section-06" className="container mx-auto px-4 py-8 sm:px-6 sm:py-12">
+          <SectionHeader
+            number="06"
+            title="Meet the founder"
+            subtitle="ImageSqueeze is a one-person studio. Here's who's behind the pixels."
+          />
+
+          <div className="mx-auto mt-10 grid max-w-4xl gap-4 sm:gap-5 lg:grid-cols-5">
+            {/* Founder card */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5 }}
+              className="lg:col-span-3"
+            >
+              <GradientCard hover={false} className="overflow-hidden">
+                <div className="relative -m-5 mb-5 overflow-hidden rounded-t-[15px] border-b border-border/40 bg-gradient-to-br from-primary/15 via-card/40 to-accent/15 p-6 sm:-m-6 sm:mb-6 sm:p-8">
                   <div
-                    className="flex h-24 w-24 items-center justify-center rounded-2xl text-3xl font-black text-primary-foreground shadow-lg sm:h-28 sm:w-28"
-                    style={{ background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))' }}
+                    className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full"
+                    style={{
+                      background: 'radial-gradient(circle, hsl(var(--primary) / 0.3), transparent)',
+                      filter: 'blur(40px)',
+                    }}
                     aria-hidden
-                  >
-                    GL
-                  </div>
-                </div>
-
-                <div className="flex-1 text-center sm:text-left">
-                  <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-                    <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">Girish Lade</h2>
-                    <span className="rounded-full border border-primary/20 bg-primary/[0.07] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
-                      Founder &amp; Solo Dev
-                    </span>
-                  </div>
-                  <p className="mt-1 flex items-center justify-center gap-1.5 text-xs text-muted-foreground sm:justify-start">
-                    <MapPin size={12} weight="duotone" />
-                    India · Building for the world
-                  </p>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    Web developer, indie hacker, and privacy enthusiast. I built ImageSqueeze because I was tired of
-                    uploading my own photos to a dozen different compression sites just to ship a product page. After
-                    one weekend it became a tool I used every day — so I polished it and shared it.
-                  </p>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                    I also run{' '}
-                    <a
-                      href="https://ladestack.in"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-semibold text-primary hover:underline"
+                  />
+                  <div className="relative flex items-center gap-4 sm:gap-5">
+                    <div
+                      className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-2xl text-3xl font-black text-primary-foreground shadow-lg sm:h-24 sm:w-24 sm:text-4xl"
+                      style={{ background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))' }}
+                      aria-hidden
                     >
-                      Lade Stack
-                    </a>
-                    , a small studio focused on local-first, privacy-respecting web tools.
-                  </p>
-
-                  <div className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
-                    <SocialChip href="https://github.com/girishlade111" icon={GithubLogo} label="GitHub" />
-                    <SocialChip href="https://www.linkedin.com/in/girish-lade-075bba201/" icon={LinkedinLogo} label="LinkedIn" />
-                    <SocialChip href="https://www.instagram.com/girish_lade_/" icon={InstagramLogo} label="Instagram" />
-                    <SocialChip href="mailto:admin@ladestack.in" icon={Envelope} label="Email" />
-                    <SocialChip href="https://ladestack.in" icon={Globe} label="ladestack.in" />
+                      GL
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="text-xl font-extrabold tracking-tight sm:text-2xl">Girish Lade</h3>
+                        <span className="rounded-full border border-primary/25 bg-primary/[0.08] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
+                          Founder &amp; Solo Dev
+                        </span>
+                      </div>
+                      <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
+                        <MapPin size={12} weight="duotone" />
+                        India · Building for the world
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </motion.div>
+
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  Web developer, indie hacker, and privacy enthusiast. I built ImageSqueeze because I was tired of
+                  uploading my own photos to a dozen different compression sites just to ship a product page. After
+                  one weekend it became a tool I used every day — so I polished it and shared it.
+                </p>
+                <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+                  I also run{' '}
+                  <a
+                    href="https://ladestack.in"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-semibold text-primary hover:underline"
+                  >
+                    Lade Stack
+                  </a>
+                  , a small studio focused on local-first, privacy-respecting web tools.
+                </p>
+
+                <div className="mt-4 flex flex-wrap items-center gap-2">
+                  <SocialChip href="https://github.com/girishlade111" icon={GithubLogo} label="GitHub" />
+                  <SocialChip href="https://www.linkedin.com/in/girish-lade-075bba201/" icon={LinkedinLogo} label="LinkedIn" />
+                  <SocialChip href="https://www.instagram.com/girish_lade_/" icon={InstagramLogo} label="Instagram" />
+                  <SocialChip href="mailto:admin@ladestack.in" icon={Envelope} label="Email" />
+                  <SocialChip href="https://ladestack.in" icon={Globe} label="ladestack.in" />
+                </div>
+              </GradientCard>
+            </motion.div>
+
+            {/* Pull quote + skills */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="space-y-4 sm:space-y-5 lg:col-span-2"
+            >
+              <GradientCard hover={false} className="h-full">
+                <Quotes size={28} weight="duotone" className="h-7 w-7 text-primary" />
+                <p className="mt-3 text-base font-medium leading-relaxed text-foreground/90">
+                  The best software is the kind that respects its users. No dark patterns, no data harvesting, no
+                  unnecessary complexity.
+                </p>
+                <p className="mt-3 flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+                  <span
+                    className="h-px w-6"
+                    style={{
+                      background: 'linear-gradient(90deg, hsl(var(--primary)), hsl(var(--accent)))',
+                    }}
+                  />
+                  Girish Lade
+                </p>
+              </GradientCard>
+
+              <GradientCard hover={false}>
+                <p className="text-[10px] font-bold uppercase tracking-[0.15em] text-primary">What I do</p>
+                <ul className="mt-3 space-y-2.5">
+                  <li className="flex items-center gap-2.5 text-xs">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10">
+                      <Cpu size={14} weight="duotone" className="h-3.5 w-3.5 text-primary" />
+                    </span>
+                    <span className="text-foreground/90">Design &amp; build web tools</span>
+                  </li>
+                  <li className="flex items-center gap-2.5 text-xs">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10">
+                      <Briefcase size={14} weight="duotone" className="h-3.5 w-3.5 text-primary" />
+                    </span>
+                    <span className="text-foreground/90">Run Lade Stack studio</span>
+                  </li>
+                  <li className="flex items-center gap-2.5 text-xs">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10">
+                      <GraduationCap size={14} weight="duotone" className="h-3.5 w-3.5 text-primary" />
+                    </span>
+                    <span className="text-foreground/90">Ship small, learn fast</span>
+                  </li>
+                  <li className="flex items-center gap-2.5 text-xs">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10">
+                      <Wrench size={14} weight="duotone" className="h-3.5 w-3.5 text-primary" />
+                    </span>
+                    <span className="text-foreground/90">Maintain a lean stack</span>
+                  </li>
+                </ul>
+              </GradientCard>
+            </motion.div>
+          </div>
         </section>
 
-        {/* PRIVACY PLEDGE */}
-        <section className="container mx-auto px-4 py-12 sm:px-6 sm:py-16">
+        {SECTION_DIVIDER}
+
+        {/* 07 — THE PLEDGE */}
+        <section id="section-07" className="container mx-auto px-4 py-8 sm:px-6 sm:py-12">
+          <SectionHeader
+            number="07"
+            title="The privacy pledge"
+            subtitle="We're committed to the simplest possible privacy story. No loopholes, no fine print — just a list of things we promise not to do."
+          />
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.3 }}
+            viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.5 }}
-            className="mx-auto max-w-3xl"
+            className="mx-auto mt-10 max-w-3xl"
           >
             <div className="relative overflow-hidden rounded-3xl border border-primary/20 bg-gradient-to-br from-primary/[0.08] via-card/40 to-accent/[0.08] p-6 backdrop-blur-sm sm:p-10">
-              <div className="flex items-start gap-3">
-                <div className="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary/30 to-accent/30">
-                  <ShieldCheck size={28} weight="duotone" className="h-6 w-6 text-primary" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="text-[11px] font-semibold uppercase tracking-wider text-primary">Our Privacy Pledge</div>
-                  <h2 className="mt-1 text-2xl font-bold tracking-tight sm:text-3xl">If it runs in your browser, it stays in your browser</h2>
-                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground sm:text-base">
-                    We&apos;re committed to the simplest possible privacy story. There is no privacy policy full of loopholes — there&apos;s just a list of things we promise not to do.
+              <div
+                className="pointer-events-none absolute -right-20 -top-20 h-64 w-64 rounded-full"
+                style={{
+                  background: 'radial-gradient(circle, hsl(var(--accent) / 0.15), transparent)',
+                  filter: 'blur(60px)',
+                }}
+                aria-hidden
+              />
+
+              <div className="relative">
+                <ul className="space-y-3 sm:space-y-4">
+                  {pledge.map((line, i) => (
+                    <motion.li
+                      key={i}
+                      initial={{ opacity: 0, x: -12 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true, amount: 0.3 }}
+                      transition={{ duration: 0.4, delay: i * 0.05 }}
+                      className="flex gap-3"
+                    >
+                      <span className="mt-0.5 flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-emerald-500/15">
+                        <CheckCircle size={16} weight="fill" className="h-4 w-4 text-emerald-500" />
+                      </span>
+                      <span className="text-sm leading-relaxed text-foreground/90 sm:text-[15px]">{line}</span>
+                    </motion.li>
+                  ))}
+                </ul>
+
+                <div className="mt-6 flex flex-col gap-3 border-t border-border/50 pt-5 sm:mt-8 sm:flex-row sm:items-center sm:justify-between">
+                  <p className="flex items-center gap-2 text-xs text-muted-foreground">
+                    <ListChecks size={14} weight="duotone" className="h-3.5 w-3.5" />
+                    Read the full legalese in our{' '}
+                    <Link to="/privacy" className="font-semibold text-primary hover:underline">
+                      Privacy Policy
+                    </Link>
+                    .
                   </p>
-                </div>
-              </div>
-
-              <ul className="mt-6 space-y-3 sm:mt-8 sm:space-y-4">
-                {pledge.map((line, i) => (
-                  <motion.li
-                    key={i}
-                    initial={{ opacity: 0, x: -12 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true, amount: 0.3 }}
-                    transition={{ duration: 0.4, delay: i * 0.05 }}
-                    className="flex gap-3"
+                  <Link
+                    to="/privacy"
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
                   >
-                    <CheckCircle
-                      size={20}
-                      weight="fill"
-                      className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-500"
-                    />
-                    <span className="text-sm leading-relaxed text-foreground/90 sm:text-[15px]">{line}</span>
-                  </motion.li>
-                ))}
-              </ul>
-
-              <div className="mt-6 flex flex-col gap-3 border-t border-border/50 pt-5 sm:mt-8 sm:flex-row sm:items-center sm:justify-between">
-                <p className="flex items-center gap-2 text-xs text-muted-foreground">
-                  <ListChecks size={14} weight="duotone" className="h-3.5 w-3.5" />
-                  Read the full legalese in our{' '}
-                  <Link to="/privacy" className="font-semibold text-primary hover:underline">
-                    Privacy Policy
+                    View policy
+                    <ArrowRight size={12} weight="bold" />
                   </Link>
-                  .
-                </p>
-                <Link
-                  to="/privacy"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline"
-                >
-                  View policy
-                  <ArrowRight size={12} weight="bold" />
-                </Link>
+                </div>
               </div>
             </div>
           </motion.div>
         </section>
 
+        {SECTION_DIVIDER}
+
         {/* CTA */}
-        <section className="container mx-auto px-4 py-12 pb-safe sm:px-6 sm:py-20">
+        <section className="container mx-auto px-4 py-8 pb-safe sm:px-6 sm:py-16">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -714,7 +877,7 @@ const About = () => {
               <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/30 to-accent/30">
                 <Rocket size={28} weight="duotone" className="h-7 w-7 text-primary" />
               </div>
-              <h2 className="mt-4 text-2xl font-bold tracking-tight sm:text-3xl">
+              <h2 className="mt-4 text-2xl font-extrabold tracking-tight sm:text-3xl">
                 Try ImageSqueeze —{' '}
                 <span style={GRADIENT_TEXT}>no signup, no upload, no tracking</span>
               </h2>
@@ -760,29 +923,23 @@ const StatCard = ({ stat, active }: { stat: typeof stats[number]; active: boolea
   const formatted = stat.format === 'decimal' ? animated.toFixed(1) : Math.floor(animated).toLocaleString();
 
   return (
-    <motion.div
-      variants={fadeUp}
-      className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card/60 p-4 backdrop-blur-sm transition-all hover:border-primary/40 sm:p-5"
-    >
-      <div
-        className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        style={{ background: 'radial-gradient(circle, hsl(var(--primary) / 0.2), transparent)', filter: 'blur(20px)' }}
-        aria-hidden
-      />
-      <div className="relative flex items-start gap-3">
-        <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10 transition-colors group-hover:bg-primary/20">
-          <stat.icon size={22} weight="duotone" className="h-5 w-5 text-primary" />
-        </div>
-        <div className="min-w-0 flex-1">
-          <div className="flex items-baseline gap-0.5">
-            <span className="text-2xl font-black tracking-tight tabular-nums sm:text-3xl">
-              {formatted}
-            </span>
-            <span className="text-lg font-bold text-primary sm:text-xl">{stat.suffix}</span>
+    <motion.div variants={fadeUp} className="h-full">
+      <GradientCard hover={true} className="h-full">
+        <div className="flex items-start gap-3">
+          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10">
+            <stat.icon size={22} weight="duotone" className="h-5 w-5 text-primary" />
           </div>
-          <div className="text-[11px] font-medium text-muted-foreground sm:text-xs">{stat.label}</div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-baseline gap-0.5">
+              <span className="text-2xl font-black tracking-tight tabular-nums sm:text-3xl">
+                {formatted}
+              </span>
+              <span className="text-lg font-bold text-primary sm:text-xl">{stat.suffix}</span>
+            </div>
+            <div className="text-[11px] font-medium text-muted-foreground sm:text-xs">{stat.label}</div>
+          </div>
         </div>
-      </div>
+      </GradientCard>
     </motion.div>
   );
 };
