@@ -41,6 +41,8 @@ const App = () => (
               </Routes>
             </ErrorBoundary>
           </Suspense>
+          <Analytics />
+          <SpeedInsights />
         </BrowserRouter>
       </TooltipProvider>
     </ThemeProvider>
