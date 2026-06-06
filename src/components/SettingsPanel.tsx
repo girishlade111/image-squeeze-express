@@ -223,8 +223,18 @@ const SettingsPanel = ({
                 aria-label="Compression quality"
               />
               <div className="mt-1.5 flex items-center justify-between text-[10px] text-muted-foreground">
-                <span>
-                  {settings.lossless ? '🟢 No quality loss' : `${hint.emoji} ${hint.text}`}
+                <span className="inline-flex items-center gap-1">
+                  {settings.lossless ? (
+                    <>
+                      <CheckCircle size={12} weight="fill" className="text-emerald-500" />
+                      No quality loss
+                    </>
+                  ) : (
+                    <>
+                      <hint.icon size={12} weight="fill" className={hint.color} />
+                      {hint.text}
+                    </>
+                  )}
                 </span>
                 <span className="tabular-nums">
                   {settings.lossless
