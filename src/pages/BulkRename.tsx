@@ -1,5 +1,4 @@
 import { useCallback, useRef } from 'react';
-import { Sparkles, Eye, Download, Shield } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import ToolHero from '@/components/ToolHero';
@@ -13,6 +12,26 @@ import MobileActionBar from '@/components/MobileActionBar';
 import { useFileRename } from '@/hooks/useFileRename';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
 import { usePageDropZone } from '@/hooks/usePageDropZone';
+import {
+  ShieldCheck,
+  Eye,
+  Gift,
+  Stack,
+  Sparkle,
+  DownloadSimple,
+  TextAUnderline,
+  Hash,
+  TextT,
+  TextAa,
+  CalendarBlank,
+  Scissors,
+  ArrowsHorizontal,
+  TextTShirt,
+  ArrowsLeftRight,
+  Stamp,
+  FileArchive,
+  Shield,
+} from '@phosphor-icons/react';
 
 const BulkRename = () => {
   const {
