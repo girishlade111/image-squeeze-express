@@ -484,7 +484,8 @@ const SettingsPanel = ({
                       {p.w}×{p.h}
                     </span>
                   </button>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </TabsContent>
