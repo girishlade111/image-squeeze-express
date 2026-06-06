@@ -241,7 +241,7 @@ const CompressPdf = () => {
         loading={isProcessing}
         loadingText="Compressing…"
         ctaLabel={`Compress ${readyCount} PDF${readyCount !== 1 ? 's' : ''}`}
-        ctaEmoji="⚡"
+        ctaIcon={Lightning}
         onCta={handleProcessAll}
       />
     </div>
