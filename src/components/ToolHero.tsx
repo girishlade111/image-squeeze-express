@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { motion } from 'framer-motion';
+import type { Icon } from '@phosphor-icons/react';
 
 interface ToolHeroProps {
   /** First line of the headline (rendered in normal weight). */
@@ -10,8 +11,8 @@ interface ToolHeroProps {
   suffix: string;
   /** One-sentence subhead. */
   subhead: string;
-  /** Trust badges shown above the upload zone. Use the brand emoji for each. */
-  badges: { emoji: string; label: string }[];
+  /** Trust badges shown above the upload zone. */
+  badges: { icon: Icon; label: string }[];
   /** Anything rendered after the upload zone (e.g. settings + queue). */
   children?: React.ReactNode;
 }
