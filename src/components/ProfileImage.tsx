@@ -1,6 +1,15 @@
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
+interface PictureSource {
+  /** MIME type — e.g. 'image/avif', 'image/webp'. */
+  type: string;
+  /** srcSet value (can include 1x/2x descriptors). */
+  srcSet: string;
+  /** Optional sizes attribute. */
+  sizes?: string;
+}
+
 interface ProfileImageProps {
   src: string;
   alt: string;
@@ -15,6 +24,12 @@ interface ProfileImageProps {
   naturalHeight?: number;
   /** Show the small "online" status dot in the bottom-right. */
   showStatus?: boolean;
+  /** Optional modern-format sources, rendered inside a <picture> in the given order. */
+  sources?: PictureSource[];
+  /** srcSet on the <img> tag (used when `sources` is empty). */
+  srcSet?: string;
+  /** sizes attribute paired with srcSet. */
+  sizes?: string;
 }
 
 /**
@@ -31,6 +46,9 @@ const ProfileImage = ({
   naturalWidth,
   naturalHeight,
   showStatus = false,
+  sources,
+  srcSet,
+  sizes,
 }: ProfileImageProps) => {
   const [errored, setErrored] = useState(false);
 
@@ -56,12 +74,30 @@ const ProfileImage = ({
             >
               {fallbackInitials}
             </div>
+          ) : sources && sources.length > 0 ? (
+            <picture>
+              {sources.map((s) => (
+                <source key={s.type} type={s.type} srcSet={s.srcSet} {...(s.sizes ? { sizes: s.sizes } : {})} />
+              ))}
+              <img
+                src={src}
+                alt={alt}
+                loading="lazy"
+                decoding="async"
+                {...(naturalWidth !== undefined ? { width: naturalWidth } : {})}
+                {...(naturalHeight !== undefined ? { height: naturalHeight } : {})}
+                onError={() => setErrored(true)}
+                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+              />
+            </picture>
           ) : (
             <img
               src={src}
               alt={alt}
               loading="lazy"
               decoding="async"
+              {...(srcSet ? { srcSet } : {})}
+              {...(sizes ? { sizes } : {})}
               {...(naturalWidth !== undefined ? { width: naturalWidth } : {})}
               {...(naturalHeight !== undefined ? { height: naturalHeight } : {})}
               onError={() => setErrored(true)}

@@ -18,7 +18,7 @@ const navLinks = [
 ];
 
 const tools = [
-  { label: 'Images', to: '/', icon: PhosphorImage, load: () => import('@/pages/Index') },
+  { label: 'Images', to: '/', icon: PhosphorImage },
   {
     label: 'PDF',
     to: '/compress-pdf',

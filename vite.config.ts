@@ -45,18 +45,39 @@ export default defineConfig(({ mode }) => ({
           if (
             id.includes("react-dom") ||
             id.includes("/react/") ||
-            id.includes("scheduler") ||
-            id.includes("react-router")
+            id.includes("scheduler")
           ) {
             return "vendor-react";
           }
 
-          // Animation engine — only the pages that use framer-motion pull it in.
-          if (id.includes("framer-motion")) return "vendor-motion";
+          // React Router + its underlying @remix-run/router engine. Split
+          // out so the 100+ KB of router internals can be cached as a single
+          // fingerprinted asset and never bundled with the React runtime.
+          if (id.includes("react-router") || id.includes("@remix-run/router")) {
+            return "vendor-router";
+          }
 
-          // All Radix UI primitives share a single chunk so any dialog/popover
-          // page can be opened without re-downloading.
-          if (id.includes("@radix-ui")) return "vendor-radix";
+          // Animation engine — only the pages that use framer-motion pull it in.
+          if (
+            id.includes("framer-motion") ||
+            id.includes("motion-dom") ||
+            id.includes("motion-utils") ||
+            id.includes("/motion/")
+          ) {
+            return "vendor-motion";
+          }
+
+          // All Radix UI primitives + their internals (floating-ui,
+          // react-remove-scroll, etc) share a single chunk so any dialog /
+          // popover page can be opened without re-downloading.
+          if (
+            id.includes("@radix-ui") ||
+            id.includes("@floating-ui") ||
+            id.includes("react-remove-scroll") ||
+            id.includes("use-sync-external-store")
+          ) {
+            return "vendor-radix";
+          }
 
           // Small icon library used by the shadcn primitives — keep separate
           // from Phosphor (which Vite auto-splits per icon).
@@ -73,9 +94,15 @@ export default defineConfig(({ mode }) => ({
             return "vendor-utils";
           }
 
+          // Theme resolution — only loaded for the theme provider.
+          if (id.includes("next-themes")) return "vendor-themes";
+
           // Analytics are tiny but bundled to a dedicated chunk so they can
           // be loaded strictly after first paint.
           if (id.includes("@vercel")) return "vendor-vercel";
+
+          // Pako / zlib — used by pdfjs for compression.
+          if (id.includes("pako") || id.includes("/fflate")) return "vendor-compress";
 
           return "vendor";
         },

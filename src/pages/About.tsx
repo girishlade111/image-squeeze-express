@@ -48,7 +48,10 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DocumentTitle from '@/components/DocumentTitle';
 import ProfileImage from '@/components/ProfileImage';
-import profileImg from '@/assets/profile.png';
+import profileImg from '@/assets/profile.webp';
+import profileAvif from '@/assets/profile.avif';
+import profileWebp2x from '@/assets/profile@2x.webp';
+import profileAvif2x from '@/assets/profile@2x.avif';
 import { cn } from '@/lib/utils';
 
 function useCountUp(target: number, duration = 1200) {
@@ -1027,6 +1030,16 @@ const About = () => {
                       naturalWidth={1024}
                       naturalHeight={1536}
                       showStatus
+                      sources={[
+                        {
+                          type: 'image/avif',
+                          srcSet: `${profileAvif} 1x, ${profileAvif2x} 2x`,
+                        },
+                        {
+                          type: 'image/webp',
+                          srcSet: `${profileImg} 1x, ${profileWebp2x} 2x`,
+                        },
+                      ]}
                     />
 
                     <div className="min-w-0 flex-1 text-center sm:text-left">
