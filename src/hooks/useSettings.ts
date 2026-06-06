@@ -30,6 +30,10 @@ export interface Settings {
   preserveMetadata: boolean;
   progressive: boolean;
   embedColorProfile: boolean;
+
+  // Power features
+  lossless: boolean;
+  filenamePattern: string;
 }
 
 const STORAGE_KEY = 'imagesqueeze-settings';
