@@ -41,8 +41,6 @@ import {
   Wrench,
   GraduationCap,
   Briefcase,
-  Code as CodeIcon,
-  Heart as Heart2,
 } from '@phosphor-icons/react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
