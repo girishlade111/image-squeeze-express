@@ -167,41 +167,34 @@ describe('calcDimensions (image processor)', () => {
     expect(r.h).toBe(500);
   });
 
-  it('produces a center-crop rectangle when source aspect is wider than target', () => {
-    // 1920×1080 source → 1080×1080 target (square). Source is wider so crop sides.
+  it('returns target dimensions when both are set with mismatched aspect (no crop — image is letterboxed in canvas)', () => {
+    // 1920×1080 source → 1080×1080 target (square). Source is wider. Previously
+    // this center-cropped the source sides; now the full image is preserved and
+    // canvasProcess letterboxes it inside the 1080×1080 canvas.
     const r = calcDimensions(1920, 1080, 1080, 1080, true);
     expect(r.w).toBe(1080);
     expect(r.h).toBe(1080);
-    expect(r.crop).toEqual({ x: 420, y: 0, w: 1080, h: 1080 });
   });
 
-  it('produces a center-crop rectangle when source aspect is taller than target', () => {
-    // 1080×1920 source → 1200×675 target (16:9). Source is taller so crop top/bottom.
+  it('returns target dimensions when both are set and lock is off (no crop)', () => {
+    // 1080×1920 source → 1200×675 target (16:9). Source is taller. Full image
+    // preserved, canvasProcess pillarboxes it inside the 1200×675 canvas.
     const r = calcDimensions(1080, 1920, 1200, 675, false);
     expect(r.w).toBe(1200);
     expect(r.h).toBe(675);
-    // sourceAspect = 1080/1920 = 0.5625
-    // targetAspect = 1200/675 = 1.7778
-    // Source is taller → cropW = 1080, cropH = 1080 / 1.7778 ≈ 607.5
-    expect(r.crop?.w).toBeCloseTo(1080, 5);
-    expect(r.crop?.h).toBeCloseTo(607.5, 1);
-    expect(r.crop?.x).toBe(0);
-    expect(r.crop?.y).toBeCloseTo((1920 - 607.5) / 2, 1);
   });
 
-  it('does not crop when source and target aspect ratios already match', () => {
-    // 1920×1080 (16:9) source → 1200×675 (16:9) target. No crop needed.
+  it('returns target dimensions when source and target aspect ratios already match', () => {
+    // 1920×1080 (16:9) source → 1200×675 (16:9) target. Perfect fit, no padding.
     const r = calcDimensions(1920, 1080, 1200, 675, true);
     expect(r.w).toBe(1200);
     expect(r.h).toBe(675);
-    expect(r.crop).toBeUndefined();
   });
 
-  it('does not crop when source dimensions are unknown', () => {
+  it('returns target dimensions when source dimensions are unknown', () => {
     const r = calcDimensions(0, 0, 1080, 1080, true);
     expect(r.w).toBe(1080);
     expect(r.h).toBe(1080);
-    expect(r.crop).toBeUndefined();
   });
 
   it('handles social media preset dimensions correctly', () => {

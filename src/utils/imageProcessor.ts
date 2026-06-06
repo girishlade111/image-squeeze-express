@@ -365,23 +365,9 @@ export function isFormatSupported(mime: string): boolean {
   }
 }
 
-interface CropRect {
-  x: number;
-  y: number;
-  w: number;
-  h: number;
-}
-
 interface CalcResult {
   w: number;
   h: number;
-  /**
-   * Source-image rectangle to sample from. When omitted, the full source is used.
-   * Returned when an explicit (w, h) target is requested whose aspect ratio differs
-   * from the source — the image is then center-cropped to match the target aspect
-   * ratio before being scaled to the target dimensions (e.g., social media presets).
-   */
-  crop?: CropRect;
 }
 
 export function calcDimensions(
@@ -412,40 +398,11 @@ export function calcDimensions(
   }
 
   // Both target dimensions are explicitly known (e.g. a Social Media preset, or
-  // the user typed both width and height). Honor them as-is and, if the source
-  // aspect ratio differs, center-crop the source to match the target aspect so
-  // the output is exactly the requested size without distortion.
+  // the user typed both width and height). Honor them as-is. When the source
+  // aspect ratio differs, canvasProcess letterboxes/pillarboxes the source so
+  // the full image remains visible — no cropping ever.
   const w = safeW || origW;
   const h = safeH || origH;
-
-  if (safeW && safeH && origW > 0 && origH > 0) {
-    const targetAspect = safeW / safeH;
-    const sourceAspect = origW / origH;
-
-    if (Math.abs(sourceAspect - targetAspect) > 0.001) {
-      let cropW: number;
-      let cropH: number;
-      let cropX: number;
-      let cropY: number;
-
-      if (sourceAspect > targetAspect) {
-        // Source is wider than target → crop the sides equally
-        cropH = origH;
-        cropW = origH * targetAspect;
-        cropX = (origW - cropW) / 2;
-        cropY = 0;
-      } else {
-        // Source is taller than target → crop top/bottom equally
-        cropW = origW;
-        cropH = origW / targetAspect;
-        cropX = 0;
-        cropY = (origH - cropH) / 2;
-      }
-
-      return { w, h, crop: { x: cropX, y: cropY, w: cropW, h: cropH } };
-    }
-  }
-
   return { w, h };
 }
 
@@ -473,18 +430,15 @@ async function canvasProcess(
     rotation?: Rotation;
     mirror?: boolean;
     grayscale?: boolean;
-    crop?: CropRect;
   }
 ): Promise<Blob> {
   const img = await loadImage(source);
 
   // Canvas dimensions swap for 90/270 rotation so the rotated image fits
-  let canvasWidth = width;
-  let canvasHeight = height;
-  if (options.rotation === 90 || options.rotation === 270) {
-    canvasWidth = height;
-    canvasHeight = width;
-  }
+  const rot = options.rotation || 0;
+  const swapDims = rot === 90 || rot === 270;
+  const canvasWidth = swapDims ? height : width;
+  const canvasHeight = swapDims ? width : height;
 
   const canvas = document.createElement('canvas');
   canvas.width = canvasWidth;
@@ -496,33 +450,72 @@ async function canvasProcess(
   ctx.imageSmoothingEnabled = true;
   ctx.imageSmoothingQuality = 'high';
 
-  // Always fill background white to avoid transparent JPEG artifacts
+  // Fill background. JPEG gets white (no alpha channel), everything else
+  // (PNG/WebP/AVIF) keeps the canvas default — fully transparent — so the
+  // letterbox padding blends with whatever the image is placed on.
   if (mime === 'image/jpeg') {
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(0, 0, canvasWidth, canvasHeight);
   }
 
-  // Source rectangle to sample from (defaults to the full image).
-  // When a crop is provided, the cropped region is drawn at the requested size
-  // so the output exactly matches the target dimensions without distortion.
-  const crop = options.crop;
-  const srcX = crop ? crop.x : 0;
-  const srcY = crop ? crop.y : 0;
-  const srcW = crop ? crop.w : img.naturalWidth;
-  const srcH = crop ? crop.h : img.naturalHeight;
+  // Effective source dimensions after the pending rotation. The fitted size
+  // must reflect the rotated footprint, otherwise 90°/270° rotation would
+  // letterbox on the wrong axis.
+  const srcW = swapDims ? img.naturalHeight : img.naturalWidth;
+  const srcH = swapDims ? img.naturalWidth : img.naturalHeight;
 
-  // Move origin to the canvas center so rotation/mirror pivot around it
-  if (options.rotation || options.mirror) {
-    ctx.translate(canvasWidth / 2, canvasHeight / 2);
-    applyCanvasTransforms(ctx, options.rotation || 0, options.mirror || false);
+  // Fit the entire source inside the canvas while preserving aspect ratio.
+  // Any leftover space is padding — the image is never cropped. When the
+  // source aspect matches the canvas aspect, drawW/drawH equal the canvas
+  // size and there is no padding at all.
+  const targetAspect = canvasWidth / canvasHeight;
+  const sourceAspect = srcW / srcH;
+
+  let drawW: number;
+  let drawH: number;
+  if (sourceAspect > targetAspect) {
+    drawW = canvasWidth;
+    drawH = canvasWidth / sourceAspect;
+  } else {
+    drawH = canvasHeight;
+    drawW = canvasHeight * sourceAspect;
   }
 
-  const drawWidth = options.rotation || options.mirror ? width : canvasWidth;
-  const drawHeight = options.rotation || options.mirror ? height : canvasHeight;
-  const drawX = options.rotation || options.mirror ? -width / 2 : 0;
-  const drawY = options.rotation || options.mirror ? -height / 2 : 0;
+  const offsetX = (canvasWidth - drawW) / 2;
+  const offsetY = (canvasHeight - drawH) / 2;
 
-  ctx.drawImage(img, srcX, srcY, srcW, srcH, drawX, drawY, drawWidth, drawHeight);
+  const needsTransform = rot !== 0 || options.mirror;
+
+  if (needsTransform) {
+    // Pivot around the center of the fitted image so rotation/mirror rotate
+    // the visible content, not the whole canvas.
+    ctx.translate(offsetX + drawW / 2, offsetY + drawH / 2);
+    if (options.mirror) ctx.scale(-1, 1);
+    if (rot) ctx.rotate((rot * Math.PI) / 180);
+    ctx.drawImage(
+      img,
+      0,
+      0,
+      img.naturalWidth,
+      img.naturalHeight,
+      -drawW / 2,
+      -drawH / 2,
+      drawW,
+      drawH
+    );
+  } else {
+    ctx.drawImage(
+      img,
+      0,
+      0,
+      img.naturalWidth,
+      img.naturalHeight,
+      offsetX,
+      offsetY,
+      drawW,
+      drawH
+    );
+  }
 
   if (options.grayscale) {
     applyGrayscale(ctx, canvasWidth, canvasHeight);
@@ -622,7 +615,7 @@ export async function processImage(
   const outputMime = toMime(settings.outputFormat, file.type);
   const origDims = await getImageDimensions(file);
 
-  const { w: targetW, h: targetH, crop } = calcDimensions(
+  const { w: targetW, h: targetH } = calcDimensions(
     origDims.width,
     origDims.height,
     settings.width,
@@ -663,7 +656,6 @@ export async function processImage(
         rotation: settings.rotation,
         mirror: settings.mirror,
         grayscale: settings.grayscale,
-        crop,
       }
     );
 
@@ -687,7 +679,6 @@ export async function processImage(
             rotation: settings.rotation,
             mirror: settings.mirror,
             grayscale: settings.grayscale,
-            crop,
           }
         );
         result = iterResult;
