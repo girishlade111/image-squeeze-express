@@ -1,10 +1,23 @@
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Loader2, Check, AlertCircle, RotateCcw, Plus, LayoutGrid, List } from 'lucide-react';
+import {
+  X,
+  Loader2,
+  Check,
+  AlertCircle,
+  RotateCcw,
+  Plus,
+  LayoutGrid,
+  List,
+  Eye,
+  Sparkles,
+  Lightbulb,
+  Gauge,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { UploadedFile } from '@/hooks/useImageUpload';
+import { UploadedFile, type ProcessingStats } from '@/hooks/useImageUpload';
 import { formatFileSize, getCompressionRatio } from '@/utils/imageProcessor';
 
 interface ImageQueueProps {
@@ -13,10 +26,13 @@ interface ImageQueueProps {
   progress: number;
   processingText: string;
   currentItem: string | null;
+  stats?: ProcessingStats;
   onRemove: (id: string) => void;
   onClearAll: () => void;
   onProcessAll: () => void;
   onRetry: (id: string) => void;
+  onPreviewOne?: (id: string) => void;
+  onInspect?: (id: string) => void;
   onAddMore: () => void;
   allDone: boolean;
   readyCount: number;
@@ -28,6 +44,18 @@ function truncate(str: string, max: number) {
   const ext = dot >= 0 ? str.slice(dot) : '';
   const base = str.slice(0, Math.max(1, max - ext.length - 1));
   return `${base}…${ext}`;
+}
+
+function formatEta(ms: number): string {
+  if (!Number.isFinite(ms) || ms <= 0) return '—';
+  const totalSec = Math.round(ms / 1000);
+  if (totalSec < 60) return `${totalSec}s`;
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  if (m < 60) return `${m}m ${s}s`;
+  const h = Math.floor(m / 60);
+  const rm = m % 60;
+  return `${h}h ${rm}m`;
 }
 
 const statusStyles = {
@@ -53,10 +81,13 @@ const ImageQueue = ({
   progress,
   processingText,
   currentItem,
+  stats,
   onRemove,
   onClearAll,
   onProcessAll,
   onRetry,
+  onPreviewOne,
+  onInspect,
   onAddMore,
   allDone,
   readyCount,
@@ -185,7 +216,18 @@ const ImageQueue = ({
             </div>
             <div className="mt-1.5 flex items-center justify-between text-[10px] text-muted-foreground">
               <span>{processingText || `${progress}%`}</span>
-              <span className="tabular-nums">{progress}%</span>
+              <span className="flex items-center gap-2 tabular-nums">
+                {stats && stats.bytesPerSecond > 0 && (
+                  <span className="inline-flex items-center gap-1 text-[10px]">
+                    <Gauge className="h-2.5 w-2.5" />
+                    {formatFileSize(stats.bytesPerSecond)}/s
+                    {stats.etaMs != null && stats.etaMs > 0 && (
+                      <> · ETA {formatEta(stats.etaMs)}</>
+                    )}
+                  </span>
+                )}
+                <span>{progress}%</span>
+              </span>
             </div>
           </motion.div>
         )}
@@ -198,12 +240,17 @@ const ImageQueue = ({
           currentItem={currentItem}
           onRemove={onRemove}
           onRetry={onRetry}
+          onInspect={onInspect}
+          onPreviewOne={onPreviewOne}
         />
       ) : (
       <motion.div className="grid grid-cols-1 gap-2 sm:grid-cols-2" layout>
         <AnimatePresence mode="popLayout">
           {files.map((f, i) => {
             const isCurrent = currentItem === f.id && f.status === 'processing';
+            const recommendation = f.metadata;
+            const showRecommendation =
+              !!recommendation && f.status === 'ready' && !isProcessing;
             return (
               <motion.div
                 key={f.id}
@@ -224,8 +271,16 @@ const ImageQueue = ({
                     : 'border-border/40 hover:border-primary/30'
                 }`}
               >
-                {/* Thumbnail */}
-                <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-secondary/30">
+                {/* Thumbnail — click to open inspector */}
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onInspect?.(f.id);
+                  }}
+                  className="relative h-14 w-14 flex-shrink-0 cursor-zoom-in overflow-hidden rounded-lg bg-secondary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  aria-label={`Open inspector for ${f.name}`}
+                >
                   <img
                     src={f.preview}
                     alt={f.name}
@@ -241,6 +296,93 @@ const ImageQueue = ({
                         aria-label="Processing"
                       />
                     </div>
+                  )}
+                  {f.status === 'done' && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: 'spring', stiffness: 500, damping: 25 }}
+                      className="absolute inset-0 flex items-center justify-center bg-success/30 backdrop-blur-[1px]"
+                    >
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-success shadow-lg">
+                        <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} />
+                      </div>
+                    </motion.div>
+                  )}
+                  {f.status === 'error' && (
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      className="absolute inset-0 flex items-center justify-center bg-destructive/30 backdrop-blur-[1px]"
+                    >
+                      <div className="flex h-6 w-6 items-center justify-center rounded-full bg-destructive shadow-lg">
+                        <AlertCircle className="h-3.5 w-3.5 text-white" strokeWidth={3} />
+                      </div>
+                    </motion.div>
+                  )}
+                </button>
+
+                {/* Info */}
+                <div className="min-w-0 flex-1">
+                  <p
+                    className="truncate text-xs font-medium text-foreground"
+                    title={f.name}
+                  >
+                    {truncate(f.name, 22)}
+                  </p>
+                  <p className="mt-0.5 text-[10px] text-muted-foreground">
+                    {formatFileSize(f.originalSize)}
+                    {f.originalWidth > 0 && f.originalHeight > 0 && (
+                      <> · {f.originalWidth}×{f.originalHeight}</>
+                    )}
+                  </p>
+                  {f.status === 'done' && f.result && (
+                    <p className="mt-0.5 text-[10px] font-medium text-success">
+                      {formatFileSize(f.result.sizeBytes)} ·{' '}
+                      {getCompressionRatio(f.originalSize, f.result.sizeBytes)}
+                    </p>
+                  )}
+                  {f.status === 'error' && f.error && (
+                    <p
+                      className="mt-0.5 truncate text-[10px] text-destructive"
+                      title={f.error}
+                    >
+                      {f.error}
+                    </p>
+                  )}
+                  <div className="mt-1 flex flex-wrap items-center gap-1">
+                    <Badge
+                      variant="outline"
+                      className={`rounded-full px-1.5 py-0 text-[9px] font-semibold ${statusStyles[f.status]}`}
+                    >
+                      {isCurrent ? 'Processing now' : statusLabel[f.status]}
+                    </Badge>
+                    {showRecommendation && (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <Badge
+                            variant="outline"
+                            className="cursor-help rounded-full border-primary/30 bg-primary/10 px-1.5 py-0 text-[9px] font-semibold text-primary"
+                          >
+                            <Lightbulb className="mr-0.5 h-2 w-2" />
+                            Use {String(recommendation!.recommendedFormat).toUpperCase()}
+                          </Badge>
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-[220px] text-[11px] leading-relaxed">
+                          {recommendation!.recommendationReason}
+                          <br />
+                          <span className="text-primary">
+                            Saves ~{recommendation!.estimatedSavings}%
+                          </span>
+                          <br />
+                          <span className="text-muted-foreground">
+                            Click the thumbnail to apply this suggestion.
+                          </span>
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
+                  </div>
+                </div>
                   )}
                   {f.status === 'done' && (
                     <motion.div
@@ -303,26 +445,66 @@ const ImageQueue = ({
                   </Badge>
                 </div>
 
-                {/* Action: retry on error */}
-                {f.status === 'error' && !isProcessing && (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <motion.button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onRetry(f.id);
-                        }}
-                        whileHover={{ scale: 1.1 }}
-                        whileTap={{ scale: 0.9 }}
-                        className="flex h-7 w-7 items-center justify-center rounded-lg border border-destructive/30 bg-destructive/10 text-destructive transition-colors hover:bg-destructive/20"
-                        aria-label={`Retry ${f.name}`}
-                      >
-                        <RotateCcw className="h-3.5 w-3.5" />
-                      </motion.button>
-                    </TooltipTrigger>
-                    <TooltipContent>Retry</TooltipContent>
-                  </Tooltip>
-                )}
+                {/* Action buttons cluster: inspect / preview / retry */}
+                <div className="flex flex-col items-center gap-1">
+                  {f.status === 'ready' && onPreviewOne && !isProcessing && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <motion.button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onPreviewOne(f.id);
+                          }}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className="flex h-7 w-7 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 text-primary transition-colors hover:bg-primary/20"
+                          aria-label={`Try settings on ${f.name}`}
+                        >
+                          <Sparkles className="h-3.5 w-3.5" />
+                        </motion.button>
+                      </TooltipTrigger>
+                      <TooltipContent>Try current settings on this image</TooltipContent>
+                    </Tooltip>
+                  )}
+                  {f.status === 'ready' && onInspect && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <motion.button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onInspect(f.id);
+                          }}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className="flex h-7 w-7 items-center justify-center rounded-lg border border-border/60 bg-background/40 text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground"
+                          aria-label={`Inspect ${f.name}`}
+                        >
+                          <Eye className="h-3.5 w-3.5" />
+                        </motion.button>
+                      </TooltipTrigger>
+                      <TooltipContent>Inspect metadata & smart suggestion</TooltipContent>
+                    </Tooltip>
+                  )}
+                  {f.status === 'error' && !isProcessing && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <motion.button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onRetry(f.id);
+                          }}
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className="flex h-7 w-7 items-center justify-center rounded-lg border border-destructive/30 bg-destructive/10 text-destructive transition-colors hover:bg-destructive/20"
+                          aria-label={`Retry ${f.name}`}
+                        >
+                          <RotateCcw className="h-3.5 w-3.5" />
+                        </motion.button>
+                      </TooltipTrigger>
+                      <TooltipContent>Retry</TooltipContent>
+                    </Tooltip>
+                  )}
+                </div>
 
                 {/* Remove button (visible on hover or when failed) */}
                 {!isProcessing && (
