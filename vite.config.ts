@@ -18,4 +18,68 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    target: "es2020",
+    cssCodeSplit: true,
+    sourcemap: false,
+    reportCompressedSize: true,
+    chunkSizeWarningLimit: 500,
+    rollupOptions: {
+      output: {
+        // Stable filenames per vendor group so we can `<link rel="modulepreload">`
+        // them in index.html and let HTTP/2 push the heaviest deps in parallel
+        // with the main bundle.
+        chunkFileNames: "assets/[name]-[hash].js",
+        entryFileNames: "assets/[name]-[hash].js",
+        assetFileNames: "assets/[name]-[hash][extname]",
+        manualChunks(id) {
+          if (!id.includes("node_modules")) return undefined;
+
+          // Heavy tool-specific deps are split out so they never reach the
+          // main bundle and only download when their route is visited.
+          if (id.includes("pdfjs-dist") || id.includes("pdf-lib")) return "vendor-pdf";
+          if (id.includes("jszip") || id.includes("file-saver")) return "vendor-zip";
+          if (id.includes("browser-image-compression")) return "vendor-image";
+
+          // React core — shared by every page; preload in parallel with main.
+          if (
+            id.includes("react-dom") ||
+            id.includes("/react/") ||
+            id.includes("scheduler") ||
+            id.includes("react-router")
+          ) {
+            return "vendor-react";
+          }
+
+          // Animation engine — only the pages that use framer-motion pull it in.
+          if (id.includes("framer-motion")) return "vendor-motion";
+
+          // All Radix UI primitives share a single chunk so any dialog/popover
+          // page can be opened without re-downloading.
+          if (id.includes("@radix-ui")) return "vendor-radix";
+
+          // Small icon library used by the shadcn primitives — keep separate
+          // from Phosphor (which Vite auto-splits per icon).
+          if (id.includes("lucide-react")) return "vendor-lucide";
+
+          // State/data/utility deps.
+          if (id.includes("@tanstack")) return "vendor-query";
+          if (id.includes("sonner")) return "vendor-sonner";
+          if (
+            id.includes("clsx") ||
+            id.includes("tailwind-merge") ||
+            id.includes("class-variance-authority")
+          ) {
+            return "vendor-utils";
+          }
+
+          // Analytics are tiny but bundled to a dedicated chunk so they can
+          // be loaded strictly after first paint.
+          if (id.includes("@vercel")) return "vendor-vercel";
+
+          return "vendor";
+        },
+      },
+    },
+  },
 }));
