@@ -1,15 +1,17 @@
 import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { toast } from 'sonner';
 import {
-  compressPdf,
-  toDownloadPdfFile,
-  getPdfMetadata,
   formatBytes,
   getReductionRatio,
   type PdfProcessSettings,
   type PdfProcessResult,
   type PdfMetadata,
-} from '@/utils/pdfProcessor';
+} from '@/utils/pdfFormat';
+
+// pdfjs-dist + pdf-lib are heavy (~700 KB + 200 KB). They're only needed when
+// the user actually runs a compression job, so we lazy-load the whole engine
+// module. The module is cached after first load.
+const loadPdfEngine = () => import('@/utils/pdfProcessor');
 
 export interface UploadedPdf {
   id: string;
