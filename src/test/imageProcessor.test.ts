@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, afterEach } from 'vitest';
+import { describe, it, expect, vi, afterEach, beforeEach } from 'vitest';
 import {
   formatFileSize,
   getCompressionRatio,
@@ -11,6 +11,7 @@ import {
   toDownloadFile,
   getFilenameTokenDocs,
   DEFAULT_FILENAME_PATTERN,
+  recommendFormat,
   type ImageFormat,
   type ProcessSettings,
 } from '../utils/imageProcessor';
