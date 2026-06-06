@@ -1,16 +1,9 @@
 import { lazy, Suspense, useCallback, useRef, useState } from 'react';
 import Header from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
-import ImageQueue from '@/components/ImageQueue';
-import SettingsPanel from '@/components/SettingsPanel';
 import LazySection from '@/components/LazySection';
-import PageDropOverlay from '@/components/PageDropOverlay';
-import ScrollToTop from '@/components/ScrollToTop';
-import DocumentTitle from '@/components/DocumentTitle';
 import ErrorBoundary from '@/components/ErrorBoundary';
-import TrustBar from '@/components/TrustBar';
-import ImageInspector from '@/components/ImageInspector';
-import MobileActionBar from '@/components/MobileActionBar';
+import { BlockSkeleton, CardSkeleton } from '@/components/Skeleton';
 import { useImageUpload, type UploadedFile } from '@/hooks/useImageUpload';
 import { useSettings } from '@/hooks/useSettings';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
@@ -18,6 +11,16 @@ import { usePageDropZone } from '@/hooks/usePageDropZone';
 import { Lightning } from '@phosphor-icons/react';
 import { toast } from 'sonner';
 
+const SettingsPanel = lazy(() =>
+  import('@/components/SettingsPanel').then((m) => ({ default: m.default }))
+);
+const ImageQueue = lazy(() => import('@/components/ImageQueue'));
+const ImageInspector = lazy(() => import('@/components/ImageInspector'));
+const MobileActionBar = lazy(() => import('@/components/MobileActionBar'));
+const PageDropOverlay = lazy(() => import('@/components/PageDropOverlay'));
+const ScrollToTop = lazy(() => import('@/components/ScrollToTop'));
+const DocumentTitle = lazy(() => import('@/components/DocumentTitle'));
+const TrustBar = lazy(() => import('@/components/TrustBar'));
 const ResultsSection = lazy(() => import('@/components/ResultsSection'));
 const HowItWorks = lazy(() => import('@/components/HowItWorks'));
 const FeaturesGrid = lazy(() => import('@/components/FeaturesGrid'));
