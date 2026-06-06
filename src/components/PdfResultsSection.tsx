@@ -103,7 +103,7 @@ const PdfResultsSection = ({ files, onReset }: PdfResultsSectionProps) => {
   }, [files]);
 
   return (
-    <section ref={ref} className="container relative mx-auto mt-20 px-4" id="pdf-results">
+    <section ref={ref} className="container relative mx-auto mt-10 px-4 sm:mt-20" id="pdf-results">
       {visible && <ConfettiBurst />}
       <motion.div
         className="mx-auto max-w-3xl"
