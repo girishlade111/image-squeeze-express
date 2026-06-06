@@ -11,6 +11,7 @@ interface ErrorBoundaryProps {
 interface ErrorBoundaryState {
   hasError: boolean;
   error?: Error;
+  chunkError?: boolean;
 }
 
 /**
@@ -27,7 +28,21 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   componentDidCatch(error: Error, info: ErrorInfo) {
     console.error(`[ErrorBoundary${this.props.label ? `: ${this.props.label}` : ''}]`, error, info);
+    // Chunk-load errors happen when a lazy chunk's hash changed between
+    // deploys and the browser still has the old HTML cached. The fix is
+    // a hard reload — show a different copy in that case.
+    const isChunkError =
+      error.name === 'ChunkLoadError' ||
+      /Loading chunk \S+ failed/i.test(error.message) ||
+      /Importing a module script failed/i.test(error.message);
+    if (isChunkError) {
+      this.setState({ chunkError: true });
+    }
   }
+
+  handleReload = () => {
+    window.location.reload();
+  };
 
   handleReset = () => {
     this.setState({ hasError: false, error: undefined });
