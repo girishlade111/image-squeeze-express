@@ -131,6 +131,7 @@ describe('pdfProcessor helpers', () => {
     it('toDownloadPdfFile strips illegal characters and collapses underscores', () => {
       const blob = new Blob([new Uint8Array(1024)], { type: 'application/pdf' });
       const file = toDownloadPdfFile('hello.pdf', blob, 'a<<<b.pdf');
+      // eslint-disable-next-line no-control-regex
       expect(file.name).not.toMatch(/[<>:"/\\|?*\x00-\x1f]/);
       // 3 illegal chars collapse to 1 underscore
       expect(file.name).toBe('a_b.pdf');
