@@ -1,11 +1,22 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Loader2, Check, AlertCircle, RotateCcw, Plus, FileText } from 'lucide-react';
+import {
+  X,
+  Loader2,
+  Check,
+  AlertCircle,
+  RotateCcw,
+  Plus,
+  FileText,
+  Eye,
+  Lightbulb,
+} from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import type { UploadedPdf } from '@/hooks/usePdfUpload';
 import { formatBytes, getReductionRatio } from '@/hooks/usePdfUpload';
+import type { ProcessingStats } from '@/hooks/usePdfUpload';
 
 interface PdfQueueProps {
   files: UploadedPdf[];
@@ -20,6 +31,9 @@ interface PdfQueueProps {
   onAddMore: () => void;
   allDone: boolean;
   readyCount: number;
+  onInspect?: (id: string) => void;
+  onApplyRecommendation?: (id: string) => void;
+  stats?: ProcessingStats;
 }
 
 function truncate(str: string, max: number) {
@@ -28,6 +42,24 @@ function truncate(str: string, max: number) {
   const ext = dot >= 0 ? str.slice(dot) : '';
   const base = str.slice(0, Math.max(1, max - ext.length - 1));
   return `${base}…${ext}`;
+}
+
+function formatEta(etaMs: number | null): string {
+  if (etaMs === null || !Number.isFinite(etaMs) || etaMs < 0) return '—';
+  const totalSeconds = Math.round(etaMs / 1000);
+  if (totalSeconds < 60) return `${totalSeconds}s`;
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  if (minutes < 60) return `${minutes}m ${seconds}s`;
+  const hours = Math.floor(minutes / 60);
+  return `${hours}h ${minutes % 60}m`;
+}
+
+function formatSpeed(bytesPerSecond: number): string {
+  if (!bytesPerSecond || bytesPerSecond <= 0) return '—';
+  if (bytesPerSecond < 1024) return `${Math.round(bytesPerSecond)} B/s`;
+  if (bytesPerSecond < 1024 * 1024) return `${(bytesPerSecond / 1024).toFixed(0)} KB/s`;
+  return `${(bytesPerSecond / (1024 * 1024)).toFixed(1)} MB/s`;
 }
 
 const statusStyles = {
@@ -57,6 +89,9 @@ const PdfQueue = ({
   onAddMore,
   allDone,
   readyCount,
+  onInspect,
+  onApplyRecommendation,
+  stats,
 }: PdfQueueProps) => {
   const [hoverId, setHoverId] = useState<string | null>(null);
 
@@ -150,8 +185,10 @@ const PdfQueue = ({
               />
             </div>
             <div className="mt-1.5 flex items-center justify-between text-[10px] text-muted-foreground">
-              <span>{processingText || `${progress}%`}</span>
-              <span className="tabular-nums">{progress}%</span>
+              <span className="truncate">{processingText || `${progress}%`}</span>
+              <span className="tabular-nums">
+                {stats ? `${formatSpeed(stats.bytesPerSecond)} · ETA ${formatEta(stats.etaMs)}` : `${progress}%`}
+              </span>
             </div>
           </motion.div>
         )}
@@ -161,6 +198,9 @@ const PdfQueue = ({
         <AnimatePresence mode="popLayout">
           {files.map((f, i) => {
             const isCurrent = currentItem === f.id && f.status === 'processing';
+            const thumb = f.metadata?.firstPageThumbnail;
+            const recommendation = f.metadata?.recommendationReason;
+            const hasRecommendation = Boolean(recommendation);
             return (
               <motion.div
                 key={f.id}
@@ -176,20 +216,37 @@ const PdfQueue = ({
                     ? 'border-red-500/30 hover:border-red-500/50'
                     : f.status === 'done'
                     ? 'border-emerald-500/20 hover:border-emerald-500/40'
+                    : isCurrent
+                    ? 'border-warning/40 bg-warning/5 shadow-elev-1'
                     : 'border-border/40 hover:border-primary/30'
                 }`}
               >
-                <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-secondary/30 flex items-center justify-center">
-                  <FileText
-                    className={`h-7 w-7 ${
-                      f.status === 'done'
-                        ? 'text-emerald-500/70'
-                        : f.status === 'error'
-                        ? 'text-red-500/70'
-                        : 'text-primary/70'
-                    }`}
-                    aria-hidden
-                  />
+                <button
+                  onClick={() => onInspect?.(f.id)}
+                  className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-secondary/30 focus:outline-none focus:ring-2 focus:ring-primary"
+                  aria-label={`Inspect ${f.name}`}
+                >
+                  {thumb ? (
+                    <img
+                      src={thumb}
+                      alt={`${f.name} first page`}
+                      className="h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center">
+                      <FileText
+                        className={`h-7 w-7 ${
+                          f.status === 'done'
+                            ? 'text-emerald-500/70'
+                            : f.status === 'error'
+                            ? 'text-red-500/70'
+                            : 'text-primary/70'
+                        }`}
+                        aria-hidden
+                      />
+                    </div>
+                  )}
                   {f.status === 'processing' && (
                     <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm">
                       <motion.div
@@ -223,19 +280,45 @@ const PdfQueue = ({
                       </div>
                     </motion.div>
                   )}
-                </div>
+                </button>
 
                 <div className="min-w-0 flex-1">
-                  <p
-                    className="truncate text-xs font-medium text-foreground"
-                    title={f.name}
-                  >
-                    {truncate(f.name, 28)}
-                  </p>
+                  <div className="flex items-center gap-1.5">
+                    <p
+                      className="truncate text-xs font-medium text-foreground"
+                      title={f.name}
+                    >
+                      {truncate(f.name, 28)}
+                    </p>
+                    {hasRecommendation && f.status === 'ready' && (
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onApplyRecommendation?.(f.id);
+                            }}
+                            className="inline-flex h-4 items-center gap-0.5 rounded-full border border-primary/30 bg-primary/10 px-1 text-[9px] font-bold uppercase tracking-wider text-primary hover:bg-primary/20"
+                            aria-label="Apply smart recommendation"
+                          >
+                            <Lightbulb className="h-2.5 w-2.5" />
+                            <span>smart</span>
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent className="max-w-[220px] text-[10px] leading-snug">
+                          <strong className="block text-foreground">Smart recommendation</strong>
+                          {recommendation}
+                        </TooltipContent>
+                      </Tooltip>
+                    )}
+                  </div>
                   <p className="mt-0.5 text-[10px] text-muted-foreground">
                     {formatBytes(f.originalSize)}
                     {f.pageCount !== null && (
                       <> · {f.pageCount} page{f.pageCount !== 1 ? 's' : ''}</>
+                    )}
+                    {f.metadata?.estimatedPageSize && (
+                      <> · {f.metadata.estimatedPageSize}</>
                     )}
                   </p>
                   {f.status === 'processing' && (
@@ -265,12 +348,24 @@ const PdfQueue = ({
                       {f.error}
                     </p>
                   )}
-                  <Badge
-                    variant="outline"
-                    className={`mt-1 rounded-full px-1.5 py-0 text-[9px] font-semibold ${statusStyles[f.status]}`}
-                  >
-                    {isCurrent ? 'Compressing now' : statusLabel[f.status]}
-                  </Badge>
+                  <div className="mt-1 flex items-center gap-1">
+                    <Badge
+                      variant="outline"
+                      className={`rounded-full px-1.5 py-0 text-[9px] font-semibold ${statusStyles[f.status]}`}
+                    >
+                      {isCurrent ? 'Compressing now' : statusLabel[f.status]}
+                    </Badge>
+                    {onInspect && (
+                      <button
+                        onClick={() => onInspect(f.id)}
+                        className="inline-flex h-4 items-center gap-0.5 rounded-full border border-border/40 bg-card/60 px-1 text-[9px] font-semibold text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+                        aria-label={`Inspect ${f.name}`}
+                      >
+                        <Eye className="h-2.5 w-2.5" />
+                        Inspect
+                      </button>
+                    )}
+                  </div>
                 </div>
 
                 {f.status === 'error' && !isProcessing && (
