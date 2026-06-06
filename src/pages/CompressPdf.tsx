@@ -10,6 +10,7 @@ import PdfInspector from '@/components/PdfInspector';
 import ScrollToTop from '@/components/ScrollToTop';
 import DocumentTitle from '@/components/DocumentTitle';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import MobileActionBar from '@/components/MobileActionBar';
 import { usePdfUpload } from '@/hooks/usePdfUpload';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
 import { usePageDropZone } from '@/hooks/usePageDropZone';
