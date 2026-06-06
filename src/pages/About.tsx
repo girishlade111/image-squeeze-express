@@ -136,7 +136,7 @@ const pillars = [
   {
     icon: BookOpen,
     title: 'Our Story',
-    desc: 'ImageSqueeze started in 2024 as a weekend project by Girish Lade. After uploading sensitive product photos to five different compression services, he built the tool he wished existed — one that runs entirely in the browser.',
+    desc: 'LS Image Compressor started in 2024 as a weekend project by Girish Lade. After uploading sensitive product photos to five different compression services, he built the tool he wished existed — one that runs entirely in the browser.',
   },
 ];
 
@@ -150,7 +150,7 @@ const stats = [
     progress: 85,
     trend: '+18%',
     sparkline: [12, 18, 25, 32, 40, 52, 65, 78, 85, 95],
-    description: 'People who trust ImageSqueeze to handle their images every month — and tell their friends.',
+    description: 'People who trust LS Image Compressor to handle their images every month — and tell their friends.',
     featured: true,
   },
   {
@@ -199,7 +199,7 @@ const values = [
   {
     icon: Handshake,
     title: 'Forever Free',
-    desc: 'No accounts. No paywalls. No "Pro" tier. ImageSqueeze will always be free for personal and commercial use.',
+    desc: 'No accounts. No paywalls. No "Pro" tier. LS Image Compressor will always be free for personal and commercial use.',
   },
   {
     icon: Sparkle,
@@ -222,7 +222,7 @@ const milestones = [
   {
     year: '2024',
     icon: Rocket,
-    title: 'ImageSqueeze v1',
+    title: 'LS Image Compressor v1',
     desc: 'A single-page image compressor. Canvas-based resize + re-encode, WebP support, drag-and-drop. No frameworks, no build step.',
   },
   {
@@ -402,7 +402,7 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <DocumentTitle title="About — The Story Behind ImageSqueeze" />
+      <DocumentTitle title="About — The Story Behind LS Image Compressor" />
       <Header />
 
       <main>
@@ -461,7 +461,7 @@ const About = () => {
                 className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.07] px-3 py-1 text-[11px] font-medium text-foreground sm:text-xs"
               >
                 <Users size={14} weight="duotone" className="h-3.5 w-3.5 text-primary" />
-                The team behind ImageSqueeze
+                The team behind LS Image Compressor
               </motion.div>
 
               <motion.h1
@@ -480,7 +480,7 @@ const About = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.15 }}
               >
-                ImageSqueeze is a tiny, independent studio of one. We build fast, free, fully client-side
+                LS Image Compressor is a tiny, independent studio of one. We build fast, free, fully client-side
                 image, PDF, and file tools because we got tired of uploading our own photos to strangers.
               </motion.p>
 
@@ -696,7 +696,7 @@ const About = () => {
           <SectionHeader
             number="04"
             title="The journey"
-            subtitle="A short history of ImageSqueeze — from a weekend script to a privacy-first toolkit serving thousands."
+            subtitle="A short history of LS Image Compressor — from a weekend script to a privacy-first toolkit serving thousands."
           />
 
           <div className="relative mx-auto mt-14 max-w-3xl">
@@ -914,7 +914,7 @@ const About = () => {
           <SectionHeader
             number="05"
             title="The stack"
-            subtitle="ImageSqueeze is assembled from best-in-class open-source libraries. We don't reinvent the wheel — we compose it beautifully."
+            subtitle="LS Image Compressor is assembled from best-in-class open-source libraries. We don't reinvent the wheel — we compose it beautifully."
           />
 
           <motion.div
@@ -997,7 +997,7 @@ const About = () => {
           <SectionHeader
             number="06"
             title="Meet the founder"
-            subtitle="ImageSqueeze is a one-person studio. Here's who's behind the pixels."
+            subtitle="LS Image Compressor is a one-person studio. Here's who's behind the pixels."
           />
 
           <div className="mx-auto mt-10 max-w-5xl">
@@ -1024,7 +1024,7 @@ const About = () => {
                   <div className="relative flex flex-col items-center gap-6 sm:flex-row sm:items-start sm:gap-8">
                     <ProfileImage
                       src={profileImg}
-                      alt="Girish Lade, founder of ImageSqueeze"
+                      alt="Girish Lade, founder of LS Image Compressor"
                       className="w-40 sm:w-52 lg:w-56"
                       fallbackInitials="GL"
                       naturalWidth={1024}
@@ -1081,7 +1081,7 @@ const About = () => {
                       </blockquote>
 
                       <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
-                        Web developer, indie hacker, and privacy enthusiast. Built ImageSqueeze after a tired weekend of
+                        Web developer, indie hacker, and privacy enthusiast. Built LS Image Compressor after a tired weekend of
                         uploading his own photos to a dozen different compression sites. He also runs{' '}
                         <a
                           href="https://ladestack.in"
@@ -1225,7 +1225,7 @@ const About = () => {
                 <Rocket size={28} weight="duotone" className="h-7 w-7 text-primary" />
               </div>
               <h2 className="mt-4 text-2xl font-extrabold tracking-tight sm:text-3xl">
-                Try ImageSqueeze —{' '}
+                Try LS Image Compressor —{' '}
                 <span style={GRADIENT_TEXT}>no signup, no upload, no tracking</span>
               </h2>
               <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground sm:text-base">

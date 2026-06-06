@@ -1,5 +1,5 @@
 # ============================================================
-#  robots.txt for ImageSqueeze — img.ladestack.in
+#  robots.txt for LS Image Compressor — img.ladestack.in
 #  Generated: June 6, 2026
 #
 #  Policy: ALL well-behaved crawlers, AI bots, and social-media

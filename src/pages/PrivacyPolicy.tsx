@@ -14,7 +14,7 @@ const PrivacyPolicy = () => (
         <p className="mt-2 text-sm text-muted-foreground">Last updated: {lastUpdated}</p>
 
         <p className="mt-6 text-muted-foreground leading-relaxed">
-          At <strong className="text-foreground">ImageSqueeze</strong>, your privacy isn't just a feature — it's the foundation of everything we build. This Privacy Policy explains how we handle (or rather, <em>don't</em> handle) your data.
+          At <strong className="text-foreground">LS Image Compressor</strong>, your privacy isn't just a feature — it's the foundation of everything we build. This Privacy Policy explains how we handle (or rather, <em>don't</em> handle) your data.
         </p>
 
         {/* Section 1 */}
@@ -33,9 +33,9 @@ const PrivacyPolicy = () => (
 
         {/* Section 2 */}
         <section className="mt-10">
-          <h2 className="text-xl font-bold">2. How ImageSqueeze Works</h2>
+          <h2 className="text-xl font-bold">2. How LS Image Compressor Works</h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            ImageSqueeze is a <strong className="text-foreground">fully client-side application</strong>. When you compress, resize, or convert an image:
+            LS Image Compressor is a <strong className="text-foreground">fully client-side application</strong>. When you compress, resize, or convert an image:
           </p>
           <ol className="mt-4 space-y-3 text-muted-foreground list-decimal list-inside">
             <li>Your image is loaded into your browser's memory using the <strong className="text-foreground">File API</strong></li>
@@ -86,7 +86,7 @@ const PrivacyPolicy = () => (
         <section className="mt-10">
           <h2 className="text-xl font-bold">4. Third-Party Services</h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            ImageSqueeze loads the following external resources:
+            LS Image Compressor loads the following external resources:
           </p>
           <ul className="mt-4 space-y-2 text-muted-foreground">
             <li className="flex gap-2"><span className="text-primary">•</span> <strong className="text-foreground">Google Fonts (Inter)</strong> — loaded for typography. Subject to Google's privacy policy.</li>
@@ -100,7 +100,7 @@ const PrivacyPolicy = () => (
         <section className="mt-10">
           <h2 className="text-xl font-bold">5. Children's Privacy</h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            ImageSqueeze does not collect any personal data from anyone, including children under 13. Since no data is collected or transmitted, COPPA and similar regulations are inherently satisfied.
+            LS Image Compressor does not collect any personal data from anyone, including children under 13. Since no data is collected or transmitted, COPPA and similar regulations are inherently satisfied.
           </p>
         </section>
 

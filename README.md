@@ -1,4 +1,4 @@
-# ⚡ ImageSqueeze — Free Browser-Native File Toolkit
+# ⚡ LS Image Compressor — Free Browser-Native File Toolkit
 
 > **Compress images up to 90%, compress PDFs, and rename hundreds of files in bulk — all 100% in your browser. No uploads, no accounts, no tracking.**
 
@@ -16,7 +16,7 @@
 
 ## 📑 Table of Contents
 
-- [🎯 What is ImageSqueeze?](#-what-is-imagesqueeze)
+- [🎯 What is LS Image Compressor?](#-what-is-ls-image-compressor)
 - [🧰 Three Powerful Tools, One App](#-three-powerful-tools-one-app)
 - [✨ Key Highlights](#-key-highlights)
 - [🚀 Features](#-features)
@@ -45,9 +45,9 @@
 
 ---
 
-## 🎯 What is ImageSqueeze?
+## 🎯 What is LS Image Compressor?
 
-**ImageSqueeze** is a **100% client-side** file toolkit for the three most common browser tasks that normally force you to upload your files to a stranger's server:
+**LS Image Compressor** is a **100% client-side** file toolkit for the three most common browser tasks that normally force you to upload your files to a stranger's server:
 
 1. **🖼️ Compress images** — resize, recompress, and convert format (with social-media presets)
 2. **📕 Compress PDFs** — shrink PDFs by re-rendering every page as a JPEG
@@ -275,7 +275,7 @@ All three tools share:
 
 ## 🏗️ System Architecture
 
-ImageSqueeze follows a **fully client-side, layered, multi-route architecture**. Every layer runs in the browser — there is **no backend service** and no telemetry endpoint.
+LS Image Compressor follows a **fully client-side, layered, multi-route architecture**. Every layer runs in the browser — there is **no backend service** and no telemetry endpoint.
 
 ### 🗺️ App-Wide Architecture
 
@@ -806,7 +806,7 @@ Defined in `vite.config.ts`:
 
 ## ☁️ Deploy to Vercel
 
-ImageSqueeze is a **fully client-side** Vite SPA — no server, no API routes, no environment variables. It deploys to Vercel as a **static site** in under a minute.
+LS Image Compressor is a **fully client-side** Vite SPA — no server, no API routes, no environment variables. It deploys to Vercel as a **static site** in under a minute.
 
 > 🔒 **Privacy note** — The app ships with **privacy-friendly** [Vercel Analytics](https://vercel.com/docs/analytics) and [Speed Insights](https://vercel.com/docs/speed-insights) pre-wired. They are **cookieless**, **DNT-aware**, and **do not collect any personal data** or file contents. Analytics components are mounted only in production builds (`import.meta.env.PROD`) and are no-ops in dev.
 
@@ -1130,6 +1130,6 @@ copies of the Software...
 **Version**: 2.0.0
 **Maintainer**: [@girishlade111](https://github.com/girishlade111)
 
-⭐ **Star this repo** if ImageSqueeze saved you time or bandwidth!
+⭐ **Star this repo** if LS Image Compressor saved you time or bandwidth!
 
 </div>

@@ -14,14 +14,14 @@ const TermsOfService = () => (
         <p className="mt-2 text-sm text-muted-foreground">Last updated: {lastUpdated}</p>
 
         <p className="mt-6 text-muted-foreground leading-relaxed">
-          Welcome to <strong className="text-foreground">ImageSqueeze</strong>. By accessing or using our website at{' '}
+          Welcome to <strong className="text-foreground">LS Image Compressor</strong>. By accessing or using our website at{' '}
           <a href="https://img.ladestack.in" className="text-primary hover:underline">img.ladestack.in</a>, you agree to be bound by these Terms of Service. If you do not agree, please do not use the service.
         </p>
 
         <section className="mt-10">
           <h2 className="text-xl font-bold">1. Service Description</h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            ImageSqueeze is a <strong className="text-foreground">free, client-side image optimization tool</strong> that provides:
+            LS Image Compressor is a <strong className="text-foreground">free, client-side image optimization tool</strong> that provides:
           </p>
           <ul className="mt-4 space-y-2 text-muted-foreground">
             <li className="flex gap-2"><span className="text-primary">•</span> Image compression (up to 90% size reduction)</li>
@@ -37,7 +37,7 @@ const TermsOfService = () => (
 
         <section className="mt-10">
           <h2 className="text-xl font-bold">2. Acceptable Use</h2>
-          <p className="mt-4 text-muted-foreground leading-relaxed">You agree to use ImageSqueeze only for lawful purposes. You must not:</p>
+          <p className="mt-4 text-muted-foreground leading-relaxed">You agree to use LS Image Compressor only for lawful purposes. You must not:</p>
           <ul className="mt-4 space-y-2 text-muted-foreground">
             <li className="flex gap-2"><span className="text-destructive">✗</span> Attempt to reverse-engineer, decompile, or disassemble the application</li>
             <li className="flex gap-2"><span className="text-destructive">✗</span> Use automated tools to scrape or overload the website</li>
@@ -49,14 +49,14 @@ const TermsOfService = () => (
         <section className="mt-10">
           <h2 className="text-xl font-bold">3. Intellectual Property</h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            The ImageSqueeze brand, logo, design, and code are the intellectual property of <strong className="text-foreground">Lade Stack</strong>. You retain full ownership of any images you process through the tool — we claim no rights to your content.
+            The LS Image Compressor brand, logo, design, and code are the intellectual property of <strong className="text-foreground">Lade Stack</strong>. You retain full ownership of any images you process through the tool — we claim no rights to your content.
           </p>
         </section>
 
         <section className="mt-10">
           <h2 className="text-xl font-bold">4. No Warranty</h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            ImageSqueeze is provided <strong className="text-foreground">"as is" without warranties of any kind</strong>, either express or implied. We do not guarantee:
+            LS Image Compressor is provided <strong className="text-foreground">"as is" without warranties of any kind</strong>, either express or implied. We do not guarantee:
           </p>
           <ul className="mt-4 space-y-2 text-muted-foreground">
             <li className="flex gap-2"><span className="text-primary">•</span> Uninterrupted or error-free operation</li>
@@ -69,7 +69,7 @@ const TermsOfService = () => (
         <section className="mt-10">
           <h2 className="text-xl font-bold">5. Limitation of Liability</h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            To the maximum extent permitted by law, Lade Stack and ImageSqueeze shall not be liable for any <strong className="text-foreground">indirect, incidental, special, consequential, or punitive damages</strong> arising from your use of the service, including but not limited to loss of data, loss of profits, or damage to your device.
+            To the maximum extent permitted by law, Lade Stack and LS Image Compressor shall not be liable for any <strong className="text-foreground">indirect, incidental, special, consequential, or punitive damages</strong> arising from your use of the service, including but not limited to loss of data, loss of profits, or damage to your device.
           </p>
           <p className="mt-4 text-muted-foreground leading-relaxed">
             Since all processing occurs in your browser, you are responsible for maintaining backups of your original images before processing.
@@ -79,14 +79,14 @@ const TermsOfService = () => (
         <section className="mt-10">
           <h2 className="text-xl font-bold">6. Free Service</h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            ImageSqueeze is offered <strong className="text-foreground">free of charge</strong>. All compression, resize, format conversion, PDF compression, and bulk-rename features are available to every user with no hidden fees, no watermarks, and no usage limits beyond the per-batch caps documented on each tool.
+            LS Image Compressor is offered <strong className="text-foreground">free of charge</strong>. All compression, resize, format conversion, PDF compression, and bulk-rename features are available to every user with no hidden fees, no watermarks, and no usage limits beyond the per-batch caps documented on each tool.
           </p>
         </section>
 
         <section className="mt-10">
           <h2 className="text-xl font-bold">7. Modifications to Terms</h2>
           <p className="mt-4 text-muted-foreground leading-relaxed">
-            We may update these Terms of Service at any time. Continued use of ImageSqueeze after changes constitutes acceptance of the updated terms. We recommend reviewing this page periodically.
+            We may update these Terms of Service at any time. Continued use of LS Image Compressor after changes constitutes acceptance of the updated terms. We recommend reviewing this page periodically.
           </p>
         </section>
 
