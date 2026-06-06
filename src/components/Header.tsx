@@ -1,6 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Moon, Sun, Menu, X, ImageIcon, FileText, FilePlus2 } from 'lucide-react';
+import { Moon, Sun, Menu, X } from 'lucide-react';
+import {
+  Lightning,
+  Image as PhosphorImage,
+  FileText as PhosphorFileText,
+  FilePlus,
+} from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts/ThemeContext';
 
@@ -11,9 +17,9 @@ const navLinks = [
 ];
 
 const tools = [
-  { label: 'Images', to: '/', icon: ImageIcon },
-  { label: 'PDF', to: '/compress-pdf', icon: FileText },
-  { label: 'Rename', to: '/bulk-rename', icon: FilePlus2 },
+  { label: 'Images', to: '/', icon: PhosphorImage },
+  { label: 'PDF', to: '/compress-pdf', icon: PhosphorFileText },
+  { label: 'Rename', to: '/bulk-rename', icon: FilePlus },
 ];
 
 const Header = () => {
