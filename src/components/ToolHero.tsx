@@ -35,7 +35,9 @@ const ToolHero = ({ prefix, highlight, suffix, subhead, badges, children }: Tool
   );
 
   return (
-    <section className="relative flex min-h-[100svh] items-center justify-center overflow-hidden pt-12 pb-12">
+    <section
+      className="relative flex min-h-[100svh] items-center justify-center overflow-hidden pt-[calc(3.5rem+env(safe-area-inset-top))] pb-12 sm:pt-[calc(3rem+env(safe-area-inset-top))] md:pt-12"
+    >
       {/* Animated gradient mesh background */}
       <div
         className="pointer-events-none absolute inset-0"
@@ -85,7 +87,7 @@ const ToolHero = ({ prefix, highlight, suffix, subhead, badges, children }: Tool
       <div className="container relative mx-auto px-4 sm:px-6">
         <div className="mx-auto max-w-3xl text-center">
           <motion.h1
-            className="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl"
+            className="text-fluid-hero font-extrabold tracking-tight text-balance"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
@@ -106,7 +108,7 @@ const ToolHero = ({ prefix, highlight, suffix, subhead, badges, children }: Tool
           </motion.h1>
 
           <motion.p
-            className="mx-auto mt-3 max-w-xl text-sm sm:text-base text-muted-foreground"
+            className="mx-auto mt-3 max-w-xl text-fluid-body text-muted-foreground text-pretty"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
@@ -115,7 +117,7 @@ const ToolHero = ({ prefix, highlight, suffix, subhead, badges, children }: Tool
           </motion.p>
 
           <motion.div
-            className="mt-5 flex flex-wrap items-center justify-center gap-1.5 sm:gap-2"
+            className="mt-4 flex flex-wrap items-center justify-center gap-1.5 sm:mt-5 sm:gap-2"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
@@ -123,9 +125,9 @@ const ToolHero = ({ prefix, highlight, suffix, subhead, badges, children }: Tool
             {badges.map((badge) => (
               <div
                 key={badge.label}
-                className="flex items-center gap-1 rounded-full border border-primary/20 bg-primary/[0.07] px-2.5 py-0.5 text-[11px] font-medium text-foreground"
+                className="flex items-center gap-1 rounded-full border border-primary/20 bg-primary/[0.07] px-2.5 py-0.5 text-[11px] font-medium text-foreground sm:px-3 sm:py-1 sm:text-xs"
               >
-                <span className="text-xs" aria-hidden>
+                <span className="text-xs sm:text-sm" aria-hidden>
                   {badge.emoji}
                 </span>
                 {badge.label}
@@ -134,7 +136,7 @@ const ToolHero = ({ prefix, highlight, suffix, subhead, badges, children }: Tool
           </motion.div>
 
           <motion.div
-            className="mx-auto mt-6 max-w-xl"
+            className="mx-auto mt-6 max-w-xl sm:mt-7"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
