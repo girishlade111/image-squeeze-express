@@ -323,7 +323,7 @@ const OrbitingGraphic = () => {
         animate={{ scale: [1, 1.06, 1] }}
         transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
       >
-        <EnvelopeSimple size={40} weight="duotone" className="h-10 w-10 text-white sm:h-12 sm:w-12" />
+        <EnvelopeSimple size={40} weight="duotone" className="h-10 w-10 text-primary-foreground sm:h-12 sm:w-12" />
       </motion.div>
 
       {/* Orbiting icons */}
