@@ -96,12 +96,12 @@ const ImageQueue = ({
             {files.length} file{files.length !== 1 ? 's' : ''}
           </p>
           {doneCount > 0 && (
-            <Badge variant="outline" className="rounded-full border-emerald-500/30 bg-emerald-500/10 px-2 py-0 text-[9px] font-semibold text-emerald-300">
+            <Badge variant="outline" className="rounded-full border-success/30 bg-success/10 px-2 py-0 text-[9px] font-semibold text-success">
               {doneCount} done
             </Badge>
           )}
           {errorCount > 0 && (
-            <Badge variant="outline" className="rounded-full border-red-500/30 bg-red-500/10 px-2 py-0 text-[9px] font-semibold text-red-300">
+            <Badge variant="outline" className="rounded-full border-destructive/30 bg-destructive/10 px-2 py-0 text-[9px] font-semibold text-destructive">
               {errorCount} failed
             </Badge>
           )}
