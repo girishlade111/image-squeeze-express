@@ -242,42 +242,6 @@ export function useImageUpload() {
 
   const pendingRef = useRef<{ files: File[]; meta: Array<{ name: string; size: number; type: string }> } | null>(null);
 
-  const addFiles = useCallback((fileList: FileList | File[]) => {
-    const incomingFiles = Array.from(fileList).filter((f) => f.type.startsWith('image/'));
-    if (incomingFiles.length === 0) {
-      toast.error(
-        'No valid images found. Please select JPG, PNG, WebP, GIF, BMP, or AVIF files.'
-      );
-      return;
-    }
-
-    // Build the metadata shadow the validator consumes. The validator never
-    // sees the real `File` objects so it can stay a pure function — and the
-    // hook can match reports back to the real files by array index.
-    const incomingMeta = incomingFiles.map((f) => ({
-      name: f.name,
-      size: f.size,
-      type: f.type,
-    }));
-
-    // Stash the candidates so the async validator can read them when its
-    // module chunk finishes loading. We can't pass the arrays through the
-    // setFiles callback because that runs synchronously and we need the
-    // values after the dynamic import resolves.
-    pendingRef.current = { files: incomingFiles, meta: incomingMeta };
-
-    // Read the current file count synchronously so the validator's overflow
-    // math is correct without needing a setFiles callback.
-    setFiles((prev) => {
-      void loadBatchValidator().then(({ validateBatch }) => {
-        const pending = pendingRef.current;
-        if (!pending) return;
-        runValidation(validateBatch, pending, prev);
-      });
-      return prev;
-    });
-  }, []);
-
   const runValidation = useCallback(
     async (
       validateBatch: typeof import('@/utils/batchValidation').validateBatch,
@@ -374,6 +338,42 @@ export function useImageUpload() {
     },
     []
   );
+
+  const addFiles = useCallback((fileList: FileList | File[]) => {
+    const incomingFiles = Array.from(fileList).filter((f) => f.type.startsWith('image/'));
+    if (incomingFiles.length === 0) {
+      toast.error(
+        'No valid images found. Please select JPG, PNG, WebP, GIF, BMP, or AVIF files.'
+      );
+      return;
+    }
+
+    // Build the metadata shadow the validator consumes. The validator never
+    // sees the real `File` objects so it can stay a pure function — and the
+    // hook can match reports back to the real files by array index.
+    const incomingMeta = incomingFiles.map((f) => ({
+      name: f.name,
+      size: f.size,
+      type: f.type,
+    }));
+
+    // Stash the candidates so the async validator can read them when its
+    // module chunk finishes loading. We can't pass the arrays through the
+    // setFiles callback because that runs synchronously and we need the
+    // values after the dynamic import resolves.
+    pendingRef.current = { files: incomingFiles, meta: incomingMeta };
+
+    // Read the current file count synchronously so the validator's overflow
+    // math is correct without needing a setFiles callback.
+    setFiles((prev) => {
+      void loadBatchValidator().then(({ validateBatch }) => {
+        const pending = pendingRef.current;
+        if (!pending) return;
+        runValidation(validateBatch, pending, prev);
+      });
+      return prev;
+    });
+  }, [runValidation]);
 
   const removeFile = useCallback(
     (id: string) => {
