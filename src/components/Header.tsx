@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Moon, Sun, Menu, X } from 'lucide-react';
 import {
@@ -9,6 +9,7 @@ import {
 } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { useTheme } from '@/contexts/ThemeContext';
+import { prefetch } from '@/lib/prefetch';
 
 const navLinks = [
   { label: 'How It Works', href: '#how-it-works' },
@@ -17,9 +18,26 @@ const navLinks = [
 ];
 
 const tools = [
-  { label: 'Images', to: '/', icon: PhosphorImage },
-  { label: 'PDF', to: '/compress-pdf', icon: PhosphorFileText },
-  { label: 'Rename', to: '/bulk-rename', icon: FilePlus },
+  { label: 'Images', to: '/', icon: PhosphorImage, load: () => import('@/pages/Index') },
+  {
+    label: 'PDF',
+    to: '/compress-pdf',
+    icon: PhosphorFileText,
+    load: () => import('@/pages/CompressPdf'),
+  },
+  {
+    label: 'Rename',
+    to: '/bulk-rename',
+    icon: FilePlus,
+    load: () => import('@/pages/BulkRename'),
+  },
+];
+
+const resources = [
+  { label: 'About', to: '/about', load: () => import('@/pages/About') },
+  { label: 'Privacy', to: '/privacy', load: () => import('@/pages/PrivacyPolicy') },
+  { label: 'Terms', to: '/terms', load: () => import('@/pages/TermsOfService') },
+  { label: 'Contact', to: '/contact', load: () => import('@/pages/Contact') },
 ];
 
 const Header = () => {
@@ -66,6 +84,11 @@ const Header = () => {
     if (el) el.scrollIntoView({ behavior: 'smooth' });
     setMobileOpen(false);
   };
+
+  const prefetchOnInteract = useCallback((load?: () => Promise<unknown>) => {
+    if (!load) return;
+    prefetch(load);
+  }, []);
 
   return (
     <>
