@@ -57,22 +57,38 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 text-destructive">
             <AlertTriangle className="h-6 w-6" strokeWidth={1.75} />
           </div>
-          <h1 className="mt-4 text-center text-lg font-bold">Something went wrong</h1>
+          <h1 className="mt-4 text-center text-lg font-bold">
+            {this.state.chunkError ? 'New version available' : 'Something went wrong'}
+          </h1>
           <p className="mt-1 text-center text-sm text-muted-foreground">
-            {this.props.label
+            {this.state.chunkError
+              ? "We've shipped an update. Reload to pick up the latest code."
+              : this.props.label
               ? `The ${this.props.label} hit an unexpected error.`
               : 'An unexpected error occurred.'}{' '}
-            You can try again or head back to the home page.
+            {this.state.chunkError
+              ? 'A quick reload is all it takes.'
+              : 'You can try again or head back to the home page.'}
           </p>
 
           <div className="mt-5 flex flex-wrap items-center justify-center gap-2">
-            <button
-              onClick={this.handleReset}
-              className="inline-flex h-9 items-center gap-1.5 rounded-full bg-primary px-4 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-            >
-              <RefreshCw className="h-3.5 w-3.5" />
-              Try again
-            </button>
+            {this.state.chunkError ? (
+              <button
+                onClick={this.handleReload}
+                className="inline-flex h-9 items-center gap-1.5 rounded-full bg-primary px-4 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
+                <RefreshCw className="h-3.5 w-3.5" />
+                Reload
+              </button>
+            ) : (
+              <button
+                onClick={this.handleReset}
+                className="inline-flex h-9 items-center gap-1.5 rounded-full bg-primary px-4 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              >
+                <RefreshCw className="h-3.5 w-3.5" />
+                Try again
+              </button>
+            )}
             <Link
               to="/"
               className="inline-flex h-9 items-center gap-1.5 rounded-full border border-border/60 bg-background/60 px-4 text-xs font-medium text-foreground transition-colors hover:bg-foreground/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
