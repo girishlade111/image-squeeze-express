@@ -45,6 +45,8 @@ import {
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DocumentTitle from '@/components/DocumentTitle';
+import ProfileImage from '@/components/ProfileImage';
+import profileImg from '@/assets/profile.png';
 import { cn } from '@/lib/utils';
 
 function useCountUp(target: number, duration = 1200) {
