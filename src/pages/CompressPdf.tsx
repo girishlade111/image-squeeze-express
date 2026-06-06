@@ -15,7 +15,6 @@ import { usePdfUpload } from '@/hooks/usePdfUpload';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
 import { usePageDropZone } from '@/hooks/usePageDropZone';
 import { saveAs } from 'file-saver';
-import { motion } from 'framer-motion';
 import {
   ShieldCheck,
   Lightning,
