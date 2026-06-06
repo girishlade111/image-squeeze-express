@@ -282,14 +282,14 @@ const ImageQueue = ({
                     )}
                   </p>
                   {f.status === 'done' && f.result && (
-                    <p className="mt-0.5 text-[10px] font-medium text-emerald-300">
+                    <p className="mt-0.5 text-[10px] font-medium text-success">
                       {formatFileSize(f.result.sizeBytes)} ·{' '}
                       {getCompressionRatio(f.originalSize, f.result.sizeBytes)}
                     </p>
                   )}
                   {f.status === 'error' && f.error && (
                     <p
-                      className="mt-0.5 truncate text-[10px] text-red-300"
+                      className="mt-0.5 truncate text-[10px] text-destructive"
                       title={f.error}
                     >
                       {f.error}
