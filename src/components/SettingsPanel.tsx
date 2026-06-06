@@ -249,7 +249,7 @@ const SettingsPanel = ({
             {/* Auto optimize */}
             <div className="flex items-center justify-between rounded-xl bg-secondary/50 px-3 py-2.5">
               <div className="flex items-center gap-1.5">
-                <Sparkles className="h-3.5 w-3.5 text-primary" />
+                <Sparkle size={14} weight="duotone" className="text-primary" />
                 <div>
                   <Label className="text-xs font-semibold">Auto Optimize</Label>
                   <p className="text-[10px] text-muted-foreground">Picks best quality automatically</p>
@@ -534,8 +534,9 @@ const SettingsPanel = ({
                     <div className="flex items-center gap-1.5">
                       <span className="text-xs font-semibold">{f.label}</span>
                       {f.recommended && (
-                        <span className="rounded-full bg-accent/20 px-1.5 py-0.5 text-[9px] font-bold text-accent">
-                          ⭐ Best
+                        <span className="inline-flex items-center gap-0.5 rounded-full bg-accent/20 px-1.5 py-0.5 text-[9px] font-bold text-accent">
+                          <Star size={9} weight="fill" />
+                          Best
                         </span>
                       )}
                       {disabled && (
@@ -639,7 +640,7 @@ const SettingsPanel = ({
 
               <div className="flex items-center justify-between rounded-xl bg-secondary/50 px-3 py-2.5">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="h-3.5 w-3.5 text-muted-foreground" />
+                  <Sparkle size={14} weight="duotone" className="text-muted-foreground" />
                   <div>
                     <Label className="text-xs font-semibold">Progressive JPEG</Label>
                     <p className="text-[10px] text-muted-foreground">Loads in passes (faster perceived load)</p>

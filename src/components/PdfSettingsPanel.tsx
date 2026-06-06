@@ -6,10 +6,6 @@ import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { Badge } from '@/components/ui/badge';
 import {
-  Sparkles,
-  Zap,
-  BadgeCheck,
-  Rocket,
   Info,
   ImageIcon,
   FileType2,
@@ -20,6 +16,14 @@ import {
   Settings2,
   Crop,
 } from 'lucide-react';
+import {
+  Rocket,
+  Lightning,
+  CheckCircle,
+  Sparkle,
+  CircleNotch,
+  WarningCircle,
+} from '@phosphor-icons/react';
 import {
   Popover,
   PopoverContent,
@@ -47,15 +51,13 @@ interface PdfSettingsPanelProps {
 
 const presets: {
   id: PdfQualityPreset;
-  emoji: string;
   name: string;
   desc: string;
   quality: number;
-  icon: typeof Sparkles;
+  icon: typeof Rocket;
 }[] = [
   {
     id: 'low',
-    emoji: '🚀',
     name: 'Strong',
     desc: 'Smallest file — emails & sharing',
     quality: 0.4,
@@ -63,26 +65,24 @@ const presets: {
   },
   {
     id: 'medium',
-    emoji: '⚡',
     name: 'Balanced',
     desc: 'Recommended for most uses',
     quality: 0.6,
-    icon: Zap,
+    icon: Lightning,
   },
   {
     id: 'high',
-    emoji: '✨',
     name: 'Light',
     desc: 'Best quality — bigger file',
     quality: 0.82,
-    icon: BadgeCheck,
+    icon: CheckCircle,
   },
 ];
 
-function qualityLabel(q: number): { emoji: string; text: string } {
-  if (q >= 0.8) return { emoji: '🟢', text: 'High quality' };
-  if (q >= 0.55) return { emoji: '🟡', text: 'Balanced' };
-  return { emoji: '🔴', text: 'Strong compression' };
+function qualityLabel(q: number): { icon: typeof CheckCircle; text: string; color: string } {
+  if (q >= 0.8) return { icon: CheckCircle, text: 'High quality', color: 'text-emerald-500' };
+  if (q >= 0.55) return { icon: CircleNotch, text: 'Balanced', color: 'text-amber-500' };
+  return { icon: WarningCircle, text: 'Strong compression', color: 'text-rose-500' };
 }
 
 const InfoTip = ({ children }: { children: React.ReactNode }) => (
@@ -250,8 +250,9 @@ const PdfSettingsPanel = ({
             aria-label="PDF JPEG quality"
           />
           <div className="mt-1.5 flex items-center justify-between text-[10px] text-muted-foreground">
-            <span>
-              {hint.emoji} {hint.text}
+            <span className="inline-flex items-center gap-1">
+              <hint.icon size={12} weight="fill" className={hint.color} />
+              {hint.text}
             </span>
             <span className="tabular-nums">
               Pages will be re-rendered as JPEG @ {Math.round(quality * 100)}%
@@ -489,7 +490,7 @@ const PdfSettingsPanel = ({
         </div>
 
         <div className="flex items-start gap-2 rounded-xl bg-secondary/50 px-3 py-2.5 text-[11px] text-muted-foreground">
-          <Sparkles className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-primary" />
+          <Sparkle size={14} weight="duotone" className="mt-0.5 flex-shrink-0 text-primary" />
           <p className="leading-snug">
             Compression happens entirely in your browser — files are never uploaded.
             Output PDFs contain re-rendered page images, so text becomes non-selectable.

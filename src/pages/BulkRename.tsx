@@ -255,39 +255,6 @@ const FeaturesRename = () => {
   );
 };
 
-const FeaturesRename = () => {
-  const features = [
-    { emoji: '🔍', title: 'Find & Replace', desc: 'Plain text or full regex support with case sensitivity toggle.' },
-    { emoji: '🔢', title: 'Sequential Numbers', desc: 'Add 001_, 002_, … with custom position, separator, and padding.' },
-    { emoji: 'Aa', title: 'Case Conversion', desc: 'Switch between lowercase, UPPERCASE, Title, and Sentence case.' },
-    { emoji: '📝', title: 'Prefix & Suffix', desc: 'Insert text at the start or end of every name. Extensions stay safe.' },
-    { emoji: '🧹', title: 'Whitespace', desc: 'Replace spaces with dashes, underscores, or remove them entirely.' },
-    { emoji: '📅', title: 'Date Stamp', desc: 'Insert the file mtime as a prefix or suffix in 7 date formats.' },
-    { emoji: '✂️', title: 'Trim / Truncate', desc: 'Strip characters from the ends or cap names to a max length with ellipsis.' },
-    { emoji: '🧷', title: 'Insert At', desc: 'Inject text at any character index — negatives count from the end.' },
-    { emoji: '🔁', title: 'Counter From Name', desc: 'Re-sequence the number already in the filename (fixes broken sequences).' },
-    { emoji: '🪞', title: 'Reverse Name', desc: 'Flip the base name backwards — extensions are always preserved.' },
-    { emoji: '🗂️', title: 'Replace Extension', desc: 'Change, lowercase, uppercase, or strip the file extension.' },
-    { emoji: '🛡️', title: 'Name Sanitisation', desc: 'Illegal characters are stripped so every OS can open the result.' },
-  ];
-  return (
-    <section className="container mx-auto mt-16 px-4">
-      <div className="mx-auto grid max-w-3xl grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
-        {features.map((f) => (
-          <div
-            key={f.title}
-            className="rounded-2xl border border-border/40 bg-card/60 p-3 text-center"
-          >
-            <div className="text-2xl">{f.emoji}</div>
-            <p className="mt-1 text-xs font-semibold">{f.title}</p>
-            <p className="mt-0.5 text-[10px] text-muted-foreground">{f.desc}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-};
-
 const FaqRename = () => {
   const faqs = [
     {
