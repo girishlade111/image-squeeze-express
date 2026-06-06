@@ -938,7 +938,20 @@ const StatCard = ({ stat, active }: { stat: typeof stats[number]; active: boolea
   );
 };
 
-const SocialChip = ({
+const SkillChip = ({
+  icon: Icon,
+  label,
+}: {
+  icon: typeof Cpu;
+  label: string;
+}) => (
+  <span className="inline-flex items-center gap-1.5 rounded-full border border-border/40 bg-background/40 px-2.5 py-1 text-[11px] font-medium text-foreground/85">
+    <Icon size={12} weight="duotone" className="h-3 w-3 text-primary" />
+    {label}
+  </span>
+);
+
+const SocialLink = ({
   href,
   icon: Icon,
   label,
@@ -951,7 +964,8 @@ const SocialChip = ({
     href={href}
     target="_blank"
     rel="noopener noreferrer"
-    className="group inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-card/80 px-2.5 py-1 text-[11px] font-semibold backdrop-blur-sm transition-colors hover:border-primary/40 hover:bg-card"
+    title={label}
+    className="group inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-card/60 px-2.5 py-1 text-[11px] font-semibold text-foreground/80 backdrop-blur-sm transition-all hover:scale-[1.03] hover:border-primary/50 hover:bg-primary/[0.08] hover:text-primary"
   >
     <Icon size={14} weight="duotone" className="h-3.5 w-3.5 text-primary transition-transform group-hover:scale-110" />
     {label}
