@@ -367,13 +367,13 @@ export function useImageUpload() {
               }
             })
             .catch(() => {
-            /* ignore — dimensions are informational */
-          });
+              /* ignore — dimensions are informational */
+            });
+        });
       });
-
-      return [...prev, ...newFiles];
-    });
-  }, []);
+    },
+    []
+  );
 
   const removeFile = useCallback(
     (id: string) => {
