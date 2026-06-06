@@ -1,15 +1,48 @@
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
-import { Sparkles, Zap, BadgeCheck, Rocket, Info } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import type { PdfQualityPreset } from '@/utils/pdfProcessor';
+import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
+import {
+  Sparkles,
+  Zap,
+  BadgeCheck,
+  Rocket,
+  Info,
+  ImageIcon,
+  FileType2,
+  Hash,
+  BookOpen,
+  EyeOff,
+  Lightbulb,
+  Settings2,
+  Crop,
+} from 'lucide-react';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import type {
+  PdfProcessSettings,
+  PdfQualityPreset,
+} from '@/utils/pdfProcessor';
+import { getPdfFilenameTokenDocs } from '@/utils/pdfProcessor';
 
 interface PdfSettingsPanelProps {
   preset: PdfQualityPreset;
   onPresetChange: (preset: PdfQualityPreset) => void;
   quality: number;
   onQualityChange: (quality: number) => void;
+  settings: PdfProcessSettings;
+  onSettingsChange: (next: PdfProcessSettings) => void;
 }
 
 const presets: {
@@ -66,13 +99,80 @@ const InfoTip = ({ children }: { children: React.ReactNode }) => (
   </Tooltip>
 );
 
+const DPI_PRESETS: number[] = [72, 96, 150, 300];
+
+function previewFilename(
+  pattern: string,
+  base: string,
+  q: number,
+  pages: number,
+  sizeKB: number
+): string {
+  const replacements: Record<string, string> = {
+    '{name}': base,
+    '{ext}': 'pdf',
+    '{format}': 'pdf',
+    '{pages}': String(pages),
+    '{size}': String(sizeKB),
+    '{date}': new Date().toISOString().slice(0, 10),
+    '{q}': String(Math.round(q * 100)),
+    '{index}': '1',
+  };
+  let out = pattern;
+  for (const [token, val] of Object.entries(replacements)) {
+    out = out.split(token).join(val);
+  }
+  out = out
+    .replace(/[<>:"/\\|?*\x00-\x1f]/g, '_')
+    .replace(/_+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .trim();
+  if (!out) out = `${base}_compressed.pdf`;
+  if (!out.toLowerCase().endsWith('.pdf')) out = `${out}.pdf`;
+  if (out.length > 60) out = `${out.slice(0, 55)}…pdf`;
+  return out;
+}
+
 const PdfSettingsPanel = ({
   preset,
   onPresetChange,
   quality,
   onQualityChange,
+  settings,
+  onSettingsChange,
 }: PdfSettingsPanelProps) => {
   const hint = qualityLabel(quality);
+  const [filenameDraft, setFilenameDraft] = useState(settings.filenamePattern);
+  const [pageRangeFrom, setPageRangeFrom] = useState(
+    String(settings.pageRange?.from ?? '')
+  );
+  const [pageRangeTo, setPageRangeTo] = useState(
+    String(settings.pageRange?.to ?? '')
+  );
+
+  const update = (patch: Partial<PdfProcessSettings>) =>
+    onSettingsChange({ ...settings, ...patch });
+
+  const commitPageRange = () => {
+    const fromNum = parseInt(pageRangeFrom, 10);
+    const toNum = parseInt(pageRangeTo, 10);
+    if (Number.isNaN(fromNum) && Number.isNaN(toNum)) {
+      update({ pageRange: null });
+    } else {
+      const from = Number.isNaN(fromNum) ? 1 : fromNum;
+      const to = Number.isNaN(toNum) ? from : toNum;
+      update({ pageRange: { from, to } });
+    }
+  };
+
+  const filenameTokens = getPdfFilenameTokenDocs();
+  const previewName = previewFilename(
+    filenameDraft || settings.filenamePattern,
+    'document',
+    quality,
+    settings.pageRange ? settings.pageRange.to - settings.pageRange.from + 1 : 1,
+    Math.max(1, Math.round(quality * 120))
+  );
 
   return (
     <motion.div
@@ -102,6 +202,7 @@ const PdfSettingsPanel = ({
                   onClick={() => {
                     onPresetChange(p.id);
                     onQualityChange(p.quality);
+                    update({ dpi: null });
                   }}
                   aria-pressed={isActive}
                   aria-label={`${p.name} compression preset`}
@@ -154,6 +255,235 @@ const PdfSettingsPanel = ({
             <span className="tabular-nums">
               Pages will be re-rendered as JPEG @ {Math.round(quality * 100)}%
             </span>
+          </div>
+        </div>
+
+        <div className="rounded-xl border border-border/30 bg-background/30 p-3">
+          <div className="mb-2 flex items-center justify-between">
+            <div className="flex items-center gap-1.5">
+              <Settings2 className="h-3.5 w-3.5 text-primary" />
+              <Label className="text-xs font-semibold">Advanced</Label>
+            </div>
+            <Badge
+              variant="outline"
+              className="rounded-full border-primary/30 bg-primary/10 px-1.5 py-0 text-[9px] font-semibold text-primary"
+            >
+              {[
+                settings.dpi ? 'dpi' : null,
+                settings.targetSizeKB ? 'target' : null,
+                settings.grayscale ? 'b&w' : null,
+                settings.stripMetadata ? 'strip' : null,
+                settings.pageRange ? 'range' : null,
+              ]
+                .filter(Boolean)
+                .join(' · ') || 'default'}
+            </Badge>
+          </div>
+
+          <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+            <div className="rounded-lg border border-border/30 bg-card/40 p-2.5">
+              <div className="mb-1.5 flex items-center justify-between">
+                <div className="flex items-center gap-1">
+                  <Hash className="h-3 w-3 text-primary" />
+                  <span className="text-[11px] font-semibold">DPI</span>
+                  <InfoTip>Override the render scale. 72 ≈ screen, 150 ≈ print, 300 ≈ high-quality print.</InfoTip>
+                </div>
+                {settings.dpi ? (
+                  <button
+                    onClick={() => update({ dpi: null })}
+                    className="text-[9px] uppercase tracking-wider text-muted-foreground hover:text-foreground"
+                    aria-label="Clear DPI"
+                  >
+                    Auto
+                  </button>
+                ) : null}
+              </div>
+              <div className="grid grid-cols-4 gap-1">
+                {DPI_PRESETS.map((d) => (
+                  <button
+                    key={d}
+                    onClick={() =>
+                      update({
+                        dpi: settings.dpi === d ? null : d,
+                      })
+                    }
+                    aria-pressed={settings.dpi === d}
+                    className={`rounded-md border px-1 py-1 text-[10px] font-semibold tabular-nums transition-all ${
+                      settings.dpi === d
+                        ? 'border-primary bg-primary/10 text-primary'
+                        : 'border-border/40 hover:border-primary/30'
+                    }`}
+                  >
+                    {d}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-border/30 bg-card/40 p-2.5">
+              <div className="mb-1.5 flex items-center gap-1">
+                <ImageIcon className="h-3 w-3 text-primary" />
+                <span className="text-[11px] font-semibold">Target size (KB)</span>
+                <InfoTip>The engine iteratively reduces quality and DPI to fit this size.</InfoTip>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Input
+                  type="number"
+                  min={50}
+                  max={50000}
+                  step={10}
+                  placeholder="auto"
+                  value={settings.targetSizeKB ?? ''}
+                  onChange={(e) => {
+                    const v = e.target.value ? parseInt(e.target.value, 10) : null;
+                    update({ targetSizeKB: v && v > 0 ? v : null });
+                  }}
+                  className="h-7 text-[11px]"
+                  aria-label="Target size in KB"
+                />
+                {settings.targetSizeKB ? (
+                  <button
+                    onClick={() => update({ targetSizeKB: null })}
+                    className="text-[9px] uppercase tracking-wider text-muted-foreground hover:text-foreground"
+                    aria-label="Clear target size"
+                  >
+                    Auto
+                  </button>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-border/30 bg-card/40 p-2.5">
+              <div className="mb-1.5 flex items-center gap-1">
+                <Lightbulb className="h-3 w-3 text-primary" />
+                <span className="text-[11px] font-semibold">Grayscale</span>
+                <InfoTip>Convert pages to B&W. Saves ~25% on color PDFs with no text loss.</InfoTip>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-muted-foreground">B&W output</span>
+                <Switch
+                  checked={settings.grayscale}
+                  onCheckedChange={(v) => update({ grayscale: v })}
+                  aria-label="Grayscale"
+                />
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-border/30 bg-card/40 p-2.5">
+              <div className="mb-1.5 flex items-center gap-1">
+                <EyeOff className="h-3 w-3 text-primary" />
+                <span className="text-[11px] font-semibold">Strip metadata</span>
+                <InfoTip>Remove title, author, producer, and creator from the output.</InfoTip>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] text-muted-foreground">Anonymize</span>
+                <Switch
+                  checked={settings.stripMetadata}
+                  onCheckedChange={(v) => update({ stripMetadata: v })}
+                  aria-label="Strip metadata"
+                />
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-border/30 bg-card/40 p-2.5 sm:col-span-2">
+              <div className="mb-1.5 flex items-center gap-1">
+                <Crop className="h-3 w-3 text-primary" />
+                <span className="text-[11px] font-semibold">Page range</span>
+                <InfoTip>Compress only specific pages. Leave empty to include all pages.</InfoTip>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <Input
+                  type="number"
+                  min={1}
+                  placeholder="From"
+                  value={pageRangeFrom}
+                  onChange={(e) => setPageRangeFrom(e.target.value)}
+                  onBlur={commitPageRange}
+                  className="h-7 w-20 text-[11px]"
+                  aria-label="Page range from"
+                />
+                <span className="text-[10px] text-muted-foreground">to</span>
+                <Input
+                  type="number"
+                  min={1}
+                  placeholder="To"
+                  value={pageRangeTo}
+                  onChange={(e) => setPageRangeTo(e.target.value)}
+                  onBlur={commitPageRange}
+                  className="h-7 w-20 text-[11px]"
+                  aria-label="Page range to"
+                />
+                {settings.pageRange ? (
+                  <button
+                    onClick={() => {
+                      setPageRangeFrom('');
+                      setPageRangeTo('');
+                      update({ pageRange: null });
+                    }}
+                    className="text-[9px] uppercase tracking-wider text-muted-foreground hover:text-foreground"
+                    aria-label="Clear page range"
+                  >
+                    All
+                  </button>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="rounded-lg border border-border/30 bg-card/40 p-2.5 sm:col-span-2">
+              <div className="mb-1.5 flex items-center gap-1">
+                <FileType2 className="h-3 w-3 text-primary" />
+                <span className="text-[11px] font-semibold">Filename pattern</span>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <button
+                      className="ml-auto inline-flex items-center gap-1 rounded-md border border-border/40 bg-background/40 px-1.5 py-0.5 text-[10px] font-semibold text-primary hover:border-primary/40"
+                      aria-label="Show filename tokens"
+                    >
+                      <BookOpen className="h-3 w-3" />
+                      Tokens
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent
+                    align="end"
+                    className="w-72 max-h-72 overflow-auto p-2 text-[11px]"
+                  >
+                    <div className="mb-1.5 font-semibold uppercase tracking-wider text-muted-foreground">
+                      Filename tokens
+                    </div>
+                    <div className="space-y-1.5">
+                      {filenameTokens.map((t) => (
+                        <button
+                          key={t.token}
+                          onClick={() =>
+                            setFilenameDraft((prev) => `${prev}${t.token}`)
+                          }
+                          className="flex w-full items-start gap-2 rounded-md border border-border/30 bg-card/40 p-1.5 text-left hover:border-primary/40"
+                        >
+                          <code className="min-w-[60px] rounded bg-primary/10 px-1 py-0.5 font-mono text-[10px] font-bold text-primary">
+                            {t.token}
+                          </code>
+                          <span className="text-[10px] text-muted-foreground">
+                            {t.description}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </div>
+              <Input
+                type="text"
+                value={filenameDraft}
+                onChange={(e) => setFilenameDraft(e.target.value)}
+                onBlur={() => update({ filenamePattern: filenameDraft || '{name}_compressed.pdf' })}
+                placeholder="{name}_compressed.pdf"
+                className="h-7 font-mono text-[11px]"
+                aria-label="Filename pattern"
+              />
+              <p className="mt-1 truncate font-mono text-[10px] text-muted-foreground" title={previewName}>
+                → {previewName}
+              </p>
+            </div>
           </div>
         </div>
 
