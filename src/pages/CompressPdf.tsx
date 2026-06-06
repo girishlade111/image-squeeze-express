@@ -1,16 +1,8 @@
-import { useCallback, useRef, useState, useMemo } from 'react';
+import { useCallback, useRef, useState, useMemo, lazy, Suspense } from 'react';
 import Header from '@/components/Header';
-import Footer from '@/components/Footer';
 import ToolHero from '@/components/ToolHero';
 import PdfUploadZone from '@/components/PdfUploadZone';
-import PdfQueue from '@/components/PdfQueue';
-import PdfSettingsPanel from '@/components/PdfSettingsPanel';
-import PdfResultsSection from '@/components/PdfResultsSection';
-import PdfInspector from '@/components/PdfInspector';
-import ScrollToTop from '@/components/ScrollToTop';
-import DocumentTitle from '@/components/DocumentTitle';
-import ErrorBoundary from '@/components/ErrorBoundary';
-import MobileActionBar from '@/components/MobileActionBar';
+import { BlockSkeleton, CardSkeleton } from '@/components/Skeleton';
 import { usePdfUpload } from '@/hooks/usePdfUpload';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
 import { usePageDropZone } from '@/hooks/usePageDropZone';
@@ -35,6 +27,16 @@ import type {
   PdfQualityPreset,
 } from '@/utils/pdfProcessor';
 import { PDF_QUALITY_PRESETS } from '@/utils/pdfProcessor';
+
+const Footer = lazy(() => import('@/components/Footer'));
+const PdfQueue = lazy(() => import('@/components/PdfQueue'));
+const PdfSettingsPanel = lazy(() => import('@/components/PdfSettingsPanel'));
+const PdfResultsSection = lazy(() => import('@/components/PdfResultsSection'));
+const PdfInspector = lazy(() => import('@/components/PdfInspector'));
+const MobileActionBar = lazy(() => import('@/components/MobileActionBar'));
+const PageDropOverlay = lazy(() => import('@/components/PageDropOverlay'));
+const ScrollToTop = lazy(() => import('@/components/ScrollToTop'));
+const DocumentTitle = lazy(() => import('@/components/DocumentTitle'));
 
 const DEFAULT_PDF_SETTINGS: PdfProcessSettings = {
   ...PDF_QUALITY_PRESETS.medium,
