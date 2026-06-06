@@ -7,6 +7,8 @@ import LazySection from '@/components/LazySection';
 import PageDropOverlay from '@/components/PageDropOverlay';
 import ScrollToTop from '@/components/ScrollToTop';
 import DocumentTitle from '@/components/DocumentTitle';
+import ErrorBoundary from '@/components/ErrorBoundary';
+import TrustBar from '@/components/TrustBar';
 import { useImageUpload } from '@/hooks/useImageUpload';
 import { useSettings } from '@/hooks/useSettings';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
