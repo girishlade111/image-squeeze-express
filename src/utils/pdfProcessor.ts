@@ -96,19 +96,6 @@ export interface PdfMetadata {
   fileVersion: string | null;
 }
 
-export const DEFAULT_PDF_FILENAME_PATTERN = '{name}_compressed.pdf';
-
-const PDF_FILENAME_TOKENS: Record<string, string> = {
-  '{name}': 'Original file name without .pdf',
-  '{ext}': 'Always "pdf"',
-  '{format}': 'Always "pdf"',
-  '{pages}': 'Page count in the output',
-  '{size}': 'Output file size in KB',
-  '{date}': 'Current date (YYYY-MM-DD)',
-  '{q}': 'Final JPEG quality (0-100)',
-  '{index}': 'Index in the batch (1-based)',
-};
-
 // Lazy-load pdfjs so its ~700 KB bundle (which needs `DOMMatrix` etc.) is only
 // fetched on first use and is excluded from the test environment entirely.
 let pdfjsPromise: Promise<typeof import('pdfjs-dist')> | null = null;
@@ -125,42 +112,9 @@ async function getPdfjs() {
   return pdfjsPromise;
 }
 
-export const PDF_QUALITY_PRESETS: Record<Exclude<PdfQualityPreset, 'custom'>, PdfProcessSettings> = {
-  low: { quality: 0.4, scale: 1.25, maxWidth: 1100, targetSizeKB: null, grayscale: false, stripMetadata: false, dpi: null, filenamePattern: DEFAULT_PDF_FILENAME_PATTERN, pageRange: null },
-  medium: { quality: 0.6, scale: 1.75, maxWidth: 1700, targetSizeKB: null, grayscale: false, stripMetadata: false, dpi: null, filenamePattern: DEFAULT_PDF_FILENAME_PATTERN, pageRange: null },
-  high: { quality: 0.82, scale: 2.25, maxWidth: 2400, targetSizeKB: null, grayscale: false, stripMetadata: false, dpi: null, filenamePattern: DEFAULT_PDF_FILENAME_PATTERN, pageRange: null },
-};
-
-export function getQualityPresetSettings(preset: PdfQualityPreset): PdfProcessSettings {
-  if (preset === 'custom') {
-    return { quality: 0.6, scale: 1.75, maxWidth: 1700, targetSizeKB: null, grayscale: false, stripMetadata: false, dpi: null, filenamePattern: DEFAULT_PDF_FILENAME_PATTERN, pageRange: null };
-  }
-  return PDF_QUALITY_PRESETS[preset];
-}
-
-export function getPdfFilenameTokenDocs(): Array<{ token: string; description: string }> {
-  return Object.entries(PDF_FILENAME_TOKENS).map(([token, description]) => ({ token, description }));
-}
-
 const MIN_TARGET_QUALITY = 0.2;
 const MIN_TARGET_SCALE = 0.5;
 const TARGET_SIZE_ITERATIONS = 5;
-
-export function formatBytes(bytes: number): string {
-  if (!Number.isFinite(bytes) || bytes < 0) return '0 B';
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
-}
-
-export function getReductionRatio(originalSize: number, newSize: number): string {
-  if (!originalSize || originalSize <= 0) return '— same';
-  const diff = originalSize - newSize;
-  if (Math.abs(diff) < 1) return '— same';
-  const ratio = Math.round((diff / originalSize) * 100);
-  if (ratio > 0) return `▼ ${ratio}%`;
-  return `▲ ${Math.abs(ratio)}%`;
-}
 
 interface RenderedPage {
   bytes: Uint8Array;
