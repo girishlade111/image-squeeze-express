@@ -123,15 +123,18 @@ const ToolHero = ({ prefix, highlight, suffix, subhead, badges, children }: Tool
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            {badges.map((badge) => (
+            {badges.map(({ icon: BadgeIcon, label }) => (
               <div
-                key={badge.label}
-                className="flex items-center gap-1 rounded-full border border-primary/20 bg-primary/[0.07] px-2.5 py-0.5 text-[11px] font-medium text-foreground sm:px-3 sm:py-1 sm:text-xs"
+                key={label}
+                className="flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/[0.07] py-0.5 pl-1.5 pr-2.5 text-[11px] font-medium text-foreground sm:gap-2 sm:pl-2 sm:pr-3 sm:text-xs"
               >
-                <span className="text-xs sm:text-sm" aria-hidden>
-                  {badge.emoji}
-                </span>
-                {badge.label}
+                <BadgeIcon
+                  size={16}
+                  weight="duotone"
+                  className="h-3.5 w-3.5 sm:h-4 sm:w-4"
+                  aria-hidden
+                />
+                {label}
               </div>
             ))}
           </motion.div>
