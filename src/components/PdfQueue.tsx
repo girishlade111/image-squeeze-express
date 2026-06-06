@@ -442,7 +442,7 @@ const PdfQueue = ({
                   </>
                 ) : (
                   <>
-                    <span className="mr-1">⚡</span>
+                    <Lightning size={16} weight="duotone" className="mr-1.5" />
                     Compress {readyCount} PDF{readyCount !== 1 ? 's' : ''}
                   </>
                 )}
