@@ -508,10 +508,61 @@ export async function processImage(
   };
 }
 
-export function toDownloadFile(originalName: string, blob: Blob): File {
-  const baseName = originalName.replace(/\.[^.]+$/, '') || 'image';
-  const ext = toExt(blob.type);
-  return new File([blob], `imagesqueeze_${baseName}${ext}`, { type: blob.type });
+export function toDownloadFile(
+  originalName: string,
+  blob: Blob,
+  pattern: string = DEFAULT_FILENAME_PATTERN,
+  context?: {
+    width?: number;
+    height?: number;
+    quality?: number;
+    index?: number;
+    sizeBytes?: number;
+  }
+): File {
+  const dot = originalName.lastIndexOf('.');
+  const baseName = (dot > 0 ? originalName.slice(0, dot) : originalName) || 'image';
+  const ext = toExt(blob.type).slice(1);
+  const format = ext;
+
+  const now = new Date();
+  const yyyy = now.getFullYear();
+  const mm = String(now.getMonth() + 1).padStart(2, '0');
+  const dd = String(now.getDate()).padStart(2, '0');
+  const dateStr = `${yyyy}-${mm}-${dd}`;
+
+  const replacements: Record<string, string> = {
+    '{name}': baseName,
+    '{ext}': ext,
+    '{format}': format,
+    '{w}': String(context?.width ?? ''),
+    '{h}': String(context?.height ?? ''),
+    '{q}': String(Math.round(context?.quality ?? 0)),
+    '{index}': String(context?.index ?? ''),
+    '{date}': dateStr,
+    '{size}': String(Math.round((context?.sizeBytes ?? 0) / 1024)),
+  };
+
+  let out = pattern;
+  for (const token of Object.keys(replacements)) {
+    out = out.split(token).join(replacements[token]);
+  }
+
+  // Sanitize illegal characters and trim
+  out = out.replace(/[<>:"/\\|?*\x00-\x1f]/g, '_').replace(/_+/g, '_').trim();
+  if (out.length === 0) out = `imagesqueeze_${baseName}${toExt(blob.type)}`;
+  if (out.length > 200) out = out.slice(0, 200);
+
+  // Guarantee the right extension is appended when the pattern omits it
+  if (!out.toLowerCase().endsWith(toExt(blob.type).toLowerCase())) {
+    out = out + toExt(blob.type);
+  }
+
+  return new File([blob], out, { type: blob.type });
+}
+
+export function getFilenameTokenDocs(): Array<{ token: string; description: string }> {
+  return Object.entries(FILENAME_TOKENS).map(([token, description]) => ({ token, description }));
 }
 
 export function estimateQualityForSize(
