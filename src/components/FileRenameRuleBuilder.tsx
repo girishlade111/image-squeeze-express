@@ -348,7 +348,7 @@ const FileRenameRuleBuilder = ({
                           className="flex h-8 w-8 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive sm:h-6 sm:w-6"
                           aria-label="Remove rule"
                         >
-                          <Trash2 className="h-3 w-3" />
+                          <Trash2 className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
                         </button>
                       </TooltipTrigger>
                       <TooltipContent>Remove</TooltipContent>
