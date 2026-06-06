@@ -290,16 +290,11 @@ const FileRenameRuleBuilder = ({
         <div className="space-y-2">
           <AnimatePresence mode="popLayout" initial={false}>
             {rules.length === 0 && (
-              <motion.div
-                key="empty"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="rounded-xl border border-dashed border-border/40 bg-secondary/20 p-4 text-center text-[11px] text-muted-foreground"
-              >
-                No rules yet. Add one above to start renaming — extensions are
-                always preserved.
-              </motion.div>
+              <EmptyState
+                icon={<ListChecks className="h-5 w-5" aria-hidden />}
+                title="No rules yet"
+                description="Add a rule above to start renaming. Extensions are always preserved."
+              />
             )}
 
             {rules.map((rule, index) => (
