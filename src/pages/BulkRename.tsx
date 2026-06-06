@@ -79,10 +79,10 @@ const BulkRename = () => {
           suffix="in Seconds"
           subhead="Rename up to 100 files at once with a live preview. Combine find & replace, prefix/suffix, sequential numbering, case changes, date stamps, trim, insert-at, counter extraction, reverse, and more — all in your browser."
           badges={[
-            { emoji: '🔒', label: '100% Private' },
-            { emoji: '👁️', label: 'Live Preview' },
-            { emoji: '🆓', label: 'Free Forever' },
-            { emoji: '📦', label: 'ZIP Download' },
+            { icon: ShieldCheck, label: '100% Private' },
+            { icon: Eye, label: 'Live Preview' },
+            { icon: Gift, label: 'Free Forever' },
+            { icon: Stack, label: 'ZIP Download' },
           ]}
         >
           <div ref={uploadRef}>
