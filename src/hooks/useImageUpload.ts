@@ -240,6 +240,8 @@ export function useImageUpload() {
     []
   );
 
+  const pendingRef = useRef<{ files: File[]; meta: Array<{ name: string; size: number; type: string }> } | null>(null);
+
   const addFiles = useCallback((fileList: FileList | File[]) => {
     const incomingFiles = Array.from(fileList).filter((f) => f.type.startsWith('image/'));
     if (incomingFiles.length === 0) {
@@ -258,12 +260,19 @@ export function useImageUpload() {
       type: f.type,
     }));
 
+    // Stash the candidates so the async validator can read them when its
+    // module chunk finishes loading. We can't pass the arrays through the
+    // setFiles callback because that runs synchronously and we need the
+    // values after the dynamic import resolves.
+    pendingRef.current = { files: incomingFiles, meta: incomingMeta };
+
+    // Read the current file count synchronously so the validator's overflow
+    // math is correct without needing a setFiles callback.
     setFiles((prev) => {
-      // Defer batch validation to first use so the validator + its tiny
-      // import graph (imageUploadLimits, a few types) is not pulled into the
-      // first paint chunk of the landing page.
       void loadBatchValidator().then(({ validateBatch }) => {
-        runValidation(validateBatch, prev);
+        const pending = pendingRef.current;
+        if (!pending) return;
+        runValidation(validateBatch, pending, prev);
       });
       return prev;
     });
@@ -272,12 +281,10 @@ export function useImageUpload() {
   const runValidation = useCallback(
     async (
       validateBatch: typeof import('@/utils/batchValidation').validateBatch,
+      pending: { files: File[]; meta: Array<{ name: string; size: number; type: string }> },
       prev: UploadedFile[]
     ) => {
-      const incomingFiles = (runValidation as unknown as { _lastIncoming?: File[] })._lastIncoming;
-      if (!incomingFiles) return;
-      const incomingMeta = (runValidation as unknown as { _lastMeta?: Array<{ name: string; size: number; type: string }> })._lastMeta;
-      if (!incomingMeta) return;
+      const { files: incomingFiles, meta: incomingMeta } = pending;
       const report = validateBatch(incomingMeta, prev.length);
 
       // Surface warnings for special cases (the validator reports, the hook
@@ -333,30 +340,33 @@ export function useImageUpload() {
         };
       });
 
+      setFiles((p) => [...p, ...newFiles]);
+
       // Resolve original dimensions + smart recommendation asynchronously.
-      // Dimensions are best-effort; the recommendation runs the
-      // analyze-then-classify pipeline in imageProcessor.ts and may
-      // take a few hundred ms per image on big batches.
+      // The image engine is dynamic-imported here so the canvas-based
+      // analyzer and browser-image-compression only load when the user
+      // actually adds images to the queue.
       newFiles.forEach((nf) => {
-        getImageDimensions(nf.file)
-          .then(async (dims) => {
-            setFiles((p) =>
-              p.map((f) =>
-                f.id === nf.id
-                  ? { ...f, originalWidth: dims.width, originalHeight: dims.height }
-                  : f
-              )
-            );
-            try {
-              const meta = await recommendFormat(nf.file, dims);
+        void loadImageEngine().then(({ getImageDimensions, recommendFormat }) => {
+          getImageDimensions(nf.file)
+            .then(async (dims) => {
               setFiles((p) =>
-                p.map((f) => (f.id === nf.id ? { ...f, metadata: meta } : f))
+                p.map((f) =>
+                  f.id === nf.id
+                    ? { ...f, originalWidth: dims.width, originalHeight: dims.height }
+                    : f
+                )
               );
-            } catch {
-              /* recommendation is best-effort */
-            }
-          })
-          .catch(() => {
+              try {
+                const meta = await recommendFormat(nf.file, dims);
+                setFiles((p) =>
+                  p.map((f) => (f.id === nf.id ? { ...f, metadata: meta } : f))
+                );
+              } catch {
+                /* recommendation is best-effort */
+              }
+            })
+            .catch(() => {
             /* ignore — dimensions are informational */
           });
       });
