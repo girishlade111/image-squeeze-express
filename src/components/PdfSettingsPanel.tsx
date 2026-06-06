@@ -182,7 +182,7 @@ const PdfSettingsPanel = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <div className="rounded-2xl border border-border/40 bg-card/80 backdrop-blur-xl p-4 shadow-lg space-y-4">
+      <div className="rounded-2xl border border-border/40 bg-card/80 backdrop-blur-xl p-3 shadow-lg space-y-4 sm:p-4">
         <div>
           <div className="mb-2 flex items-center justify-between">
             <div className="flex items-center gap-1.5">

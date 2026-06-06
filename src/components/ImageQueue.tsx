@@ -396,10 +396,10 @@ const ImageQueue = ({
                           }}
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          className="flex h-7 w-7 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 text-primary transition-colors hover:bg-primary/20"
+                          className="flex h-9 w-9 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 text-primary transition-colors hover:bg-primary/20 sm:h-7 sm:w-7"
                           aria-label={`Try settings on ${f.name}`}
                         >
-                          <Sparkles className="h-3.5 w-3.5" />
+                          <Sparkles className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
                         </motion.button>
                       </TooltipTrigger>
                       <TooltipContent>Try current settings on this image</TooltipContent>
@@ -415,10 +415,10 @@ const ImageQueue = ({
                           }}
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          className="flex h-7 w-7 items-center justify-center rounded-lg border border-border/60 bg-background/40 text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground"
+                          className="flex h-9 w-9 items-center justify-center rounded-lg border border-border/60 bg-background/40 text-muted-foreground transition-colors hover:border-primary/30 hover:text-foreground sm:h-7 sm:w-7"
                           aria-label={`Inspect ${f.name}`}
                         >
-                          <Eye className="h-3.5 w-3.5" />
+                          <Eye className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
                         </motion.button>
                       </TooltipTrigger>
                       <TooltipContent>Inspect metadata & smart suggestion</TooltipContent>
@@ -434,10 +434,10 @@ const ImageQueue = ({
                           }}
                           whileHover={{ scale: 1.1 }}
                           whileTap={{ scale: 0.9 }}
-                          className="flex h-7 w-7 items-center justify-center rounded-lg border border-destructive/30 bg-destructive/10 text-destructive transition-colors hover:bg-destructive/20"
+                          className="flex h-9 w-9 items-center justify-center rounded-lg border border-destructive/30 bg-destructive/10 text-destructive transition-colors hover:bg-destructive/20 sm:h-7 sm:w-7"
                           aria-label={`Retry ${f.name}`}
                         >
-                          <RotateCcw className="h-3.5 w-3.5" />
+                          <RotateCcw className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
                         </motion.button>
                       </TooltipTrigger>
                       <TooltipContent>Retry</TooltipContent>
@@ -445,7 +445,7 @@ const ImageQueue = ({
                   )}
                 </div>
 
-                {/* Remove button (visible on hover or when failed) */}
+                {/* Remove button — always visible on touch / mobile, hover-only on desktop */}
                 {!isProcessing && (
                   <motion.button
                     onClick={(e) => {
@@ -454,14 +454,14 @@ const ImageQueue = ({
                     }}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className={`absolute -right-1.5 -top-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-destructive-foreground shadow-sm transition-all duration-150 ${
+                    className={`absolute -right-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-destructive text-destructive-foreground shadow-sm transition-opacity duration-150 sm:h-5 sm:w-5 ${
                       hoverId === f.id || f.status === 'error'
                         ? 'opacity-100'
-                        : 'opacity-0 group-hover:opacity-100'
+                        : 'opacity-100 sm:opacity-0 sm:group-hover:opacity-100'
                     }`}
                     aria-label={`Remove ${f.name}`}
                   >
-                    <X className="h-3 w-3" />
+                    <X className="h-3 w-3 sm:h-3 sm:w-3" />
                   </motion.button>
                 )}
               </motion.div>
