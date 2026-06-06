@@ -69,8 +69,8 @@ const UploadZone = ({ onFilesSelected, imageCount, maxFiles = 50 }: UploadZonePr
           full
             ? 'cursor-not-allowed border-border/30 opacity-60'
             : dragOver
-            ? 'border-primary bg-primary/10 scale-[1.01]'
-            : 'border-primary/25 hover:border-primary/50 hover:bg-primary/[0.04] hover:shadow-[0_0_30px_rgba(124,58,237,0.08)]'
+            ? 'border-primary bg-primary/10 scale-[1.01] shadow-elev-glow'
+            : 'border-primary/25 hover:border-primary/50 hover:bg-primary/[0.04] hover:shadow-elev-2'
         }`}
         whileHover={full ? {} : { scale: 1.005 }}
         whileTap={full ? {} : { scale: 0.995 }}
@@ -103,8 +103,16 @@ const UploadZone = ({ onFilesSelected, imageCount, maxFiles = 50 }: UploadZonePr
             className={`relative flex h-14 w-14 items-center justify-center rounded-2xl transition-colors ${
               dragOver ? 'bg-primary/25' : 'bg-primary/[0.1] group-hover:bg-primary/[0.15]'
             }`}
-            animate={{ scale: dragOver ? 1.1 : 1, rotate: dragOver ? -6 : 0 }}
-            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+            animate={
+              dragOver
+                ? { scale: 1.1, rotate: -6 }
+                : { scale: 1, rotate: 0, y: [0, -2, 0] }
+            }
+            transition={
+              dragOver
+                ? { type: 'spring', stiffness: 300, damping: 20 }
+                : { duration: 3, repeat: Infinity, ease: 'easeInOut' }
+            }
           >
             <CloudUpload className="h-7 w-7 text-primary" strokeWidth={1.75} aria-hidden="true" />
           </motion.div>
