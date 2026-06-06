@@ -26,11 +26,12 @@ import {
   CalendarBlank,
   Scissors,
   ArrowsHorizontal,
-  TextTShirt,
+  ArrowsClockwise,
   ArrowsLeftRight,
   Stamp,
   FileArchive,
   Shield,
+  MagnifyingGlass,
 } from '@phosphor-icons/react';
 
 const BulkRename = () => {
