@@ -54,16 +54,16 @@ interface SettingsPanelProps {
   onResetAll: () => void;
 }
 
-const presets = [
-  { id: 'ig-post', emoji: '📸', name: 'IG Post', w: 1080, h: 1080 },
-  { id: 'ig-story', emoji: '📱', name: 'IG Story', w: 1080, h: 1920 },
-  { id: 'li-post', emoji: '💼', name: 'LinkedIn', w: 1200, h: 627 },
-  { id: 'li-banner', emoji: '📊', name: 'LI Banner', w: 1584, h: 396 },
-  { id: 'wa-dp', emoji: '💬', name: 'WhatsApp', w: 500, h: 500 },
-  { id: 'tw-post', emoji: '🐦', name: 'Twitter', w: 1200, h: 675 },
-  { id: 'fb-cover', emoji: '📘', name: 'FB Cover', w: 820, h: 312 },
-  { id: 'yt-thumb', emoji: '📺', name: 'YT Thumb', w: 1280, h: 720 },
-  { id: 'fullhd', emoji: '🖥️', name: 'Full HD', w: 1920, h: 1080 },
+const presets: { id: string; icon: typeof Camera; name: string; w: number; h: number }[] = [
+  { id: 'ig-post', icon: InstagramLogo, name: 'IG Post', w: 1080, h: 1080 },
+  { id: 'ig-story', icon: Camera, name: 'IG Story', w: 1080, h: 1920 },
+  { id: 'li-post', icon: LinkedinLogo, name: 'LinkedIn', w: 1200, h: 627 },
+  { id: 'li-banner', icon: ChartBar, name: 'LI Banner', w: 1584, h: 396 },
+  { id: 'wa-dp', icon: WhatsappLogo, name: 'WhatsApp', w: 500, h: 500 },
+  { id: 'tw-post', icon: TwitterLogo, name: 'Twitter', w: 1200, h: 675 },
+  { id: 'fb-cover', icon: FacebookLogo, name: 'FB Cover', w: 820, h: 312 },
+  { id: 'yt-thumb', icon: YoutubeLogo, name: 'YT Thumb', w: 1280, h: 720 },
+  { id: 'fullhd', icon: Monitor, name: 'Full HD', w: 1920, h: 1080 },
 ];
 
 const formats: {
@@ -94,9 +94,9 @@ const rotations: { value: Rotation; label: string }[] = [
 ];
 
 function qualityHint(q: number) {
-  if (q >= 90) return { emoji: '🟢', text: 'High quality' };
-  if (q >= 50) return { emoji: '🟡', text: 'Balanced' };
-  return { emoji: '🔴', text: 'Compact' };
+  if (q >= 90) return { icon: CheckCircle, text: 'High quality', color: 'text-emerald-500' };
+  if (q >= 50) return { icon: CircleNotch, text: 'Balanced', color: 'text-amber-500' };
+  return { icon: WarningCircle, text: 'Compact', color: 'text-rose-500' };
 }
 
 const InfoTip = ({ children }: { children: React.ReactNode }) => (
