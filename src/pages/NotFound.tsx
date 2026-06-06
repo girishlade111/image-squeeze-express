@@ -1,8 +1,8 @@
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { Home, AlertTriangle, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { House, Warning, MagnifyingGlass } from "@phosphor-icons/react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import DocumentTitle from "@/components/DocumentTitle";
@@ -47,7 +47,7 @@ const NotFound = () => {
             animate={{ rotate: 0, scale: 1 }}
             transition={{ type: 'spring', stiffness: 200, damping: 14 }}
           >
-            <AlertTriangle className="h-8 w-8" strokeWidth={1.75} />
+            <Warning size={36} weight="duotone" />
           </motion.div>
           <h1 className="mt-6 text-6xl font-black tracking-tight sm:text-7xl">
             <span
@@ -70,13 +70,13 @@ const NotFound = () => {
           <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
             <Button asChild className="rounded-full px-5">
               <a href="/">
-                <Home className="mr-2 h-4 w-4" />
+                <House size={16} weight="bold" className="mr-2" />
                 Return to Home
               </a>
             </Button>
             <Button asChild variant="outline" className="rounded-full px-5">
               <a href="/#how-it-works">
-                <Search className="mr-2 h-4 w-4" />
+                <MagnifyingGlass size={16} weight="bold" className="mr-2" />
                 See How It Works
               </a>
             </Button>
