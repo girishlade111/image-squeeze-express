@@ -583,11 +583,15 @@ function QueueList({
   currentItem,
   onRemove,
   onRetry,
+  onInspect,
+  onPreviewOne,
 }: {
   files: UploadedFile[];
   currentItem: string | null;
   onRemove: (id: string) => void;
   onRetry: (id: string) => void;
+  onInspect?: (id: string) => void;
+  onPreviewOne?: (id: string) => void;
 }) {
   return (
     <motion.ul
@@ -597,6 +601,7 @@ function QueueList({
       <AnimatePresence mode="popLayout" initial={false}>
         {files.map((f) => {
           const isCurrent = currentItem === f.id && f.status === 'processing';
+          const hasRec = f.metadata && f.status === 'ready';
           return (
             <motion.li
               key={f.id}
@@ -615,7 +620,12 @@ function QueueList({
                   : ''
               }`}
             >
-              <div className="relative h-8 w-8 flex-shrink-0 overflow-hidden rounded-md bg-secondary/30">
+              <button
+                type="button"
+                onClick={() => onInspect?.(f.id)}
+                className="relative h-8 w-8 flex-shrink-0 cursor-zoom-in overflow-hidden rounded-md bg-secondary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                aria-label={`Inspect ${f.name}`}
+              >
                 <img
                   src={f.preview}
                   alt={f.name}
@@ -641,7 +651,7 @@ function QueueList({
                     <AlertCircle className="h-3.5 w-3.5 text-white" strokeWidth={3} />
                   </div>
                 )}
-              </div>
+              </button>
 
               <div className="min-w-0 flex-1">
                 <p
@@ -664,6 +674,27 @@ function QueueList({
                 </p>
               </div>
 
+              {hasRec && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Badge
+                      variant="outline"
+                      className="rounded-full border-primary/30 bg-primary/10 px-1.5 py-0 text-[9px] font-semibold text-primary"
+                    >
+                      <Lightbulb className="mr-0.5 h-2 w-2" />
+                      {String(f.metadata!.recommendedFormat).toUpperCase()}
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent className="max-w-[220px] text-[11px] leading-relaxed">
+                    {f.metadata!.recommendationReason}
+                    <br />
+                    <span className="text-primary">
+                      Saves ~{f.metadata!.estimatedSavings}%
+                    </span>
+                  </TooltipContent>
+                </Tooltip>
+              )}
+
               <Badge
                 variant="outline"
                 className={`rounded-full px-1.5 py-0 text-[9px] font-semibold ${statusStyles[f.status]}`}
@@ -672,6 +703,15 @@ function QueueList({
               </Badge>
 
               <div className="flex items-center gap-0.5">
+                {f.status === 'ready' && onPreviewOne && (
+                  <button
+                    onClick={() => onPreviewOne(f.id)}
+                    className="flex h-6 w-6 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+                    aria-label={`Try settings on ${f.name}`}
+                  >
+                    <Sparkles className="h-3 w-3" />
+                  </button>
+                )}
                 {f.status === 'error' && (
                   <button
                     onClick={() => onRetry(f.id)}
