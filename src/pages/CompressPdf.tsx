@@ -251,17 +251,17 @@ const CompressPdf = () => {
 const HowItWorksPdf = () => {
   const steps = [
     {
-      icon: <Sparkles className="h-4 w-4 text-primary" />,
+      icon: UploadSimple,
       title: '1. Upload PDFs',
       desc: 'Drag & drop up to 5 files. Nothing leaves your device.',
     },
     {
-      icon: <Zap className="h-4 w-4 text-primary" />,
+      icon: Gear,
       title: '2. Pick a level',
       desc: 'Choose Strong, Balanced, or Light. Adjust DPI, target size, B&W, and more.',
     },
     {
-      icon: <Shield className="h-4 w-4 text-primary" />,
+      icon: Shield,
       title: '3. Compress & save',
       desc: 'We rebuild each PDF with re-rendered pages — you get a smaller file.',
     },
@@ -272,18 +272,21 @@ const HowItWorksPdf = () => {
         How it works
       </h2>
       <div className="mx-auto mt-8 grid max-w-3xl grid-cols-1 gap-3 sm:grid-cols-3">
-        {steps.map((s) => (
-          <div
-            key={s.title}
-            className="rounded-2xl border border-border/40 bg-card/60 p-4 text-center"
-          >
-            <div className="mx-auto mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
-              {s.icon}
+        {steps.map((s) => {
+          const StepIcon = s.icon;
+          return (
+            <div
+              key={s.title}
+              className="rounded-2xl border border-border/40 bg-card/60 p-4 text-center"
+            >
+              <div className="mx-auto mb-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <StepIcon size={20} weight="duotone" aria-hidden />
+              </div>
+              <p className="text-sm font-semibold">{s.title}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{s.desc}</p>
             </div>
-            <p className="text-sm font-semibold">{s.title}</p>
-            <p className="mt-1 text-xs text-muted-foreground">{s.desc}</p>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </section>
   );
@@ -291,26 +294,31 @@ const HowItWorksPdf = () => {
 
 const FeaturesPdf = () => {
   const features = [
-    { emoji: '🔒', title: 'Private', desc: 'Files never leave your browser. No server uploads.' },
-    { emoji: '⚡', title: 'Fast', desc: 'Re-renders each page in parallel-friendly chunks.' },
-    { emoji: '📦', title: 'Batch', desc: 'Compress up to 5 PDFs at once. ZIP download included.' },
-    { emoji: '🎚️', title: 'Three levels', desc: 'Strong, Balanced, or Light — pick what fits.' },
-    { emoji: '🎯', title: 'Target size', desc: 'Iteratively reduce quality/DPI to hit a KB target.' },
-    { emoji: '🔍', title: 'Inspector', desc: 'First-page thumbnail, smart recommendation, metadata.' },
+    { icon: Lock, title: 'Private', desc: 'Files never leave your browser. No server uploads.' },
+    { icon: Lightning, title: 'Fast', desc: 'Re-renders each page in parallel-friendly chunks.' },
+    { icon: StackSimple, title: 'Batch', desc: 'Compress up to 5 PDFs at once. ZIP download included.' },
+    { icon: Rocket, title: 'Three levels', desc: 'Strong, Balanced, or Light — pick what fits.' },
+    { icon: Target, title: 'Target size', desc: 'Iteratively reduce quality/DPI to hit a KB target.' },
+    { icon: MagnifyingGlass, title: 'Inspector', desc: 'First-page thumbnail, smart recommendation, metadata.' },
   ];
   return (
     <section className="container mx-auto mt-16 px-4">
       <div className="mx-auto grid max-w-4xl grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
-        {features.map((f) => (
-          <div
-            key={f.title}
-            className="rounded-2xl border border-border/40 bg-card/60 p-3 text-center"
-          >
-            <div className="text-2xl">{f.emoji}</div>
-            <p className="mt-1 text-xs font-semibold">{f.title}</p>
-            <p className="mt-0.5 text-[10px] text-muted-foreground">{f.desc}</p>
-          </div>
-        ))}
+        {features.map((f) => {
+          const Icon = f.icon;
+          return (
+            <div
+              key={f.title}
+              className="rounded-2xl border border-border/40 bg-card/60 p-3 text-center"
+            >
+              <div className="mx-auto flex h-9 w-9 items-center justify-center rounded-full bg-primary/10 text-primary">
+                <Icon size={22} weight="duotone" aria-hidden />
+              </div>
+              <p className="mt-2 text-xs font-semibold">{f.title}</p>
+              <p className="mt-0.5 text-[10px] text-muted-foreground">{f.desc}</p>
+            </div>
+          );
+        })}
       </div>
     </section>
   );
