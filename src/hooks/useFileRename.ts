@@ -163,6 +163,7 @@ export function useFileRename() {
     setZipProgress(0);
 
     try {
+      const [{ default: JSZip }, { saveAs }] = await Promise.all([loadZip(), loadSaver()]);
       const zip = new JSZip();
       const folder = zip.folder('renamed') ?? zip;
 
