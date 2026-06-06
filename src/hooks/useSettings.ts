@@ -64,6 +64,10 @@ const defaults: Settings = {
   preserveMetadata: false,
   progressive: true,
   embedColorProfile: false,
+
+  // Power features
+  lossless: false,
+  filenamePattern: 'imagesqueeze_{name}.{ext}',
 };
 
 function load(): Settings {
