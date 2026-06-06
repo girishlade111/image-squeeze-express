@@ -270,7 +270,7 @@ describe('AVIF format support', () => {
         type: 'image/avif',
       });
       const file = toDownloadFile('photo.png', blob);
-      expect(file.name).toBe('imagesqueeze_photo.avif');
+      expect(file.name).toBe('ls-image-compressor_photo.avif');
       expect(file.type).toBe('image/avif');
     });
   });
@@ -341,7 +341,7 @@ describe('AVIF format support', () => {
     it('uses the default pattern when none is provided', () => {
       const blob = new Blob(['x'], { type: 'image/webp' });
       const f = toDownloadFile('photo.jpg', blob);
-      expect(f.name).toBe('imagesqueeze_photo.webp');
+      expect(f.name).toBe('ls-image-compressor_photo.webp');
     });
 
     it('replaces {name} and {ext} tokens', () => {
@@ -386,7 +386,7 @@ describe('AVIF format support', () => {
     it('falls back when the pattern is empty or all illegal chars', () => {
       const blob = new Blob(['x'], { type: 'image/webp' });
       const f = toDownloadFile('photo.jpg', blob, '<>:"|?*');
-      expect(f.name).toMatch(/^imagesqueeze_photo\.webp$/);
+      expect(f.name).toMatch(/^ls-image-compressor_photo\.webp$/);
     });
   });
 
@@ -401,7 +401,7 @@ describe('AVIF format support', () => {
     });
 
     it('exposes the default pattern', () => {
-      expect(DEFAULT_FILENAME_PATTERN).toBe('imagesqueeze_{name}.{ext}');
+      expect(DEFAULT_FILENAME_PATTERN).toBe('ls-image-compressor_{name}.{ext}');
     });
   });
 

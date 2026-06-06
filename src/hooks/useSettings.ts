@@ -82,7 +82,7 @@ const defaults: Settings = {
 
   // Power features
   lossless: false,
-  filenamePattern: 'imagesqueeze_{name}.{ext}',
+  filenamePattern: 'ls-image-compressor_{name}.{ext}',
 };
 
 function load(): Settings {

@@ -65,12 +65,12 @@ const PrivacyPolicy = () => (
               </thead>
               <tbody className="text-muted-foreground">
                 <tr className="border-b border-border/50">
-                  <td className="py-2"><code className="rounded bg-secondary px-1.5 py-0.5 text-xs">imagesqueeze-theme</code></td>
+                  <td className="py-2"><code className="rounded bg-secondary px-1.5 py-0.5 text-xs">ls-image-compressor-theme</code></td>
                   <td className="py-2">Remember dark/light mode preference</td>
                   <td className="py-2">"dark" or "light"</td>
                 </tr>
                 <tr className="border-b border-border/50">
-                  <td className="py-2"><code className="rounded bg-secondary px-1.5 py-0.5 text-xs">imagesqueeze-settings</code></td>
+                  <td className="py-2"><code className="rounded bg-secondary px-1.5 py-0.5 text-xs">ls-image-compressor-settings</code></td>
                   <td className="py-2">Remember compression settings</td>
                   <td className="py-2">Quality, format, resize preferences</td>
                 </tr>

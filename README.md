@@ -746,8 +746,8 @@ User settings persisted to `localStorage`:
 
 | Key | Setting | Default | Type |
 |-----|---------|---------|------|
-| `imagesqueeze-settings` | Image preferences | See below | JSON |
-| `imagesqueeze-theme` | Dark/Light mode | `dark` | string |
+| `ls-image-compressor-settings` | Image preferences | See below | JSON |
+| `ls-image-compressor-theme` | Dark/Light mode | `dark` | string |
 
 ### 🎛️ Default Image Settings
 
@@ -786,7 +786,7 @@ User settings persisted to `localStorage`:
 ### 🌙 Dark Mode
 
 - **Default Theme**: Dark mode
-- **Persistence Key**: `imagesqueeze-theme`
+- **Persistence Key**: `ls-image-compressor-theme`
 - **No Flash on Reload**: Inline script in `index.html` applies theme before React hydrates
 - **System Preference**: Detects `prefers-color-scheme` on first visit
 
