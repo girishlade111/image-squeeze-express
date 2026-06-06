@@ -44,7 +44,7 @@ const HowItWorks = () => {
   const { ref, visible } = useInView(0.15);
 
   return (
-    <section id="how-it-works" className="container mx-auto mt-24 px-4" ref={ref}>
+    <section id="how-it-works" className="container mx-auto mt-16 px-4 sm:mt-24" ref={ref}>
       <h2 className="mb-14 text-center text-3xl font-extrabold tracking-tight sm:text-4xl">
         How It{' '}
         <span

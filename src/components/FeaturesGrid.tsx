@@ -24,7 +24,7 @@ const FeaturesGrid = () => {
   }, []);
 
   return (
-    <section id="features" className="container mx-auto mt-24 px-4" ref={ref}>
+    <section id="features" className="container mx-auto mt-16 px-4 sm:mt-24" ref={ref}>
       <h2 className="mb-14 text-center text-3xl font-extrabold tracking-tight sm:text-4xl">
         Why Choose{' '}
         <span
