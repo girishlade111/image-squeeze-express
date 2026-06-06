@@ -471,13 +471,13 @@ function QueueList({
                 <p className="text-[9px] text-muted-foreground">
                   {formatFileSize(f.originalSize)}
                   {f.result && (
-                    <span className="text-emerald-300">
+                    <span className="text-success">
                       {' '}→ {formatFileSize(f.result.sizeBytes)} ·{' '}
                       {getCompressionRatio(f.originalSize, f.result.sizeBytes)}
                     </span>
                   )}
                   {f.status === 'error' && f.error && (
-                    <span className="text-red-300"> · {f.error}</span>
+                    <span className="text-destructive"> · {f.error}</span>
                   )}
                 </p>
               </div>
