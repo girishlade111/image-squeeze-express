@@ -804,6 +804,115 @@ Defined in `vite.config.ts`:
 
 ---
 
+## ☁️ Deploy to Vercel
+
+ImageSqueeze is a **fully client-side** Vite SPA — no server, no API routes, no environment variables. It deploys to Vercel as a **static site** in under a minute.
+
+> 🔒 **Privacy note** — The app ships with **privacy-friendly** [Vercel Analytics](https://vercel.com/docs/analytics) and [Speed Insights](https://vercel.com/docs/speed-insights) pre-wired. They are **cookieless**, **DNT-aware**, and **do not collect any personal data** or file contents. Analytics components are mounted only in production builds (`import.meta.env.PROD`) and are no-ops in dev.
+
+### ⚡ One-Click Deploy
+
+<p align="left">
+  <a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fgirishlade%2Fimage-squeeze-express&project-name=image-squeeze-express&repository-name=image-squeeze-express">
+    <img src="https://vercel.com/button" alt="Deploy with Vercel" />
+  </a>
+</p>
+
+The button above forks this repo into your GitHub account and immediately starts a Vercel deployment with **zero configuration** — Vercel auto-detects the Vite framework.
+
+### 🛠️ Manual Deploy (CLI)
+
+If you prefer the command line:
+
+```bash
+# 1️⃣ Install the Vercel CLI (one-time)
+npm i -g vercel
+
+# 2️⃣ From the project root, deploy
+vercel              # preview deployment (great for QA)
+vercel --prod       # production deployment
+```
+
+The CLI auto-detects Vite, runs `npm run build`, and serves `dist/` globally on Vercel's edge network.
+
+### 🧩 Git-Based Continuous Deployment
+
+The recommended workflow:
+
+1. **Push your fork** to GitHub / GitLab / Bitbucket
+2. **Import the repo** at [vercel.com/new](https://vercel.com/new)
+3. **Click Deploy** — every subsequent `git push` triggers a fresh production build
+
+### 📋 Build Settings (auto-detected by Vercel)
+
+| Setting | Value | Source |
+|---------|-------|--------|
+| **Framework Preset** | `Vite` | Auto-detected from `vite.config.ts` |
+| **Build Command** | `npm run build` | `package.json` |
+| **Output Directory** | `dist` | `vercel.json` (also auto-detected) |
+| **Install Command** | `npm install` | `package.json` |
+| **Node Version** | `20.x` | `package.json` `engines.node` |
+
+> You can override any of these in the Vercel dashboard under **Settings → General → Build & Development Settings**, but the defaults work out of the box.
+
+### 🔁 SPA Routing (deep-link support)
+
+The included `vercel.json` rewrites every URL to `/index.html` so client-side routes work on hard refresh and direct links:
+
+```json
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}
+```
+
+This means every route works as a deep link:
+
+- `/` — Image Compressor
+- `/compress-pdf` — PDF Compressor
+- `/bulk-rename` — Bulk File Renamer
+- `/about` — `/contact` — `/privacy` — `/terms`
+
+### 🛡️ Security & Cache Headers
+
+The same `vercel.json` ships with opinionated security headers and **1-year immutable cache** for fingerprinted assets:
+
+| Header | Value | Why |
+|--------|-------|-----|
+| `X-Content-Type-Options` | `nosniff` | Block MIME-type sniffing attacks |
+| `X-Frame-Options` | `DENY` | Prevent clickjacking |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` | Limit referrer leakage |
+| `Permissions-Policy` | `camera=(), microphone=(), geolocation=()` | No sensor access needed |
+| `Cache-Control` (assets) | `public, max-age=31536000, immutable` | Cache-bust via Vite's file hashes |
+
+### 🌍 Custom Domain
+
+After your first deploy:
+
+1. Open the project on the [Vercel dashboard](https://vercel.com/dashboard)
+2. **Settings → Domains → Add**
+3. Point your domain's DNS to Vercel (instructions are shown in the UI)
+4. Vercel auto-provisions a free **Let's Encrypt** SSL certificate
+
+For the production deployment of this project, the canonical domain is `https://img.ladestack.in`.
+
+### 🧪 Preview Deployments
+
+Every push to a non-`main` branch (and every PR) gets its own **unique preview URL** — perfect for QA. Preview deployments share the same code, but use a separate analytics project, so production dashboards stay clean.
+
+### 🆘 Troubleshooting
+
+| Symptom | Fix |
+|---------|-----|
+| `404` on direct route like `/compress-pdf` | Make sure `vercel.json` is at the **project root** (not in `public/`) |
+| Analytics not showing up | Analytics only fire on `vercel.com` deployments — they're no-ops on localhost |
+| Build fails on Node version | Vercel uses Node 20 by default. Override in **Settings → General → Node.js Version** if needed |
+| PDF worker returns 404 | `public/pdf.worker.min.mjs` is auto-copied to `dist/` by Vite — no config needed |
+| Service Worker / PWA not working | PWA is not yet enabled (see Roadmap) |
+
+---
+
 ## 📁 Project Structure
 
 ```
