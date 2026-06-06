@@ -666,62 +666,55 @@ const About = () => {
               className="lg:col-span-3"
             >
               <GradientCard hover={false} className="overflow-hidden">
-                <div className="relative -m-5 mb-5 overflow-hidden rounded-t-[15px] border-b border-border/40 bg-gradient-to-br from-primary/15 via-card/40 to-accent/15 p-6 sm:-m-6 sm:mb-6 sm:p-8">
-                  <div
-                    className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full"
-                    style={{
-                      background: 'radial-gradient(circle, hsl(var(--primary) / 0.3), transparent)',
-                      filter: 'blur(40px)',
-                    }}
-                    aria-hidden
+                <div className="flex flex-col items-center gap-5 sm:flex-row sm:items-start sm:gap-6">
+                  <ProfileImage
+                    src={profileImg}
+                    alt="Girish Lade, founder of ImageSqueeze"
+                    className="w-32 sm:w-40 lg:w-44"
+                    fallbackInitials="GL"
+                    naturalWidth={1024}
+                    naturalHeight={1536}
+                    showStatus
                   />
-                  <div className="relative flex items-center gap-4 sm:gap-5">
-                    <div
-                      className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-2xl text-3xl font-black text-primary-foreground shadow-lg sm:h-24 sm:w-24 sm:text-4xl"
-                      style={{ background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))' }}
-                      aria-hidden
-                    >
-                      GL
+
+                  <div className="min-w-0 flex-1 text-center sm:text-left">
+                    <div className="flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+                      <h3 className="text-xl font-extrabold tracking-tight sm:text-2xl">Girish Lade</h3>
+                      <span className="rounded-full border border-primary/25 bg-primary/[0.08] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
+                        Founder &amp; Solo Dev
+                      </span>
                     </div>
-                    <div className="min-w-0 flex-1">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <h3 className="text-xl font-extrabold tracking-tight sm:text-2xl">Girish Lade</h3>
-                        <span className="rounded-full border border-primary/25 bg-primary/[0.08] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary">
-                          Founder &amp; Solo Dev
-                        </span>
-                      </div>
-                      <p className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
-                        <MapPin size={12} weight="duotone" />
-                        India · Building for the world
-                      </p>
+                    <p className="mt-1 flex items-center justify-center gap-1.5 text-xs text-muted-foreground sm:justify-start">
+                      <MapPin size={12} weight="duotone" />
+                      India · Building for the world
+                    </p>
+
+                    <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                      Web developer, indie hacker, and privacy enthusiast. I built ImageSqueeze because I was tired of
+                      uploading my own photos to a dozen different compression sites just to ship a product page. After
+                      one weekend it became a tool I used every day — so I polished it and shared it.
+                    </p>
+                    <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
+                      I also run{' '}
+                      <a
+                        href="https://ladestack.in"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="font-semibold text-primary hover:underline"
+                      >
+                        Lade Stack
+                      </a>
+                      , a small studio focused on local-first, privacy-respecting web tools.
+                    </p>
+
+                    <div className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+                      <SocialChip href="https://github.com/girishlade111" icon={GithubLogo} label="GitHub" />
+                      <SocialChip href="https://www.linkedin.com/in/girish-lade-075bba201/" icon={LinkedinLogo} label="LinkedIn" />
+                      <SocialChip href="https://www.instagram.com/girish_lade_/" icon={InstagramLogo} label="Instagram" />
+                      <SocialChip href="mailto:admin@ladestack.in" icon={Envelope} label="Email" />
+                      <SocialChip href="https://ladestack.in" icon={Globe} label="ladestack.in" />
                     </div>
                   </div>
-                </div>
-
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  Web developer, indie hacker, and privacy enthusiast. I built ImageSqueeze because I was tired of
-                  uploading my own photos to a dozen different compression sites just to ship a product page. After
-                  one weekend it became a tool I used every day — so I polished it and shared it.
-                </p>
-                <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">
-                  I also run{' '}
-                  <a
-                    href="https://ladestack.in"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-semibold text-primary hover:underline"
-                  >
-                    Lade Stack
-                  </a>
-                  , a small studio focused on local-first, privacy-respecting web tools.
-                </p>
-
-                <div className="mt-4 flex flex-wrap items-center gap-2">
-                  <SocialChip href="https://github.com/girishlade111" icon={GithubLogo} label="GitHub" />
-                  <SocialChip href="https://www.linkedin.com/in/girish-lade-075bba201/" icon={LinkedinLogo} label="LinkedIn" />
-                  <SocialChip href="https://www.instagram.com/girish_lade_/" icon={InstagramLogo} label="Instagram" />
-                  <SocialChip href="mailto:admin@ladestack.in" icon={Envelope} label="Email" />
-                  <SocialChip href="https://ladestack.in" icon={Globe} label="ladestack.in" />
                 </div>
               </GradientCard>
             </motion.div>
