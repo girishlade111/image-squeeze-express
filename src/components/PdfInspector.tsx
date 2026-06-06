@@ -91,18 +91,18 @@ const PdfInspector = ({
                 : `${file.pageCount ?? '…'} page${file.pageCount !== 1 ? 's' : ''} · ${formatBytes(file.originalSize)}`}
             </DialogDescription>
           </div>
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-0.5 sm:gap-1">
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7"
+                  className="h-8 w-8 sm:h-7 sm:w-7"
                   onClick={() => setShowOriginal((v) => !v)}
                   aria-pressed={showOriginal}
                   aria-label={showOriginal ? 'Show processed' : 'Show original'}
                 >
-                  {showOriginal ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
+                  {showOriginal ? <Eye className="h-4 w-4 sm:h-3.5 sm:w-3.5" /> : <EyeOff className="h-4 w-4 sm:h-3.5 sm:w-3.5" />}
                 </Button>
               </TooltipTrigger>
               <TooltipContent>{showOriginal ? 'Show processed' : 'Show original'}</TooltipContent>
@@ -112,11 +112,11 @@ const PdfInspector = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7"
+                  className="h-8 w-8 sm:h-7 sm:w-7"
                   onClick={() => setZoom((z) => Math.max(0.5, z - 0.25))}
                   aria-label="Zoom out"
                 >
-                  <ZoomOut className="h-3.5 w-3.5" />
+                  <ZoomOut className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Zoom out</TooltipContent>
@@ -129,11 +129,11 @@ const PdfInspector = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7"
+                  className="h-8 w-8 sm:h-7 sm:w-7"
                   onClick={() => setZoom((z) => Math.min(4, z + 0.25))}
                   aria-label="Zoom in"
                 >
-                  <ZoomIn className="h-3.5 w-3.5" />
+                  <ZoomIn className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Zoom in</TooltipContent>
@@ -143,11 +143,11 @@ const PdfInspector = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7"
+                  className="h-8 w-8 sm:h-7 sm:w-7"
                   onClick={() => setZoom(1)}
                   aria-label="Reset zoom"
                 >
-                  <RotateCcw className="h-3.5 w-3.5" />
+                  <RotateCcw className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>Reset zoom</TooltipContent>
@@ -155,19 +155,19 @@ const PdfInspector = ({
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7"
+              className="h-8 w-8 sm:h-7 sm:w-7"
               onClick={() => onOpenChange(false)}
               aria-label="Close inspector"
             >
-              <X className="h-3.5 w-3.5" />
+              <X className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
             </Button>
           </div>
         </DialogHeader>
 
-        <div className="grid max-h-[70vh] grid-cols-1 md:grid-cols-[1fr_280px]">
-          <div className="flex items-center justify-center overflow-auto bg-foreground/[0.02] p-4">
+        <div className="grid max-h-[calc(100dvh-3.5rem)] grid-cols-1 overflow-y-auto sm:max-h-[calc(90vh-3.5rem)] md:grid-cols-[1fr_280px]">
+          <div className="flex min-h-[260px] items-center justify-center overflow-auto bg-foreground/[0.02] p-3 sm:min-h-[300px] sm:p-4">
             {showOriginal ? (
-              <div className="flex h-[60vh] w-full max-w-md flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-border/60 bg-card/40 p-6 text-center">
+              <div className="flex h-[50vh] w-full max-w-md flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-border/60 bg-card/40 p-6 text-center sm:h-[60vh]">
                 <FileText className="h-12 w-12 text-muted-foreground/40" />
                 <p className="text-[11px] text-muted-foreground">
                   Original PDF preview is not available — open it in your PDF reader to compare.
@@ -181,7 +181,7 @@ const PdfInspector = ({
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: zoom }}
                 transition={{ duration: 0.2 }}
-                className="h-[60vh] w-full max-w-2xl rounded-lg border border-border/30 bg-white shadow-elev-2"
+                className="h-[50vh] w-full max-w-2xl rounded-lg border border-border/30 bg-white shadow-elev-2 sm:h-[60vh]"
                 style={{ transform: `scale(${zoom})`, transformOrigin: 'center' }}
               />
             ) : thumbnailUrl ? (
@@ -192,11 +192,11 @@ const PdfInspector = ({
                 initial={{ opacity: 0, scale: 0.98 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.2 }}
-                className="max-h-[60vh] max-w-full rounded-lg object-contain shadow-elev-2"
+                className="max-h-[50vh] max-w-full rounded-lg object-contain shadow-elev-2 sm:max-h-[60vh]"
                 style={{ transform: `scale(${zoom})`, transformOrigin: 'center' }}
               />
             ) : (
-              <div className="flex h-[60vh] w-full max-w-md flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-border/60 bg-card/40 p-6 text-center">
+              <div className="flex h-[50vh] w-full max-w-md flex-col items-center justify-center gap-3 rounded-lg border border-dashed border-border/60 bg-card/40 p-6 text-center sm:h-[60vh]">
                 <FileText className="h-12 w-12 text-muted-foreground/40" />
                 <p className="text-[11px] text-muted-foreground">
                   {file.status === 'ready'
@@ -209,7 +209,7 @@ const PdfInspector = ({
             )}
           </div>
 
-          <div className="flex flex-col gap-3 overflow-auto border-l border-border/40 bg-card/40 p-4 text-xs">
+          <div className="flex flex-col gap-3 overflow-auto border-border/40 bg-card/40 p-3 text-xs sm:p-4 md:border-l">
             {hasResult && (
               <div className="rounded-lg border border-success/30 bg-success/10 p-3">
                 <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-success">
