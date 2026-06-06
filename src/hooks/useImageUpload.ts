@@ -4,8 +4,10 @@ import {
   processImage,
   toDownloadFile,
   getImageDimensions,
+  recommendFormat,
   type ProcessResult,
   type ProcessSettings,
+  type ImageMetadata,
 } from '@/utils/imageProcessor';
 import { validateBatch } from '@/utils/batchValidation';
 import {
@@ -28,6 +30,18 @@ export interface UploadedFile {
   result?: ProcessResult;
   processedFile?: File;
   processedPreview?: string;
+  metadata?: ImageMetadata;
+}
+
+export interface ProcessingStats {
+  /** Rolling throughput in bytes per second. */
+  bytesPerSecond: number;
+  /** Estimated time remaining, or null if unknown. */
+  etaMs: number | null;
+  /** Number of bytes processed so far. */
+  bytesProcessed: number;
+  /** Total bytes to process. */
+  bytesTotal: number;
 }
 
 export { MAX_FILES, MAX_FILE_SIZE, MAX_TOTAL_BATCH_SIZE };
@@ -38,7 +52,15 @@ export function useImageUpload() {
   const [progress, setProgress] = useState(0);
   const [processingText, setProcessingText] = useState('');
   const [currentItem, setCurrentItem] = useState<string | null>(null);
+  const [stats, setStats] = useState<ProcessingStats>({
+    bytesPerSecond: 0,
+    etaMs: null,
+    bytesProcessed: 0,
+    bytesTotal: 0,
+  });
   const urlsRef = useRef<Set<string>>(new Set());
+  const sessionStartRef = useRef<number | null>(null);
+  const bytesProcessedRef = useRef<number>(0);
 
   // Stable revoke helper
   const revokeUrl = useCallback((url: string) => {
