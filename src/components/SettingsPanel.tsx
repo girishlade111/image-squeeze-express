@@ -16,11 +16,30 @@ import {
   Layers,
   FlipHorizontal,
   RotateCw,
-  Sparkles,
   RotateCcw,
   FileText,
   Hash,
 } from 'lucide-react';
+import {
+  InstagramLogo,
+  Camera,
+  LinkedinLogo,
+  ChartBar,
+  WhatsappLogo,
+  ChatCircle,
+  TwitterLogo,
+  FacebookLogo,
+  UsersThree,
+  YoutubeLogo,
+  PlayCircle,
+  Monitor,
+  Sparkle,
+  Lightning,
+  Star,
+  CircleNotch,
+  CheckCircle,
+  WarningCircle,
+} from '@phosphor-icons/react';
 import { Settings, QualityPreset, Rotation } from '@/hooks/useSettings';
 import { isFormatSupported, getFilenameTokenDocs } from '@/utils/imageProcessor';
 
