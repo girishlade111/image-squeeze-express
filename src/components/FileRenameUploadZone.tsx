@@ -1,6 +1,11 @@
 import { useCallback, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { FilePlus2, Sparkles, Zap, Shield } from 'lucide-react';
+import {
+  FilePlus,
+  Sparkle,
+  Lightning,
+  ShieldCheck,
+} from '@phosphor-icons/react';
 
 interface FileRenameUploadZoneProps {
   onFilesSelected: (files: FileList | File[]) => void;
