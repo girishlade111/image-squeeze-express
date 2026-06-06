@@ -1,10 +1,11 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Download, RefreshCw, Check, ImageIcon, FileArchive, Share2, Eye, X } from 'lucide-react';
+import { Download, RefreshCw, Check, ImageIcon, FileArchive, Share2, Eye } from 'lucide-react';
 import { Confetti } from '@phosphor-icons/react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { ComparisonView } from '@/components/ComparisonView';
 import { UploadedFile } from '@/hooks/useImageUpload';
 import { formatFileSize, getCompressionRatio } from '@/utils/imageProcessor';
 import { saveAs } from 'file-saver';
@@ -388,35 +389,6 @@ function StatsBar({ filesCount, totalSaved, avgReduction, visible }: {
         <p className="mt-0.5 text-[10px] sm:text-[11px] font-medium text-muted-foreground">Smaller</p>
       </div>
     </motion.div>
-  );
-}
-
-/** Side-by-side comparison in the preview dialog */
-function ComparisonView({ file }: { file: UploadedFile }) {
-  if (!file.result) return null;
-  return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-      <div className="rounded-xl border border-border/40 bg-secondary/30 p-3">
-        <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-          Original · {formatFileSize(file.originalSize)} · {file.originalWidth}×{file.originalHeight}
-        </p>
-        <img
-          src={file.preview}
-          alt={`Original ${file.name}`}
-          className="w-full rounded-lg object-contain"
-        />
-      </div>
-      <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.04] p-3">
-        <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-emerald-300">
-          Compressed · {formatFileSize(file.result.sizeBytes)} · {file.result.width}×{file.result.height}
-        </p>
-        <img
-          src={file.processedPreview}
-          alt={`Compressed ${file.name}`}
-          className="w-full rounded-lg object-contain"
-        />
-      </div>
-    </div>
   );
 }
 
