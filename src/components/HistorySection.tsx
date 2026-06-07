@@ -138,7 +138,45 @@ const HistorySection = ({ tool, title, description }: HistorySectionProps) => {
     [entries, showAll]
   );
 
-  if (entries.length === 0) return null;
+  if (entries.length === 0) {
+    const heading = title ?? 'Recent Files';
+    const subhead = description ?? (tool === 'image'
+      ? 'Compressed images you process will appear here for re-download — up to your last 50.'
+      : 'Compressed PDFs you process will appear here for re-download — up to your last 50.');
+
+    return (
+      <section className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 sm:py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          className="mb-4 flex items-center gap-2 sm:mb-6"
+        >
+          <History className="h-4 w-4 text-primary" />
+          <h2 className="text-lg font-bold text-foreground sm:text-xl">{heading}</h2>
+          <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-medium text-muted-foreground">
+            0 files
+          </span>
+        </motion.div>
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.1 }}
+          transition={{ duration: 0.4, ease: 'easeOut', delay: 0.05 }}
+          className="flex flex-col items-center gap-3 rounded-2xl border border-dashed border-border/60 bg-card/30 px-6 py-10 text-center sm:py-14"
+        >
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <Upload className="h-5 w-5" />
+          </div>
+          <div>
+            <p className="text-sm font-medium text-foreground">No recent files yet</p>
+            <p className="mt-1 text-xs text-muted-foreground sm:text-sm">{subhead}</p>
+          </div>
+        </motion.div>
+      </section>
+    );
+  }
 
   const heading = title ?? 'Recent Files';
   const subhead = description ?? (tool === 'image'
