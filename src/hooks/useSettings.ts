@@ -37,21 +37,6 @@ export interface Settings {
 }
 
 const STORAGE_KEY = 'ls-image-compressor-settings';
-const STORAGE_KEY_OLD = 'imagesqueeze-settings';
-
-const migrateSettingsKey = () => {
-  try {
-    const old = localStorage.getItem(STORAGE_KEY_OLD);
-    if (old !== null && localStorage.getItem(STORAGE_KEY) === null) {
-      localStorage.setItem(STORAGE_KEY, old);
-      localStorage.removeItem(STORAGE_KEY_OLD);
-    }
-  } catch {
-    /* storage disabled — non-fatal */
-  }
-};
-
-migrateSettingsKey();
 
 const defaults: Settings = {
   // Basic compression
