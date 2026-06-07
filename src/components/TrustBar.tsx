@@ -37,11 +37,16 @@ const TrustBar = () => (
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.4, delay: i * 0.05 }}
+            whileHover="hover"
             className="group flex items-center gap-3 rounded-xl border border-border/40 bg-background/40 p-3 transition-colors hover:border-primary/40 hover:bg-primary/[0.04]"
           >
-            <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary transition-transform group-hover:scale-105 sm:h-9 sm:w-9">
+            <motion.div
+              className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary sm:h-9 sm:w-9"
+              variants={{ rest: { scale: 1 }, hover: { scale: 1.05 } }}
+              transition={{ duration: 0.25, ease: 'easeOut' }}
+            >
               <Icon size={22} weight="duotone" aria-hidden />
-            </div>
+            </motion.div>
             <div className="min-w-0">
               <p className="text-sm font-semibold leading-tight sm:text-xs">{label}</p>
               <p className="text-[11px] text-muted-foreground sm:text-[10px]">{desc}</p>
