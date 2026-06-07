@@ -257,7 +257,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
                       </p>
                     )}
                   </div>
-                </button>
+                </motion.button>
               </div>
 
               {/* Bottom row */}
