@@ -113,15 +113,15 @@ const PdfQueue = ({
       role="region"
       aria-label="PDF queue"
     >
-      <motion.div className="mb-3 flex items-center justify-between" layout>
-        <div className="flex items-center gap-2">
-          <p className="text-xs font-semibold text-foreground">
+      <motion.div className="mb-3 flex flex-wrap items-center justify-between gap-2" layout>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-sm font-semibold text-foreground">
             {files.length} file{files.length !== 1 ? 's' : ''}
           </p>
           {doneCount > 0 && (
             <Badge
               variant="outline"
-              className="rounded-full border-emerald-500/30 bg-emerald-500/10 px-2 py-0 text-[9px] font-semibold text-emerald-300"
+              className="rounded-full border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-300"
             >
               {doneCount} done
             </Badge>
@@ -129,27 +129,27 @@ const PdfQueue = ({
           {errorCount > 0 && (
             <Badge
               variant="outline"
-              className="rounded-full border-red-500/30 bg-red-500/10 px-2 py-0 text-[9px] font-semibold text-red-300"
+              className="rounded-full border-red-500/30 bg-red-500/10 px-2 py-0.5 text-[11px] font-semibold text-red-300"
             >
               {errorCount} failed
             </Badge>
           )}
         </div>
         {!isProcessing && files.length > 0 && (
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <Button
               variant="ghost"
               size="sm"
-              className="h-6 rounded-full px-2 text-[10px] text-muted-foreground hover:text-foreground"
+              className="h-9 rounded-full px-3 text-xs text-muted-foreground hover:text-foreground sm:h-7 sm:px-2 sm:text-[11px]"
               onClick={onAddMore}
               aria-label="Add more PDFs"
             >
-              <Plus className="mr-0.5 h-2.5 w-2.5" /> Add
+              <Plus className="mr-1 h-3.5 w-3.5 sm:mr-0.5 sm:h-3 sm:w-3" /> Add
             </Button>
             <Button
               variant="ghost"
               size="sm"
-              className="h-6 rounded-full px-2 text-[10px] text-muted-foreground hover:text-destructive"
+              className="h-9 rounded-full px-3 text-xs text-muted-foreground hover:text-destructive sm:h-7 sm:px-2 sm:text-[11px]"
               onClick={onClearAll}
               aria-label="Clear all PDFs"
             >
@@ -185,7 +185,7 @@ const PdfQueue = ({
                 aria-hidden
               />
             </div>
-            <div className="mt-1.5 flex items-center justify-between text-[10px] text-muted-foreground">
+            <div className="mt-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-xs text-muted-foreground">
               <span className="truncate">{processingText || `${progress}%`}</span>
               <span className="tabular-nums">
                 {stats ? `${formatSpeed(stats.bytesPerSecond)} · ETA ${formatEta(stats.etaMs)}` : `${progress}%`}
@@ -212,7 +212,7 @@ const PdfQueue = ({
                 transition={{ duration: 0.2, delay: i * 0.02 }}
                 onMouseEnter={() => setHoverId(f.id)}
                 onMouseLeave={() => setHoverId(null)}
-                className={`group relative flex items-center gap-2.5 rounded-xl border bg-card/60 p-2 transition-all duration-200 ${
+                className={`group relative flex items-center gap-3 rounded-xl border bg-card/60 p-2.5 transition-all duration-200 sm:gap-2.5 sm:p-2 ${
                   f.status === 'error'
                     ? 'border-red-500/30 hover:border-red-500/50'
                     : f.status === 'done'
@@ -224,7 +224,7 @@ const PdfQueue = ({
               >
                 <button
                   onClick={() => onInspect?.(f.id)}
-                  className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-secondary/30 focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-secondary/30 focus:outline-none focus:ring-2 focus:ring-primary sm:h-14 sm:w-14"
                   aria-label={`Inspect ${f.name}`}
                 >
                   {thumb ? (
@@ -286,7 +286,7 @@ const PdfQueue = ({
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1.5">
                     <p
-                      className="truncate text-xs font-medium text-foreground"
+                      className="truncate text-sm font-medium text-foreground sm:text-xs"
                       title={f.name}
                     >
                       {truncate(f.name, 28)}
@@ -299,21 +299,21 @@ const PdfQueue = ({
                               e.stopPropagation();
                               onApplyRecommendation?.(f.id);
                             }}
-                            className="inline-flex h-4 items-center gap-0.5 rounded-full border border-primary/30 bg-primary/10 px-1 text-[9px] font-bold uppercase tracking-wider text-primary hover:bg-primary/20"
+                            className="inline-flex h-6 items-center gap-0.5 rounded-full border border-primary/30 bg-primary/10 px-2 text-[11px] font-bold uppercase tracking-wider text-primary hover:bg-primary/20 sm:h-4 sm:px-1 sm:text-[9px]"
                             aria-label="Apply smart recommendation"
                           >
-                            <Lightbulb className="h-2.5 w-2.5" />
+                            <Lightbulb className="h-3 w-3 sm:h-2.5 sm:w-2.5" />
                             <span>smart</span>
                           </button>
                         </TooltipTrigger>
-                        <TooltipContent className="max-w-[220px] text-[10px] leading-snug">
+                        <TooltipContent className="max-w-[220px] text-xs leading-snug">
                           <strong className="block text-foreground">Smart recommendation</strong>
                           {recommendation}
                         </TooltipContent>
                       </Tooltip>
                     )}
                   </div>
-                  <p className="mt-0.5 text-[10px] text-muted-foreground">
+                  <p className="mt-1 text-xs text-muted-foreground sm:mt-0.5 sm:text-[10px]">
                     {formatBytes(f.originalSize)}
                     {f.pageCount !== null && (
                       <> · {f.pageCount} page{f.pageCount !== 1 ? 's' : ''}</>
@@ -323,46 +323,46 @@ const PdfQueue = ({
                     )}
                   </p>
                   {f.status === 'processing' && (
-                    <div className="mt-1 flex items-center gap-1.5">
-                      <div className="h-1 flex-1 overflow-hidden rounded-full bg-secondary">
+                    <div className="mt-1.5 flex items-center gap-1.5 sm:mt-1">
+                      <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-secondary sm:h-1">
                         <motion.div
                           className="h-full bg-gradient-to-r from-primary to-accent"
                           style={{ width: `${Math.round(f.progress * 100)}%` }}
                         />
                       </div>
-                      <span className="text-[9px] tabular-nums text-muted-foreground">
+                      <span className="text-xs tabular-nums text-muted-foreground sm:text-[9px]">
                         {Math.round(f.progress * 100)}%
                       </span>
                     </div>
                   )}
                   {f.status === 'done' && f.result && (
-                    <p className="mt-0.5 text-[10px] font-medium text-emerald-300">
+                    <p className="mt-1 text-xs font-medium text-emerald-300 sm:mt-0.5 sm:text-[10px]">
                       {formatBytes(f.result.sizeBytes)} ·{' '}
                       {getReductionRatio(f.originalSize, f.result.sizeBytes)}
                     </p>
                   )}
                   {f.status === 'error' && f.error && (
                     <p
-                      className="mt-0.5 truncate text-[10px] text-red-300"
+                      className="mt-1 truncate text-xs text-red-300 sm:mt-0.5 sm:text-[10px]"
                       title={f.error}
                     >
                       {f.error}
                     </p>
                   )}
-                  <div className="mt-1 flex items-center gap-1">
+                  <div className="mt-1.5 flex flex-wrap items-center gap-1 sm:mt-1">
                     <Badge
                       variant="outline"
-                      className={`rounded-full px-1.5 py-0 text-[9px] font-semibold ${statusStyles[f.status]}`}
+                      className={`rounded-full px-2 py-0.5 text-[11px] font-semibold sm:px-1.5 sm:py-0 sm:text-[9px] ${statusStyles[f.status]}`}
                     >
                       {isCurrent ? 'Compressing now' : statusLabel[f.status]}
                     </Badge>
                     {onInspect && (
                       <button
                         onClick={() => onInspect(f.id)}
-                        className="inline-flex h-4 items-center gap-0.5 rounded-full border border-border/40 bg-card/60 px-1 text-[9px] font-semibold text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground"
+                        className="inline-flex h-6 items-center gap-0.5 rounded-full border border-border/40 bg-card/60 px-2 text-[11px] font-semibold text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground sm:h-4 sm:px-1 sm:text-[9px]"
                         aria-label={`Inspect ${f.name}`}
                       >
-                        <Eye className="h-2.5 w-2.5" />
+                        <Eye className="h-3 w-3 sm:h-2.5 sm:w-2.5" />
                         Inspect
                       </button>
                     )}
@@ -379,10 +379,10 @@ const PdfQueue = ({
                         }}
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
-                        className="flex h-9 w-9 items-center justify-center rounded-lg border border-red-500/30 bg-red-500/10 text-red-300 transition-colors hover:bg-red-500/20 sm:h-7 sm:w-7"
+                        className="flex h-11 w-11 items-center justify-center rounded-lg border border-red-500/30 bg-red-500/10 text-red-300 transition-colors hover:bg-red-500/20 sm:h-9 sm:w-9"
                         aria-label={`Retry ${f.name}`}
                       >
-                        <RotateCcw className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
+                        <RotateCcw className="h-5 w-5 sm:h-4 sm:w-4" />
                       </motion.button>
                     </TooltipTrigger>
                     <TooltipContent>Retry</TooltipContent>
@@ -397,14 +397,14 @@ const PdfQueue = ({
                     }}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className={`absolute -right-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-destructive text-destructive-foreground shadow-sm transition-opacity duration-150 sm:h-5 sm:w-5 ${
+                    className={`absolute -right-1.5 -top-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-destructive text-destructive-foreground shadow-sm transition-opacity duration-150 sm:h-6 sm:w-6 ${
                       hoverId === f.id || f.status === 'error'
                         ? 'opacity-100'
                         : 'opacity-100 sm:opacity-0 sm:group-hover:opacity-100'
                     }`}
                     aria-label={`Remove ${f.name}`}
                   >
-                    <X className="h-3 w-3" />
+                    <X className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
                   </motion.button>
                 )}
               </motion.div>

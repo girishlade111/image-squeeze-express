@@ -549,7 +549,7 @@ function QueueList({
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.15 }}
-              className={`group flex items-center gap-2.5 px-2.5 py-1.5 transition-colors ${
+              className={`group flex items-center gap-2.5 px-3 py-2.5 transition-colors sm:px-2.5 sm:py-1.5 ${
                 f.status === 'error'
                   ? 'bg-destructive/5'
                   : f.status === 'done'
@@ -562,7 +562,7 @@ function QueueList({
               <button
                 type="button"
                 onClick={() => onInspect?.(f.id)}
-                className="relative h-8 w-8 flex-shrink-0 cursor-zoom-in overflow-hidden rounded-md bg-secondary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="relative h-11 w-11 flex-shrink-0 cursor-zoom-in overflow-hidden rounded-md bg-secondary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:h-8 sm:w-8"
                 aria-label={`Inspect ${f.name}`}
               >
                 <img
@@ -594,12 +594,12 @@ function QueueList({
 
               <div className="min-w-0 flex-1">
                 <p
-                  className="truncate text-[11px] font-medium"
+                  className="truncate text-sm font-medium sm:text-[11px]"
                   title={f.name}
                 >
                   {truncate(f.name, 32)}
                 </p>
-                <p className="text-[9px] text-muted-foreground">
+                <p className="text-xs text-muted-foreground sm:text-[9px]">
                   {formatFileSize(f.originalSize)}
                   {f.result && (
                     <span className="text-success">
@@ -618,13 +618,13 @@ function QueueList({
                   <TooltipTrigger asChild>
                     <Badge
                       variant="outline"
-                      className="rounded-full border-primary/30 bg-primary/10 px-1.5 py-0 text-[9px] font-semibold text-primary"
+                      className="hidden rounded-full border-primary/30 bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary sm:inline-flex sm:px-1.5 sm:py-0 sm:text-[9px]"
                     >
-                      <Lightbulb className="mr-0.5 h-2 w-2" />
+                      <Lightbulb className="mr-0.5 h-2.5 w-2.5 sm:h-2 sm:w-2" />
                       {String(f.metadata!.recommendedFormat).toUpperCase()}
                     </Badge>
                   </TooltipTrigger>
-                  <TooltipContent className="max-w-[220px] text-[11px] leading-relaxed">
+                  <TooltipContent className="max-w-[220px] text-xs leading-relaxed">
                     {f.metadata!.recommendationReason}
                     <br />
                     <span className="text-primary">
@@ -636,36 +636,36 @@ function QueueList({
 
               <Badge
                 variant="outline"
-                className={`rounded-full px-1.5 py-0 text-[9px] font-semibold ${statusStyles[f.status]}`}
+                className={`hidden rounded-full px-2 py-0.5 text-[11px] font-semibold sm:inline-flex sm:px-1.5 sm:py-0 sm:text-[9px] ${statusStyles[f.status]}`}
               >
                 {isCurrent ? 'Processing' : statusLabel[f.status]}
               </Badge>
 
-              <div className="flex items-center gap-0.5">
+              <div className="flex items-center gap-1">
                 {f.status === 'ready' && onPreviewOne && (
                   <button
                     onClick={() => onPreviewOne(f.id)}
-                    className="flex h-6 w-6 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+                    className="flex h-9 w-9 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary sm:h-6 sm:w-6"
                     aria-label={`Try settings on ${f.name}`}
                   >
-                    <Sparkle size={12} weight="duotone" />
+                    <Sparkle size={14} weight="duotone" className="sm:!h-3 sm:!w-3" />
                   </button>
                 )}
                 {f.status === 'error' && (
                   <button
                     onClick={() => onRetry(f.id)}
-                    className="flex h-6 w-6 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+                    className="flex h-9 w-9 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary sm:h-6 sm:w-6"
                     aria-label={`Retry ${f.name}`}
                   >
-                    <RotateCcw className="h-3 w-3" />
+                    <RotateCcw className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
                   </button>
                 )}
                 <button
                   onClick={() => onRemove(f.id)}
-                  className="flex h-6 w-6 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive"
+                  className="flex h-9 w-9 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive sm:h-6 sm:w-6"
                   aria-label={`Remove ${f.name}`}
                 >
-                  <X className="h-3 w-3" />
+                  <X className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
                 </button>
               </div>
             </motion.li>
