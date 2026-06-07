@@ -503,7 +503,7 @@ This is pure logic; it has no React dependencies. It's the heart of the image to
 
 **`toExt(mime)`** — `'image/webp' → '.webp'`, `'image/png' → '.png'`, `'image/avif' → '.avif'`, else `'.jpg'`.
 
-**`toDownloadFile(originalName, blob)`** — builds a `File` named `imagesqueeze_<base>.<ext>` with the right MIME.
+**`toDownloadFile(originalName, blob)`** — builds a `File` named `ls-image-compressor_<base>.<ext>` with the right MIME.
 
 **`calculateOptimalQuality(originalSize, targetSizeKB, outputFormat, hasTransforms)`:**
 - If `targetSizeKB` set:
@@ -518,7 +518,7 @@ This is pure logic; it has no React dependencies. It's the heart of the image to
 
 ### 5.8 `useSettings` hook (`src/hooks/useSettings.ts`)
 
-Owns the entire `Settings` object. Persists to `localStorage['imagesqueeze-settings']` on every change (try/catch swallows storage errors).
+Owns the entire `Settings` object. Persists to `localStorage['ls-image-compressor-settings']` on every change (try/catch swallows storage errors).
 
 **Default settings:**
 ```ts
@@ -565,7 +565,7 @@ Layout:
   - File ext badge + file name (truncated, hover for full)
   - Single "Download" button per file (`saveAs(f.processedFile, f.processedFile.name)`)
   - Clicking either thumbnail opens a `Dialog` with a side-by-side `ComparisonView`
-- **Download All as ZIP** button (gradient, full-width on mobile). If only 1 file, just downloads it directly. ZIP filename: `imagesqueeze_batch.zip`
+- **Download All as ZIP** button (gradient, full-width on mobile). If only 1 file, just downloads it directly. ZIP filename: `ls-image-compressor_batch.zip`
 - **Process More Images** ghost button — calls `onReset` (= `clearAll`)
 - **Share** row: Twitter / X, WhatsApp, Copy Link
 
@@ -581,7 +581,7 @@ Section under the hero. A **live crop preview** that visualizes the active socia
 
 ### 5.11 `HowItWorks`, `FeaturesGrid`, `FAQSection`, `ProTeaser`
 
-Landing-page sections, all `IntersectionObserver`-driven fade-ins, no state. `ProTeaser` is the only one with state — it has a "Join Waitlist" `Dialog` that just appends the email to `localStorage['imagesqueeze-waitlist']` (no backend).
+Landing-page sections, all `IntersectionObserver`-driven fade-ins, no state. `ProTeaser` is the only one with state — it has a "Join Waitlist" `Dialog` that just appends the email to `localStorage['ls-image-compressor-waitlist']` (no backend).
 
 ### 5.12 `PageDropOverlay` (`src/components/PageDropOverlay.tsx`)
 
@@ -650,7 +650,7 @@ Similar to `ResultsSection` but:
 - 3 inline stat tiles: **Total saved** / **Avg. reduction %** / **N/M Files** (using the same `useCountUp` hook)
 - Each file row: name + size arrow + new size + reduction badge + page count
 - Per-file **Preview** opens a `Dialog` with an `<iframe src={URL.createObjectURL(processedFile)}>` showing the PDF
-- Per-file **Download** and a single **Download all as ZIP** button (filename: `imagesqueeze_pdfs.zip`)
+- Per-file **Download** and a single **Download all as ZIP** button (filename: `ls-image-compressor_pdfs.zip`)
 
 ### 6.5 `usePdfUpload` hook (`src/hooks/usePdfUpload.ts`)
 
