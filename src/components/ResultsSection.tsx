@@ -215,21 +215,29 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
                 </div>
 
                 {/* After */}
-                <button
+                <motion.button
                   onClick={() => setPreviewFile(f)}
                   className="group/after flex flex-1 items-center gap-3 rounded-lg p-1 text-left transition-colors hover:bg-foreground/[0.03] sm:justify-end sm:text-right"
                   aria-label={`Preview compressed ${f.name}`}
+                  whileHover="hover"
+                  initial="rest"
                 >
                   <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl shadow-md sm:order-2 sm:h-14 sm:w-14">
-                    <img
+                    <motion.img
                       src={f.processedPreview}
                       alt={`Compressed ${f.name}`}
-                      className="h-full w-full object-cover transition-transform group-hover/after:scale-110"
+                      className="h-full w-full object-cover"
                       loading="lazy"
+                      variants={{ rest: { scale: 1 }, hover: { scale: 1.1 } }}
+                      transition={{ duration: 0.3, ease: 'easeOut' }}
                     />
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover/after:bg-black/30">
+                    <motion.div
+                      className="absolute inset-0 flex items-center justify-center bg-black/0"
+                      variants={{ rest: { backgroundColor: 'rgba(0,0,0,0)' }, hover: { backgroundColor: 'rgba(0,0,0,0.3)' } }}
+                      transition={{ duration: 0.25, ease: 'easeOut' }}
+                    >
                       <Eye className="h-4 w-4 text-white opacity-0 transition-opacity group-hover/after:opacity-100" />
-                    </div>
+                    </motion.div>
                     {isReduction && (
                       <div className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-emerald-500 shadow-md">
                         <Check className="h-3 w-3 text-white" strokeWidth={3} />
