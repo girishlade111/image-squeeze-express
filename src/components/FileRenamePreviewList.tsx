@@ -84,27 +84,27 @@ const FileRenamePreviewList = ({
       role="region"
       aria-label="File rename preview"
     >
-      <div className="mb-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <p className="text-xs font-semibold text-foreground">
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-sm font-semibold text-foreground sm:text-xs">
             {files.length} file{files.length !== 1 ? 's' : ''}
           </p>
           {changedCount > 0 ? (
             <Badge
               variant="outline"
-              className="rounded-full border-primary/30 bg-primary/10 px-2 py-0 text-[9px] font-semibold text-primary"
+              className="rounded-full border-primary/30 bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary sm:py-0 sm:text-[9px]"
             >
               {changedCount} renamed
             </Badge>
           ) : (
             <Badge
               variant="outline"
-              className="rounded-full border-border/40 bg-secondary/40 px-2 py-0 text-[9px] font-semibold text-muted-foreground"
+              className="rounded-full border-border/40 bg-secondary/40 px-2 py-0.5 text-[11px] font-semibold text-muted-foreground sm:py-0 sm:text-[9px]"
             >
               No changes yet
             </Badge>
           )}
-          <span className="text-[10px] text-muted-foreground">
+          <span className="text-xs text-muted-foreground sm:text-[10px]">
             · {formatBytes(totalSize)} total
           </span>
         </div>
@@ -112,16 +112,16 @@ const FileRenamePreviewList = ({
           <Button
             variant="ghost"
             size="sm"
-            className="h-6 rounded-full px-2 text-[10px] text-muted-foreground hover:text-foreground"
+            className="h-9 rounded-full px-3 text-xs text-muted-foreground hover:text-foreground sm:h-7 sm:px-2 sm:text-[10px]"
             onClick={onAddMore}
             aria-label="Add more files"
           >
-            <Plus className="mr-0.5 h-2.5 w-2.5" /> Add
+            <Plus className="mr-0.5 h-3.5 w-3.5 sm:h-2.5 sm:w-2.5" /> Add
           </Button>
           <Button
             variant="ghost"
             size="sm"
-            className="h-6 rounded-full px-2 text-[10px] text-muted-foreground hover:text-destructive"
+            className="h-9 rounded-full px-3 text-xs text-muted-foreground hover:text-destructive sm:h-7 sm:px-2 sm:text-[10px]"
             onClick={onClearAll}
             aria-label="Remove all files"
           >
@@ -139,7 +139,7 @@ const FileRenamePreviewList = ({
             exit={{ opacity: 0, height: 0 }}
             aria-live="polite"
           >
-            <div className="relative overflow-hidden rounded-full bg-secondary/50 h-1.5">
+            <div className="relative h-1.5 overflow-hidden rounded-full bg-secondary/50">
               <motion.div
                 className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary to-accent"
                 initial={{ width: 0 }}
@@ -147,7 +147,7 @@ const FileRenamePreviewList = ({
                 transition={{ duration: 0.2 }}
               />
             </div>
-            <p className="mt-1 text-center text-[10px] text-muted-foreground tabular-nums">
+            <p className="mt-1.5 text-center text-xs text-muted-foreground tabular-nums sm:text-[10px]">
               Building ZIP… {zipProgress}%
             </p>
           </motion.div>
@@ -168,12 +168,12 @@ const FileRenamePreviewList = ({
                 transition={{ duration: 0.18, delay: i * 0.01 }}
                 onMouseEnter={() => setHoverId(f.id)}
                 onMouseLeave={() => setHoverId(null)}
-                className="group relative rounded-xl border border-border/40 bg-card/60 p-2.5 transition-colors hover:border-primary/30"
+                className="group relative rounded-xl border border-border/40 bg-card/60 p-3 transition-colors hover:border-primary/30 sm:p-2.5"
               >
                 <div className="flex items-start gap-2.5">
-                  <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-secondary/40">
+                  <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-secondary/40 sm:h-9 sm:w-9">
                     <FileText
-                      className={`h-4 w-4 ${
+                      className={`h-5 w-5 sm:h-4 sm:w-4 ${
                         entry?.changed ? 'text-primary' : 'text-muted-foreground'
                       }`}
                       aria-hidden
@@ -183,13 +183,13 @@ const FileRenamePreviewList = ({
                     {entry?.changed ? (
                       <div className="space-y-0.5">
                         <p
-                          className="truncate text-[11px] text-muted-foreground line-through"
+                          className="truncate text-sm text-muted-foreground line-through sm:text-[11px]"
                           title={entry.originalName}
                         >
                           {truncate(entry.originalName, 50)}
                         </p>
                         <p
-                          className="truncate font-mono text-[12px] font-semibold text-foreground"
+                          className="truncate font-mono text-sm font-semibold text-foreground sm:text-[12px]"
                           title={entry.renamedName}
                         >
                           {highlightDiff(entry.originalName, entry.renamedName)}
@@ -197,13 +197,13 @@ const FileRenamePreviewList = ({
                       </div>
                     ) : (
                       <p
-                        className="truncate font-mono text-[12px] text-foreground"
+                        className="truncate font-mono text-sm text-foreground sm:text-[12px]"
                         title={f.name}
                       >
                         {truncate(f.name, 60)}
                       </p>
                     )}
-                    <p className="mt-0.5 text-[10px] text-muted-foreground">
+                    <p className="mt-0.5 text-xs text-muted-foreground sm:text-[10px]">
                       {formatBytes(f.size)}
                       {f.type && f.type !== 'application/octet-stream' && (
                         <> · {f.type.split('/').pop()?.toUpperCase()}</>
@@ -214,12 +214,12 @@ const FileRenamePreviewList = ({
                     onClick={() => onRemove(f.id)}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className={`flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-destructive text-destructive-foreground shadow-sm transition-opacity sm:h-6 sm:w-6 ${
+                    className={`flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-destructive text-destructive-foreground shadow-sm transition-opacity sm:h-7 sm:w-7 ${
                       hoverId === f.id ? 'opacity-100' : 'opacity-100 sm:opacity-0 sm:group-hover:opacity-100'
                     }`}
                     aria-label={`Remove ${f.name}`}
                   >
-                    <X className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
+                    <X className="h-4 w-4 sm:h-3 sm:w-3" />
                   </motion.button>
                 </div>
               </motion.div>
@@ -234,15 +234,15 @@ const FileRenamePreviewList = ({
           size="sm"
           onClick={onReset}
           disabled={isZipping}
-          className="h-9 rounded-full px-3 text-[11px] text-muted-foreground hover:text-foreground"
+          className="h-10 rounded-full px-3 text-xs text-muted-foreground hover:text-foreground sm:h-9 sm:text-[11px]"
           aria-label="Reset all rules"
         >
-          <RotateCcw className="mr-1.5 h-3 w-3" /> Clear rules
+          <RotateCcw className="mr-1.5 h-3.5 w-3.5 sm:h-3 sm:w-3" /> Clear rules
         </Button>
         <Button
           onClick={onDownload}
           disabled={isZipping || files.length === 0}
-          className="h-10 rounded-xl text-sm font-semibold text-primary-foreground shadow-md"
+          className="h-12 rounded-xl text-base font-semibold text-primary-foreground shadow-md sm:h-10 sm:text-sm"
           style={{
             background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
           }}
@@ -250,12 +250,12 @@ const FileRenamePreviewList = ({
         >
           {isZipping ? (
             <>
-              <Loader2 className="mr-1.5 h-4 w-4 animate-spin" />
+              <Loader2 className="mr-1.5 h-5 w-5 animate-spin sm:h-4 sm:w-4" />
               Building ZIP…
             </>
           ) : (
             <>
-              <Download className="mr-1.5 h-4 w-4" />
+              <Download className="mr-1.5 h-5 w-5 sm:h-4 sm:w-4" />
               Download renamed ZIP
             </>
           )}

@@ -270,13 +270,13 @@ const FileRenameRuleBuilder = ({
                         onAdd(t.factory());
                         setShowAdd(false);
                       }}
-                      className="flex flex-col items-start gap-0.5 rounded-lg border border-border/40 bg-background/40 p-2 text-left transition-all hover:border-primary/40 hover:bg-primary/5"
+                      className="flex min-h-[64px] flex-col items-start gap-0.5 rounded-lg border border-border/40 bg-background/40 p-2.5 text-left transition-all hover:border-primary/40 hover:bg-primary/5 sm:min-h-0 sm:p-2"
                     >
-                      <div className="flex items-center gap-1 text-[11px] font-semibold">
-                        <Icon className="h-3 w-3 text-primary" aria-hidden />
+                      <div className="flex items-center gap-1 text-sm font-semibold sm:text-[11px]">
+                        <Icon className="h-4 w-4 text-primary sm:h-3 sm:w-3" aria-hidden />
                         {t.label}
                       </div>
-                      <span className="text-[9px] text-muted-foreground leading-tight">
+                      <span className="text-[11px] text-muted-foreground leading-tight sm:text-[9px]">
                         {t.desc}
                       </span>
                     </button>
@@ -305,13 +305,13 @@ const FileRenameRuleBuilder = ({
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.95, y: -4 }}
                 transition={{ duration: 0.15 }}
-                className="rounded-xl border border-border/40 bg-background/40 p-2.5"
+                className="rounded-xl border border-border/40 bg-background/40 p-3 sm:p-2.5"
               >
                 <div className="flex items-center gap-1.5">
-                  <span className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-primary/15 text-[10px] font-bold text-primary">
+                  <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-primary/15 text-[11px] font-bold text-primary sm:h-5 sm:w-5 sm:text-[10px]">
                     {index + 1}
                   </span>
-                  <span className="text-[11px] font-semibold capitalize">
+                  <span className="text-sm font-semibold capitalize sm:text-[11px]">
                     {KIND_LABELS[rule.kind]}
                   </span>
                   <div className="ml-auto flex items-center gap-0.5">
@@ -320,10 +320,10 @@ const FileRenameRuleBuilder = ({
                         <button
                           onClick={() => onMove(index, -1)}
                           disabled={index === 0}
-                          className="flex h-8 w-8 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary disabled:opacity-30 sm:h-6 sm:w-6"
+                          className="flex h-10 w-10 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary disabled:opacity-30 sm:h-7 sm:w-7"
                           aria-label="Move rule up"
                         >
-                          <ArrowUp className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
+                          <ArrowUp className="h-4 w-4 sm:h-3 sm:w-3" />
                         </button>
                       </TooltipTrigger>
                       <TooltipContent>Move up</TooltipContent>
@@ -333,10 +333,10 @@ const FileRenameRuleBuilder = ({
                         <button
                           onClick={() => onMove(index, 1)}
                           disabled={index === rules.length - 1}
-                          className="flex h-8 w-8 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary disabled:opacity-30 sm:h-6 sm:w-6"
+                          className="flex h-10 w-10 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary disabled:opacity-30 sm:h-7 sm:w-7"
                           aria-label="Move rule down"
                         >
-                          <ArrowDown className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
+                          <ArrowDown className="h-4 w-4 sm:h-3 sm:w-3" />
                         </button>
                       </TooltipTrigger>
                       <TooltipContent>Move down</TooltipContent>
@@ -345,10 +345,10 @@ const FileRenameRuleBuilder = ({
                       <TooltipTrigger asChild>
                         <button
                           onClick={() => onRemove(index)}
-                          className="flex h-8 w-8 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive sm:h-6 sm:w-6"
+                          className="flex h-10 w-10 items-center justify-center rounded text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive sm:h-7 sm:w-7"
                           aria-label="Remove rule"
                         >
-                          <Trash2 className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
+                          <Trash2 className="h-4 w-4 sm:h-3 sm:w-3" />
                         </button>
                       </TooltipTrigger>
                       <TooltipContent>Remove</TooltipContent>
@@ -382,33 +382,33 @@ function RuleEditor({
             value={rule.find}
             onChange={(e) => onChange({ find: e.target.value })}
             placeholder="Find (text or /regex/)"
-            className="h-7 text-[11px]"
+            className="h-11 text-sm sm:h-7 sm:text-[11px]"
             aria-label="Find text"
           />
           <Input
             value={rule.replace}
             onChange={(e) => onChange({ replace: e.target.value })}
             placeholder="Replace with"
-            className="h-7 text-[11px]"
+            className="h-11 text-sm sm:h-7 sm:text-[11px]"
             aria-label="Replacement text"
           />
         </div>
-        <div className="flex flex-wrap items-center gap-1.5 text-[10px]">
-          <label className="flex items-center gap-1 text-muted-foreground">
+        <div className="flex flex-wrap items-center gap-3 text-xs sm:gap-2.5 sm:text-[10px]">
+          <label className="flex min-h-[32px] items-center gap-2 text-muted-foreground sm:min-h-0 sm:gap-1">
             <input
               type="checkbox"
               checked={rule.mode === 'regex'}
               onChange={(e) => onChange({ mode: (e.target.checked ? 'regex' : 'plain') as ReplaceMode })}
-              className="h-3 w-3 accent-[hsl(var(--primary))]"
+              className="h-4 w-4 accent-[hsl(var(--primary))] sm:h-3 sm:w-3"
             />
             Regex
           </label>
-          <label className="flex items-center gap-1 text-muted-foreground">
+          <label className="flex min-h-[32px] items-center gap-2 text-muted-foreground sm:min-h-0 sm:gap-1">
             <input
               type="checkbox"
               checked={!rule.caseSensitive}
               onChange={(e) => onChange({ caseSensitive: !e.target.checked })}
-              className="h-3 w-3 accent-[hsl(var(--primary))]"
+              className="h-4 w-4 accent-[hsl(var(--primary))] sm:h-3 sm:w-3"
             />
             Case-insensitive
           </label>
@@ -423,7 +423,7 @@ function RuleEditor({
         value={rule.text}
         onChange={(e) => onChange({ text: e.target.value } as Partial<RenameRule>)}
         placeholder={rule.kind === 'prefix' ? 'Text to prepend…' : 'Text to append…'}
-        className="h-7 text-[11px]"
+        className="h-11 text-sm sm:h-7 sm:text-[11px]"
         aria-label={rule.kind === 'prefix' ? 'Prefix text' : 'Suffix text'}
       />
     );
@@ -433,11 +433,11 @@ function RuleEditor({
     return (
       <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
         <div>
-          <label className="text-[9px] text-muted-foreground">Position</label>
+          <label className="text-[11px] text-muted-foreground sm:text-[9px]">Position</label>
           <select
             value={rule.position}
             onChange={(e) => onChange({ position: e.target.value as 'start' | 'end' })}
-            className="h-7 w-full rounded-md border border-border/40 bg-background/40 px-1.5 text-[11px]"
+            className="h-11 w-full rounded-md border border-border/40 bg-background/40 px-2 text-sm sm:h-7 sm:px-1.5 sm:text-[11px]"
             aria-label="Number position"
           >
             <option value="start">Start</option>
@@ -445,26 +445,26 @@ function RuleEditor({
           </select>
         </div>
         <div>
-          <label className="text-[9px] text-muted-foreground">Separator</label>
+          <label className="text-[11px] text-muted-foreground sm:text-[9px]">Separator</label>
           <Input
             value={rule.separator}
             onChange={(e) => onChange({ separator: e.target.value })}
-            className="h-7 text-[11px]"
+            className="h-11 text-sm sm:h-7 sm:text-[11px]"
             aria-label="Separator"
           />
         </div>
         <div>
-          <label className="text-[9px] text-muted-foreground">Start</label>
+          <label className="text-[11px] text-muted-foreground sm:text-[9px]">Start</label>
           <Input
             type="number"
             value={rule.start}
             onChange={(e) => onChange({ start: Math.max(0, Number(e.target.value) || 0) })}
-            className="h-7 text-[11px]"
+            className="h-11 text-sm sm:h-7 sm:text-[11px]"
             aria-label="Starting number"
           />
         </div>
         <div>
-          <label className="text-[9px] text-muted-foreground">Pad</label>
+          <label className="text-[11px] text-muted-foreground sm:text-[9px]">Pad</label>
           <Input
             type="number"
             min={0}
@@ -473,7 +473,7 @@ function RuleEditor({
             onChange={(e) =>
               onChange({ pad: Math.max(0, Math.min(10, Number(e.target.value) || 0)) })
             }
-            className="h-7 text-[11px]"
+            className="h-11 text-sm sm:h-7 sm:text-[11px]"
             aria-label="Number padding"
           />
         </div>
@@ -489,13 +489,13 @@ function RuleEditor({
       { value: 'sentence', label: 'Sentence case' },
     ];
     return (
-      <div className="grid grid-cols-4 gap-1">
+      <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4 sm:gap-1">
         {cases.map((c) => (
           <button
             key={c.value}
             onClick={() => onChange({ mode: c.value } as Partial<RenameRule>)}
             aria-pressed={rule.mode === c.value}
-            className={`rounded-md border px-1.5 py-1 text-[10px] font-semibold transition-all ${
+            className={`flex min-h-[44px] items-center justify-center rounded-md border px-2 py-1.5 text-sm font-semibold transition-all sm:min-h-0 sm:px-1.5 sm:py-1 sm:text-[10px] ${
               rule.mode === c.value
                 ? 'border-primary bg-primary/10 text-primary'
                 : 'border-border/40 hover:border-primary/30'
@@ -516,13 +516,13 @@ function RuleEditor({
       { value: 'none', label: 'a b' },
     ];
     return (
-      <div className="grid grid-cols-4 gap-1">
+      <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4 sm:gap-1">
         {modes.map((m) => (
           <button
             key={m.value}
             onClick={() => onChange({ mode: m.value } as Partial<RenameRule>)}
             aria-pressed={rule.mode === m.value}
-            className={`rounded-md border px-1.5 py-1 text-[10px] font-mono font-semibold transition-all ${
+            className={`flex min-h-[44px] items-center justify-center rounded-md border px-2 py-1.5 font-mono text-sm font-semibold transition-all sm:min-h-0 sm:px-1.5 sm:py-1 sm:text-[10px] ${
               rule.mode === m.value
                 ? 'border-primary bg-primary/10 text-primary'
                 : 'border-border/40 hover:border-primary/30'
@@ -541,7 +541,7 @@ function RuleEditor({
         value={rule.chars}
         onChange={(e) => onChange({ chars: e.target.value } as Partial<RenameRule>)}
         placeholder="Characters to strip (e.g. #@!)"
-        className="h-7 text-[11px]"
+        className="h-11 text-sm sm:h-7 sm:text-[11px]"
         aria-label="Characters to remove"
       />
     );
@@ -561,11 +561,11 @@ function RuleEditor({
       <div className="space-y-1.5">
         <div className="grid grid-cols-2 gap-1.5">
           <div>
-            <label className="text-[9px] text-muted-foreground">Format</label>
+            <label className="text-[11px] text-muted-foreground sm:text-[9px]">Format</label>
             <select
               value={rule.format}
               onChange={(e) => onChange({ format: e.target.value as DateFormat })}
-              className="h-7 w-full rounded-md border border-border/40 bg-background/40 px-1.5 text-[11px]"
+              className="h-11 w-full rounded-md border border-border/40 bg-background/40 px-2 text-sm sm:h-7 sm:px-1.5 sm:text-[11px]"
               aria-label="Date format"
             >
               {formats.map((f) => (
@@ -576,22 +576,22 @@ function RuleEditor({
             </select>
           </div>
           <div>
-            <label className="text-[9px] text-muted-foreground">Separator</label>
+            <label className="text-[11px] text-muted-foreground sm:text-[9px]">Separator</label>
             <Input
               value={rule.separator}
               onChange={(e) => onChange({ separator: e.target.value })}
-              className="h-7 text-[11px]"
+              className="h-11 text-sm sm:h-7 sm:text-[11px]"
               aria-label="Date separator"
             />
           </div>
         </div>
-        <div className="grid grid-cols-3 gap-1">
+        <div className="grid grid-cols-3 gap-1.5 sm:gap-1">
           {(['start', 'end'] as const).map((p) => (
             <button
               key={p}
               onClick={() => onChange({ position: p })}
               aria-pressed={rule.position === p}
-              className={`rounded-md border px-1.5 py-1 text-[10px] font-semibold transition-all ${
+              className={`flex min-h-[44px] items-center justify-center rounded-md border px-2 py-1.5 text-sm font-semibold transition-all sm:min-h-0 sm:px-1.5 sm:py-1 sm:text-[10px] ${
                 rule.position === p
                   ? 'border-primary bg-primary/10 text-primary'
                   : 'border-border/40 hover:border-primary/30'
@@ -600,12 +600,12 @@ function RuleEditor({
               {p === 'start' ? 'Prefix' : 'Suffix'}
             </button>
           ))}
-          <label className="col-span-1 flex items-center justify-center gap-1 rounded-md border border-border/40 bg-background/40 px-1.5 py-1 text-[10px] text-muted-foreground">
+          <label className="col-span-1 flex min-h-[44px] cursor-pointer items-center justify-center gap-2 rounded-md border border-border/40 bg-background/40 px-2 text-xs text-muted-foreground sm:min-h-0 sm:gap-1 sm:px-1.5 sm:py-1 sm:text-[10px]">
             <input
               type="checkbox"
               checked={rule.useCurrent}
               onChange={(e) => onChange({ useCurrent: e.target.checked })}
-              className="h-3 w-3 accent-[hsl(var(--primary))]"
+              className="h-4 w-4 accent-[hsl(var(--primary))] sm:h-3 sm:w-3"
             />
             Now
           </label>
@@ -616,12 +616,12 @@ function RuleEditor({
 
   if (rule.kind === 'insertAt') {
     return (
-      <div className="flex items-center gap-1.5">
+      <div className="flex flex-wrap items-center gap-1.5">
         <Input
           type="number"
           value={rule.index}
           onChange={(e) => onChange({ index: Number(e.target.value) || 0 })}
-          className="h-7 w-20 text-[11px]"
+          className="h-11 w-24 text-sm sm:h-7 sm:w-20 sm:text-[11px]"
           aria-label="Insert position"
           placeholder="0"
         />
@@ -629,10 +629,10 @@ function RuleEditor({
           value={rule.text}
           onChange={(e) => onChange({ text: e.target.value })}
           placeholder="Text to insert…"
-          className="h-7 text-[11px]"
+          className="h-11 min-w-0 flex-1 text-sm sm:h-7 sm:text-[11px]"
           aria-label="Text to insert"
         />
-        <span className="text-[9px] text-muted-foreground">-ve = from end</span>
+        <span className="text-[11px] text-muted-foreground sm:text-[9px]">-ve = from end</span>
       </div>
     );
   }
@@ -647,13 +647,13 @@ function RuleEditor({
     const isTruncate = rule.mode === 'truncate';
     return (
       <div className="space-y-1.5">
-        <div className="grid grid-cols-4 gap-1">
+        <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4 sm:gap-1">
           {modes.map((m) => (
             <button
               key={m.value}
               onClick={() => onChange({ mode: m.value })}
               aria-pressed={rule.mode === m.value}
-              className={`rounded-md border px-1.5 py-1 text-[10px] font-semibold transition-all ${
+              className={`flex min-h-[44px] items-center justify-center rounded-md border px-2 py-1.5 text-sm font-semibold transition-all sm:min-h-0 sm:px-1.5 sm:py-1 sm:text-[10px] ${
                 rule.mode === m.value
                   ? 'border-primary bg-primary/10 text-primary'
                   : 'border-border/40 hover:border-primary/30'
@@ -663,10 +663,10 @@ function RuleEditor({
             </button>
           ))}
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-1.5">
           {isTruncate ? (
             <>
-              <label className="text-[9px] text-muted-foreground">Max length</label>
+              <label className="text-[11px] text-muted-foreground sm:text-[9px]">Max length</label>
               <Input
                 type="number"
                 min={1}
@@ -674,22 +674,22 @@ function RuleEditor({
                 onChange={(e) =>
                   onChange({ maxLength: Math.max(1, Number(e.target.value) || 1) })
                 }
-                className="h-7 w-16 text-[11px]"
+                className="h-11 w-20 text-sm sm:h-7 sm:w-16 sm:text-[11px]"
                 aria-label="Max length"
               />
-              <label className="ml-1 flex items-center gap-1 text-[10px] text-muted-foreground">
+              <label className="ml-1 flex min-h-[32px] cursor-pointer items-center gap-2 text-xs text-muted-foreground sm:min-h-0 sm:gap-1 sm:text-[10px]">
                 <input
                   type="checkbox"
                   checked={rule.ellipsis}
                   onChange={(e) => onChange({ ellipsis: e.target.checked })}
-                  className="h-3 w-3 accent-[hsl(var(--primary))]"
+                  className="h-4 w-4 accent-[hsl(var(--primary))] sm:h-3 sm:w-3"
                 />
                 ...
               </label>
             </>
           ) : (
             <>
-              <label className="text-[9px] text-muted-foreground">Chars</label>
+              <label className="text-[11px] text-muted-foreground sm:text-[9px]">Chars</label>
               <Input
                 type="number"
                 min={0}
@@ -697,7 +697,7 @@ function RuleEditor({
                 onChange={(e) =>
                   onChange({ count: Math.max(0, Number(e.target.value) || 0) })
                 }
-                className="h-7 w-16 text-[11px]"
+                className="h-11 w-20 text-sm sm:h-7 sm:w-16 sm:text-[11px]"
                 aria-label="Character count"
               />
             </>
@@ -716,13 +716,13 @@ function RuleEditor({
     ];
     return (
       <div className="space-y-1.5">
-        <div className="grid grid-cols-4 gap-1">
+        <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4 sm:gap-1">
           {modes.map((m) => (
             <button
               key={m.value}
               onClick={() => onChange({ mode: m.value })}
               aria-pressed={rule.mode === m.value}
-              className={`rounded-md border px-1.5 py-1 text-[10px] font-semibold transition-all ${
+              className={`flex min-h-[44px] items-center justify-center rounded-md border px-2 py-1.5 text-sm font-semibold transition-all sm:min-h-0 sm:px-1.5 sm:py-1 sm:text-[10px] ${
                 rule.mode === m.value
                   ? 'border-primary bg-primary/10 text-primary'
                   : 'border-border/40 hover:border-primary/30'
@@ -737,7 +737,7 @@ function RuleEditor({
             value={rule.extension ?? ''}
             onChange={(e) => onChange({ extension: e.target.value })}
             placeholder=".jpg (leading dot optional)"
-            className="h-7 text-[11px]"
+            className="h-11 text-sm sm:h-7 sm:text-[11px]"
             aria-label="New extension"
           />
         )}
@@ -750,14 +750,14 @@ function RuleEditor({
       <div className="space-y-1.5">
         <div className="grid grid-cols-2 gap-1.5">
           <div>
-            <label className="text-[9px] text-muted-foreground">Find in</label>
+            <label className="text-[11px] text-muted-foreground sm:text-[9px]">Find in</label>
             <div className="grid grid-cols-2 gap-1">
               {(['first', 'last'] as const).map((w) => (
                 <button
                   key={w}
                   onClick={() => onChange({ where: w as CounterWhere })}
                   aria-pressed={rule.where === w}
-                  className={`rounded-md border px-1.5 py-1 text-[10px] font-semibold capitalize transition-all ${
+                  className={`flex min-h-[44px] items-center justify-center rounded-md border px-2 py-1.5 text-sm font-semibold capitalize transition-all sm:min-h-0 sm:px-1.5 sm:py-1 sm:text-[10px] ${
                     rule.where === w
                       ? 'border-primary bg-primary/10 text-primary'
                       : 'border-border/40 hover:border-primary/30'
@@ -769,14 +769,14 @@ function RuleEditor({
             </div>
           </div>
           <div>
-            <label className="text-[9px] text-muted-foreground">Place at</label>
+            <label className="text-[11px] text-muted-foreground sm:text-[9px]">Place at</label>
             <div className="grid grid-cols-2 gap-1">
               {(['start', 'end'] as const).map((p) => (
                 <button
                   key={p}
                   onClick={() => onChange({ position: p })}
                   aria-pressed={rule.position === p}
-                  className={`rounded-md border px-1.5 py-1 text-[10px] font-semibold capitalize transition-all ${
+                  className={`flex min-h-[44px] items-center justify-center rounded-md border px-2 py-1.5 text-sm font-semibold capitalize transition-all sm:min-h-0 sm:px-1.5 sm:py-1 sm:text-[10px] ${
                     rule.position === p
                       ? 'border-primary bg-primary/10 text-primary'
                       : 'border-border/40 hover:border-primary/30'
@@ -790,16 +790,16 @@ function RuleEditor({
         </div>
         <div className="grid grid-cols-3 gap-1.5">
           <div>
-            <label className="text-[9px] text-muted-foreground">Sep</label>
+            <label className="text-[11px] text-muted-foreground sm:text-[9px]">Sep</label>
             <Input
               value={rule.separator}
               onChange={(e) => onChange({ separator: e.target.value })}
-              className="h-7 text-[11px]"
+              className="h-11 text-sm sm:h-7 sm:text-[11px]"
               aria-label="Separator"
             />
           </div>
           <div>
-            <label className="text-[9px] text-muted-foreground">Pad</label>
+            <label className="text-[11px] text-muted-foreground sm:text-[9px]">Pad</label>
             <Input
               type="number"
               min={0}
@@ -808,19 +808,19 @@ function RuleEditor({
               onChange={(e) =>
                 onChange({ pad: Math.max(0, Math.min(10, Number(e.target.value) || 0)) })
               }
-              className="h-7 text-[11px]"
+              className="h-11 text-sm sm:h-7 sm:text-[11px]"
               aria-label="Counter padding"
             />
           </div>
           <div>
-            <label className="text-[9px] text-muted-foreground">Fallback</label>
+            <label className="text-[11px] text-muted-foreground sm:text-[9px]">Fallback</label>
             <Input
               type="number"
               value={rule.fallbackStart}
               onChange={(e) =>
                 onChange({ fallbackStart: Math.max(0, Number(e.target.value) || 0) })
               }
-              className="h-7 text-[11px]"
+              className="h-11 text-sm sm:h-7 sm:text-[11px]"
               aria-label="Fallback start"
             />
           </div>
@@ -831,7 +831,7 @@ function RuleEditor({
 
   if (rule.kind === 'reverse') {
     return (
-      <p className="text-[10px] text-muted-foreground">
+      <p className="text-xs text-muted-foreground sm:text-[10px]">
         Reverses the order of every character in the base name.
         <br />
         <span className="font-mono">photo → otohp</span>
