@@ -130,7 +130,7 @@ const ProfileImage = ({
           <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500 opacity-50" />
         </span>
       )}
-    </div>
+    </motion.div>
   );
 };
 
