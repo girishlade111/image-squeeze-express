@@ -4,12 +4,11 @@ import {
   clearHistory,
   deleteHistoryEntry,
   downloadHistoryEntry,
+  HISTORY_UPDATED_EVENT,
   loadHistory,
   type HistoryEntry,
   type HistoryTool,
 } from '@/utils/historyStorage';
-
-const HISTORY_UPDATED_EVENT = 'ls-image-compressor-history-updated';
 
 const useHistory = (tool: HistoryTool | 'all' = 'all') => {
   const [entries, setEntries] = useState<HistoryEntry[]>(() => loadHistory());
