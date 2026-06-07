@@ -419,6 +419,33 @@
   .tap-target { min-height: 2.75rem; min-width: 2.75rem; }
   .tap-target-sm { min-height: 2.25rem; min-width: 2.25rem; }
 
+  /* === Minimum readable type on mobile ===
+     9-10px is unreadable on phones; use these tokens for non-critical labels
+     while the rest of the app reads at >= 12px on small screens. */
+  .type-micro { font-size: 0.6875rem; line-height: 1rem; }      /* 11px */
+  .type-mini  { font-size: 0.75rem;   line-height: 1.1rem; }    /* 12px */
+  .type-tiny  { font-size: 0.8125rem; line-height: 1.2rem; }    /* 13px */
+
+  /* === Mobile-first horizontal scroll snap for tag rows === */
+  .snap-row {
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  .snap-row > * { scroll-snap-align: start; }
+
+  /* === Prevent body scroll when a modal is open (fallback) === */
+  .lock-scroll { overflow: hidden; touch-action: none; }
+
+  /* === Safe-area aware sticky bottom bar (used by MobileActionBar) === */
+  .safe-bottom {
+    padding-bottom: calc(env(safe-area-inset-bottom) + 0.75rem);
+  }
+
+  /* === Better focus ring on tap for non-keyboard users === */
+  @media (hover: none) {
+    :focus { outline: none; }
+  }
+
   /* === Scrollbar utilities === */
   .scrollbar-hide {
     -ms-overflow-style: none;
