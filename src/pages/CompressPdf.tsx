@@ -2,6 +2,7 @@ import { useCallback, useRef, useState, useMemo, lazy, Suspense } from 'react';
 import Header from '@/components/Header';
 import ToolHero from '@/components/ToolHero';
 import PdfUploadZone from '@/components/PdfUploadZone';
+import LazySection from '@/components/LazySection';
 import { BlockSkeleton, CardSkeleton } from '@/components/Skeleton';
 import { usePdfUpload } from '@/hooks/usePdfUpload';
 import { useClipboardPaste } from '@/hooks/useClipboardPaste';
