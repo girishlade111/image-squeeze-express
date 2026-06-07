@@ -61,9 +61,13 @@ const Footer = () => {
             {/* Brand block */}
             <div className="lg:col-span-4">
               <Link to="/" className="inline-flex items-center gap-2 group min-h-[44px]">
-                <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-primary/20 bg-gradient-to-br from-primary/20 to-accent/20 text-primary">
-                  <Lightning size={20} weight="duotone" />
-                </div>
+                <img
+                  src="/logo-mark.svg"
+                  alt=""
+                  width={40}
+                  height={40}
+                  className="h-10 w-10"
+                />
                 <span
                   className="text-base font-bold tracking-tight sm:text-lg"
                   style={{
