@@ -232,21 +232,26 @@ const FeatureCard = ({
               animate={{ scale: [1, 1.25, 1], opacity: [0.3, 0.6, 0.3] }}
               transition={{ duration: 3.5, repeat: Infinity, ease: 'easeInOut' }}
             />
-            <div
-              className="relative flex h-14 w-14 items-center justify-center rounded-2xl border transition-transform duration-500 group-hover:scale-110 group-hover:rotate-3"
+            <motion.div
+              className="relative flex h-14 w-14 items-center justify-center rounded-2xl border"
               style={{
                 background: isAccent
                   ? 'linear-gradient(135deg, hsl(var(--accent) / 0.15), hsl(var(--primary) / 0.1))'
                   : 'linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--accent) / 0.1))',
                 borderColor: 'hsl(var(--border) / 0.5)',
               }}
+              variants={{
+                rest: { scale: 1, rotate: 0 },
+                hover: { scale: 1.1, rotate: 3 },
+              }}
+              transition={{ duration: 0.4, ease: 'easeOut' }}
             >
               <Icon
                 size={28}
                 weight="duotone"
                 className={isAccent ? 'h-7 w-7 text-primary/80' : 'h-7 w-7 text-primary'}
               />
-            </div>
+            </motion.div>
           </div>
 
           {/* Number badge + meta pill */}
