@@ -175,7 +175,7 @@ const SettingsPanel = ({
             {/* Quick quality presets */}
             <div>
               <div className="mb-2 flex items-center justify-between">
-                <Label className="text-xs font-semibold">Quick Preset</Label>
+                <Label className="text-sm font-semibold sm:text-xs">Quick Preset</Label>
               </div>
               <div className="grid grid-cols-4 gap-1.5">
                 {qualityPresets.map((p) => (
@@ -184,14 +184,14 @@ const SettingsPanel = ({
                     onClick={() => onApplyPreset(p.value)}
                     aria-pressed={settings.qualityPreset === p.value}
                     aria-label={`${p.label} quality preset`}
-                    className={`flex flex-col items-center gap-0.5 rounded-lg border p-2 text-center transition-all ${
+                    className={`flex min-h-[44px] flex-col items-center justify-center gap-0.5 rounded-lg border p-2 text-center transition-all ${
                       settings.qualityPreset === p.value
                         ? 'border-primary bg-primary/10 text-primary'
                         : 'border-border/40 hover:border-primary/30 hover:bg-primary/5'
                     }`}
                   >
-                    <span className="text-[11px] font-semibold">{p.label}</span>
-                    <span className="text-[9px] text-muted-foreground">{p.quality}%</span>
+                    <span className="text-sm font-semibold sm:text-[11px]">{p.label}</span>
+                    <span className="text-[11px] text-muted-foreground sm:text-[9px]">{p.quality}%</span>
                   </button>
                 ))}
               </div>
@@ -201,10 +201,10 @@ const SettingsPanel = ({
             <div>
               <div className="mb-1.5 flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <Label className="text-xs font-semibold">Quality</Label>
+                  <Label className="text-sm font-semibold sm:text-xs">Quality</Label>
                   <InfoTip>Higher = better quality, larger file. Lower = smaller file, slight quality loss.</InfoTip>
                 </div>
-                <span className="text-xs font-bold tabular-nums text-primary">
+                <span className="text-sm font-bold tabular-nums text-primary sm:text-xs">
                   {settings.lossless
                     ? 'Lossless'
                     : settings.autoOptimize
@@ -222,7 +222,7 @@ const SettingsPanel = ({
                 disabled={settings.lossless}
                 aria-label="Compression quality"
               />
-              <div className="mt-1.5 flex items-center justify-between text-[10px] text-muted-foreground">
+              <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground sm:mt-1.5 sm:text-[10px]">
                 <span className="inline-flex items-center gap-1">
                   {settings.lossless ? (
                     <>
@@ -247,12 +247,12 @@ const SettingsPanel = ({
             </div>
 
             {/* Auto optimize */}
-            <div className="flex items-center justify-between rounded-xl bg-secondary/50 px-3 py-2.5">
-              <div className="flex items-center gap-1.5">
-                <Sparkle size={14} weight="duotone" className="text-primary" />
-                <div>
-                  <Label className="text-xs font-semibold">Auto Optimize</Label>
-                  <p className="text-[10px] text-muted-foreground">Picks best quality automatically</p>
+            <div className="flex items-center justify-between gap-3 rounded-xl bg-secondary/50 px-3 py-3 sm:py-2.5">
+              <div className="flex min-w-0 flex-1 items-center gap-2">
+                <Sparkle size={16} weight="duotone" className="text-primary sm:h-3.5 sm:w-3.5" />
+                <div className="min-w-0">
+                  <Label className="text-sm font-semibold sm:text-xs">Auto Optimize</Label>
+                  <p className="text-[11px] text-muted-foreground sm:text-[10px]">Picks best quality automatically</p>
                 </div>
               </div>
               <Switch
@@ -267,7 +267,7 @@ const SettingsPanel = ({
             {/* Target size */}
             <div>
               <div className="mb-1.5 flex items-center gap-1.5">
-                <Label className="text-xs font-semibold">Target File Size (KB)</Label>
+                <Label className="text-sm font-semibold sm:text-xs">Target File Size (KB)</Label>
                 <InfoTip>The engine will iteratively reduce quality until the output fits this size.</InfoTip>
               </div>
               <Input
@@ -282,24 +282,24 @@ const SettingsPanel = ({
                     autoOptimize: e.target.value ? true : settings.autoOptimize,
                   })
                 }
-                className="rounded-lg"
+                className="h-11 rounded-lg sm:h-9"
                 aria-label="Target file size in KB"
               />
             </div>
 
             {/* Lossless mode */}
-            <div className="flex items-center justify-between rounded-xl bg-secondary/50 px-3 py-2.5">
-              <div className="flex items-center gap-1.5">
-                <FileText className="h-3.5 w-3.5 text-primary" />
-                <div>
+            <div className="flex items-center justify-between gap-3 rounded-xl bg-secondary/50 px-3 py-3 sm:py-2.5">
+              <div className="flex min-w-0 flex-1 items-center gap-2">
+                <FileText className="h-4 w-4 text-primary sm:h-3.5 sm:w-3.5" />
+                <div className="min-w-0">
                   <div className="flex items-center gap-1">
-                    <Label className="text-xs font-semibold">Lossless</Label>
+                    <Label className="text-sm font-semibold sm:text-xs">Lossless</Label>
                     <InfoTip>
                       Skip quality reduction and encode without any quality loss. Only applies to WebP
                       and PNG output — JPEG and AVIF are always lossy.
                     </InfoTip>
                   </div>
-                  <p className="text-[10px] text-muted-foreground">
+                  <p className="text-[11px] text-muted-foreground sm:text-[10px]">
                     No quality loss · larger files
                   </p>
                 </div>
@@ -315,10 +315,10 @@ const SettingsPanel = ({
             <div>
               <div className="mb-1.5 flex items-center justify-between">
                 <div className="flex items-center gap-1.5">
-                  <Label className="text-xs font-semibold">Output Filename</Label>
+                  <Label className="text-sm font-semibold sm:text-xs">Output Filename</Label>
                   <InfoTip>
                     Customize how renamed files are named. Tokens like{' '}
-                    <code className="rounded bg-foreground/10 px-1 text-[10px]">{'{name}'}</code> are
+                    <code className="rounded bg-foreground/10 px-1 text-[11px]">{'{name}'}</code> are
                     replaced with the file's actual values.
                   </InfoTip>
                 </div>
@@ -326,20 +326,20 @@ const SettingsPanel = ({
                   <PopoverTrigger asChild>
                     <button
                       type="button"
-                      className="inline-flex h-6 items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 text-[10px] font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                      className="inline-flex h-9 items-center gap-1 rounded-full border border-border/40 bg-background/40 px-3 text-xs font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring sm:h-6 sm:px-2 sm:text-[10px]"
                     >
-                      <Hash className="h-2.5 w-2.5" />
+                      <Hash className="h-3 w-3 sm:h-2.5 sm:w-2.5" />
                       Tokens
                     </button>
                   </PopoverTrigger>
                   <PopoverContent className="w-72 p-3" align="end">
-                    <p className="mb-2 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    <p className="mb-2 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
                       Available tokens
                     </p>
-                    <ul className="space-y-1.5 text-[11px]">
+                    <ul className="space-y-1.5 text-xs">
                       {getFilenameTokenDocs().map(({ token, description }) => (
                         <li key={token} className="flex items-start gap-2">
-                          <code className="mt-0.5 inline-flex flex-shrink-0 rounded bg-primary/15 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-primary">
+                          <code className="mt-0.5 inline-flex flex-shrink-0 rounded bg-primary/15 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-primary">
                             {token}
                           </code>
                           <span className="text-muted-foreground">{description}</span>
@@ -353,12 +353,12 @@ const SettingsPanel = ({
                 value={settings.filenamePattern}
                 onChange={(e) => onUpdate({ filenamePattern: e.target.value })}
                 placeholder="ls-image-compressor_{name}.{ext}"
-                className="rounded-lg font-mono text-[11px]"
+                className="h-11 rounded-lg font-mono text-sm sm:h-9 sm:text-[11px]"
                 aria-label="Output filename pattern"
               />
-              <p className="mt-1 text-[10px] text-muted-foreground">
+              <p className="mt-1.5 text-[11px] text-muted-foreground sm:mt-1 sm:text-[10px]">
                 e.g.{' '}
-                <code className="rounded bg-foreground/10 px-1 text-[10px]">
+                <code className="rounded bg-foreground/10 px-1 text-[11px]">
                   {settings.filenamePattern.replace('{name}', 'photo').replace('{ext}', 'webp')}
                 </code>
               </p>
