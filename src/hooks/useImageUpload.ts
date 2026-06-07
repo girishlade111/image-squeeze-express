@@ -20,8 +20,13 @@ const saveToHistory = async (entry: HistoryEntry, blob: Blob): Promise<void> => 
     const dataUrl = await blobToDataUrl(blob);
     addHistoryEntry({ ...entry, dataUrl });
     window.dispatchEvent(new CustomEvent(HISTORY_UPDATED_EVENT));
-  } catch {
-    /* history save is best-effort — never fail compression over it */
+  } catch (err) {
+    if (import.meta.env?.DEV) {
+      console.warn(
+        `[history] Could not save ${entry.fileName} to recent files:`,
+        err instanceof Error ? err.message : err
+      );
+    }
   }
 };
 
