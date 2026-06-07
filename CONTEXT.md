@@ -676,7 +676,7 @@ Layout:
   - File ext badge + file name (truncated, hover for full)
   - Single "Download" button per file (`saveAs(f.processedFile, f.processedFile.name)`)
   - Clicking either thumbnail opens `ImageInspector`
-- **Download All as ZIP** button (gradient, full-width on mobile). If only 1 file, just downloads it directly. ZIP filename: `ls-image-compressor_batch.zip`
+- **Download All as ZIP** button (gradient, full-width on mobile). If only 1 file, just downloads it directly. ZIP filename: `ls-image-compressor.zip`
 - **Process More Images** ghost button — calls `onReset` (= `clearAll`)
 - **Share** row: Twitter / X, WhatsApp, Copy Link
 
@@ -835,7 +835,7 @@ Similar to `ResultsSection` but:
 - Each file row: name + size arrow + new size + reduction badge + page count + final quality/DPI
 - Per-file **Preview** opens `Dialog` with an `<iframe src={URL.createObjectURL(processedFile)}>` showing the PDF
 - Per-file **Save** button (emerald, like image download)
-- **Download all as ZIP** button (filename: `ls-image-compressor_pdfs.zip`)
+- **Download all as ZIP** button (filename: `ls-image-compressor-pdf.zip`)
 - **Start over** ghost button
 - Includes a 24-particle monochrome confetti burst that fires when the section scrolls into view
 
@@ -1078,7 +1078,7 @@ const totalSize = useMemo(() => files.reduce((s, f) => s + f.size, 0), [files]);
 3. Create `new JSZip()`, get its `'renamed'` subfolder (fall back to root if `.folder()` returns null)
 4. For each file: add `folder.file(sanitizeFileName(plan[i].renamedName ?? f.name), f.file)`. Update `setZipProgress(round((i+1)/files.length * 90))` — first 90% of the bar is "adding files"
 5. `zip.generateAsync({ type: 'blob', compression: 'STORE' }, (meta) => setZipProgress(90 + meta.percent / 10))` — last 10% of the bar is "compressing". **`STORE` is used on purpose** — files are already compressed; using `DEFLATE` would waste CPU for almost no size benefit
-6. `saveAs(blob, 'ls-image-compressor_renamed.zip')` — triggers download
+6. `saveAs(blob, 'ls-image-compressor-rename.zip')` — triggers download
 7. `setZipProgress(100)` + `toast.success('✅ Renamed N of M files. ZIP downloaded.')`
 8. In `finally`, after 400ms, clear `isZipping` and reset `zipProgress`
 
