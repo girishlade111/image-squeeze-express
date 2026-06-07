@@ -162,21 +162,29 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
             >
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                 {/* Before */}
-                <button
+                <motion.button
                   onClick={() => setPreviewFile(f)}
                   className="group/before flex flex-1 items-center gap-3 rounded-lg p-1 text-left transition-colors hover:bg-foreground/[0.03]"
                   aria-label={`Preview original ${f.name}`}
+                  whileHover="hover"
+                  initial="rest"
                 >
                   <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl shadow-md sm:h-14 sm:w-14">
-                    <img
+                    <motion.img
                       src={f.preview}
                       alt={`Original ${f.name}`}
-                      className="h-full w-full object-cover transition-transform group-hover/before:scale-110"
+                      className="h-full w-full object-cover"
                       loading="lazy"
+                      variants={{ rest: { scale: 1 }, hover: { scale: 1.1 } }}
+                      transition={{ duration: 0.3, ease: 'easeOut' }}
                     />
-                    <div className="absolute inset-0 flex items-center justify-center bg-black/0 transition-colors group-hover/before:bg-black/30">
+                    <motion.div
+                      className="absolute inset-0 flex items-center justify-center bg-black/0"
+                      variants={{ rest: { backgroundColor: 'rgba(0,0,0,0)' }, hover: { backgroundColor: 'rgba(0,0,0,0.3)' } }}
+                      transition={{ duration: 0.25, ease: 'easeOut' }}
+                    >
                       <Eye className="h-4 w-4 text-white opacity-0 transition-opacity group-hover/before:opacity-100" />
-                    </div>
+                    </motion.div>
                   </div>
                   <div className="min-w-0">
                     <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground sm:text-[10px]">
