@@ -98,7 +98,7 @@ const PdfResultsSection = ({ files, onReset }: PdfResultsSectionProps) => {
       if (f.processedFile) zip.file(f.processedFile.name, f.processedFile);
     });
     const blob = await zip.generateAsync({ type: 'blob' });
-    saveAs(blob, 'ls-image-compressor_pdfs.zip');
+    saveAs(blob, 'ls-image-compressor-pdf.zip');
     toast.success(`Downloaded ${doneFiles.length} PDFs as ZIP`);
   }, [files]);
 

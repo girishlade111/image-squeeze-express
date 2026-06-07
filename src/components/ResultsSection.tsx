@@ -92,7 +92,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
       if (f.processedFile) zip.file(f.processedFile.name, f.processedFile);
     });
     const blob = await zip.generateAsync({ type: 'blob' });
-    saveAs(blob, 'ls-image-compressor_batch.zip');
+    saveAs(blob, 'ls-image-compressor.zip');
     toast.success(`Downloaded ${doneFiles.length} images as ZIP`);
   }, [files]);
 
