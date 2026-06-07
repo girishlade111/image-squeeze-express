@@ -44,6 +44,7 @@ export interface HistoryEntry {
 
 const STORAGE_KEY = 'ls-image-compressor-history';
 export const MAX_HISTORY_ENTRIES = 50;
+export const HISTORY_UPDATED_EVENT = 'ls-image-compressor-history-updated';
 
 const isValidEntry = (e: unknown): e is HistoryEntry => {
   if (!e || typeof e !== 'object') return false;

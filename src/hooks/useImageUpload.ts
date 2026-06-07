@@ -7,12 +7,25 @@ import {
   MAX_TOTAL_BATCH_SIZE,
 } from '@/hooks/imageUploadLimits';
 import type { Settings } from '@/hooks/useSettings';
+import { addHistoryEntry, blobToDataUrl, type HistoryEntry } from '@/utils/historyStorage';
 
 // browser-image-compression is ~50 KB. We defer loading the image engine
 // (and the pure batch-validator) until the user actually interacts with the
 // queue, so the landing page stays lean on first paint.
 const loadImageEngine = () => import('@/utils/imageProcessor');
 const loadBatchValidator = () => import('@/utils/batchValidation');
+
+import { addHistoryEntry, blobToDataUrl, HISTORY_UPDATED_EVENT, type HistoryEntry } from '@/utils/historyStorage';
+
+const saveToHistory = async (entry: HistoryEntry, blob: Blob): Promise<void> => {
+  try {
+    const dataUrl = await blobToDataUrl(blob);
+    addHistoryEntry({ ...entry, dataUrl });
+    window.dispatchEvent(new CustomEvent(HISTORY_UPDATED_EVENT));
+  } catch {
+    /* history save is best-effort — never fail compression over it */
+  }
+};
 
 export interface UploadedFile {
   id: string;
@@ -170,6 +183,25 @@ export function useImageUpload() {
           });
           const processedPreview = URL.createObjectURL(result.blob);
           urlsRef.current.add(processedPreview);
+
+          void saveToHistory({
+            id: item.id,
+            tool: 'image',
+            fileName: processedFile.name,
+            fileSize: result.sizeBytes,
+            mimeType: result.blob.type || processedFile.type,
+            createdAt: Date.now(),
+            image: {
+              originalSize: item.originalSize,
+              originalWidth: result.width,
+              originalHeight: result.height,
+              processedWidth: result.width,
+              processedHeight: result.height,
+              reduction: result.reduction,
+              format: result.blob.type?.split('/')[1]?.toUpperCase() ?? 'IMG',
+              quality: settings.autoOptimize ? 0 : settings.quality,
+            },
+          }, result.blob);
 
           setFiles((prev) =>
             prev.map((f) =>
