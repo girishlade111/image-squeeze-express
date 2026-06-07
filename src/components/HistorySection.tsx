@@ -217,7 +217,7 @@ const HistorySection = ({ tool, title, description }: HistorySectionProps) => {
         variants={staggerContainer(50)}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, margin: '-80px' }}
+        viewport={{ once: true, amount: 0.1 }}
         className="space-y-2"
       >
         <AnimatePresence initial={false}>
