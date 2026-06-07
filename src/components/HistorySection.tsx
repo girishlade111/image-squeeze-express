@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Download, Trash2, History, X, FileText, Image as ImageIcon, ChevronDown } from 'lucide-react';
+import { Download, Trash2, History, X, FileText, Image as ImageIcon, ChevronDown, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { staggerContainer, fadeInUp } from '@/lib/motion';
 import useHistory from '@/hooks/useHistory';
