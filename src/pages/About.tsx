@@ -48,6 +48,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import DocumentTitle from '@/components/DocumentTitle';
 import ProfileImage from '@/components/ProfileImage';
+import PrimaryCTA from '@/components/PrimaryCTA';
 import profileImg from '@/assets/profile.webp';
 import profileAvif from '@/assets/profile.avif';
 import profileWebp2x from '@/assets/profile@2x.webp';
@@ -491,14 +492,9 @@ const About = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.25 }}
               >
-                <a
-                  href="#section-01"
-                  className="group inline-flex h-12 items-center gap-2 rounded-full px-5 text-base font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-[1.02] sm:h-auto sm:px-4 sm:py-2.5 sm:text-sm"
-                  style={{ background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))' }}
-                >
+                <PrimaryCTA href="#section-01" withArrow>
                   Read our story
-                  <ArrowRight size={16} weight="bold" className="transition-transform group-hover:translate-x-0.5" />
-                </a>
+                </PrimaryCTA>
                 <Link
                   to="/"
                   className="inline-flex h-12 items-center gap-2 rounded-full border border-border/50 bg-card/60 px-5 text-base font-semibold backdrop-blur-sm transition-colors hover:border-primary/40 hover:bg-card sm:h-auto sm:px-4 sm:py-2.5 sm:text-sm"
