@@ -54,9 +54,10 @@ const ProfileImage = ({
   const [errored, setErrored] = useState(false);
 
   return (
-    <div
+    <motion.div
       className={cn('group relative flex-shrink-0', className)}
       style={{ aspectRatio }}
+      whileHover="hover"
     >
       <div
         className="absolute inset-0 rounded-2xl p-[2px]"
@@ -80,7 +81,7 @@ const ProfileImage = ({
               {sources.map((s) => (
                 <source key={s.type} type={s.type} srcSet={s.srcSet} {...(s.sizes ? { sizes: s.sizes } : {})} />
               ))}
-              <img
+              <motion.img
                 src={src}
                 alt={alt}
                 loading="lazy"
@@ -88,11 +89,13 @@ const ProfileImage = ({
                 {...(naturalWidth !== undefined ? { width: naturalWidth } : {})}
                 {...(naturalHeight !== undefined ? { height: naturalHeight } : {})}
                 onError={() => setErrored(true)}
-                className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+                className="h-full w-full object-cover"
+                variants={{ rest: { scale: 1 }, hover: { scale: 1.04 } }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
               />
             </picture>
           ) : (
-            <img
+            <motion.img
               src={src}
               alt={alt}
               loading="lazy"
@@ -102,7 +105,9 @@ const ProfileImage = ({
               {...(naturalWidth !== undefined ? { width: naturalWidth } : {})}
               {...(naturalHeight !== undefined ? { height: naturalHeight } : {})}
               onError={() => setErrored(true)}
-              className="h-full w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+              className="h-full w-full object-cover"
+              variants={{ rest: { scale: 1 }, hover: { scale: 1.04 } }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
             />
           )}
 
