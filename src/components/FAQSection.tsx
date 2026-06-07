@@ -1,10 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import { fadeInUp, staggerContainer } from '@/lib/motion';
 
 const faqs = [
   {
