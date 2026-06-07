@@ -133,7 +133,7 @@ const FeaturesGrid = () => {
           initial={{ opacity: 0, y: 12 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.4 }}
-          className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.07] px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-primary sm:mb-4"
+          className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.07] px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-primary sm:mb-4 sm:py-1 sm:text-[10px]"
         >
           <Sparkle size={12} weight="duotone" />
           Why choose us
