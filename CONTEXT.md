@@ -685,7 +685,7 @@ async function getPdfjs() {
 
 1. `originalSize = file.size`, start the performance timer
 2. Load the source PDF via `pdfjs.getDocument({ data: <copy of the file's ArrayBuffer> })`. **Important:** pdfjs mutates the buffer, so we pass a `slice(0)` copy to keep the original `File` usable for retries
-3. Create a new `PDFDocument` via `pdf-lib`, set its `title` / `producer` / `creator` to "ImageSqueeze"
+3. Create a new `PDFDocument` via `pdf-lib`, set its `title` / `producer` / `creator` to "LS Image Compressor"
 4. For each page (1..numPages):
    - `pdf.getPage(i)`
    - `renderPageToJpeg(page, q, scale, maxWidth)`:
@@ -827,7 +827,7 @@ const totalSize = useMemo(() => files.reduce((s, f) => s + f.size, 0), [files]);
 3. Create `new JSZip()`, get its `'renamed'` subfolder (fall back to root if `.folder()` returns null)
 4. For each file: add `folder.file(sanitizeFileName(plan[i].renamedName ?? f.name), f.file)`. Update `setZipProgress(round((i+1)/files.length * 90))` — first 90% of the bar is "adding files"
 5. `zip.generateAsync({ type: 'blob', compression: 'STORE' }, (meta) => setZipProgress(90 + meta.percent / 10))` — last 10% of the bar is "compressing". **`STORE` is used on purpose** — files are already compressed; using `DEFLATE` would waste CPU for almost no size benefit
-6. `saveAs(blob, 'imagesqueeze_renamed.zip')` — triggers download
+6. `saveAs(blob, 'ls-image-compressor_renamed.zip')` — triggers download
 7. `setZipProgress(100)` + `toast.success('✅ Renamed N of M files. ZIP downloaded.')`
 8. In `finally`, after 400ms, clear `isZipping` and reset `zipProgress` (gives the user a moment to see "100%")
 
@@ -899,7 +899,7 @@ The classic shadcn-style toast reducer. `TOAST_LIMIT = 1` (only one toast at a t
 
 - Fixed at the top, `z-50`, with `backdrop-blur-xl` background
 - Gradient line (`h-px w-full bg-gradient-to-r from-transparent via-primary/30 to-transparent`) at the top edge
-- Logo: ⚡ emoji in a tinted rounded square + "ImageSqueeze" gradient text
+- Logo: ⚡ emoji in a tinted rounded square + "LS Image Compressor" gradient text
 - Desktop nav (`hidden md:flex`): How It Works / Features / Social Presets / FAQ (smooth-scroll anchors) + Compress PDF / Bulk Rename (`<Link to=...>`) + dark/light toggle
 - Mobile nav: dark/light toggle + hamburger. Tapping the hamburger opens a full-screen slide-in panel (right side, `max-w-xs`) with all the same links plus About / Privacy / Terms / Contact
 - **Mobile menu accessibility:** body scroll is locked while open, Escape key closes it, first link is focused 50ms after open
@@ -910,7 +910,7 @@ The classic shadcn-style toast reducer. `TOAST_LIMIT = 1` (only one toast at a t
 - 4-column grid on desktop (logo+blurb, Product, Company, Legal), single-column on mobile
 - 6 social icons (Instagram, LinkedIn, GitHub, CodePen, Mail, Website)
 - `handleAnchorClick` only smooth-scrolls when on `/` (else falls through to default `<a href="#...">` behavior)
-- Copyright: `© 2026 ImageSqueeze. All rights reserved.`
+- Copyright: `© 2026 LS Image Compressor. All rights reserved.`
 
 ### 9.3 `NavLink` (`src/components/NavLink.tsx`)
 
@@ -1239,7 +1239,7 @@ When making any change, the AI should always ask itself:
 7. **Does it add a new dependency?** Run `npm install` and update `package.json`. Consider whether the dep is actually needed (the starter has a lot of unused ones).
 8. **Does it add a new page or route?** Follow the pattern in §17. Don't forget the `navLinks` array in `Header.tsx`.
 9. **Does it add a new top-level component?** Place it in `src/components/`. If it's a small inline helper (like the inline `HowItWorksPdf` in `CompressPdf.tsx`), it's fine to keep it in the page file.
-10. **Does it add new user-facing settings?** Add a `localStorage` key (or extend the existing `imagesqueeze-settings` schema with a default), update the `Settings` type in `useSettings.ts`, add a UI control in `SettingsPanel.tsx`, and — most importantly — **wire the setting into the processor in `imageProcessor.ts`**. If you can't wire it, don't add the UI.
+10. **Does it add new user-facing settings?** Add a `localStorage` key (or extend the existing `ls-image-compressor-settings` schema with a default), update the `Settings` type in `useSettings.ts`, add a UI control in `SettingsPanel.tsx`, and — most importantly — **wire the setting into the processor in `imageProcessor.ts`**. If you can't wire it, don't add the UI.
 
 ---
 
