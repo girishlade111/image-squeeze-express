@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { Moon, Sun, Menu, X } from 'lucide-react';
+import { iconHover } from '@/lib/motion';
 import {
   Image as PhosphorImage,
   FileText as PhosphorFileText,
@@ -103,8 +105,9 @@ const Header = () => {
             className="flex min-w-0 items-center gap-1.5 group min-h-[44px] min-w-[44px] md:min-h-0 md:min-w-0 md:gap-1.5"
             aria-label="LS Image Compressor — home"
           >
-            <span
-              className="flex h-9 w-9 flex-shrink-0 items-center justify-center transition-transform group-hover:scale-110 md:h-7 md:w-7"
+            <motion.span
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center md:h-7 md:w-7"
+              whileHover={iconHover}
               aria-hidden
             >
               <img
@@ -114,7 +117,7 @@ const Header = () => {
                 height={36}
                 className="h-9 w-9 rounded-lg md:h-7 md:w-7"
               />
-            </span>
+            </motion.span>
             <span className="truncate text-sm font-bold tracking-tight sm:text-base md:text-base metallic-text">
               <span className="sm:hidden">LS Compressor</span>
               <span className="hidden sm:inline">LS Image Compressor</span>
