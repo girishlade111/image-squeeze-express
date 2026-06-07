@@ -188,7 +188,7 @@ const HistorySection = ({ tool, title, description }: HistorySectionProps) => {
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-80px' }}
+        viewport={{ once: true, amount: 0.1 }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
         className="mb-4 flex items-center justify-between gap-3 sm:mb-6"
       >
