@@ -31,6 +31,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from '@/components/ui/accordion';
+import PrimaryCTA from '@/components/PrimaryCTA';
 import { cn } from '@/lib/utils';
 import { pageSeo } from '@/config/seo';
 
@@ -398,6 +399,7 @@ const PrimaryChannelCard = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.5, delay }}
+      whileHover="hover"
       className="group relative block overflow-hidden rounded-2xl border border-border/40 bg-card/30 p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-card/55 sm:p-7"
     >
       <div
@@ -411,9 +413,13 @@ const PrimaryChannelCard = ({
       />
 
       <div className="relative flex items-start justify-between gap-3">
-        <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/25 to-accent/25 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3">
+        <motion.div
+          className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/25 to-accent/25"
+          variants={{ rest: { scale: 1, rotate: 0 }, hover: { scale: 1.1, rotate: 3 } }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+        >
           <Icon size={26} weight="duotone" className="h-6 w-6 text-primary" />
-        </div>
+        </motion.div>
         {channel.copyable ? (
           <CopyButton text={channel.handle} label="Copy" />
         ) : (
@@ -619,17 +625,10 @@ const Contact = () => {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.25 }}
                 >
-                  <a
-                    href="mailto:admin@ladestack.in"
-                    className="group inline-flex h-12 items-center gap-2 rounded-full px-5 text-base font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-[1.02] sm:h-auto sm:py-2.5 sm:text-sm"
-                    style={{
-                      background:
-                        'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
-                    }}
-                  >
+                  <PrimaryCTA href="mailto:admin@ladestack.in" size="md">
                     <PaperPlaneTiltIcon />
                     Send an email
-                  </a>
+                  </PrimaryCTA>
                   <a
                     href="https://github.com/girishlade111"
                     target="_blank"
@@ -858,22 +857,10 @@ const Contact = () => {
                 read everything that comes in.
               </p>
               <div className="mt-6 flex flex-col items-stretch gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
-                <a
-                  href="mailto:admin@ladestack.in"
-                  className="group inline-flex h-12 items-center justify-center gap-2 rounded-full px-5 text-base font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-[1.02] sm:h-auto sm:px-5 sm:py-2.5 sm:text-sm"
-                  style={{
-                    background:
-                      'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
-                  }}
-                >
+                <PrimaryCTA href="mailto:admin@ladestack.in">
                   <PaperPlaneTiltIcon />
                   admin@ladestack.in
-                  <ArrowRight
-                    size={14}
-                    weight="bold"
-                    className="transition-transform group-hover:translate-x-0.5"
-                  />
-                </a>
+                </PrimaryCTA>
                 <a
                   href="https://github.com/girishlade111"
                   target="_blank"

@@ -1229,14 +1229,10 @@ const About = () => {
                 Three tools. Zero servers in the loop. Drop a file and watch it work — that&apos;s the whole pitch.
               </p>
               <div className="mt-6 flex flex-col items-stretch gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
-                <Link
-                  to="/"
-                  className="group inline-flex h-12 items-center justify-center gap-2 rounded-full px-5 text-base font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-[1.02] sm:h-auto sm:px-5 sm:py-2.5 sm:text-sm"
-                  style={{ background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))' }}
-                >
+                <PrimaryCTA to="/">
                   <Lightning size={16} weight="duotone" />
                   Compress Images
-                </Link>
+                </PrimaryCTA>
                 <Link
                   to="/compress-pdf"
                   className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border/50 bg-card/80 px-5 text-base font-semibold backdrop-blur-sm transition-colors hover:border-primary/40 sm:h-auto sm:px-5 sm:py-2.5 sm:text-sm"
@@ -1680,16 +1676,26 @@ const SocialLink = ({
   icon: typeof GithubLogo;
   label: string;
 }) => (
-  <a
+  <motion.a
     href={href}
     target="_blank"
     rel="noopener noreferrer"
     title={label}
-    className="group inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-card/60 px-2.5 py-1 text-[11px] font-semibold text-foreground/80 backdrop-blur-sm transition-all hover:scale-[1.03] hover:border-primary/50 hover:bg-primary/[0.08] hover:text-primary"
+    className="group inline-flex items-center gap-1.5 rounded-full border border-border/50 bg-card/60 px-2.5 py-1 text-[11px] font-semibold text-foreground/80 backdrop-blur-sm hover:border-primary/50 hover:bg-primary/[0.08] hover:text-primary"
+    initial="rest"
+    whileHover="hover"
+    variants={{ rest: { scale: 1 }, hover: { scale: 1.03 } }}
+    transition={{ duration: 0.2, ease: 'easeOut' }}
   >
-    <Icon size={14} weight="duotone" className="h-3.5 w-3.5 text-primary transition-transform group-hover:scale-110" />
+    <motion.span
+      className="inline-flex text-primary"
+      variants={{ rest: { scale: 1 }, hover: { scale: 1.1 } }}
+      transition={{ duration: 0.2, ease: 'easeOut' }}
+    >
+      <Icon size={14} weight="duotone" className="h-3.5 w-3.5" />
+    </motion.span>
     {label}
-  </a>
+  </motion.a>
 );
 
 export default About;
