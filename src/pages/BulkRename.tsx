@@ -27,6 +27,7 @@ import {
   Shield,
   MagnifyingGlass,
 } from '@phosphor-icons/react';
+import { pageSeo } from '@/config/seo';
 
 const Footer = lazy(() => import('@/components/Footer'));
 const FileRenameRuleBuilder = lazy(() => import('@/components/FileRenameRuleBuilder'));
@@ -74,7 +75,7 @@ const BulkRename = () => {
   return (
     <div className="min-h-screen bg-background">
       <Suspense fallback={null}>
-        <DocumentTitle title="Bulk File Rename — 13 Rule Types, Live Preview & ZIP" />
+        <DocumentTitle {...pageSeo.rename} />
       </Suspense>
       <Header />
       <main>

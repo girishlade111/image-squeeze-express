@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
+
+  <url>
+    <loc>https://img.ladestack.in/</loc>
+    <image:image>
+      <image:loc>https://img.ladestack.in/og-image.png</image:loc>
+      <image:title>LS Image Compressor — Free Online Image Compressor</image:title>
+      <image:caption>Compress images up to 90% smaller in your browser. 100% private, no upload, no signup.</image:caption>
+      <image:license>https://img.ladestack.in/terms</image:license>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://img.ladestack.in/compress-pdf</loc>
+    <image:image>
+      <image:loc>https://img.ladestack.in/og-pdf.png</image:loc>
+      <image:title>LS Image Compressor PDF Compressor</image:title>
+      <image:caption>Compress PDF files up to 90% smaller in your browser. Strong, Balanced, and Light presets.</image:caption>
+      <image:license>https://img.ladestack.in/terms</image:license>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://img.ladestack.in/bulk-rename</loc>
+    <image:image>
+      <image:loc>https://img.ladestack.in/og-rename.png</image:loc>
+      <image:title>LS Image Compressor Bulk File Renamer</image:title>
+      <image:caption>Rename hundreds of files at once with 13 live rules. Download as a ZIP.</image:caption>
+      <image:license>https://img.ladestack.in/terms</image:license>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://img.ladestack.in/about</loc>
+    <image:image>
+      <image:loc>https://img.ladestack.in/og-about.png</image:loc>
+      <image:title>About LS Image Compressor</image:title>
+      <image:caption>The story, founder, and stack behind LS Image Compressor.</image:caption>
+      <image:license>https://img.ladestack.in/terms</image:license>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://img.ladestack.in/contact</loc>
+    <image:image>
+      <image:loc>https://img.ladestack.in/og-contact.png</image:loc>
+      <image:title>Contact LS Image Compressor</image:title>
+      <image:caption>Email, GitHub, Instagram, LinkedIn — all the ways to reach us.</image:caption>
+      <image:license>https://img.ladestack.in/terms</image:license>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://img.ladestack.in/privacy</loc>
+    <image:image>
+      <image:loc>https://img.ladestack.in/og-privacy.png</image:loc>
+      <image:title>LS Image Compressor Privacy Policy</image:title>
+      <image:caption>How LS Image Compressor handles your data. Spoiler: we don’t collect anything.</image:caption>
+      <image:license>https://img.ladestack.in/terms</image:license>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://img.ladestack.in/terms</loc>
+    <image:image>
+      <image:loc>https://img.ladestack.in/og-terms.png</image:loc>
+      <image:title>LS Image Compressor Terms of Service</image:title>
+      <image:caption>Free for personal and commercial use, no warranty, your files stay on your device.</image:caption>
+    </image:image>
+  </url>
+
+  <url>
+    <loc>https://img.ladestack.in/</loc>
+    <image:image>
+      <image:loc>https://img.ladestack.in/logo-mark.svg</image:loc>
+      <image:title>LS Image Compressor logo</image:title>
+      <image:caption>The LS Image Compressor brand mark — two inward chevrons with a spark, indigo-to-teal gradient.</image:caption>
+    </image:image>
+  </url>
+
+</urlset>

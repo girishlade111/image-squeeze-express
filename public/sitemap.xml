@@ -13,13 +13,14 @@
     <loc>https://img.ladestack.in/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://img.ladestack.in/" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://img.ladestack.in/" />
-    <lastmod>2026-06-06</lastmod>
+    <lastmod>2026-06-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <image:image>
       <image:loc>https://img.ladestack.in/og-image.png</image:loc>
       <image:title>LS Image Compressor — Free Online Image Compressor</image:title>
       <image:caption>Compress images up to 90% smaller in your browser. 100% private, no upload.</image:caption>
+      <image:license>https://img.ladestack.in/terms</image:license>
     </image:image>
   </url>
 
@@ -30,7 +31,7 @@
     <loc>https://img.ladestack.in/compress-pdf</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://img.ladestack.in/compress-pdf" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://img.ladestack.in/compress-pdf" />
-    <lastmod>2026-06-06</lastmod>
+    <lastmod>2026-06-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -47,7 +48,7 @@
     <loc>https://img.ladestack.in/bulk-rename</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://img.ladestack.in/bulk-rename" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://img.ladestack.in/bulk-rename" />
-    <lastmod>2026-06-06</lastmod>
+    <lastmod>2026-06-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <image:image>
@@ -64,9 +65,14 @@
     <loc>https://img.ladestack.in/about</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://img.ladestack.in/about" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://img.ladestack.in/about" />
-    <lastmod>2026-06-06</lastmod>
+    <lastmod>2026-06-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+    <image:image>
+      <image:loc>https://img.ladestack.in/og-about.png</image:loc>
+      <image:title>About LS Image Compressor</image:title>
+      <image:caption>The story, founder, and stack behind LS Image Compressor.</image:caption>
+    </image:image>
   </url>
 
   <!-- =========================================================
@@ -76,9 +82,14 @@
     <loc>https://img.ladestack.in/contact</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://img.ladestack.in/contact" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://img.ladestack.in/contact" />
-    <lastmod>2026-06-06</lastmod>
+    <lastmod>2026-06-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+    <image:image>
+      <image:loc>https://img.ladestack.in/og-contact.png</image:loc>
+      <image:title>Contact LS Image Compressor</image:title>
+      <image:caption>Email, GitHub, Instagram, LinkedIn — all the ways to reach us.</image:caption>
+    </image:image>
   </url>
 
   <!-- =========================================================
@@ -88,7 +99,7 @@
     <loc>https://img.ladestack.in/privacy</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://img.ladestack.in/privacy" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://img.ladestack.in/privacy" />
-    <lastmod>2026-06-06</lastmod>
+    <lastmod>2026-03-08</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
@@ -100,7 +111,7 @@
     <loc>https://img.ladestack.in/terms</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://img.ladestack.in/terms" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://img.ladestack.in/terms" />
-    <lastmod>2026-06-06</lastmod>
+    <lastmod>2026-03-08</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>

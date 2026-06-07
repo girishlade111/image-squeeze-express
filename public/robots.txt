@@ -1,11 +1,15 @@
 # ============================================================
 #  robots.txt for LS Image Compressor — img.ladestack.in
-#  Generated: June 6, 2026
+#  Generated: June 7, 2026
 #
-#  Policy: ALL well-behaved crawlers, AI bots, and social-media
-#  scrapers are ALLOWED to crawl the entire site. The only
-#  restricted path is a non-existent /api/ which is reserved
-#  defensively for any future backend endpoint.
+#  Policy: ALL well-behaved crawlers, AI/LLM bots, social-media
+#  scrapers, and search engines are ALLOWED to crawl the entire
+#  site. The only restricted path is a non-existent /api/ which
+#  is reserved defensively for any future backend endpoint.
+#
+#  We explicitly allow AI training crawlers (GPTBot, Claude,
+#  Perplexity, Google-Extended, etc.) because we want our tools
+#  to be discoverable and citable in AI answers.
 # ============================================================
 
 # ============================================================
@@ -17,10 +21,11 @@ Allow: /
 Disallow: /api/
 Disallow: /*.json$
 Disallow: /*?ref=*
+Disallow: /*?utm_*
 
 # ============================================================
 # AI & LLM CRAWLERS — explicitly allowed (used by ChatGPT,
-# Claude, Perplexity, Google SGE, Copilot, etc. for citations)
+# Claude, Perplexity, Google SGE, Copilot, Gemini, etc.)
 # ============================================================
 User-agent: GPTBot
 Allow: /
@@ -37,13 +42,22 @@ Allow: /
 User-agent: Claude-Web
 Allow: /
 
+User-agent: Claude-User
+Allow: /
+
 User-agent: anthropic-ai
+Allow: /
+
+User-agent: anthropic-ai-1
 Allow: /
 
 User-agent: PerplexityBot
 Allow: /
 
 User-agent: Perplexity-User
+Allow: /
+
+User-agent: Perplexity-AI
 Allow: /
 
 User-agent: Google-Extended
@@ -55,13 +69,16 @@ Allow: /
 User-agent: Google-NotebookLM
 Allow: /
 
+User-agent: Google-Prog-Search
+Allow: /
+
 User-agent: Applebot-Extended
 Allow: /
 
 User-agent: Amazonbot
 Allow: /
 
-User-agent: Meta-ExternalAgent
+User-agent: meta-externalagent
 Allow: /
 
 User-agent: meta-webindexer
@@ -92,6 +109,30 @@ User-agent: TimpiBot
 Allow: /
 
 User-agent: Andibot
+Allow: /
+
+User-agent: MistralAI-User
+Allow: /
+
+User-agent: Omgilibot
+Allow: /
+
+User-agent: Omgili
+Allow: /
+
+User-agent: Webz.io
+Allow: /
+
+User-agent: MemoryBot
+Allow: /
+
+User-agent: FriendlyCrawler
+Allow: /
+
+User-agent: AwarioRssBot
+Allow: /
+
+User-agent: AwarioSmartBot
 Allow: /
 
 # ============================================================
@@ -232,57 +273,6 @@ Allow: /
 User-agent: SerendeputyBot
 Allow: /
 
-User-agent: YandexAntivirus
-Allow: /
-
-User-agent: YandexCalendar
-Allow: /
-
-User-agent: YandexDirect
-Allow: /
-
-User-agent: YandexFavicons
-Allow: /
-
-User-agent: YandexForDomain
-Allow: /
-
-User-agent: YandexMetrika
-Allow: /
-
-User-agent: YandexMobileBot
-Allow: /
-
-User-agent: YandexMobileScreenShotBot
-Allow: /
-
-User-agent: YandexNews
-Allow: /
-
-User-agent: YandexOntoDB
-Allow: /
-
-User-agent: YandexPagechecker
-Allow: /
-
-User-agent: YandexRCA
-Allow: /
-
-User-agent: YandexSprav
-Allow: /
-
-User-agent: YandexTracker
-Allow: /
-
-User-agent: YandexTurboParser
-Allow: /
-
-User-agent: YandexVertis
-Allow: /
-
-User-agent: YandexWebmaster
-Allow: /
-
 User-agent: PetalBot
 Allow: /
 
@@ -358,9 +348,6 @@ Allow: /
 # ============================================================
 # MEDIA, ADS, AND FEED BOTS
 # ============================================================
-User-agent: Mediapartners-Google
-Allow: /
-
 User-agent: GoogleAdSense
 Allow: /
 
@@ -415,9 +402,6 @@ Allow: /
 User-agent: NewRelicPinger
 Allow: /
 
-User-agent: Uptimebot
-Allow: /
-
 User-agent: W3C_Validator
 Allow: /
 
@@ -428,9 +412,6 @@ User-agent: W3C-mobileOK
 Allow: /
 
 User-agent: Loader
-Allow: /
-
-User-agent: HttpUrlConnection
 Allow: /
 
 User-agent: Checkly
@@ -447,6 +428,7 @@ Allow: /
 # ============================================================
 Sitemap: https://img.ladestack.in/sitemap.xml
 Sitemap: https://img.ladestack.in/sitemap-index.xml
+Sitemap: https://img.ladestack.in/image-sitemap.xml
 
 # ============================================================
 # CANONICAL HOST

@@ -27,6 +27,7 @@ import type {
   PdfQualityPreset,
 } from '@/utils/pdfProcessor';
 import { PDF_QUALITY_PRESETS } from '@/utils/pdfFormat';
+import { pageSeo } from '@/config/seo';
 
 const Footer = lazy(() => import('@/components/Footer'));
 const PdfQueue = lazy(() => import('@/components/PdfQueue'));
@@ -164,7 +165,7 @@ const CompressPdf = () => {
   return (
     <div className="min-h-screen bg-background">
       <Suspense fallback={null}>
-        <DocumentTitle title="Compress PDF — Up to 90% Smaller, Free & Private" />
+        <DocumentTitle {...pageSeo.pdf} />
       </Suspense>
       <Header />
       <main>

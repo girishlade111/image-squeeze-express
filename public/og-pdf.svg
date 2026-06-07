@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="630" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#0D9488"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.18"/>
+      <stop offset="60%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="logoGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#shine)"/>
+
+  <!-- Decorative blobs -->
+  <circle cx="80" cy="540" r="180" fill="#ffffff" fill-opacity="0.08"/>
+  <circle cx="1120" cy="100" r="140" fill="#ffffff" fill-opacity="0.10"/>
+
+  <!-- Logo mark (left) -->
+  <g transform="translate(100, 100)">
+    <rect width="120" height="120" rx="26" fill="#ffffff"/>
+    <g fill="none" stroke="#4F46E5" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+      <polyline points="18,34 42,60 18,86"/>
+      <polyline points="102,34 78,60 102,86"/>
+    </g>
+    <path d="M60 49 L62.5 57 L70.5 60 L62.5 63 L60 71 L57.5 63 L49.5 60 L57.5 57 Z" fill="#4F46E5"/>
+  </g>
+  <text x="250" y="170" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="32" font-weight="700" fill="#ffffff" fill-opacity="0.95">LS Image Compressor</text>
+  <text x="250" y="200" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="18" font-weight="500" fill="#ffffff" fill-opacity="0.7">img.ladestack.in</text>
+
+  <!-- Main title -->
+  <text x="100" y="380" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="80" font-weight="800" fill="#ffffff">Compress PDFs Free</text>
+
+  <!-- Subtitle -->
+  <text x="100" y="445" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="36" font-weight="500" fill="#ffffff" fill-opacity="0.92">Shrink PDF Files Up to 90%</text>
+
+  <!-- Tagline pill -->
+  <rect x="100" y="510" width="1000" height="56" rx="28" fill="#ffffff" fill-opacity="0.15"/>
+  <text x="600" y="546" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="22" font-weight="600" fill="#ffffff" fill-opacity="0.95" text-anchor="middle">3 quality presets · 5 PDFs at a time · 100% in browser</text>
+</svg>

@@ -53,6 +53,7 @@ import profileAvif from '@/assets/profile.avif';
 import profileWebp2x from '@/assets/profile@2x.webp';
 import profileAvif2x from '@/assets/profile@2x.avif';
 import { cn } from '@/lib/utils';
+import { pageSeo } from '@/config/seo';
 
 function useCountUp(target: number, duration = 1200) {
   const [value, setValue] = useState(0);
@@ -402,7 +403,7 @@ const About = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <DocumentTitle title="About — The Story Behind LS Image Compressor" />
+      <DocumentTitle {...pageSeo.about} />
       <Header />
 
       <main>

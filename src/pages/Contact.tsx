@@ -32,6 +32,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
+import { pageSeo } from '@/config/seo';
 
 const GRADIENT_TEXT = {
   background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
@@ -524,7 +525,7 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <DocumentTitle title="Contact — Say Hello" />
+      <DocumentTitle {...pageSeo.contact} />
       <Header />
 
       <main>

@@ -10,6 +10,7 @@ import { useClipboardPaste } from '@/hooks/useClipboardPaste';
 import { usePageDropZone } from '@/hooks/usePageDropZone';
 import { Lightning } from '@phosphor-icons/react';
 import { toast } from 'sonner';
+import { pageSeo } from '@/config/seo';
 
 const SettingsPanel = lazy(() =>
   import('@/components/SettingsPanel').then((m) => ({ default: m.default }))
@@ -114,7 +115,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <Suspense fallback={null}>
-        <DocumentTitle title="Free Online Image Compressor — Up to 90% Smaller & Private" />
+        <DocumentTitle {...pageSeo.home} />
       </Suspense>
       <Header />
       <main>
