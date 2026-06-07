@@ -130,7 +130,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
             Compression Complete!
           </h2>
         </div>
-        <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
+        <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground sm:text-sm">
           {successCount} image{successCount !== 1 ? 's' : ''} optimized and ready to download.
         </p>
       </motion.div>
@@ -158,7 +158,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
               initial={{ opacity: 0, y: 16 }}
               animate={visible ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.4, delay: 0.1 + i * 0.08 }}
-              className="rounded-2xl border border-border/50 bg-card/70 backdrop-blur-xl p-4 shadow-md"
+              className="rounded-2xl border border-border/50 bg-card/70 backdrop-blur-xl p-3 shadow-md sm:p-4"
             >
               <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
                 {/* Before */}
@@ -167,7 +167,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
                   className="group/before flex flex-1 items-center gap-3 rounded-lg p-1 text-left transition-colors hover:bg-foreground/[0.03]"
                   aria-label={`Preview original ${f.name}`}
                 >
-                  <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl shadow-md">
+                  <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl shadow-md sm:h-14 sm:w-14">
                     <img
                       src={f.preview}
                       alt={`Original ${f.name}`}
@@ -179,12 +179,12 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
                     </div>
                   </div>
                   <div className="min-w-0">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground sm:text-[10px]">
                       Before
                     </p>
                     <p className="text-sm font-bold">{formatFileSize(f.originalSize)}</p>
                     {f.originalWidth > 0 && (
-                      <p className="text-[10px] text-muted-foreground">
+                      <p className="text-[11px] text-muted-foreground sm:text-[10px]">
                         {f.originalWidth}×{f.originalHeight}
                       </p>
                     )}
@@ -212,7 +212,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
                   className="group/after flex flex-1 items-center gap-3 rounded-lg p-1 text-left transition-colors hover:bg-foreground/[0.03] sm:justify-end sm:text-right"
                   aria-label={`Preview compressed ${f.name}`}
                 >
-                  <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl shadow-md sm:order-2">
+                  <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-xl shadow-md sm:order-2 sm:h-14 sm:w-14">
                     <img
                       src={f.processedPreview}
                       alt={`Compressed ${f.name}`}
@@ -229,14 +229,14 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
                     )}
                   </div>
                   <div className="min-w-0 sm:order-1">
-                    <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                    <p className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground sm:text-[10px]">
                       After
                     </p>
                     <p className="text-sm font-bold text-emerald-300">
                       {formatFileSize(newSize)}
                     </p>
                     {f.result && (
-                      <p className="text-[10px] text-muted-foreground">
+                      <p className="text-[11px] text-muted-foreground sm:text-[10px]">
                         {f.result.width}×{f.result.height}
                       </p>
                     )}
@@ -245,22 +245,22 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
               </div>
 
               {/* Bottom row */}
-              <div className="mt-3 flex items-center justify-between border-t border-border/30 pt-3">
-                <div className="flex items-center gap-2 min-w-0">
-                  <Badge variant="outline" className="rounded-full px-2 py-0 text-[10px] font-semibold">
+              <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-border/30 pt-3 sm:flex-nowrap">
+                <div className="flex min-w-0 flex-1 items-center gap-2">
+                  <Badge variant="outline" className="rounded-full px-2 py-0.5 text-[11px] font-semibold sm:py-0 sm:text-[10px]">
                     {ext}
                   </Badge>
-                  <p className="truncate text-[10px] text-muted-foreground" title={f.name}>
+                  <p className="truncate text-[11px] text-muted-foreground sm:text-[10px]" title={f.name}>
                     {f.name}
                   </p>
                 </div>
                 <Button
                   size="sm"
-                  className="h-7 rounded-full px-3 text-[11px] font-semibold text-primary-foreground"
+                  className="h-10 rounded-full px-4 text-sm font-semibold text-primary-foreground sm:h-7 sm:px-3 sm:text-[11px]"
                   style={{ background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))' }}
                   onClick={() => downloadSingle(f)}
                 >
-                  <Download className="mr-1 h-3 w-3" /> Download
+                  <Download className="mr-1 h-3.5 w-3.5 sm:mr-1 sm:h-3 sm:w-3" /> Download
                 </Button>
               </div>
             </motion.div>
@@ -277,19 +277,19 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
       >
         <Button
           size="lg"
-          className="h-11 w-full rounded-full text-sm font-semibold text-primary-foreground shadow-lg sm:w-auto"
+          className="h-12 w-full rounded-full text-base font-semibold text-primary-foreground shadow-lg sm:h-11 sm:w-auto sm:text-sm"
           style={{ background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))' }}
           onClick={downloadAll}
         >
-          <FileArchive className="mr-2 h-4 w-4" /> Download All as ZIP
+          <FileArchive className="mr-2 h-5 w-5 sm:h-4 sm:w-4" /> Download All as ZIP
         </Button>
         <Button
           variant="outline"
           size="lg"
-          className="h-11 w-full rounded-full text-sm sm:w-auto"
+          className="h-12 w-full rounded-full text-base sm:h-11 sm:w-auto sm:text-sm"
           onClick={onReset}
         >
-          <RefreshCw className="mr-2 h-4 w-4" /> Process More Images
+          <RefreshCw className="mr-2 h-5 w-5 sm:h-4 sm:w-4" /> Process More Images
         </Button>
       </motion.div>
 
@@ -300,16 +300,16 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
         animate={visible ? { opacity: 1 } : {}}
         transition={{ duration: 0.4, delay: 0.6 }}
       >
-        <p className="mb-3 flex items-center justify-center gap-1.5 text-xs font-semibold text-muted-foreground">
+        <p className="mb-3 flex items-center justify-center gap-1.5 text-xs font-semibold text-muted-foreground sm:text-sm">
           <Share2 className="h-3.5 w-3.5" />
           Share LS Image Compressor
         </p>
-        <div className="flex justify-center gap-2">
+        <div className="flex flex-wrap justify-center gap-2">
           <a
             href={`https://twitter.com/intent/tweet?text=${shareText}&url=${shareUrl}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full border border-border/40 bg-secondary/50 px-4 py-1.5 text-xs font-medium transition-all hover:border-primary/40 hover:bg-primary/5"
+            className="inline-flex h-10 items-center rounded-full border border-border/40 bg-secondary/50 px-5 text-sm font-medium transition-all hover:border-primary/40 hover:bg-primary/5 sm:h-auto sm:py-1.5 sm:text-xs"
           >
             Twitter / X
           </a>
@@ -317,7 +317,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
             href={`https://wa.me/?text=${shareText}%20${shareUrl}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="rounded-full border border-border/40 bg-secondary/50 px-4 py-1.5 text-xs font-medium transition-all hover:border-primary/40 hover:bg-primary/5"
+            className="inline-flex h-10 items-center rounded-full border border-border/40 bg-secondary/50 px-5 text-sm font-medium transition-all hover:border-primary/40 hover:bg-primary/5 sm:h-auto sm:py-1.5 sm:text-xs"
           >
             WhatsApp
           </a>
@@ -326,7 +326,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
               navigator.clipboard.writeText('https://img.ladestack.in');
               toast.success('Link copied to clipboard!');
             }}
-            className="rounded-full border border-border/40 bg-secondary/50 px-4 py-1.5 text-xs font-medium transition-all hover:border-primary/40 hover:bg-primary/5"
+            className="inline-flex h-10 items-center rounded-full border border-border/40 bg-secondary/50 px-5 text-sm font-medium transition-all hover:border-primary/40 hover:bg-primary/5 sm:h-auto sm:py-1.5 sm:text-xs"
           >
             Copy link
           </button>
@@ -372,21 +372,21 @@ function StatsBar({ filesCount, totalSaved, avgReduction, visible }: {
         <p className="text-2xl sm:text-3xl font-extrabold tabular-nums bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
           {filesCount}
         </p>
-        <p className="mt-0.5 text-[10px] sm:text-[11px] font-medium text-muted-foreground">Images</p>
+        <p className="mt-0.5 text-[11px] sm:text-[11px] font-medium text-muted-foreground">Images</p>
       </div>
       <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.05] p-3 sm:p-5 text-center shadow-md shadow-emerald-500/[0.08]">
         <p className="text-2xl sm:text-3xl font-extrabold tabular-nums text-emerald-300">
           {animatedSaved}
           <span className="text-sm sm:text-base font-bold text-emerald-400/80"> KB</span>
         </p>
-        <p className="mt-0.5 text-[10px] sm:text-[11px] font-medium text-muted-foreground">Saved</p>
+        <p className="mt-0.5 text-[11px] sm:text-[11px] font-medium text-muted-foreground">Saved</p>
       </div>
       <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/[0.05] p-3 sm:p-5 text-center shadow-md shadow-emerald-500/[0.08]">
         <p className="text-2xl sm:text-3xl font-extrabold tabular-nums text-emerald-300">
           {animatedReduction}
           <span className="text-base font-bold text-emerald-400/80">%</span>
         </p>
-        <p className="mt-0.5 text-[10px] sm:text-[11px] font-medium text-muted-foreground">Smaller</p>
+        <p className="mt-0.5 text-[11px] sm:text-[11px] font-medium text-muted-foreground">Smaller</p>
       </div>
     </motion.div>
   );

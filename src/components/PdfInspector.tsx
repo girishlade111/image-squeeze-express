@@ -84,8 +84,8 @@ const PdfInspector = ({
       <DialogContent className="max-w-4xl gap-0 overflow-hidden p-0 sm:rounded-lg max-sm:left-0 max-sm:top-0 max-sm:h-[100dvh] max-sm:max-w-none max-sm:translate-x-0 max-sm:translate-y-0 sm:max-h-[90vh]">
         <DialogHeader className="flex-row items-center justify-between gap-2 border-b border-border/40 bg-card/60 px-3 py-2.5 sm:px-5 sm:py-3">
           <div className="min-w-0 flex-1">
-            <DialogTitle className="truncate text-sm font-semibold">{file.name}</DialogTitle>
-            <DialogDescription className="text-[11px] text-muted-foreground">
+            <DialogTitle className="truncate text-sm font-semibold sm:text-sm">{file.name}</DialogTitle>
+            <DialogDescription className="text-xs text-muted-foreground sm:text-[11px]">
               {meta
                 ? `${meta.pageCount} page${meta.pageCount !== 1 ? 's' : ''} · ${meta.estimatedPageSize} · ${formatBytes(file.originalSize)}`
                 : `${file.pageCount ?? '…'} page${file.pageCount !== 1 ? 's' : ''} · ${formatBytes(file.originalSize)}`}
@@ -97,7 +97,7 @@ const PdfInspector = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 sm:h-7 sm:w-7"
+                  className="h-9 w-9 sm:h-7 sm:w-7"
                   onClick={() => setShowOriginal((v) => !v)}
                   aria-pressed={showOriginal}
                   aria-label={showOriginal ? 'Show processed' : 'Show original'}
@@ -112,7 +112,7 @@ const PdfInspector = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 sm:h-7 sm:w-7"
+                  className="h-9 w-9 sm:h-7 sm:w-7"
                   onClick={() => setZoom((z) => Math.max(0.5, z - 0.25))}
                   aria-label="Zoom out"
                 >
@@ -121,7 +121,7 @@ const PdfInspector = ({
               </TooltipTrigger>
               <TooltipContent>Zoom out</TooltipContent>
             </Tooltip>
-            <span className="w-10 text-center text-[10px] tabular-nums text-muted-foreground">
+            <span className="w-10 text-center text-[11px] tabular-nums text-muted-foreground sm:text-[10px]">
               {Math.round(zoom * 100)}%
             </span>
             <Tooltip>
@@ -129,7 +129,7 @@ const PdfInspector = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 sm:h-7 sm:w-7"
+                  className="h-9 w-9 sm:h-7 sm:w-7"
                   onClick={() => setZoom((z) => Math.min(4, z + 0.25))}
                   aria-label="Zoom in"
                 >
@@ -143,7 +143,7 @@ const PdfInspector = ({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 sm:h-7 sm:w-7"
+                  className="h-9 w-9 sm:h-7 sm:w-7"
                   onClick={() => setZoom(1)}
                   aria-label="Reset zoom"
                 >
@@ -155,7 +155,7 @@ const PdfInspector = ({
             <Button
               variant="ghost"
               size="icon"
-              className="h-8 w-8 sm:h-7 sm:w-7"
+              className="h-9 w-9 sm:h-7 sm:w-7"
               onClick={() => onOpenChange(false)}
               aria-label="Close inspector"
             >
@@ -212,10 +212,10 @@ const PdfInspector = ({
           <div className="flex flex-col gap-3 overflow-auto border-border/40 bg-card/40 p-3 text-xs sm:p-4 md:border-l">
             {hasResult && (
               <div className="rounded-lg border border-success/30 bg-success/10 p-3">
-                <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-success">
+                <div className="mb-1.5 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-success sm:text-[10px]">
                   <Check className="h-3 w-3" /> Compression complete
                 </div>
-                <div className="grid grid-cols-2 gap-2 text-[11px]">
+                <div className="grid grid-cols-2 gap-2 text-xs sm:text-[11px]">
                   <div>
                     <p className="text-muted-foreground">Original</p>
                     <p className="font-semibold tabular-nums">{formatBytes(file.originalSize)}</p>
@@ -244,23 +244,23 @@ const PdfInspector = ({
 
             {meta && (meta.isTextHeavy || meta.isImageHeavy || meta.recommendedPreset) && (
               <div className="rounded-lg border border-primary/30 bg-primary/[0.06] p-3">
-                <div className="mb-1.5 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-primary">
+                <div className="mb-1.5 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-primary sm:text-[10px]">
                   <Lightbulb className="h-3 w-3" /> Smart recommendation
                 </div>
                 <div className="space-y-1.5">
-                  <p className="text-[11px] leading-relaxed">{meta.recommendationReason}</p>
+                  <p className="text-xs leading-relaxed sm:text-[11px]">{meta.recommendationReason}</p>
                   <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                    <span className="rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase text-primary">
+                    <span className="rounded-full border border-primary/30 bg-primary/10 px-2 py-0.5 text-[11px] font-bold uppercase text-primary sm:text-[10px]">
                       {meta.recommendedPreset}
                     </span>
-                    <span className="text-[10px] text-muted-foreground">
+                    <span className="text-[11px] text-muted-foreground sm:text-[10px]">
                       q={Math.round(meta.recommendedQuality * 100)}% · saves ~{meta.estimatedSavings}%
                     </span>
                   </div>
                   <Button
                     size="sm"
                     variant="outline"
-                    className="mt-1.5 h-7 w-full rounded-md text-[11px]"
+                    className="mt-1.5 h-9 w-full rounded-md text-xs sm:h-7 sm:text-[11px]"
                     onClick={() =>
                       onApplyRecommendation(
                         file.id,
@@ -269,7 +269,7 @@ const PdfInspector = ({
                       )
                     }
                   >
-                    <Sparkles className="mr-1 h-3 w-3" />
+                    <Sparkles className="mr-1 h-3.5 w-3.5 sm:h-3 sm:w-3" />
                     Apply suggestion
                   </Button>
                 </div>
@@ -277,10 +277,10 @@ const PdfInspector = ({
             )}
 
             <div className="rounded-lg border border-border/40 bg-background/40 p-3">
-              <div className="mb-2 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+              <div className="mb-2 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-muted-foreground sm:text-[10px]">
                 <Database className="h-3 w-3" /> Metadata
               </div>
-              <dl className="space-y-1.5 text-[11px]">
+              <dl className="space-y-1.5 text-xs sm:text-[11px]">
                 <div className="flex items-center justify-between">
                   <dt className="flex items-center gap-1 text-muted-foreground">
                     <FileText className="h-3 w-3" /> Pages
@@ -301,7 +301,7 @@ const PdfInspector = ({
                     </div>
                     <div className="flex items-center justify-between">
                       <dt className="text-muted-foreground">Page format</dt>
-                      <dd className="font-mono text-[10px]">{meta.estimatedPageSize}</dd>
+                      <dd className="font-mono text-[11px] sm:text-[10px]">{meta.estimatedPageSize}</dd>
                     </div>
                     <div className="flex items-center justify-between">
                       <dt className="text-muted-foreground">Aspect ratio</dt>
@@ -314,7 +314,7 @@ const PdfInspector = ({
                         <dt className="flex items-center gap-1 text-muted-foreground">
                           <Type className="h-3 w-3" /> Title
                         </dt>
-                        <dd className="truncate font-mono text-[10px]" title={meta.title}>
+                        <dd className="truncate font-mono text-[11px] sm:text-[10px]" title={meta.title}>
                           {meta.title}
                         </dd>
                       </div>
@@ -324,7 +324,7 @@ const PdfInspector = ({
                         <dt className="flex items-center gap-1 text-muted-foreground">
                           <Type className="h-3 w-3" /> Author
                         </dt>
-                        <dd className="truncate font-mono text-[10px]" title={meta.author}>
+                        <dd className="truncate font-mono text-[11px] sm:text-[10px]" title={meta.author}>
                           {meta.author}
                         </dd>
                       </div>
@@ -348,7 +348,7 @@ const PdfInspector = ({
                     <dt className="flex items-center gap-1 text-muted-foreground">
                       <FileImage className="h-3 w-3" /> Content type
                     </dt>
-                    <dd className="font-mono text-[10px]">
+                    <dd className="font-mono text-[11px] sm:text-[10px]">
                       {meta.isTextHeavy ? 'Text-heavy' : meta.isImageHeavy ? 'Image-heavy' : 'Mixed'}
                     </dd>
                   </div>
@@ -368,11 +368,11 @@ const PdfInspector = ({
               {file.status === 'ready' && (
                 <Button
                   size="sm"
-                  className="h-8 w-full rounded-md text-[11px]"
+                  className="h-10 w-full rounded-md text-sm font-semibold sm:h-8 sm:text-[11px]"
                   onClick={() => onPreviewOne(file.id)}
                   style={{ background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))' }}
                 >
-                  <Sparkles className="mr-1 h-3 w-3" />
+                  <Sparkles className="mr-1 h-4 w-4 sm:h-3 sm:w-3" />
                   Try current settings
                 </Button>
               )}
@@ -380,19 +380,19 @@ const PdfInspector = ({
                 <Button
                   size="sm"
                   variant="outline"
-                  className="h-8 w-full rounded-md text-[11px]"
+                  className="h-10 w-full rounded-md text-sm font-semibold sm:h-8 sm:text-[11px]"
                   onClick={() => onDownload(file.id)}
                 >
-                  <Download className="mr-1 h-3 w-3" />
+                  <Download className="mr-1 h-4 w-4 sm:h-3 sm:w-3" />
                   Download
                 </Button>
               )}
             </div>
 
-            <div className="rounded-lg border border-border/30 bg-secondary/30 p-2.5 text-[10px] leading-relaxed text-muted-foreground">
+            <div className="rounded-lg border border-border/30 bg-secondary/30 p-2.5 text-[11px] leading-relaxed text-muted-foreground sm:text-[10px]">
               <Badge
                 variant="outline"
-                className="mb-1 rounded-full border-primary/30 bg-primary/10 px-1.5 py-0 text-[9px] font-semibold text-primary"
+                className="mb-1 rounded-full border-primary/30 bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary sm:px-1.5 sm:py-0 sm:text-[9px]"
               >
                 Privacy
               </Badge>

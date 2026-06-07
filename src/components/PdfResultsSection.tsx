@@ -111,7 +111,7 @@ const PdfResultsSection = ({ files, onReset }: PdfResultsSectionProps) => {
         animate={visible ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5 }}
       >
-        <div className="rounded-2xl border border-border/40 bg-card/80 backdrop-blur-xl p-5 shadow-lg sm:p-6">
+        <div className="rounded-2xl border border-border/40 bg-card/80 backdrop-blur-xl p-4 shadow-lg sm:p-6">
           <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
             <div>
               <h3 className="flex items-center gap-2 text-lg font-bold tracking-tight">
@@ -129,28 +129,28 @@ const PdfResultsSection = ({ files, onReset }: PdfResultsSectionProps) => {
               variant="ghost"
               size="sm"
               onClick={onReset}
-              className="h-8 rounded-full text-[11px] text-muted-foreground hover:text-foreground"
+              className="h-9 rounded-full px-3 text-xs text-muted-foreground hover:text-foreground sm:h-8 sm:text-[11px]"
               aria-label="Start over with new PDFs"
             >
-              <RefreshCw className="mr-1.5 h-3 w-3" /> Start over
+              <RefreshCw className="mr-1.5 h-3.5 w-3.5 sm:h-3 sm:w-3" /> Start over
             </Button>
           </div>
 
           <div className="mt-5 grid grid-cols-3 gap-2 sm:gap-3">
             <div className="rounded-xl border border-border/40 bg-secondary/30 p-3 text-center">
-              <p className="text-[10px] font-medium text-muted-foreground">Total saved</p>
+              <p className="text-[11px] font-medium text-muted-foreground sm:text-[10px]">Total saved</p>
               <p className="mt-0.5 text-base font-bold tabular-nums text-emerald-400 sm:text-lg">
                 {formatBytes(animatedSaved)}
               </p>
             </div>
             <div className="rounded-xl border border-border/40 bg-secondary/30 p-3 text-center">
-              <p className="text-[10px] font-medium text-muted-foreground">Avg. reduction</p>
+              <p className="text-[11px] font-medium text-muted-foreground sm:text-[10px]">Avg. reduction</p>
               <p className="mt-0.5 text-base font-bold tabular-nums text-primary sm:text-lg">
                 {animatedReduction}%
               </p>
             </div>
             <div className="rounded-xl border border-border/40 bg-secondary/30 p-3 text-center">
-              <p className="text-[10px] font-medium text-muted-foreground">Files</p>
+              <p className="text-[11px] font-medium text-muted-foreground sm:text-[10px]">Files</p>
               <p className="mt-0.5 text-base font-bold tabular-nums sm:text-lg">
                 {successCount}/{files.length}
               </p>
@@ -161,9 +161,9 @@ const PdfResultsSection = ({ files, onReset }: PdfResultsSectionProps) => {
             {files.map((f) => (
               <div
                 key={f.id}
-                className="flex items-center gap-2.5 rounded-xl border border-border/40 bg-background/40 p-2.5"
+                className="flex items-center gap-3 rounded-xl border border-border/40 bg-background/40 p-2.5 sm:gap-2.5"
               >
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10 sm:h-10 sm:w-10">
                   <FileText
                     className={`h-5 w-5 ${
                       f.status === 'done'
@@ -176,10 +176,10 @@ const PdfResultsSection = ({ files, onReset }: PdfResultsSectionProps) => {
                   />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-xs font-medium" title={f.name}>
+                  <p className="truncate text-sm font-medium sm:text-xs" title={f.name}>
                     {f.name}
                   </p>
-                  <div className="mt-0.5 flex items-center gap-2 text-[10px]">
+                  <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] sm:text-[10px]">
                     {f.status === 'done' && f.result && (
                       <>
                         <span className="text-muted-foreground">
@@ -190,7 +190,7 @@ const PdfResultsSection = ({ files, onReset }: PdfResultsSectionProps) => {
                         </span>
                         <Badge
                           variant="outline"
-                          className="rounded-full border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0 text-[9px] font-semibold text-emerald-300"
+                          className="rounded-full border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[11px] font-semibold text-emerald-300 sm:px-1.5 sm:py-0 sm:text-[9px]"
                         >
                           {getReductionRatio(f.originalSize, f.result.sizeBytes)}
                         </Badge>
@@ -211,7 +211,7 @@ const PdfResultsSection = ({ files, onReset }: PdfResultsSectionProps) => {
                         variant="ghost"
                         size="sm"
                         onClick={() => setPreviewFile(f)}
-                        className="h-9 rounded-full px-2.5 text-[11px] sm:h-7 sm:px-2 sm:text-[10px]"
+                        className="h-10 rounded-full px-3 text-xs sm:h-7 sm:px-2 sm:text-[10px]"
                         aria-label={`Preview ${f.name}`}
                       >
                         Preview
@@ -219,10 +219,10 @@ const PdfResultsSection = ({ files, onReset }: PdfResultsSectionProps) => {
                       <Button
                         size="sm"
                         onClick={() => downloadSingle(f)}
-                        className="h-9 rounded-full bg-emerald-500 px-3 text-[11px] font-semibold text-white hover:bg-emerald-600 sm:h-7 sm:px-2.5 sm:text-[10px]"
+                        className="h-10 rounded-full bg-emerald-500 px-3.5 text-xs font-semibold text-white hover:bg-emerald-600 sm:h-7 sm:px-2.5 sm:text-[10px]"
                         aria-label={`Download ${f.name}`}
                       >
-                        <Download className="mr-1 h-3.5 w-3.5 sm:mr-1 sm:h-3 sm:w-3" />
+                        <Download className="mr-1 h-4 w-4 sm:mr-1 sm:h-3 sm:w-3" />
                         Save
                       </Button>
                     </>
@@ -235,13 +235,13 @@ const PdfResultsSection = ({ files, onReset }: PdfResultsSectionProps) => {
           {successCount > 1 && (
             <Button
               onClick={downloadAll}
-              className="mt-4 h-10 w-full rounded-xl text-sm font-semibold"
+              className="mt-4 h-12 w-full rounded-xl text-base font-semibold sm:h-10 sm:text-sm"
               style={{
                 background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
               }}
               aria-label="Download all compressed PDFs as ZIP"
             >
-              <FileArchive className="mr-2 h-4 w-4" />
+              <FileArchive className="mr-2 h-5 w-5 sm:h-4 sm:w-4" />
               Download all as ZIP
             </Button>
           )}

@@ -278,51 +278,51 @@ export function ComparisonView({ file }: ComparisonViewProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7"
+                className="h-10 w-10 sm:h-7 sm:w-7"
                 onClick={zoomOut}
                 disabled={scale <= MIN_SCALE}
                 aria-label="Zoom out"
                 title="Zoom out (-)"
               >
-                <ZoomOut className="h-3.5 w-3.5" />
+                <ZoomOut className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
               </Button>
-              <span className="min-w-[3.5ch] text-center text-[10px] tabular-nums text-muted-foreground">
+              <span className="min-w-[3.5ch] text-center text-[11px] tabular-nums text-muted-foreground sm:text-[10px]">
                 {Math.round(scale * 100)}%
               </span>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7"
+                className="h-10 w-10 sm:h-7 sm:w-7"
                 onClick={zoomIn}
                 disabled={scale >= MAX_SCALE}
                 aria-label="Zoom in"
                 title="Zoom in (+)"
               >
-                <ZoomIn className="h-3.5 w-3.5" />
+                <ZoomIn className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7"
+                className="h-10 w-10 sm:h-7 sm:w-7"
                 onClick={resetZoom}
                 disabled={isAtDefaultView}
                 aria-label="Reset zoom"
                 title="Reset zoom (0)"
               >
-                <Maximize2 className="h-3.5 w-3.5" />
+                <Maximize2 className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
               </Button>
-              <div className="mx-1 h-4 w-px bg-border/40" />
+              <div className="mx-1 h-5 w-px bg-border/40 sm:h-4" />
             </>
           )}
           <Button
             variant="ghost"
             size="icon"
-            className="h-7 w-7"
+            className="h-10 w-10 sm:h-7 sm:w-7"
             onClick={download}
             aria-label="Download compressed"
             title="Download compressed"
           >
-            <Download className="h-3.5 w-3.5" />
+            <Download className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
           </Button>
         </div>
       </div>
@@ -385,23 +385,23 @@ export function ComparisonView({ file }: ComparisonViewProps) {
       </div>
 
       <div className="grid grid-cols-2 gap-2">
-        <div className="rounded-lg border border-border/40 bg-secondary/20 p-2">
-          <p className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Before</p>
+        <div className="rounded-lg border border-border/40 bg-secondary/20 p-2.5 sm:p-2">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground sm:text-[9px]">Before</p>
           <p className="mt-0.5 text-sm font-bold text-foreground">{formatFileSize(file.originalSize)}</p>
           {file.originalWidth > 0 && (
-            <p className="text-[10px] text-muted-foreground">
+            <p className="text-[11px] text-muted-foreground sm:text-[10px]">
               {file.originalWidth}×{file.originalHeight}
             </p>
           )}
         </div>
-        <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/[0.04] p-2">
-          <p className="text-[9px] font-bold uppercase tracking-wider text-emerald-300">After</p>
+        <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/[0.04] p-2.5 sm:p-2">
+          <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-300 sm:text-[9px]">After</p>
           <p className="mt-0.5 text-sm font-bold text-emerald-300">
             {formatFileSize(newSize)}
-            <span className="ml-1 text-[10px] font-normal text-emerald-400/80">· {ratio}</span>
+            <span className="ml-1 text-[11px] font-normal text-emerald-400/80 sm:text-[10px]">· {ratio}</span>
           </p>
           {file.result && (
-            <p className="text-[10px] text-muted-foreground">
+            <p className="text-[11px] text-muted-foreground sm:text-[10px]">
               {file.result.width}×{file.result.height}
             </p>
           )}
@@ -423,7 +423,7 @@ function ModeButton({ active, onClick, icon, label, shortcut }: {
       type="button"
       onClick={onClick}
       className={cn(
-        'flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium transition-all',
+        'flex h-10 items-center gap-1.5 rounded-full px-3 text-sm font-medium transition-all sm:h-auto sm:py-1 sm:text-[11px]',
         active
           ? 'bg-foreground/10 text-foreground shadow-sm'
           : 'text-muted-foreground hover:text-foreground'
@@ -445,8 +445,8 @@ function ModeButton({ active, onClick, icon, label, shortcut }: {
 function SideBySideView({ file }: { file: UploadedFile }) {
   return (
     <div className="grid grid-cols-2 gap-px bg-border/40">
-      <div className="flex flex-col gap-1 bg-background/95 p-2">
-        <p className="text-[9px] font-bold uppercase tracking-wider text-muted-foreground">Before</p>
+      <div className="flex flex-col gap-1 bg-background/95 p-2.5 sm:p-2">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground sm:text-[9px]">Before</p>
         <div className="flex min-h-[40vh] items-center justify-center">
           <img
             src={file.preview}
@@ -456,8 +456,8 @@ function SideBySideView({ file }: { file: UploadedFile }) {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-1 bg-background/95 p-2">
-        <p className="text-[9px] font-bold uppercase tracking-wider text-emerald-300">After</p>
+      <div className="flex flex-col gap-1 bg-background/95 p-2.5 sm:p-2">
+        <p className="text-[10px] font-bold uppercase tracking-wider text-emerald-300 sm:text-[9px]">After</p>
         <div className="flex min-h-[40vh] items-center justify-center">
           <img
             src={file.processedPreview}
