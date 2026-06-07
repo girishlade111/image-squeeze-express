@@ -325,35 +325,35 @@ const ImageQueue = ({
                 {/* Info */}
                 <div className="min-w-0 flex-1">
                   <p
-                    className="truncate text-xs font-medium text-foreground"
+                    className="truncate text-sm font-medium text-foreground sm:text-xs"
                     title={f.name}
                   >
                     {truncate(f.name, 22)}
                   </p>
-                  <p className="mt-0.5 text-[10px] text-muted-foreground">
+                  <p className="mt-0.5 text-[11px] text-muted-foreground sm:text-[10px]">
                     {formatFileSize(f.originalSize)}
                     {f.originalWidth > 0 && f.originalHeight > 0 && (
                       <> · {f.originalWidth}×{f.originalHeight}</>
                     )}
                   </p>
                   {f.status === 'done' && f.result && (
-                    <p className="mt-0.5 text-[10px] font-medium text-success">
+                    <p className="mt-0.5 text-[11px] font-medium text-success sm:text-[10px]">
                       {formatFileSize(f.result.sizeBytes)} ·{' '}
                       {getCompressionRatio(f.originalSize, f.result.sizeBytes)}
                     </p>
                   )}
                   {f.status === 'error' && f.error && (
                     <p
-                      className="mt-0.5 truncate text-[10px] text-destructive"
+                      className="mt-0.5 truncate text-[11px] text-destructive sm:text-[10px]"
                       title={f.error}
                     >
                       {f.error}
                     </p>
                   )}
-                  <div className="mt-1 flex flex-wrap items-center gap-1">
+                  <div className="mt-1.5 flex flex-wrap items-center gap-1">
                     <Badge
                       variant="outline"
-                      className={`rounded-full px-1.5 py-0 text-[9px] font-semibold ${statusStyles[f.status]}`}
+                      className={`rounded-full px-2 py-0 text-[11px] font-semibold sm:px-1.5 sm:text-[9px] ${statusStyles[f.status]}`}
                     >
                       {isCurrent ? 'Processing now' : statusLabel[f.status]}
                     </Badge>
@@ -362,13 +362,13 @@ const ImageQueue = ({
                         <TooltipTrigger asChild>
                           <Badge
                             variant="outline"
-                            className="cursor-help rounded-full border-primary/30 bg-primary/10 px-1.5 py-0 text-[9px] font-semibold text-primary"
+                            className="cursor-help rounded-full border-primary/30 bg-primary/10 px-2 py-0 text-[11px] font-semibold text-primary sm:px-1.5 sm:text-[9px]"
                           >
-                            <Lightbulb className="mr-0.5 h-2 w-2" />
+                            <Lightbulb className="mr-0.5 h-2.5 w-2.5 sm:h-2 sm:w-2" />
                             Use {String(recommendation!.recommendedFormat).toUpperCase()}
                           </Badge>
                         </TooltipTrigger>
-                        <TooltipContent className="max-w-[220px] text-[11px] leading-relaxed">
+                        <TooltipContent className="max-w-[220px] text-xs leading-relaxed">
                           {recommendation!.recommendationReason}
                           <br />
                           <span className="text-primary">
@@ -454,14 +454,14 @@ const ImageQueue = ({
                     }}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className={`absolute -right-1.5 -top-1.5 flex h-6 w-6 items-center justify-center rounded-full bg-destructive text-destructive-foreground shadow-sm transition-opacity duration-150 sm:h-5 sm:w-5 ${
+                    className={`absolute -right-1.5 -top-1.5 flex h-7 w-7 items-center justify-center rounded-full bg-destructive text-destructive-foreground shadow-sm transition-opacity duration-150 sm:h-6 sm:w-6 ${
                       hoverId === f.id || f.status === 'error'
                         ? 'opacity-100'
                         : 'opacity-100 sm:opacity-0 sm:group-hover:opacity-100'
                     }`}
                     aria-label={`Remove ${f.name}`}
                   >
-                    <X className="h-3 w-3 sm:h-3 sm:w-3" />
+                    <X className="h-3.5 w-3.5 sm:h-3 sm:w-3" />
                   </motion.button>
                 )}
               </motion.div>
@@ -475,7 +475,7 @@ const ImageQueue = ({
       <AnimatePresence>
         {!allDone && readyCount > 0 && (
           <motion.div
-            className="mt-4 flex flex-col items-center gap-2 sm:flex-row sm:justify-center"
+            className="mt-4 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-center"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
@@ -485,7 +485,7 @@ const ImageQueue = ({
                 size="default"
                 disabled={isProcessing}
                 onClick={onProcessAll}
-                className="h-10 w-full rounded-xl text-sm font-semibold text-primary-foreground shadow-md sm:w-auto"
+                className="h-12 w-full rounded-xl text-sm font-semibold text-primary-foreground shadow-md sm:h-10 sm:w-auto"
                 style={{
                   background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
                 }}
