@@ -190,8 +190,10 @@ const FeatureCard = ({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 24 }}
+      initial="rest"
+      whileInView={active ? 'visible' : undefined}
       animate={active ? { opacity: 1, y: 0 } : {}}
+      whileHover="hover"
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.5, delay: 0.05 + index * 0.07, ease: 'easeOut' }}
       className="group relative"
