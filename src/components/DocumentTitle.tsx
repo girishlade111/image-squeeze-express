@@ -10,7 +10,7 @@ export interface DocumentTitleProps {
   canonical?: string;
   ogImage?: string;
   ogType?: 'website' | 'article' | 'product';
-  twitterCard?: 'summary' | 'summary_large_image';
+  twitterCard?: 'summary' | 'summary_large_image' | 'app' | 'player';
   noindex?: boolean;
   jsonLd?: object | object[] | null;
   suffix?: string;
@@ -75,10 +75,38 @@ const DocumentTitle = ({
     if (document.title !== fullTitle) document.title = fullTitle;
 
     if (description) setMeta('description', description);
+    if (shortDescription) {
+      setMeta('description:short', shortDescription);
+      setMeta('twitter:description:short', shortDescription);
+      setMeta('og:description:short', shortDescription);
+    }
     if (keywords) setMeta('keywords', keywords);
+    if (shortTitle) {
+      setMeta('title:short', shortTitle);
+      setMeta('og:title:short', shortTitle);
+      setMeta('twitter:title:short', shortTitle);
+    }
+
     setMeta('author', 'Lade Stack');
+    setMeta('designer', 'Girish Lade');
+    setMeta('developer', 'Lade Stack');
+    setMeta('reply-to', siteSeo.email);
+    setMeta('owner', `Lade Stack — ${siteSeo.email}`);
+    setMeta('copyright', 'Copyright © 2026 Lade Stack. All rights reserved.');
+    setMeta('category', 'Multimedia, Utilities, Productivity');
+    setMeta('coverage', siteSeo.coverage);
+    setMeta('distribution', siteSeo.distribution);
+    setMeta('rating', siteSeo.rating);
+    setMeta('revisit-after', siteSeo.revisitAfter);
     setMeta('robots', noindex ? ROBOTS_NOINDEX : ROBOTS_INDEX);
     setMeta('googlebot', noindex ? ROBOTS_NOINDEX : ROBOTS_INDEX);
+    setMeta('bingbot', noindex ? ROBOTS_NOINDEX : ROBOTS_INDEX);
+    setMeta('language', 'English');
+    setMeta('geo.region', siteSeo.geo.region);
+    setMeta('geo.placename', siteSeo.geo.placename);
+    setMeta('geo.position', siteSeo.geo.position);
+    setMeta('ICBM', siteSeo.geo.icbm);
+    setMeta('og:country-name', siteSeo.geo.region);
 
     const ogTitle = shortTitle || title;
     const ogDesc = shortDescription || description || '';
@@ -90,13 +118,15 @@ const DocumentTitle = ({
     setMeta('og:type', ogType);
     setMeta('og:url', ogUrl);
     setMeta('og:image', ogImage);
+    setMeta('og:image:secure_url', ogImage);
     setMeta('og:image:width', String(siteSeo.defaultImage.width));
     setMeta('og:image:height', String(siteSeo.defaultImage.height));
     setMeta('og:image:alt', ogTitle);
     setMeta('og:site_name', siteSeo.name);
-    setMeta('og:locale', 'en_US');
+    setMeta('og:locale', siteSeo.locale);
     setMeta('og:locale:alternate', 'en_IN');
     setMeta('og:locale:alternate', 'en_GB');
+    setMeta('og:updated_time', new Date().toISOString());
 
     setMeta('twitter:card', twitterCard);
     setMeta('twitter:title', ogTitle);
@@ -106,6 +136,19 @@ const DocumentTitle = ({
     setMeta('twitter:url', ogUrl);
     setMeta('twitter:site', siteSeo.twitter);
     setMeta('twitter:creator', siteSeo.twitter);
+    setMeta('twitter:domain', 'img.ladestack.in');
+    setMeta('twitter:label1', 'Privacy');
+    setMeta('twitter:data1', '100% Client-Side — No Upload');
+    setMeta('twitter:label2', 'Price');
+    setMeta('twitter:data2', 'Free Forever');
+    setMeta('twitter:label3', 'Formats');
+    setMeta('twitter:data3', 'JPG, PNG, WebP, AVIF, PDF');
+    setMeta('twitter:label4', 'Batch Size');
+    setMeta('twitter:data4', 'Up to 50 images / 750 MB');
+
+    setMeta('article:author', 'https://ladestack.in');
+    setMeta('article:publisher', 'https://ladestack.in');
+    setMeta('article:section', 'Technology');
 
     if (canonical) setLink('canonical', canonical);
 
