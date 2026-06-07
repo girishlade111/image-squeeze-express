@@ -620,7 +620,7 @@ const Contact = () => {
                 >
                   <a
                     href="mailto:admin@ladestack.in"
-                    className="group inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-[1.02]"
+                    className="group inline-flex h-12 items-center gap-2 rounded-full px-5 text-base font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-[1.02] sm:h-auto sm:py-2.5 sm:text-sm"
                     style={{
                       background:
                         'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
@@ -633,7 +633,7 @@ const Contact = () => {
                     href="https://github.com/girishlade111"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-card/60 px-5 py-2.5 text-sm font-semibold backdrop-blur-sm transition-colors hover:border-primary/40 hover:bg-card"
+                    className="inline-flex h-12 items-center gap-2 rounded-full border border-border/50 bg-card/60 px-5 text-base font-semibold backdrop-blur-sm transition-colors hover:border-primary/40 hover:bg-card sm:h-auto sm:py-2.5 sm:text-sm"
                   >
                     <GithubLogo size={16} weight="duotone" />
                     Browse GitHub
@@ -856,10 +856,10 @@ const Contact = () => {
                 One click to email, one click to GitHub. Pick whichever feels easier — we
                 read everything that comes in.
               </p>
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <div className="mt-6 flex flex-col items-stretch gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
                 <a
                   href="mailto:admin@ladestack.in"
-                  className="group inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-[1.02]"
+                  className="group inline-flex h-12 items-center justify-center gap-2 rounded-full px-5 text-base font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-[1.02] sm:h-auto sm:px-5 sm:py-2.5 sm:text-sm"
                   style={{
                     background:
                       'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
@@ -877,7 +877,7 @@ const Contact = () => {
                   href="https://github.com/girishlade111"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-card/80 px-5 py-2.5 text-sm font-semibold backdrop-blur-sm transition-colors hover:border-primary/40"
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border/50 bg-card/80 px-5 text-base font-semibold backdrop-blur-sm transition-colors hover:border-primary/40 sm:h-auto sm:px-5 sm:py-2.5 sm:text-sm"
                 >
                   <GithubLogo size={16} weight="duotone" />
                   Open GitHub

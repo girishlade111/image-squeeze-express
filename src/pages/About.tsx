@@ -492,7 +492,7 @@ const About = () => {
               >
                 <a
                   href="#section-01"
-                  className="group inline-flex items-center gap-2 rounded-full px-4 py-2 text-sm font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-[1.02]"
+                  className="group inline-flex h-12 items-center gap-2 rounded-full px-5 text-base font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-[1.02] sm:h-auto sm:px-4 sm:py-2.5 sm:text-sm"
                   style={{ background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))' }}
                 >
                   Read our story
@@ -500,7 +500,7 @@ const About = () => {
                 </a>
                 <Link
                   to="/"
-                  className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-card/60 px-4 py-2 text-sm font-semibold backdrop-blur-sm transition-colors hover:border-primary/40 hover:bg-card"
+                  className="inline-flex h-12 items-center gap-2 rounded-full border border-border/50 bg-card/60 px-5 text-base font-semibold backdrop-blur-sm transition-colors hover:border-primary/40 hover:bg-card sm:h-auto sm:px-4 sm:py-2.5 sm:text-sm"
                 >
                   <Lightning size={16} weight="duotone" />
                   Try the tools
@@ -519,9 +519,9 @@ const About = () => {
                     key={f.label}
                     className="rounded-xl border border-border/40 bg-card/50 px-3 py-3 backdrop-blur-sm transition-colors hover:border-primary/30 hover:bg-card/70"
                   >
-                    <f.icon size={18} weight="duotone" className="mx-auto h-4 w-4 text-primary" />
-                    <div className="mt-1.5 text-base font-bold tracking-tight sm:text-lg">{f.value}</div>
-                    <div className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground sm:text-[11px]">
+                    <f.icon size={18} weight="duotone" className="mx-auto h-5 w-5 text-primary sm:h-4 sm:w-4" />
+                    <div className="mt-1.5 text-lg font-bold tracking-tight sm:text-lg">{f.value}</div>
+                    <div className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground sm:text-[11px]">
                       {f.label}
                     </div>
                   </div>
@@ -572,7 +572,7 @@ const About = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.4 }}
               transition={{ duration: 0.4 }}
-              className="mb-2 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400 sm:mb-3"
+              className="mb-2 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.15em] text-emerald-600 dark:text-emerald-400 sm:mb-3 sm:py-1 sm:text-[10px]"
             >
               <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-500 opacity-60" />
@@ -1231,10 +1231,10 @@ const About = () => {
               <p className="mx-auto mt-3 max-w-md text-sm text-muted-foreground sm:text-base">
                 Three tools. Zero servers in the loop. Drop a file and watch it work — that&apos;s the whole pitch.
               </p>
-              <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+              <div className="mt-6 flex flex-col items-stretch gap-2.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-3">
                 <Link
                   to="/"
-                  className="group inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-[1.02]"
+                  className="group inline-flex h-12 items-center justify-center gap-2 rounded-full px-5 text-base font-semibold text-primary-foreground shadow-lg transition-transform hover:scale-[1.02] sm:h-auto sm:px-5 sm:py-2.5 sm:text-sm"
                   style={{ background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))' }}
                 >
                   <Lightning size={16} weight="duotone" />
@@ -1242,14 +1242,14 @@ const About = () => {
                 </Link>
                 <Link
                   to="/compress-pdf"
-                  className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-card/80 px-5 py-2.5 text-sm font-semibold backdrop-blur-sm transition-colors hover:border-primary/40"
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border/50 bg-card/80 px-5 text-base font-semibold backdrop-blur-sm transition-colors hover:border-primary/40 sm:h-auto sm:px-5 sm:py-2.5 sm:text-sm"
                 >
                   <FileText size={16} weight="duotone" />
                   Compress PDF
                 </Link>
                 <Link
                   to="/bulk-rename"
-                  className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-card/80 px-5 py-2.5 text-sm font-semibold backdrop-blur-sm transition-colors hover:border-primary/40"
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-full border border-border/50 bg-card/80 px-5 text-base font-semibold backdrop-blur-sm transition-colors hover:border-primary/40 sm:h-auto sm:px-5 sm:py-2.5 sm:text-sm"
                 >
                   <ArrowsClockwise size={16} weight="duotone" />
                   Bulk Rename

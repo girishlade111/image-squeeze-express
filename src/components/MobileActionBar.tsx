@@ -49,7 +49,7 @@ const MobileActionBar = ({
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 80, opacity: 0 }}
           transition={{ type: 'spring', stiffness: 280, damping: 26 }}
-          className="fixed inset-x-0 bottom-0 z-30 px-3 pb-safe pt-2 sm:hidden"
+          className="fixed inset-x-0 bottom-0 z-30 px-3 safe-bottom pt-2 sm:hidden"
         >
           <div className="rounded-2xl border border-border/50 bg-card/95 p-2 shadow-elev-3 backdrop-blur-xl">
             <button

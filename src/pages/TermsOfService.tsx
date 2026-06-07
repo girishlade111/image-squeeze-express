@@ -10,7 +10,7 @@ const TermsOfService = () => (
     <Header />
     <main className="container mx-auto px-4 pt-24 pb-16 sm:px-6">
       <div className="mx-auto max-w-3xl">
-        <h1 className="text-4xl font-black tracking-tight">Terms of Service</h1>
+        <h1 className="text-3xl font-black tracking-tight sm:text-4xl">Terms of Service</h1>
         <p className="mt-2 text-sm text-muted-foreground">Last updated: {lastUpdated}</p>
 
         <p className="mt-6 text-muted-foreground leading-relaxed">

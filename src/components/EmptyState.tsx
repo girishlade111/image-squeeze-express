@@ -19,16 +19,16 @@ const EmptyState = ({ icon, title, description, action, className = '' }: EmptyS
     initial={{ opacity: 0, y: 8 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.3 }}
-    className={`flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-foreground/[0.015] px-6 py-10 text-center ${className}`}
+    className={`flex flex-col items-center justify-center rounded-2xl border border-dashed border-border/60 bg-foreground/[0.015] px-5 py-8 text-center sm:px-6 sm:py-10 ${className}`}
   >
     {icon && (
-      <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+      <div className="mb-3 flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary sm:h-12 sm:w-12">
         {icon}
       </div>
     )}
-    <h3 className="text-sm font-semibold text-foreground">{title}</h3>
+    <h3 className="text-base font-semibold text-foreground sm:text-sm">{title}</h3>
     {description && (
-      <p className="mt-1 max-w-sm text-xs text-muted-foreground">{description}</p>
+      <p className="mt-1.5 max-w-sm text-sm text-muted-foreground sm:mt-1 sm:text-xs">{description}</p>
     )}
     {action && <div className="mt-4">{action}</div>}
   </motion.div>

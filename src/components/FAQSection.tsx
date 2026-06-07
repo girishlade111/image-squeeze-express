@@ -91,12 +91,12 @@ const FAQSection = () => {
         </span>
       </h2>
 
-      <Accordion type="single" collapsible className="space-y-3">
+      <Accordion type="single" collapsible className="space-y-2.5 sm:space-y-3">
         {faqs.map((f, i) => (
           <AccordionItem
             key={i}
             value={`faq-${i}`}
-            className={`rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl px-5 transition-all duration-700 hover:border-primary/30 ${
+            className={`rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl px-4 transition-all duration-700 hover:border-primary/30 sm:px-5 ${
               visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
             }`}
             style={{ animationDelay: visible ? `${i * 80}ms` : '0ms' }}

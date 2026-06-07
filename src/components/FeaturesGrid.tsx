@@ -256,7 +256,7 @@ const FeatureCard = ({
             </span>
             <span
               className={cn(
-                'rounded-full border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider transition-colors duration-500',
+                'rounded-full border px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider transition-colors duration-500 sm:px-1.5 sm:py-0 sm:text-[9px]',
                 isAccent
                   ? 'border-primary/30 bg-primary/10 text-primary/80'
                   : 'border-primary/25 bg-primary/10 text-primary'
