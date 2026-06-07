@@ -2,7 +2,6 @@ import { useState, useEffect, useRef, useCallback } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Moon, Sun, Menu, X } from 'lucide-react';
 import {
-  Lightning,
   Image as PhosphorImage,
   FileText as PhosphorFileText,
   FilePlus,
@@ -105,11 +104,16 @@ const Header = () => {
             aria-label="LS Image Compressor — home"
           >
             <span
-              className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary/20 to-accent/20 text-primary transition-transform group-hover:scale-110 md:h-7 md:w-7"
+              className="flex h-9 w-9 flex-shrink-0 items-center justify-center transition-transform group-hover:scale-110 md:h-7 md:w-7"
               aria-hidden
             >
-              <Lightning size={20} weight="duotone" className="md:hidden" />
-              <Lightning size={16} weight="duotone" className="hidden md:block" />
+              <img
+                src="/logo-mark.svg"
+                alt=""
+                width={36}
+                height={36}
+                className="h-9 w-9 rounded-lg md:h-7 md:w-7"
+              />
             </span>
             <span className="truncate text-sm font-bold tracking-tight sm:text-base md:text-base metallic-text">
               <span className="sm:hidden">LS Compressor</span>

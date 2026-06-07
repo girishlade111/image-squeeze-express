@@ -370,21 +370,21 @@ const SettingsPanel = ({
             {/* Dimension inputs */}
             <div>
               <div className="mb-1.5 flex items-center justify-between">
-                <Label className="text-xs font-semibold">Custom Dimensions</Label>
+                <Label className="text-sm font-semibold sm:text-xs">Custom Dimensions</Label>
                 {(settings.width || settings.height) && (
                   <Button
                     variant="ghost"
                     size="sm"
-                    className="h-5 px-2 text-[10px] text-muted-foreground hover:text-destructive"
+                    className="h-8 px-2.5 text-xs text-muted-foreground hover:text-destructive sm:h-5 sm:px-2 sm:text-[10px]"
                     onClick={onResetResize}
                     aria-label="Clear dimensions"
                   >
-                    <X className="mr-0.5 h-2.5 w-2.5" /> Clear
+                    <X className="mr-0.5 h-3 w-3 sm:h-2.5 sm:w-2.5" /> Clear
                   </Button>
                 )}
               </div>
               <div className="flex flex-wrap items-end gap-2">
-                <div className="min-w-0 flex-1 basis-[calc(50%-1rem)]">
+                <div className="min-w-0 flex-1 basis-[calc(50%-1.5rem)]">
                   <Input
                     type="number"
                     inputMode="numeric"
@@ -395,17 +395,17 @@ const SettingsPanel = ({
                       const v = e.target.value ? Number(e.target.value) : null;
                       onSetWidth(v, firstFile);
                     }}
-                    className="rounded-lg"
+                    className="h-11 rounded-lg sm:h-9"
                     aria-label="Width in pixels"
                   />
-                  <p className="mt-1 text-center text-[9px] text-muted-foreground">Width (px)</p>
+                  <p className="mt-1 text-center text-[11px] text-muted-foreground sm:text-[9px]">Width (px)</p>
                 </div>
 
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <button
                       onClick={() => onUpdate({ lockAspectRatio: !settings.lockAspectRatio })}
-                      className={`mb-4 flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border-2 transition-all ${
+                      className={`mb-4 flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border-2 transition-all sm:h-9 sm:w-9 ${
                         settings.lockAspectRatio
                           ? 'border-primary bg-primary/10 text-primary shadow-sm'
                           : 'border-border text-muted-foreground hover:border-primary/30'
@@ -418,9 +418,9 @@ const SettingsPanel = ({
                       aria-pressed={settings.lockAspectRatio}
                     >
                       {settings.lockAspectRatio ? (
-                        <Link2 className="h-3.5 w-3.5" />
+                        <Link2 className="h-4 w-4" />
                       ) : (
-                        <Unlink2 className="h-3.5 w-3.5" />
+                        <Unlink2 className="h-4 w-4" />
                       )}
                     </button>
                   </TooltipTrigger>
@@ -431,7 +431,7 @@ const SettingsPanel = ({
                   </TooltipContent>
                 </Tooltip>
 
-                <div className="min-w-0 flex-1 basis-[calc(50%-1rem)]">
+                <div className="min-w-0 flex-1 basis-[calc(50%-1.5rem)]">
                   <Input
                     type="number"
                     inputMode="numeric"
@@ -442,14 +442,14 @@ const SettingsPanel = ({
                       const v = e.target.value ? Number(e.target.value) : null;
                       onSetHeight(v, firstFile);
                     }}
-                    className="rounded-lg"
+                    className="h-11 rounded-lg sm:h-9"
                     aria-label="Height in pixels"
                   />
-                  <p className="mt-1 text-center text-[9px] text-muted-foreground">Height (px)</p>
+                  <p className="mt-1 text-center text-[11px] text-muted-foreground sm:text-[9px]">Height (px)</p>
                 </div>
               </div>
               {settings.lockAspectRatio && settings.width && settings.height && (
-                <p className="mt-2 text-center text-[10px] text-muted-foreground">
+                <p className="mt-2 text-center text-[11px] text-muted-foreground sm:text-[10px]">
                   Aspect ratio:{' '}
                   <span className="font-semibold text-foreground">
                     {(settings.width / settings.height).toFixed(2)}:1
@@ -460,7 +460,7 @@ const SettingsPanel = ({
 
             {/* Presets */}
             <div>
-              <Label className="text-xs font-semibold">Social Media Presets</Label>
+              <Label className="text-sm font-semibold sm:text-xs">Social Media Presets</Label>
               <div className="mt-2 grid grid-cols-2 gap-1.5 sm:grid-cols-3">
                 {presets.map((p) => {
                   const PresetIcon = p.icon;
@@ -472,15 +472,15 @@ const SettingsPanel = ({
                     }
                     aria-label={`${p.name} preset: ${p.w} by ${p.h} pixels`}
                     aria-pressed={settings.selectedPreset === p.id}
-                    className={`flex flex-col items-center gap-0.5 rounded-lg border p-2 text-center transition-all ${
+                    className={`flex min-h-[60px] flex-col items-center justify-center gap-0.5 rounded-lg border p-2 text-center transition-all sm:min-h-0 ${
                       settings.selectedPreset === p.id
                         ? 'border-primary bg-primary/10 text-primary shadow-sm'
                         : 'border-border/40 hover:border-primary/30 hover:bg-primary/5'
                     }`}
                   >
-                    <PresetIcon size={18} weight="duotone" aria-hidden />
-                    <span className="text-[10px] font-semibold">{p.name}</span>
-                    <span className="text-[9px] text-muted-foreground">
+                    <PresetIcon size={20} weight="duotone" aria-hidden className="sm:!h-[18px] sm:!w-[18px]" />
+                    <span className="text-xs font-semibold sm:text-[10px]">{p.name}</span>
+                    <span className="text-[11px] text-muted-foreground sm:text-[9px]">
                       {p.w}×{p.h}
                     </span>
                   </button>
@@ -509,14 +509,14 @@ const SettingsPanel = ({
                   aria-checked={settings.outputFormat === f.value}
                   aria-disabled={disabled}
                   aria-label={`Output format: ${f.label}${disabled ? ' (not supported by your browser)' : ''}`}
-                  className={`flex w-full items-center gap-3 rounded-xl border p-3 text-left transition-all ${
+                  className={`flex w-full items-center gap-3 rounded-xl border p-3.5 text-left transition-all sm:p-3 ${
                     settings.outputFormat === f.value
                       ? 'border-primary bg-primary/10 shadow-sm'
                       : 'border-border/40 hover:border-primary/30 hover:bg-primary/5'
                   } ${disabled ? 'cursor-not-allowed opacity-50 hover:border-border/40 hover:bg-transparent' : ''}`}
                 >
                   <div
-                    className={`flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+                    className={`flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full border-2 transition-colors sm:h-4 sm:w-4 ${
                       settings.outputFormat === f.value
                         ? 'border-primary'
                         : 'border-muted-foreground/40'
@@ -525,27 +525,27 @@ const SettingsPanel = ({
                     {settings.outputFormat === f.value && (
                       <motion.div
                         layoutId="formatDot"
-                        className="h-2 w-2 rounded-full bg-primary"
+                        className="h-2.5 w-2.5 rounded-full bg-primary sm:h-2 sm:w-2"
                       />
                     )}
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-xs font-semibold">{f.label}</span>
+                    <div className="flex flex-wrap items-center gap-1.5">
+                      <span className="text-sm font-semibold sm:text-xs">{f.label}</span>
                       {f.recommended && (
-                        <span className="inline-flex items-center gap-0.5 rounded-full bg-primary px-1.5 py-0.5 text-[9px] font-bold text-primary-foreground">
-                          <Star size={9} weight="fill" />
+                        <span className="inline-flex items-center gap-0.5 rounded-full bg-primary px-2 py-0.5 text-[11px] font-bold text-primary-foreground sm:px-1.5 sm:py-0 sm:text-[9px]">
+                          <Star size={10} weight="fill" className="sm:!h-2.5 sm:!w-2.5" />
                           Best
                         </span>
                       )}
                       {disabled && (
-                        <span className="rounded-full bg-muted px-1.5 py-0.5 text-[9px] font-semibold text-muted-foreground">
+                        <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-semibold text-muted-foreground sm:px-1.5 sm:py-0 sm:text-[9px]">
                           🚫 Unsupported
                         </span>
                       )}
                     </div>
-                    <p className="text-[10px] text-muted-foreground">
+                    <p className="text-[11px] text-muted-foreground sm:text-[10px]">
                       {disabled ? 'Not supported by your browser — try Chrome 85+ or Safari 16+.' : f.desc}
                     </p>
                   </div>
@@ -570,7 +570,7 @@ const SettingsPanel = ({
             {/* Rotation */}
             <div>
               <div className="mb-1.5 flex items-center gap-1.5">
-                <Label className="text-xs font-semibold">Rotation</Label>
+                <Label className="text-sm font-semibold sm:text-xs">Rotation</Label>
                 <InfoTip>Rotates the image by the selected angle. Useful for portrait photos.</InfoTip>
               </div>
               <div className="grid grid-cols-4 gap-1.5">
@@ -579,7 +579,7 @@ const SettingsPanel = ({
                     key={r.value}
                     onClick={() => onUpdate({ rotation: r.value })}
                     aria-pressed={settings.rotation === r.value}
-                    className={`rounded-lg border py-1.5 text-[11px] font-semibold transition-all ${
+                    className={`min-h-[44px] rounded-lg border py-2 text-sm font-semibold transition-all sm:min-h-0 sm:py-1.5 sm:text-[11px] ${
                       settings.rotation === r.value
                         ? 'border-primary bg-primary/10 text-primary'
                         : 'border-border/40 text-muted-foreground hover:border-primary/30'
@@ -593,12 +593,12 @@ const SettingsPanel = ({
 
             {/* Toggles */}
             <div className="space-y-2">
-              <div className="flex items-center justify-between rounded-xl bg-secondary/50 px-3 py-2.5">
-                <div className="flex items-center gap-2">
-                  <FlipHorizontal className="h-3.5 w-3.5 text-muted-foreground" />
-                  <div>
-                    <Label className="text-xs font-semibold">Mirror / Flip</Label>
-                    <p className="text-[10px] text-muted-foreground">Flip horizontally</p>
+              <div className="flex items-center justify-between gap-3 rounded-xl bg-secondary/50 px-3 py-3 sm:py-2.5">
+                <div className="flex min-w-0 flex-1 items-center gap-2">
+                  <FlipHorizontal className="h-4 w-4 text-muted-foreground sm:h-3.5 sm:w-3.5" />
+                  <div className="min-w-0">
+                    <Label className="text-sm font-semibold sm:text-xs">Mirror / Flip</Label>
+                    <p className="text-[11px] text-muted-foreground sm:text-[10px]">Flip horizontally</p>
                   </div>
                 </div>
                 <Switch
@@ -608,12 +608,12 @@ const SettingsPanel = ({
                 />
               </div>
 
-              <div className="flex items-center justify-between rounded-xl bg-secondary/50 px-3 py-2.5">
-                <div className="flex items-center gap-2">
-                  <ImageIcon className="h-3.5 w-3.5 text-muted-foreground" />
-                  <div>
-                    <Label className="text-xs font-semibold">Grayscale</Label>
-                    <p className="text-[10px] text-muted-foreground">Convert to black & white</p>
+              <div className="flex items-center justify-between gap-3 rounded-xl bg-secondary/50 px-3 py-3 sm:py-2.5">
+                <div className="flex min-w-0 flex-1 items-center gap-2">
+                  <ImageIcon className="h-4 w-4 text-muted-foreground sm:h-3.5 sm:w-3.5" />
+                  <div className="min-w-0">
+                    <Label className="text-sm font-semibold sm:text-xs">Grayscale</Label>
+                    <p className="text-[11px] text-muted-foreground sm:text-[10px]">Convert to black & white</p>
                   </div>
                 </div>
                 <Switch
@@ -623,11 +623,11 @@ const SettingsPanel = ({
                 />
               </div>
 
-              <div className="flex items-center justify-between rounded-xl bg-secondary/50 px-3 py-2.5">
-                <div className="flex items-center gap-2">
-                  <Layers className="h-3.5 w-3.5 text-muted-foreground" />
-                  <div className="flex items-center gap-1">
-                    <Label className="text-xs font-semibold">Strip EXIF Data</Label>
+              <div className="flex items-center justify-between gap-3 rounded-xl bg-secondary/50 px-3 py-3 sm:py-2.5">
+                <div className="flex min-w-0 flex-1 items-center gap-2">
+                  <Layers className="h-4 w-4 text-muted-foreground sm:h-3.5 sm:w-3.5" />
+                  <div className="flex min-w-0 items-center gap-1">
+                    <Label className="text-sm font-semibold sm:text-xs">Strip EXIF Data</Label>
                     <InfoTip>Removes camera info, GPS, and other metadata. Recommended for privacy.</InfoTip>
                   </div>
                 </div>
@@ -638,12 +638,12 @@ const SettingsPanel = ({
                 />
               </div>
 
-              <div className="flex items-center justify-between rounded-xl bg-secondary/50 px-3 py-2.5">
-                <div className="flex items-center gap-2">
-                  <Sparkle size={14} weight="duotone" className="text-muted-foreground" />
-                  <div>
-                    <Label className="text-xs font-semibold">Progressive JPEG</Label>
-                    <p className="text-[10px] text-muted-foreground">Loads in passes (faster perceived load)</p>
+              <div className="flex items-center justify-between gap-3 rounded-xl bg-secondary/50 px-3 py-3 sm:py-2.5">
+                <div className="flex min-w-0 flex-1 items-center gap-2">
+                  <Sparkle size={16} weight="duotone" className="text-muted-foreground sm:h-3.5 sm:w-3.5" />
+                  <div className="min-w-0">
+                    <Label className="text-sm font-semibold sm:text-xs">Progressive JPEG</Label>
+                    <p className="text-[11px] text-muted-foreground sm:text-[10px]">Loads in passes (faster perceived load)</p>
                   </div>
                 </div>
                 <Switch
@@ -659,10 +659,10 @@ const SettingsPanel = ({
               variant="ghost"
               size="sm"
               onClick={onResetAll}
-              className="w-full rounded-xl text-[11px] text-muted-foreground hover:text-foreground"
+              className="h-11 w-full rounded-xl text-sm text-muted-foreground hover:text-foreground sm:h-9 sm:text-[11px]"
               aria-label="Reset all settings to defaults"
             >
-              <RotateCcw className="mr-1 h-3 w-3" />
+              <RotateCcw className="mr-1 h-3.5 w-3.5 sm:h-3 sm:w-3" />
               Reset all settings
             </Button>
           </TabsContent>

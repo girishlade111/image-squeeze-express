@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Instagram, Linkedin, Github, Mail, Globe } from 'lucide-react';
 import {
-  Lightning,
   CodepenLogo,
   Heart,
 } from '@phosphor-icons/react';
