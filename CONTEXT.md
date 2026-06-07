@@ -1,8 +1,8 @@
-# ImageSqueeze — Full App Context (for AI-Assisted Improvements)
+# LS Image Compressor — Full App Context (for AI-Assisted Improvements)
 
-> **Purpose of this document:** Single-source-of-truth context dump for any AI assistant (or developer) that needs to make changes, add features, fix bugs, or refactor the **ImageSqueeze** project. Read this first before touching the code.
+> **Purpose of this document:** Single-source-of-truth context dump for any AI assistant (or developer) that needs to make changes, add features, fix bugs, or refactor the **LS Image Compressor** project. Read this first before touching the code.
 >
-> **Project Name (internal):** `vite_react_shadcn_ts` (in `package.json`), but branded as **ImageSqueeze**.
+> **Project Name (internal):** `ls-image-compressor` (in `package.json`), branded as **LS Image Compressor**.
 >
 > **Domain:** `https://img.ladestack.in`
 >
@@ -12,7 +12,7 @@
 
 ## 1. High-Level Snapshot
 
-ImageSqueeze is a **100% client-side, privacy-first** web app built with **Vite + React 18 + TypeScript + Tailwind CSS + shadcn/ui**. It provides three independent tools (all running entirely in the browser — **no server, no uploads, no auth**):
+LS Image Compressor is a **100% client-side, privacy-first** web app built with **Vite + React 18 + TypeScript + Tailwind CSS + shadcn/ui**. It provides three independent tools (all running entirely in the browser — **no server, no uploads, no auth**):
 
 | Tool | Route | Purpose | Tech used |
 |---|---|---|---|
@@ -201,7 +201,7 @@ Provider stack, top to bottom:
 
 ```
 <QueryClientProvider client={queryClient}>
-  <ThemeProvider>                    // dark/light, persisted to localStorage('imagesqueeze-theme')
+  <ThemeProvider>                    // dark/light, persisted to localStorage('ls-image-compressor-theme')
     <TooltipProvider>                 // Radix tooltip root
       <Toaster />                     // Radix toast viewport (legacy)
       <Sonner />                      // Sonner toast viewport (the one actually used)
@@ -229,9 +229,9 @@ Provider stack, top to bottom:
 ### 4.3 `src/contexts/ThemeContext.tsx`
 
 - Context value: `{ darkMode: boolean, toggleDarkMode: () => void }`
-- Initial value is read from `localStorage['imagesqueeze-theme']`; default is `true` (dark) if missing.
+- Initial value is read from `localStorage['ls-image-compressor-theme']`; default is `true` (dark) if missing.
 - On every change, toggles `document.documentElement.classList.toggle('dark', darkMode)` and writes back to `localStorage`.
-- `index.html` has an **inline script** that reads `localStorage.imagesqueeze-theme` *before React mounts* and toggles the `dark` class on `<html>` — this prevents the dark→light flash on reload.
+- `index.html` has an **inline script** that reads `localStorage.ls-image-compressor-theme` *before React mounts* and toggles the `dark` class on `<html>` — this prevents the dark→light flash on reload.
 
 ---
 
@@ -241,7 +241,7 @@ Provider stack, top to bottom:
 
 Composes the entire image tool. Reads the following hooks/state:
 - `useImageUpload()` — file queue, processing state, per-file results
-- `useSettings()` — compression config (persisted to `localStorage['imagesqueeze-settings']`)
+- `useSettings()` — compression config (persisted to `localStorage['ls-image-compressor-settings']`)
 - `useClipboardPaste({ onPaste: addFiles })` — accepts Ctrl+V image pastes anywhere
 - `usePageDropZone({ onDrop: addFiles })` — full-page drag-drop overlay
 
