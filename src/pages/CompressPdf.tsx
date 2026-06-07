@@ -233,7 +233,9 @@ const CompressPdf = () => {
         )}
 
         <Suspense fallback={null}>
-          <HistorySection tool="pdf" />
+          <LazySection minHeight={220}>
+            <HistorySection tool="pdf" />
+          </LazySection>
         </Suspense>
 
         <HowItWorksPdf />
