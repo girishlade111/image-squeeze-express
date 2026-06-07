@@ -197,7 +197,7 @@ const ResultsSection = ({ files, onReset }: ResultsSectionProps) => {
                       </p>
                     )}
                   </div>
-                </button>
+                </motion.button>
 
                 {/* Arrow + ratio */}
                 <div className="flex flex-shrink-0 items-center gap-2 self-center">
