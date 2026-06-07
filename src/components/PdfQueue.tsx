@@ -416,7 +416,7 @@ const PdfQueue = ({
       <AnimatePresence>
         {!allDone && readyCount > 0 && (
           <motion.div
-            className="mt-4 flex flex-col items-center gap-2 sm:flex-row sm:justify-center"
+            className="mt-4 flex flex-col items-stretch gap-2 sm:flex-row sm:items-center sm:justify-center"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
@@ -430,7 +430,7 @@ const PdfQueue = ({
                 size="default"
                 disabled={isProcessing}
                 onClick={onProcessAll}
-                className="h-10 w-full rounded-xl text-sm font-semibold text-primary-foreground shadow-md sm:w-auto"
+                className="h-12 w-full rounded-xl text-sm font-semibold text-primary-foreground shadow-md sm:h-10 sm:w-auto"
                 style={{
                   background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
                 }}
