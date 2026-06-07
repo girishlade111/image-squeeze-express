@@ -172,7 +172,9 @@ const Index = () => {
           )}
 
           <Suspense fallback={null}>
-            <HistorySection tool="image" />
+            <LazySection minHeight={220}>
+              <HistorySection tool="image" />
+            </LazySection>
           </Suspense>
 
           <Suspense fallback={null}>
