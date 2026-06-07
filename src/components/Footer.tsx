@@ -61,12 +61,12 @@ const Footer = () => {
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-12">
             {/* Brand block */}
             <div className="lg:col-span-4">
-              <Link to="/" className="inline-flex items-center gap-2 group">
-                <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-primary/20 bg-gradient-to-br from-primary/20 to-accent/20 text-primary">
-                  <Lightning size={18} weight="duotone" />
+              <Link to="/" className="inline-flex items-center gap-2 group min-h-[44px]">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-primary/20 bg-gradient-to-br from-primary/20 to-accent/20 text-primary">
+                  <Lightning size={20} weight="duotone" />
                 </div>
                 <span
-                  className="text-base font-bold tracking-tight"
+                  className="text-base font-bold tracking-tight sm:text-lg"
                   style={{
                     background: 'linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand-2)))',
                     WebkitBackgroundClip: 'text',
@@ -76,11 +76,11 @@ const Footer = () => {
                   LS Image Compressor
                 </span>
               </Link>
-              <p className="mt-3 max-w-xs text-xs leading-relaxed text-muted-foreground">
+              <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
                 Three privacy-first tools that run 100% in your browser — image compression, PDF re-rendering, and bulk file renaming. No uploads, no signups, no watermarks.
               </p>
 
-              <div className="mt-4 flex items-center gap-1.5">
+              <div className="mt-5 flex flex-wrap items-center gap-2">
                 {socials.map((s) => (
                   <a
                     key={s.label}
@@ -88,14 +88,14 @@ const Footer = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={s.label}
-                    className="group/icon flex h-7 w-7 items-center justify-center rounded-lg border border-border/40 bg-foreground/[0.03] text-muted-foreground transition-colors hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
+                    className="group/icon flex h-11 w-11 items-center justify-center rounded-xl border border-border/40 bg-foreground/[0.03] text-muted-foreground transition-colors hover:border-primary/50 hover:bg-primary/10 hover:text-primary sm:h-9 sm:w-9"
                   >
-                    <s.icon className="h-3.5 w-3.5" />
+                    <s.icon className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
                   </a>
                 ))}
               </div>
 
-              <p className="mt-4 text-[10px] text-muted-foreground/70">
+              <p className="mt-5 text-xs text-muted-foreground/70">
                 Made with{' '}
                 <Heart size={12} weight="fill" className="inline align-[-2px] text-red-400" aria-label="love" />{' '}
                 in India by{' '}
@@ -112,23 +112,23 @@ const Footer = () => {
 
             {/* Link columns */}
             <div className="lg:col-span-8">
-              <div className="grid grid-cols-2 gap-6 sm:grid-cols-4">
+              <div className="grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4 sm:gap-6">
                 {/* Tools */}
                 <div>
                   <h4 className="mb-3 text-[10px] font-bold uppercase tracking-[0.15em] text-foreground/50">
                     Tools
                   </h4>
-                  <nav className="flex flex-col gap-2.5" aria-label="Tool pages">
+                  <nav className="flex flex-col gap-3" aria-label="Tool pages">
                     {toolLinks.map((link) => (
                       <Link
                         key={link.to}
                         to={link.to}
-                        className="group flex flex-col"
+                        className="group flex min-h-[36px] flex-col justify-center"
                       >
-                        <span className="text-xs font-medium text-foreground/90 transition-colors group-hover:text-primary">
+                        <span className="text-sm font-medium text-foreground/90 transition-colors group-hover:text-primary">
                           {link.label}
                         </span>
-                        <span className="text-[10px] leading-tight text-muted-foreground/80">
+                        <span className="text-[11px] leading-snug text-muted-foreground/80">
                           {link.desc}
                         </span>
                       </Link>
@@ -147,7 +147,7 @@ const Footer = () => {
                         key={link.label}
                         href={link.href}
                         onClick={(e) => handleAnchorClick(e, link.href)}
-                        className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+                        className="flex min-h-[36px] items-center text-sm text-muted-foreground transition-colors hover:text-foreground"
                       >
                         {link.label}
                       </a>
@@ -166,7 +166,7 @@ const Footer = () => {
                         <Link
                           key={link.label}
                           to={link.to}
-                          className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+                          className="flex min-h-[36px] items-center text-sm text-muted-foreground transition-colors hover:text-foreground"
                         >
                           {link.label}
                         </Link>
@@ -176,7 +176,7 @@ const Footer = () => {
                           href={link.href}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+                          className="flex min-h-[36px] items-center text-sm text-muted-foreground transition-colors hover:text-foreground"
                         >
                           {link.label}
                         </a>
@@ -195,12 +195,12 @@ const Footer = () => {
                       <Link
                         key={link.to}
                         to={link.to}
-                        className="text-xs text-muted-foreground transition-colors hover:text-foreground"
+                        className="flex min-h-[36px] items-center text-sm text-muted-foreground transition-colors hover:text-foreground"
                       >
                         {link.label}
                       </Link>
                     ))}
-                    <span className="text-[10px] text-muted-foreground/60">
+                    <span className="text-[11px] text-muted-foreground/60">
                       Updated March 8, 2026
                     </span>
                   </nav>
@@ -210,11 +210,11 @@ const Footer = () => {
           </div>
 
           {/* Bottom strip */}
-          <div className="mt-8 flex flex-col items-center gap-2 border-t border-foreground/[0.06] pt-6 sm:flex-row sm:justify-between">
-            <p className="text-[10px] text-muted-foreground/70">
+          <div className="mt-10 flex flex-col items-center gap-2 border-t border-foreground/[0.06] pt-6 text-center sm:flex-row sm:justify-between sm:text-left">
+            <p className="text-[11px] text-muted-foreground/70">
               © 2026 LS Image Compressor. All rights reserved.
             </p>
-            <p className="text-[10px] text-muted-foreground/70">
+            <p className="text-[11px] text-muted-foreground/70">
               100% client-side · No servers · No tracking
             </p>
           </div>

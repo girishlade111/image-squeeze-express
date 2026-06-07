@@ -72,9 +72,9 @@ const Header = () => {
 
   // Lock body scroll when mobile menu is open
   useEffect(() => {
-    document.body.style.overflow = mobileOpen ? 'hidden' : '';
+    document.body.classList.toggle('lock-scroll', mobileOpen);
     return () => {
-      document.body.style.overflow = '';
+      document.body.classList.remove('lock-scroll');
     };
   }, [mobileOpen]);
 

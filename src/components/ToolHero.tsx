@@ -37,7 +37,7 @@ const ToolHero = ({ prefix, highlight, suffix, subhead, badges, children }: Tool
 
   return (
     <section
-      className="relative flex min-h-[100svh] items-center justify-center overflow-hidden pt-[calc(3.5rem+env(safe-area-inset-top))] pb-12 sm:pt-[calc(3.5rem+env(safe-area-inset-top))] md:pt-20"
+      className="relative flex min-h-[100svh] items-center justify-center overflow-hidden pt-[calc(3.5rem+env(safe-area-inset-top))] pb-16 sm:pt-[calc(3.5rem+env(safe-area-inset-top))] md:pt-20 md:pb-20"
     >
       {/* Animated gradient mesh background */}
       <div
@@ -53,26 +53,26 @@ const ToolHero = ({ prefix, highlight, suffix, subhead, badges, children }: Tool
         aria-hidden
       />
 
-      {/* Floating blurred shapes */}
+      {/* Floating blurred shapes (smaller & fewer on mobile) */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-        {floatingShapes.map((shape, i) => (
+        {floatingShapes.slice(0, 2).map((shape, i) => (
           <motion.div
             key={i}
-            className="absolute rounded-full opacity-30"
+            className="absolute rounded-full opacity-20 sm:opacity-30"
             style={{
-              width: shape.size,
-              height: shape.size,
+              width: shape.size * 0.6,
+              height: shape.size * 0.6,
               left: shape.left,
               top: shape.top,
               background:
                 i % 2 === 0
                   ? 'radial-gradient(circle, hsl(var(--primary) / 0.4), transparent)'
                   : 'radial-gradient(circle, hsl(var(--accent) / 0.4), transparent)',
-              filter: 'blur(60px)',
+              filter: 'blur(40px)',
             }}
             animate={{
-              y: [0, -30, 0],
-              x: [0, 30, 0],
+              y: [0, -20, 0],
+              x: [0, 20, 0],
               scale: [1, 1.05, 1],
             }}
             transition={{
@@ -126,12 +126,12 @@ const ToolHero = ({ prefix, highlight, suffix, subhead, badges, children }: Tool
             {badges.map(({ icon: BadgeIcon, label }) => (
               <div
                 key={label}
-                className="flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/[0.07] py-0.5 pl-1.5 pr-2.5 text-[11px] font-medium text-foreground sm:gap-2 sm:pl-2 sm:pr-3 sm:text-xs"
+                className="flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/[0.07] py-1 pl-1.5 pr-2.5 text-xs font-medium text-foreground sm:gap-2 sm:pl-2 sm:pr-3 sm:text-xs"
               >
                 <BadgeIcon
                   size={16}
                   weight="duotone"
-                  className="h-3.5 w-3.5 sm:h-4 sm:w-4"
+                  className="h-4 w-4 sm:h-4 sm:w-4"
                   aria-hidden
                 />
                 {label}

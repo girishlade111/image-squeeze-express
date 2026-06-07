@@ -68,7 +68,7 @@ const PdfUploadZone = ({ onFilesSelected, pdfCount, maxFiles = 5 }: PdfUploadZon
         onDrop={handleDrop}
         onClick={() => !full && inputRef.current?.click()}
         onKeyDown={handleKeyDown}
-        className={`group relative flex min-h-[160px] cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed bg-foreground/[0.02] p-5 text-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:min-h-[220px] sm:gap-4 sm:p-8 ${
+        className={`group relative flex min-h-[180px] cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed bg-foreground/[0.02] p-6 text-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:min-h-[220px] sm:gap-4 sm:p-8 ${
           full
             ? 'cursor-not-allowed border-border/30 opacity-60'
             : dragOver

@@ -70,7 +70,7 @@ const UploadZone = ({ onFilesSelected, imageCount, maxFiles = 50 }: UploadZonePr
         onDrop={handleDrop}
         onClick={() => !full && inputRef.current?.click()}
         onKeyDown={handleKeyDown}
-        className={`group relative flex min-h-[160px] cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed bg-foreground/[0.02] p-5 text-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:min-h-[220px] sm:gap-4 sm:p-8 metallic-rim ${
+        className={`group relative flex min-h-[180px] cursor-pointer flex-col items-center justify-center gap-3 rounded-2xl border-2 border-dashed bg-foreground/[0.02] p-6 text-center transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:min-h-[220px] sm:gap-4 sm:p-8 metallic-rim ${
           full
             ? 'cursor-not-allowed border-border/30 opacity-60'
             : dragOver
@@ -105,7 +105,7 @@ const UploadZone = ({ onFilesSelected, imageCount, maxFiles = 50 }: UploadZonePr
             aria-hidden
           />
           <motion.div
-            className={`relative flex h-12 w-12 items-center justify-center rounded-2xl transition-colors sm:h-14 sm:w-14 ${
+            className={`relative flex h-14 w-14 items-center justify-center rounded-2xl transition-colors sm:h-16 sm:w-16 ${
               dragOver ? 'bg-primary/25' : 'bg-primary/[0.1] group-hover:bg-primary/[0.15]'
             }`}
             animate={
@@ -119,16 +119,16 @@ const UploadZone = ({ onFilesSelected, imageCount, maxFiles = 50 }: UploadZonePr
                 : { duration: 3, repeat: Infinity, ease: 'easeInOut' }
             }
           >
-            <CloudArrowUp size={28} weight="duotone" className="text-primary sm:!h-8 sm:!w-8" aria-hidden="true" />
+            <CloudArrowUp size={32} weight="duotone" className="text-primary sm:!h-9 sm:!w-9" aria-hidden="true" />
           </motion.div>
         </div>
 
         {/* Text */}
-        <div className="space-y-1">
-          <p className="text-sm font-semibold text-foreground sm:text-base md:text-lg">
+        <div className="space-y-1.5">
+          <p className="text-base font-semibold text-foreground sm:text-lg">
             {full ? `Maximum ${maxFiles} images reached` : 'Drag & drop images here'}
           </p>
-          <p className="text-xs text-muted-foreground sm:text-sm">
+          <p className="text-sm text-muted-foreground">
             {full ? (
               'Remove some images to add more'
             ) : (
@@ -138,7 +138,7 @@ const UploadZone = ({ onFilesSelected, imageCount, maxFiles = 50 }: UploadZonePr
                   browse files
                 </span>
                 {' • '}
-                <kbd className="rounded border border-border/60 bg-secondary/60 px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground">
+                <kbd className="rounded border border-border/60 bg-secondary/60 px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground">
                   Ctrl V
                 </kbd>{' '}
                 to paste
@@ -150,15 +150,15 @@ const UploadZone = ({ onFilesSelected, imageCount, maxFiles = 50 }: UploadZonePr
         {/* Quick info chips */}
         {!full && (
           <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1">
-            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
               <ShieldCheck size={12} weight="duotone" />
               100% Private
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
               <Lightning size={12} weight="duotone" />
               Instant
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
               <Sparkle size={12} weight="duotone" />
               Up to 90% smaller
             </span>
@@ -166,7 +166,7 @@ const UploadZone = ({ onFilesSelected, imageCount, maxFiles = 50 }: UploadZonePr
         )}
 
         {/* Supported formats */}
-        <p className="text-[10px] text-muted-foreground/70">
+        <p className="text-[11px] text-muted-foreground/70">
           JPG · PNG · WebP · GIF · BMP · AVIF &nbsp;•&nbsp; {imageCount}/{maxFiles} files
         </p>
 
