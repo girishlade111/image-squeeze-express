@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="LS Image Compressor">
+  <defs>
+    <linearGradient id="f-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4F46E5"/>
+      <stop offset="100%" stop-color="#0D9488"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="url(#f-grad)"/>
+  <g fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="10,18 22,32 10,46"/>
+    <polyline points="54,18 42,32 54,46"/>
+  </g>
+  <path d="M32 27 L33.5 30.5 L37 32 L33.5 33.5 L32 37 L30.5 33.5 L27 32 L30.5 30.5 Z" fill="#ffffff"/>
+</svg>
