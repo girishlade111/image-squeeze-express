@@ -186,7 +186,7 @@ const PdfSettingsPanel = ({
         <div>
           <div className="mb-2 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <Label className="text-xs font-semibold">Compression Level</Label>
+              <Label className="text-sm font-semibold sm:text-xs">Compression Level</Label>
               <InfoTip>
                 We re-render every page as a JPEG and rebuild the PDF — this is the
                 fastest and most reliable way to shrink a PDF in the browser.
@@ -207,15 +207,15 @@ const PdfSettingsPanel = ({
                   }}
                   aria-pressed={isActive}
                   aria-label={`${p.name} compression preset`}
-                  className={`flex flex-col items-center gap-1 rounded-lg border p-2.5 text-center transition-all ${
+                  className={`flex min-h-[72px] flex-col items-center justify-center gap-1 rounded-lg border p-3 text-center transition-all sm:min-h-0 sm:p-2.5 ${
                     isActive
                       ? 'border-primary bg-primary/10 text-primary shadow-sm'
                       : 'border-border/40 hover:border-primary/30 hover:bg-primary/5'
                   }`}
                 >
-                  <Icon className="h-3.5 w-3.5" aria-hidden />
-                  <span className="text-[11px] font-semibold">{p.name}</span>
-                  <span className="text-[9px] text-muted-foreground leading-tight">
+                  <Icon className="h-5 w-5 sm:h-3.5 sm:w-3.5" aria-hidden />
+                  <span className="text-sm font-semibold sm:text-[11px]">{p.name}</span>
+                  <span className="text-[11px] text-muted-foreground leading-tight sm:text-[9px]">
                     {p.desc}
                   </span>
                 </button>
@@ -227,13 +227,13 @@ const PdfSettingsPanel = ({
         <div>
           <div className="mb-1.5 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <Label className="text-xs font-semibold">JPEG Quality</Label>
+              <Label className="text-sm font-semibold sm:text-xs">JPEG Quality</Label>
               <InfoTip>
                 Lower = smaller file, more visible compression artefacts. 0.6 is a
                 good default for documents.
               </InfoTip>
             </div>
-            <span className="text-xs font-bold tabular-nums text-primary">
+            <span className="text-sm font-bold tabular-nums text-primary sm:text-xs">
               {Math.round(quality * 100)}%
             </span>
           </div>
@@ -249,26 +249,26 @@ const PdfSettingsPanel = ({
             className="mt-2"
             aria-label="PDF JPEG quality"
           />
-          <div className="mt-1.5 flex items-center justify-between text-[10px] text-muted-foreground">
+          <div className="mt-2 flex items-center justify-between text-xs text-muted-foreground sm:mt-1.5 sm:text-[10px]">
             <span className="inline-flex items-center gap-1">
               <hint.icon size={12} weight="fill" className={hint.color} />
               {hint.text}
             </span>
             <span className="tabular-nums">
-              Pages will be re-rendered as JPEG @ {Math.round(quality * 100)}%
+              JPEG @ {Math.round(quality * 100)}%
             </span>
           </div>
         </div>
 
-        <div className="rounded-xl border border-border/30 bg-background/30 p-3">
+        <div className="rounded-xl border border-border/30 bg-background/30 p-3 sm:p-3">
           <div className="mb-2 flex items-center justify-between">
             <div className="flex items-center gap-1.5">
-              <Settings2 className="h-3.5 w-3.5 text-primary" />
-              <Label className="text-xs font-semibold">Advanced</Label>
+              <Settings2 className="h-4 w-4 text-primary sm:h-3.5 sm:w-3.5" />
+              <Label className="text-sm font-semibold sm:text-xs">Advanced</Label>
             </div>
             <Badge
               variant="outline"
-              className="rounded-full border-primary/30 bg-primary/10 px-1.5 py-0 text-[9px] font-semibold text-primary"
+              className="rounded-full border-primary/30 bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary sm:px-1.5 sm:py-0 sm:text-[9px]"
             >
               {[
                 settings.dpi ? 'dpi' : null,
@@ -283,17 +283,17 @@ const PdfSettingsPanel = ({
           </div>
 
           <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-            <div className="rounded-lg border border-border/30 bg-card/40 p-2.5">
+            <div className="rounded-lg border border-border/30 bg-card/40 p-3 sm:p-2.5">
               <div className="mb-1.5 flex items-center justify-between">
                 <div className="flex items-center gap-1">
-                  <Hash className="h-3 w-3 text-primary" />
-                  <span className="text-[11px] font-semibold">DPI</span>
+                  <Hash className="h-3.5 w-3.5 text-primary sm:h-3 sm:w-3" />
+                  <span className="text-sm font-semibold sm:text-[11px]">DPI</span>
                   <InfoTip>Override the render scale. 72 ≈ screen, 150 ≈ print, 300 ≈ high-quality print.</InfoTip>
                 </div>
                 {settings.dpi ? (
                   <button
                     onClick={() => update({ dpi: null })}
-                    className="text-[9px] uppercase tracking-wider text-muted-foreground hover:text-foreground"
+                    className="text-[11px] uppercase tracking-wider text-muted-foreground hover:text-foreground sm:text-[9px]"
                     aria-label="Clear DPI"
                   >
                     Auto
@@ -310,7 +310,7 @@ const PdfSettingsPanel = ({
                       })
                     }
                     aria-pressed={settings.dpi === d}
-                    className={`rounded-md border px-1 py-1 text-[10px] font-semibold tabular-nums transition-all ${
+                    className={`min-h-[44px] rounded-md border px-1 py-1.5 text-sm font-semibold tabular-nums transition-all sm:min-h-0 sm:py-1 sm:text-[10px] ${
                       settings.dpi === d
                         ? 'border-primary bg-primary/10 text-primary'
                         : 'border-border/40 hover:border-primary/30'
@@ -322,10 +322,10 @@ const PdfSettingsPanel = ({
               </div>
             </div>
 
-            <div className="rounded-lg border border-border/30 bg-card/40 p-2.5">
+            <div className="rounded-lg border border-border/30 bg-card/40 p-3 sm:p-2.5">
               <div className="mb-1.5 flex items-center gap-1">
-                <ImageIcon className="h-3 w-3 text-primary" />
-                <span className="text-[11px] font-semibold">Target size (KB)</span>
+                <ImageIcon className="h-3.5 w-3.5 text-primary sm:h-3 sm:w-3" />
+                <span className="text-sm font-semibold sm:text-[11px]">Target size (KB)</span>
                 <InfoTip>The engine iteratively reduces quality and DPI to fit this size.</InfoTip>
               </div>
               <div className="flex items-center gap-1.5">
@@ -340,13 +340,13 @@ const PdfSettingsPanel = ({
                     const v = e.target.value ? parseInt(e.target.value, 10) : null;
                     update({ targetSizeKB: v && v > 0 ? v : null });
                   }}
-                  className="h-7 text-[11px]"
+                  className="h-11 text-sm sm:h-7 sm:text-[11px]"
                   aria-label="Target size in KB"
                 />
                 {settings.targetSizeKB ? (
                   <button
                     onClick={() => update({ targetSizeKB: null })}
-                    className="text-[9px] uppercase tracking-wider text-muted-foreground hover:text-foreground"
+                    className="text-[11px] uppercase tracking-wider text-muted-foreground hover:text-foreground sm:text-[9px]"
                     aria-label="Clear target size"
                   >
                     Auto
@@ -355,14 +355,14 @@ const PdfSettingsPanel = ({
               </div>
             </div>
 
-            <div className="rounded-lg border border-border/30 bg-card/40 p-2.5">
+            <div className="rounded-lg border border-border/30 bg-card/40 p-3 sm:p-2.5">
               <div className="mb-1.5 flex items-center gap-1">
-                <Lightbulb className="h-3 w-3 text-primary" />
-                <span className="text-[11px] font-semibold">Grayscale</span>
+                <Lightbulb className="h-3.5 w-3.5 text-primary sm:h-3 sm:w-3" />
+                <span className="text-sm font-semibold sm:text-[11px]">Grayscale</span>
                 <InfoTip>Convert pages to B&W. Saves ~25% on color PDFs with no text loss.</InfoTip>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-[10px] text-muted-foreground">B&W output</span>
+                <span className="text-xs text-muted-foreground sm:text-[10px]">B&W output</span>
                 <Switch
                   checked={settings.grayscale}
                   onCheckedChange={(v) => update({ grayscale: v })}
@@ -371,14 +371,14 @@ const PdfSettingsPanel = ({
               </div>
             </div>
 
-            <div className="rounded-lg border border-border/30 bg-card/40 p-2.5">
+            <div className="rounded-lg border border-border/30 bg-card/40 p-3 sm:p-2.5">
               <div className="mb-1.5 flex items-center gap-1">
-                <EyeOff className="h-3 w-3 text-primary" />
-                <span className="text-[11px] font-semibold">Strip metadata</span>
+                <EyeOff className="h-3.5 w-3.5 text-primary sm:h-3 sm:w-3" />
+                <span className="text-sm font-semibold sm:text-[11px]">Strip metadata</span>
                 <InfoTip>Remove title, author, producer, and creator from the output.</InfoTip>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-[10px] text-muted-foreground">Anonymize</span>
+                <span className="text-xs text-muted-foreground sm:text-[10px]">Anonymize</span>
                 <Switch
                   checked={settings.stripMetadata}
                   onCheckedChange={(v) => update({ stripMetadata: v })}
@@ -387,13 +387,13 @@ const PdfSettingsPanel = ({
               </div>
             </div>
 
-            <div className="rounded-lg border border-border/30 bg-card/40 p-2.5 sm:col-span-2">
+            <div className="rounded-lg border border-border/30 bg-card/40 p-3 sm:col-span-2 sm:p-2.5">
               <div className="mb-1.5 flex items-center gap-1">
-                <Crop className="h-3 w-3 text-primary" />
-                <span className="text-[11px] font-semibold">Page range</span>
+                <Crop className="h-3.5 w-3.5 text-primary sm:h-3 sm:w-3" />
+                <span className="text-sm font-semibold sm:text-[11px]">Page range</span>
                 <InfoTip>Compress only specific pages. Leave empty to include all pages.</InfoTip>
               </div>
-              <div className="flex items-center gap-1.5">
+              <div className="flex flex-wrap items-center gap-2">
                 <Input
                   type="number"
                   min={1}
@@ -401,10 +401,10 @@ const PdfSettingsPanel = ({
                   value={pageRangeFrom}
                   onChange={(e) => setPageRangeFrom(e.target.value)}
                   onBlur={commitPageRange}
-                  className="h-7 w-20 text-[11px]"
+                  className="h-11 w-24 text-sm sm:h-7 sm:w-20 sm:text-[11px]"
                   aria-label="Page range from"
                 />
-                <span className="text-[10px] text-muted-foreground">to</span>
+                <span className="text-xs text-muted-foreground sm:text-[10px]">to</span>
                 <Input
                   type="number"
                   min={1}
@@ -412,7 +412,7 @@ const PdfSettingsPanel = ({
                   value={pageRangeTo}
                   onChange={(e) => setPageRangeTo(e.target.value)}
                   onBlur={commitPageRange}
-                  className="h-7 w-20 text-[11px]"
+                  className="h-11 w-24 text-sm sm:h-7 sm:w-20 sm:text-[11px]"
                   aria-label="Page range to"
                 />
                 {settings.pageRange ? (
@@ -422,7 +422,7 @@ const PdfSettingsPanel = ({
                       setPageRangeTo('');
                       update({ pageRange: null });
                     }}
-                    className="text-[9px] uppercase tracking-wider text-muted-foreground hover:text-foreground"
+                    className="h-9 rounded-md border border-border/40 bg-background/40 px-3 text-xs text-muted-foreground hover:text-foreground sm:h-6 sm:px-2 sm:text-[10px]"
                     aria-label="Clear page range"
                   >
                     All
@@ -431,23 +431,23 @@ const PdfSettingsPanel = ({
               </div>
             </div>
 
-            <div className="rounded-lg border border-border/30 bg-card/40 p-2.5 sm:col-span-2">
+            <div className="rounded-lg border border-border/30 bg-card/40 p-3 sm:col-span-2 sm:p-2.5">
               <div className="mb-1.5 flex items-center gap-1">
-                <FileType2 className="h-3 w-3 text-primary" />
-                <span className="text-[11px] font-semibold">Filename pattern</span>
+                <FileType2 className="h-3.5 w-3.5 text-primary sm:h-3 sm:w-3" />
+                <span className="text-sm font-semibold sm:text-[11px]">Filename pattern</span>
                 <Popover>
                   <PopoverTrigger asChild>
                     <button
-                      className="ml-auto inline-flex items-center gap-1 rounded-md border border-border/40 bg-background/40 px-1.5 py-0.5 text-[10px] font-semibold text-primary hover:border-primary/40"
+                      className="ml-auto inline-flex h-9 items-center gap-1 rounded-md border border-border/40 bg-background/40 px-3 text-xs font-semibold text-primary hover:border-primary/40 sm:h-6 sm:px-1.5 sm:py-0.5 sm:text-[10px]"
                       aria-label="Show filename tokens"
                     >
-                      <BookOpen className="h-3 w-3" />
+                      <BookOpen className="h-3 w-3 sm:h-2.5 sm:w-2.5" />
                       Tokens
                     </button>
                   </PopoverTrigger>
                   <PopoverContent
                     align="end"
-                    className="w-72 max-h-72 overflow-auto p-2 text-[11px]"
+                    className="max-h-72 w-72 overflow-auto p-2 text-xs"
                   >
                     <div className="mb-1.5 font-semibold uppercase tracking-wider text-muted-foreground">
                       Filename tokens
@@ -461,10 +461,10 @@ const PdfSettingsPanel = ({
                           }
                           className="flex w-full items-start gap-2 rounded-md border border-border/30 bg-card/40 p-1.5 text-left hover:border-primary/40"
                         >
-                          <code className="min-w-[60px] rounded bg-primary/10 px-1 py-0.5 font-mono text-[10px] font-bold text-primary">
+                          <code className="min-w-[60px] rounded bg-primary/10 px-1 py-0.5 font-mono text-[11px] font-bold text-primary sm:text-[10px]">
                             {t.token}
                           </code>
-                          <span className="text-[10px] text-muted-foreground">
+                          <span className="text-[11px] text-muted-foreground sm:text-[10px]">
                             {t.description}
                           </span>
                         </button>
@@ -479,18 +479,18 @@ const PdfSettingsPanel = ({
                 onChange={(e) => setFilenameDraft(e.target.value)}
                 onBlur={() => update({ filenamePattern: filenameDraft || '{name}_compressed.pdf' })}
                 placeholder="{name}_compressed.pdf"
-                className="h-7 font-mono text-[11px]"
+                className="h-11 font-mono text-sm sm:h-7 sm:text-[11px]"
                 aria-label="Filename pattern"
               />
-              <p className="mt-1 truncate font-mono text-[10px] text-muted-foreground" title={previewName}>
+              <p className="mt-1.5 truncate font-mono text-[11px] text-muted-foreground sm:mt-1 sm:text-[10px]" title={previewName}>
                 → {previewName}
               </p>
             </div>
           </div>
         </div>
 
-        <div className="flex items-start gap-2 rounded-xl bg-secondary/50 px-3 py-2.5 text-[11px] text-muted-foreground">
-          <Sparkle size={14} weight="duotone" className="mt-0.5 flex-shrink-0 text-primary" />
+        <div className="flex items-start gap-2 rounded-xl bg-secondary/50 px-3 py-3 text-xs text-muted-foreground sm:py-2.5 sm:text-[11px]">
+          <Sparkle size={16} weight="duotone" className="mt-0.5 flex-shrink-0 text-primary sm:h-3.5 sm:w-3.5" />
           <p className="leading-snug">
             Compression happens entirely in your browser — files are never uploaded.
             Output PDFs contain re-rendered page images, so text becomes non-selectable.
