@@ -76,10 +76,11 @@ const FAQSection = () => {
 
   return (
     <section id="faq" className="container mx-auto mt-12 max-w-2xl px-4 sm:mt-24" ref={ref}>
-      <h2
-        className={`mb-10 text-center text-3xl font-extrabold tracking-tight sm:text-4xl transition-all duration-700 ${
-          visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
-        }`}
+      <motion.h2
+        className="mb-10 text-center text-3xl font-extrabold tracking-tight sm:text-4xl"
+        initial="hidden"
+        animate={visible ? 'visible' : 'hidden'}
+        variants={fadeInUp}
       >
         Frequently Asked{' '}
         <span
@@ -91,26 +92,26 @@ const FAQSection = () => {
         >
           Questions
         </span>
-      </h2>
+      </motion.h2>
 
       <Accordion type="single" collapsible className="space-y-2.5 sm:space-y-3">
-        {faqs.map((f, i) => (
-          <AccordionItem
-            key={i}
-            value={`faq-${i}`}
-            className={`rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl px-4 transition-all duration-700 hover:border-primary/30 sm:px-5 ${
-              visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
-            }`}
-            style={{ animationDelay: visible ? `${i * 80}ms` : '0ms' }}
-          >
-            <AccordionTrigger className="py-4 text-sm font-semibold hover:no-underline sm:text-base [&[data-state=open]]:text-primary">
-              {f.q}
-            </AccordionTrigger>
-            <AccordionContent className="pb-4 text-sm leading-relaxed text-muted-foreground">
-              {f.a}
-            </AccordionContent>
-          </AccordionItem>
-        ))}
+        <motion.div initial="hidden" animate={visible ? 'visible' : 'hidden'} variants={staggerContainer(80)}>
+          {faqs.map((f, i) => (
+            <motion.div key={i} variants={fadeInUp}>
+              <AccordionItem
+                value={`faq-${i}`}
+                className="mb-2.5 rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl px-4 transition-all duration-300 hover:border-primary/30 sm:mb-3 sm:px-5"
+              >
+                <AccordionTrigger className="py-4 text-sm font-semibold hover:no-underline sm:text-base [&[data-state=open]]:text-primary">
+                  {f.q}
+                </AccordionTrigger>
+                <AccordionContent className="pb-4 text-sm leading-relaxed text-muted-foreground">
+                  {f.a}
+                </AccordionContent>
+              </AccordionItem>
+            </motion.div>
+          ))}
+        </motion.div>
       </Accordion>
     </section>
   );

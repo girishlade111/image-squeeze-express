@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import { motion } from 'framer-motion';
 import { ArrowRight, UploadSimple, Gear, DownloadSimple } from '@phosphor-icons/react';
+import { fadeInUp, staggerContainer } from '@/lib/motion';
 
 const steps = [
   {
