@@ -457,6 +457,7 @@ const SocialProfileCard = ({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.45, delay }}
+      whileHover="hover"
       className="group relative flex items-center gap-3 overflow-hidden rounded-2xl border border-border/40 bg-card/30 p-4 backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-card/60"
     >
       <div
@@ -469,9 +470,13 @@ const SocialProfileCard = ({
         aria-hidden
       />
 
-      <div className="relative flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl border border-border/40 bg-background/40 transition-transform duration-300 group-hover:scale-110">
+      <motion.div
+        className="relative flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl border border-border/40 bg-background/40"
+        variants={{ rest: { scale: 1 }, hover: { scale: 1.1 } }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+      >
         <Icon size={22} weight="duotone" className="h-5 w-5 text-primary" />
-      </div>
+      </motion.div>
       <div className="relative min-w-0 flex-1">
         <p className="text-sm font-semibold tracking-tight">{profile.label}</p>
         <p className="truncate text-[12px] text-muted-foreground">{profile.handle}</p>
