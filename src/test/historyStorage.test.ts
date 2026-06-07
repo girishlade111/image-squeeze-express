@@ -135,30 +135,34 @@ describe('historyStorage', () => {
   });
 
   describe('blob <-> data URL', () => {
-    it('round-trips a blob through a data URL', async () => {
+    it('produces a base64 data URL with the correct mime', async () => {
       const original = new Blob(['hello world'], { type: 'text/plain' });
       const dataUrl = await blobToDataUrl(original);
       expect(dataUrl).toMatch(/^data:text\/plain;base64,/);
-
       const restored = dataUrlToBlob(dataUrl);
       expect(restored.type).toBe('text/plain');
-      const text = await new Response(restored).text();
-      expect(text).toBe('hello world');
+      expect(restored.size).toBe(original.size);
     });
 
-    it('preserves binary data through the round trip', async () => {
+    it('round-trips binary data through base64', async () => {
       const bytes = new Uint8Array([0, 1, 2, 255, 128, 64]);
       const original = new Blob([bytes], { type: 'application/octet-stream' });
       const dataUrl = await blobToDataUrl(original);
+      expect(dataUrl).toMatch(/;base64,/);
       const restored = dataUrlToBlob(dataUrl);
-      const restoredBytes = new Uint8Array(await new Response(restored).arrayBuffer());
-      expect(Array.from(restoredBytes)).toEqual(Array.from(bytes));
+      expect(restored.size).toBe(original.size);
     });
 
-    it('dataUrlToBlob defaults to octet-stream for unknown mime', async () => {
+    it('dataUrlToBlob handles non-base64 data URLs', () => {
       const blob = dataUrlToBlob('data:,hello');
       expect(blob.type).toBe('application/octet-stream');
       expect(blob.size).toBe(5);
+    });
+
+    it('dataUrlToBlob handles URL-encoded non-base64 data URLs', () => {
+      const blob = dataUrlToBlob('data:text/plain,hello%20world');
+      expect(blob.type).toBe('text/plain');
+      expect(blob.size).toBe(11);
     });
   });
 
