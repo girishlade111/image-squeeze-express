@@ -80,15 +80,26 @@ const writeHistory = (entries: HistoryEntry[]): void => {
       .slice(0, MAX_HISTORY_ENTRIES);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(pruned));
   } catch (err) {
-    if (err instanceof Error && err.name === 'QuotaExceededError') {
+    const isQuota =
+      err instanceof Error &&
+      (err.name === 'QuotaExceededError' ||
+        /quota/i.test(err.message || ''));
+    if (isQuota) {
+      if (import.meta.env?.DEV) {
+        console.warn('[historyStorage] Quota exceeded — pruning to 25 most-recent entries.');
+      }
       try {
         const reduced = entries
           .sort((a, b) => b.createdAt - a.createdAt)
           .slice(0, Math.max(1, Math.floor(MAX_HISTORY_ENTRIES / 2)));
         localStorage.setItem(STORAGE_KEY, JSON.stringify(reduced));
-      } catch {
-        /* storage full — silently drop oldest half */
+      } catch (err2) {
+        if (import.meta.env?.DEV) {
+          console.error('[historyStorage] Could not write even after pruning:', err2);
+        }
       }
+    } else if (import.meta.env?.DEV) {
+      console.error('[historyStorage] Failed to write history:', err);
     }
   }
 };
