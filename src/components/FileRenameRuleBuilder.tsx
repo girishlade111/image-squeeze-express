@@ -217,7 +217,7 @@ const FileRenameRuleBuilder = ({
       <div className="rounded-2xl border border-border/40 bg-card/80 backdrop-blur-xl p-3 shadow-lg space-y-3 sm:p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-1.5">
-            <Label className="text-xs font-semibold">Rename Rules</Label>
+            <Label className="text-sm font-semibold sm:text-xs">Rename Rules</Label>
             <InfoTip>
               Rules are applied in the order shown. File extensions are never
               touched by base rules — use "Replace Extension" to modify the
@@ -230,23 +230,23 @@ const FileRenameRuleBuilder = ({
               size="sm"
               onClick={onReset}
               disabled={rules.length === 0}
-              className="h-6 rounded-full px-2 text-[10px] text-muted-foreground hover:text-foreground"
+              className="h-9 rounded-full px-3 text-xs text-muted-foreground hover:text-foreground sm:h-7 sm:px-2 sm:text-[10px]"
               aria-label="Reset all rules"
             >
-              <RotateCcw className="mr-1 h-2.5 w-2.5" />
+              <RotateCcw className="mr-1 h-3.5 w-3.5 sm:h-2.5 sm:w-2.5" />
               Reset
             </Button>
             <Button
               size="sm"
               onClick={() => setShowAdd((s) => !s)}
-              className="h-6 rounded-full px-2.5 text-[10px]"
+              className="h-9 rounded-full px-3 text-xs font-semibold sm:h-7 sm:px-2.5 sm:text-[10px]"
               style={{
                 background: 'linear-gradient(135deg, hsl(var(--primary)), hsl(var(--accent)))',
               }}
               aria-expanded={showAdd}
               aria-label="Add a new rule"
             >
-              <Plus className="mr-1 h-3 w-3" />
+              <Plus className="mr-1 h-4 w-4 sm:h-3 sm:w-3" />
               Add rule
             </Button>
           </div>
