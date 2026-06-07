@@ -321,69 +321,6 @@
   .bg-warning\/10 { background: hsl(var(--warning) / 0.1); }
   .bg-info\/10 { background: hsl(var(--info) / 0.1); }
 
-  /* === Animations === */
-  @keyframes float {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    25% { transform: translate(30px, -30px) scale(1.05); }
-    50% { transform: translate(-20px, 20px) scale(0.95); }
-    75% { transform: translate(-30px, -20px) scale(1.02); }
-  }
-  .animate-float { animation: float ease-in-out infinite; }
-
-  @keyframes pulse-glow {
-    0%, 100% { box-shadow: 0 0 0 0 hsl(var(--primary) / 0.4); }
-    50% { box-shadow: 0 0 0 8px hsl(var(--primary) / 0); }
-  }
-  .animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
-
-  @keyframes gradient-pan {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-  }
-  .animated-gradient-border {
-    background: linear-gradient(
-      135deg,
-      hsl(var(--primary) / 0.55),
-      hsl(var(--accent) / 0.55),
-      hsl(var(--primary) / 0.3),
-      hsl(var(--accent) / 0.55)
-    );
-    background-size: 300% 300%;
-    animation: gradient-pan 8s ease-in-out infinite;
-  }
-
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
-  }
-  .shimmer-gradient {
-    background: linear-gradient(
-      90deg,
-      transparent 0%,
-      hsl(var(--primary) / 0.12) 50%,
-      transparent 100%
-    );
-    background-size: 200% 100%;
-    animation: shimmer 2.5s ease-in-out infinite;
-  }
-
-  @keyframes scale-in {
-    0% { transform: scale(0); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-  }
-  .animate-scale-in { animation: scale-in 0.2s ease-out forwards; }
-
-  @keyframes fade-in-up {
-    0% { opacity: 0; transform: translateY(20px); }
-    100% { opacity: 1; transform: translateY(0); }
-  }
-  .animate-fade-in-up { animation: fade-in-up 0.6s ease-out forwards; }
-
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  .animate-spin-slow { animation: spin 2s linear infinite; }
-
   /* === Text balance for headings === */
   .text-balance { text-wrap: balance; }
   .text-pretty { text-wrap: pretty; }
