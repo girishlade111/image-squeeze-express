@@ -60,17 +60,17 @@ const HowItWorks = () => {
         </span>
       </h2>
 
-      <div className="mx-auto flex max-w-4xl flex-col items-center gap-8 sm:flex-row sm:items-start sm:gap-0">
+      <motion.div
+        className="mx-auto flex max-w-4xl flex-col items-center gap-8 sm:flex-row sm:items-start sm:gap-0"
+        initial="hidden"
+        animate={visible ? 'visible' : 'hidden'}
+        variants={staggerContainer(200)}
+      >
         {steps.map((s, i) => {
           const StepIcon = s.icon;
           return (
-          <div key={s.num} className="flex items-center sm:flex-1">
-            <div
-              className={`flex w-full flex-col items-center text-center transition-all duration-700 ${
-                visible ? 'animate-fade-in-up opacity-100' : 'opacity-0'
-              }`}
-              style={{ animationDelay: visible ? `${i * 200}ms` : '0ms' }}
-            >
+          <motion.div key={s.num} className="flex items-center sm:flex-1" variants={fadeInUp}>
+            <div className="flex w-full flex-col items-center text-center">
               <div className="relative mb-5">
                 <div className="flex h-20 w-20 items-center justify-center rounded-full border-2 border-primary/30 bg-primary/10 text-primary shadow-[0_0_20px_hsl(var(--brand)/0.18)]">
                   <StepIcon size={42} weight="duotone" aria-hidden />
@@ -89,19 +89,14 @@ const HowItWorks = () => {
             </div>
 
             {i < steps.length - 1 && (
-              <div
-                className={`hidden flex-shrink-0 px-4 sm:flex transition-all duration-700 ${
-                  visible ? 'opacity-100' : 'opacity-0'
-                }`}
-                style={{ animationDelay: visible ? `${i * 200 + 100}ms` : '0ms', transitionDelay: `${i * 200 + 300}ms` }}
-              >
+              <div className="hidden flex-shrink-0 px-4 sm:flex">
                 <ArrowRight size={20} weight="bold" className="text-muted-foreground/40" aria-hidden />
               </div>
             )}
-          </div>
+          </motion.div>
           );
         })}
-      </div>
+      </motion.div>
     </section>
   );
 };
