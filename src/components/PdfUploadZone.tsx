@@ -101,7 +101,7 @@ const PdfUploadZone = ({ onFilesSelected, pdfCount, maxFiles = 5 }: PdfUploadZon
             aria-hidden
           />
           <motion.div
-            className={`relative flex h-12 w-12 items-center justify-center rounded-2xl transition-colors sm:h-14 sm:w-14 ${
+            className={`relative flex h-14 w-14 items-center justify-center rounded-2xl transition-colors sm:h-16 sm:w-16 ${
               dragOver ? 'bg-primary/25' : 'bg-primary/[0.1] group-hover:bg-primary/[0.15]'
             }`}
             animate={
@@ -115,15 +115,15 @@ const PdfUploadZone = ({ onFilesSelected, pdfCount, maxFiles = 5 }: PdfUploadZon
                 : { duration: 3, repeat: Infinity, ease: 'easeInOut' }
             }
           >
-            <FilePdf size={28} weight="duotone" className="text-primary sm:!h-8 sm:!w-8" aria-hidden="true" />
+            <FilePdf size={32} weight="duotone" className="text-primary sm:!h-9 sm:!w-9" aria-hidden="true" />
           </motion.div>
         </div>
 
-        <div className="space-y-1">
-          <p className="text-sm font-semibold text-foreground sm:text-base md:text-lg">
+        <div className="space-y-1.5">
+          <p className="text-base font-semibold text-foreground sm:text-lg">
             {full ? `Maximum ${maxFiles} PDFs reached` : 'Drag & drop PDFs here'}
           </p>
-          <p className="text-xs text-muted-foreground sm:text-sm">
+          <p className="text-sm text-muted-foreground">
             {full ? (
               'Remove some PDFs to add more'
             ) : (
@@ -139,30 +139,22 @@ const PdfUploadZone = ({ onFilesSelected, pdfCount, maxFiles = 5 }: PdfUploadZon
 
         {!full && (
           <div className="flex flex-wrap items-center justify-center gap-1.5 pt-1">
-            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
               <ShieldCheck size={12} weight="duotone" />
               100% Private
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
+            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
               <Lightning size={12} weight="duotone" />
-              Instant
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-              <Sparkle size={12} weight="duotone" />
-              Up to 90% smaller
-            </span>
-            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-              <Zap className="h-2.5 w-2.5" />
               Runs in browser
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2 py-0.5 text-[10px] font-medium text-muted-foreground">
-              <Sparkles className="h-2.5 w-2.5" />
+            <span className="inline-flex items-center gap-1 rounded-full border border-border/40 bg-background/40 px-2.5 py-1 text-[11px] font-medium text-muted-foreground">
+              <Sparkle size={12} weight="duotone" />
               Up to 90% smaller
             </span>
           </div>
         )}
 
-        <p className="text-[10px] text-muted-foreground/70">
+        <p className="text-[11px] text-muted-foreground/70">
           PDF files only &nbsp;•&nbsp; {pdfCount}/{maxFiles} files &nbsp;•&nbsp; up to 100 MB each
         </p>
 

@@ -119,28 +119,28 @@ const ImageQueue = ({
     >
       {/* Header */}
       <motion.div
-        className="mb-3 flex items-center justify-between"
+        className="mb-3 flex flex-wrap items-center justify-between gap-2"
         layout
       >
-        <div className="flex items-center gap-2">
-          <p className="text-xs font-semibold text-foreground">
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="text-sm font-semibold text-foreground">
             {files.length} file{files.length !== 1 ? 's' : ''}
           </p>
           {doneCount > 0 && (
-            <Badge variant="outline" className="rounded-full border-success/30 bg-success/10 px-2 py-0 text-[9px] font-semibold text-success">
+            <Badge variant="outline" className="rounded-full border-success/30 bg-success/10 px-2 py-0.5 text-[11px] font-semibold text-success">
               {doneCount} done
             </Badge>
           )}
           {errorCount > 0 && (
-            <Badge variant="outline" className="rounded-full border-destructive/30 bg-destructive/10 px-2 py-0 text-[9px] font-semibold text-destructive">
+            <Badge variant="outline" className="rounded-full border-destructive/30 bg-destructive/10 px-2 py-0.5 text-[11px] font-semibold text-destructive">
               {errorCount} failed
             </Badge>
           )}
         </div>
         {!isProcessing && files.length > 0 && (
-          <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1.5">
             <div
-              className="flex h-6 items-center rounded-full border border-border/40 bg-background/40 p-0.5"
+              className="flex h-9 items-center rounded-full border border-border/40 bg-background/40 p-0.5 sm:h-7"
               role="group"
               aria-label="Queue view mode"
             >
@@ -148,36 +148,36 @@ const ImageQueue = ({
                 onClick={() => setViewMode('cards')}
                 aria-pressed={!isList}
                 aria-label="Card view"
-                className={`flex h-5 w-5 items-center justify-center rounded-full transition-colors ${
+                className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors sm:h-6 sm:w-6 ${
                   !isList ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                <LayoutGrid className="h-3 w-3" />
+                <LayoutGrid className="h-3.5 w-3.5" />
               </button>
               <button
                 onClick={() => setViewMode('list')}
                 aria-pressed={isList}
                 aria-label="List view"
-                className={`flex h-5 w-5 items-center justify-center rounded-full transition-colors ${
+                className={`flex h-8 w-8 items-center justify-center rounded-full transition-colors sm:h-6 sm:w-6 ${
                   isList ? 'bg-primary/20 text-primary' : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
-                <List className="h-3 w-3" />
+                <List className="h-3.5 w-3.5" />
               </button>
             </div>
             <Button
               variant="ghost"
               size="sm"
-              className="h-6 rounded-full px-2 text-[10px] text-muted-foreground hover:text-foreground"
+              className="h-9 rounded-full px-3 text-xs text-muted-foreground hover:text-foreground sm:h-7 sm:px-2 sm:text-[11px]"
               onClick={onAddMore}
               aria-label="Add more images"
             >
-              <Plus className="mr-0.5 h-2.5 w-2.5" /> Add
+              <Plus className="mr-1 h-3.5 w-3.5 sm:mr-0.5 sm:h-3 sm:w-3" /> Add
             </Button>
             <Button
               variant="ghost"
               size="sm"
-              className="h-6 rounded-full px-2 text-[10px] text-muted-foreground hover:text-destructive"
+              className="h-9 rounded-full px-3 text-xs text-muted-foreground hover:text-destructive sm:h-7 sm:px-2 sm:text-[11px]"
               onClick={onClearAll}
               aria-label="Clear all images"
             >
@@ -197,7 +197,7 @@ const ImageQueue = ({
             exit={{ opacity: 0, height: 0 }}
             aria-live="polite"
           >
-            <div className="relative overflow-hidden rounded-full bg-secondary/50 h-1.5">
+            <div className="relative h-1.5 overflow-hidden rounded-full bg-secondary/50">
               <motion.div
                 className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-primary to-accent"
                 initial={{ width: 0 }}
@@ -214,19 +214,19 @@ const ImageQueue = ({
                 aria-hidden
               />
             </div>
-            <div className="mt-1.5 flex items-center justify-between text-[10px] text-muted-foreground">
-              <span>{processingText || `${progress}%`}</span>
+            <div className="mt-2 flex flex-wrap items-center justify-between gap-x-2 gap-y-1 text-xs text-muted-foreground">
+              <span className="truncate">{processingText || `${progress}%`}</span>
               <span className="flex items-center gap-2 tabular-nums">
                 {stats && stats.bytesPerSecond > 0 && (
-                  <span className="inline-flex items-center gap-1 text-[10px]">
-                    <Gauge className="h-2.5 w-2.5" />
+                  <span className="inline-flex items-center gap-1 text-[11px]">
+                    <Gauge className="h-3 w-3" />
                     {formatFileSize(stats.bytesPerSecond)}/s
                     {stats.etaMs != null && stats.etaMs > 0 && (
                       <> · ETA {formatEta(stats.etaMs)}</>
                     )}
                   </span>
                 )}
-                <span>{progress}%</span>
+                <span className="font-semibold">{progress}%</span>
               </span>
             </div>
           </motion.div>
@@ -261,7 +261,7 @@ const ImageQueue = ({
                 transition={{ duration: 0.2, delay: i * 0.02 }}
                 onMouseEnter={() => setHoverId(f.id)}
                 onMouseLeave={() => setHoverId(null)}
-                className={`group relative flex items-center gap-2.5 rounded-xl border bg-card/60 p-2 transition-all duration-200 ${
+                className={`group relative flex items-center gap-2.5 rounded-xl border bg-card/60 p-2.5 transition-all duration-200 sm:p-2 ${
                   f.status === 'error'
                     ? 'border-destructive/30 bg-destructive/[0.04] hover:border-destructive/50'
                     : f.status === 'done'
@@ -278,7 +278,7 @@ const ImageQueue = ({
                     e.stopPropagation();
                     onInspect?.(f.id);
                   }}
-                  className="relative h-14 w-14 flex-shrink-0 cursor-zoom-in overflow-hidden rounded-lg bg-secondary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  className="relative h-14 w-14 flex-shrink-0 cursor-zoom-in overflow-hidden rounded-lg bg-secondary/30 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:h-12 sm:w-12"
                   aria-label={`Open inspector for ${f.name}`}
                 >
                   <img
