@@ -33,6 +33,7 @@ const Footer = lazy(() => import('@/components/Footer'));
 const PdfQueue = lazy(() => import('@/components/PdfQueue'));
 const PdfSettingsPanel = lazy(() => import('@/components/PdfSettingsPanel'));
 const PdfResultsSection = lazy(() => import('@/components/PdfResultsSection'));
+const HistorySection = lazy(() => import('@/components/HistorySection'));
 const PdfInspector = lazy(() => import('@/components/PdfInspector'));
 const MobileActionBar = lazy(() => import('@/components/MobileActionBar'));
 const PageDropOverlay = lazy(() => import('@/components/PageDropOverlay'));
@@ -229,6 +230,10 @@ const CompressPdf = () => {
             <PdfResultsSection files={processedFiles} onReset={clearAll} />
           </Suspense>
         )}
+
+        <Suspense fallback={null}>
+          <HistorySection tool="pdf" />
+        </Suspense>
 
         <HowItWorksPdf />
         <FeaturesPdf />

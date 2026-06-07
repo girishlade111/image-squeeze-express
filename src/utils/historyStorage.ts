@@ -124,12 +124,16 @@ export const blobToDataUrl = (blob: Blob): Promise<string> =>
   });
 
 export const dataUrlToBlob = (dataUrl: string): Blob => {
-  const [meta = '', b64 = ''] = dataUrl.split(',');
+  const [meta = '', payload = ''] = dataUrl.split(',');
   const mime = meta.match(/data:([^;]+)/)?.[1] ?? 'application/octet-stream';
-  const binary = atob(b64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-  return new Blob([bytes], { type: mime });
+  const isBase64 = /;base64$/i.test(meta);
+  if (isBase64) {
+    const binary = atob(payload);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+    return new Blob([bytes], { type: mime });
+  }
+  return new Blob([decodeURIComponent(payload)], { type: mime });
 };
 
 export const downloadHistoryEntry = (entry: HistoryEntry): void => {

@@ -7,11 +7,22 @@ import {
   type PdfProcessResult,
   type PdfMetadata,
 } from '@/utils/pdfFormat';
+import { addHistoryEntry, blobToDataUrl, HISTORY_UPDATED_EVENT, type HistoryEntry } from '@/utils/historyStorage';
 
 // pdfjs-dist + pdf-lib are heavy (~700 KB + 200 KB). They're only needed when
 // the user actually runs a compression job, so we lazy-load the whole engine
 // module. The module is cached after first load.
 const loadPdfEngine = () => import('@/utils/pdfProcessor');
+
+const saveToHistory = async (entry: HistoryEntry, blob: Blob): Promise<void> => {
+  try {
+    const dataUrl = await blobToDataUrl(blob);
+    addHistoryEntry({ ...entry, dataUrl });
+    window.dispatchEvent(new CustomEvent(HISTORY_UPDATED_EVENT));
+  } catch {
+    /* history save is best-effort */
+  }
+};
 
 export interface UploadedPdf {
   id: string;
@@ -307,6 +318,21 @@ export function usePdfUpload() {
             quality: result.finalQuality,
             pageCount: result.pagesProcessed,
           });
+
+          void saveToHistory({
+            id: item.id,
+            tool: 'pdf',
+            fileName: processedFile.name,
+            fileSize: result.sizeBytes,
+            mimeType: 'application/pdf',
+            createdAt: Date.now(),
+            pdf: {
+              pageCount: result.pagesProcessed,
+              reduction: result.reduction,
+              finalQuality: result.finalQuality,
+              finalDpi: result.finalDpi,
+            },
+          }, result.blob);
 
           setFiles((prev) =>
             prev.map((f) =>

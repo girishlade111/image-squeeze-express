@@ -23,6 +23,7 @@ const ScrollToTop = lazy(() => import('@/components/ScrollToTop'));
 const DocumentTitle = lazy(() => import('@/components/DocumentTitle'));
 const TrustBar = lazy(() => import('@/components/TrustBar'));
 const ResultsSection = lazy(() => import('@/components/ResultsSection'));
+const HistorySection = lazy(() => import('@/components/HistorySection'));
 const HowItWorks = lazy(() => import('@/components/HowItWorks'));
 const FeaturesGrid = lazy(() => import('@/components/FeaturesGrid'));
 const FAQSection = lazy(() => import('@/components/FAQSection'));
@@ -169,6 +170,10 @@ const Index = () => {
               <ResultsSection files={processedFiles} onReset={clearAll} />
             </Suspense>
           )}
+
+          <Suspense fallback={null}>
+            <HistorySection tool="image" />
+          </Suspense>
 
           <Suspense fallback={null}>
             <LazySection>

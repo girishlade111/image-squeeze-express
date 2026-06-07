@@ -7,15 +7,13 @@ import {
   MAX_TOTAL_BATCH_SIZE,
 } from '@/hooks/imageUploadLimits';
 import type { Settings } from '@/hooks/useSettings';
-import { addHistoryEntry, blobToDataUrl, type HistoryEntry } from '@/utils/historyStorage';
+import { addHistoryEntry, blobToDataUrl, HISTORY_UPDATED_EVENT, type HistoryEntry } from '@/utils/historyStorage';
 
 // browser-image-compression is ~50 KB. We defer loading the image engine
 // (and the pure batch-validator) until the user actually interacts with the
 // queue, so the landing page stays lean on first paint.
 const loadImageEngine = () => import('@/utils/imageProcessor');
 const loadBatchValidator = () => import('@/utils/batchValidation');
-
-import { addHistoryEntry, blobToDataUrl, HISTORY_UPDATED_EVENT, type HistoryEntry } from '@/utils/historyStorage';
 
 const saveToHistory = async (entry: HistoryEntry, blob: Blob): Promise<void> => {
   try {
@@ -193,8 +191,8 @@ export function useImageUpload() {
             createdAt: Date.now(),
             image: {
               originalSize: item.originalSize,
-              originalWidth: result.width,
-              originalHeight: result.height,
+              originalWidth: item.originalWidth || result.width,
+              originalHeight: item.originalHeight || result.height,
               processedWidth: result.width,
               processedHeight: result.height,
               reduction: result.reduction,
