@@ -2,30 +2,28 @@
 #  robots.txt for LS Image Compressor — img.ladestack.in
 #  Generated: June 7, 2026
 #
-#  Policy: ALL well-behaved crawlers, AI/LLM bots, social-media
-#  scrapers, and search engines are ALLOWED to crawl the entire
-#  site. The only restricted path is a non-existent /api/ which
-#  is reserved defensively for any future backend endpoint.
-#
-#  We explicitly allow AI training crawlers (GPTBot, Claude,
-#  Perplexity, Google-Extended, etc.) because we want our tools
-#  to be discoverable and citable in AI answers.
+#  Policy: EVERY well-behaved crawler is ALLOWED to crawl the
+#  entire site, including:
+#   - Search engines (Google, Bing, DuckDuckGo, Yandex, Baidu…)
+#   - AI / LLM crawlers (GPTBot, Claude, Perplexity, Gemini…)
+#   - Social-media scrapers (Facebook, Twitter, LinkedIn…)
+#   - SEO / audit tools (Ahrefs, Semrush, Moz, Screaming Frog…)
+#   - Generic / academic / archive crawlers
+#  No path is disallowed. Sitemaps are advertised below.
 # ============================================================
 
 # ============================================================
-# DEFAULT POLICY — applies to any crawler that does not match
-# a more specific User-agent block below.
+# DEFAULT POLICY — applies to any crawler (including the
+# generic "User-agent: *" used by the vast majority of bots
+# that do not match a more specific block below).
 # ============================================================
 User-agent: *
 Allow: /
-Disallow: /api/
-Disallow: /*.json$
-Disallow: /*?ref=*
-Disallow: /*?utm_*
 
 # ============================================================
 # AI & LLM CRAWLERS — explicitly allowed (used by ChatGPT,
-# Claude, Perplexity, Google SGE, Copilot, Gemini, etc.)
+# Claude, Perplexity, Google SGE, Copilot, Gemini, Apple
+# Intelligence, Meta AI, Cohere, Mistral, and more).
 # ============================================================
 User-agent: GPTBot
 Allow: /
@@ -135,6 +133,72 @@ Allow: /
 User-agent: AwarioSmartBot
 Allow: /
 
+User-agent: TurnitinBot
+Allow: /
+
+User-agent: QualifiedBot
+Allow: /
+
+User-agent: Semantici
+Allow: /
+
+User-agent: MegaIndex
+Allow: /
+
+User-agent: BiltbyBot
+Allow: /
+
+User-agent: bitdiscoverybot
+Allow: /
+
+User-agent: magpie-crawler
+Allow: /
+
+User-agent: scalaj
+Allow: /
+
+User-agent: lb-robot
+Allow: /
+
+User-agent: BUbiNG
+Allow: /
+
+User-agent: BUbiNG+
+Allow: /
+
+User-agent: Genieo
+Allow: /
+
+User-agent: ltx71
+Allow: /
+
+User-agent: PiplBot
+Allow: /
+
+User-agent: CuriosityBot
+Allow: /
+
+User-agent: SentiBot
+Allow: /
+
+User-agent: spinne
+Allow: /
+
+User-agent: Appindexer
+Allow: /
+
+User-agent: Owlin
+Allow: /
+
+User-agent: DSearch
+Allow: /
+
+User-agent: Primalbot
+Allow: /
+
+User-agent: PiplConnect
+Allow: /
+
 # ============================================================
 # MAJOR SEARCH ENGINES
 # ============================================================
@@ -228,6 +292,48 @@ Allow: /
 User-agent: archive.org_bot
 Allow: /
 
+User-agent: Mojeekbot
+Allow: /
+
+User-agent: Mojeek
+Allow: /
+
+User-agent: Qwantify
+Allow: /
+
+User-agent: Startpagina
+Allow: /
+
+User-agent: Marginalia
+Allow: /
+
+User-agent: Kagi
+Allow: /
+
+User-agent: Kagi-Fetcher
+Allow: /
+
+User-agent: KagiOrb
+Allow: /
+
+User-agent: Wibybot
+Allow: /
+
+User-agent: Goo
+Allow: /
+
+User-agent: SearchAtlas
+Allow: /
+
+User-agent: Ecosia
+Allow: /
+
+User-agent: Bravebot
+Allow: /
+
+User-agent: Brave
+Allow: /
+
 # ============================================================
 # SEO TOOL CRAWLERS (Ahrefs, Semrush, Moz, etc.)
 # ============================================================
@@ -288,6 +394,48 @@ Allow: /
 User-agent: GTmetrix
 Allow: /
 
+User-agent: ScreamingFrogSEOSpider
+Allow: /
+
+User-agent: Sitebulb
+Allow: /
+
+User-agent: Oncrawl
+Allow: /
+
+User-agent: Botify
+Allow: /
+
+User-agent: DeepCrawl
+Allow: /
+
+User-agent: Lumar
+Allow: /
+
+User-agent: ContentKing
+Allow: /
+
+User-agent: SiteImprove
+Allow: /
+
+User-agent: Ryte
+Allow: /
+
+User-agent: Conductor
+Allow: /
+
+User-agent: npmscraper
+Allow: /
+
+User-agent: swiftbot
+Allow: /
+
+User-agent: dataforseobot
+Allow: /
+
+User-agent: omgilibot
+Allow: /
+
 # ============================================================
 # SOCIAL MEDIA PLATFORMS
 # ============================================================
@@ -345,6 +493,66 @@ Allow: /
 User-agent: Taboola
 Allow: /
 
+User-agent: Redditbot
+Allow: /
+
+User-agent: Tumblr
+Allow: /
+
+User-agent: Mediumbot
+Allow: /
+
+User-agent: MetaInspector
+Allow: /
+
+User-agent: Iframely
+Allow: /
+
+User-agent: AppLinkBot
+Allow: /
+
+User-agent: Kakao
+Allow: /
+
+User-agent: VK
+Allow: /
+
+User-agent: Weibo
+Allow: /
+
+User-agent: Quora
+Allow: /
+
+User-agent: QuoraBot
+Allow: /
+
+User-agent: Mastodon
+Allow: /
+
+User-agent: Bluesky
+Allow: /
+
+User-agent: Threads
+Allow: /
+
+User-agent: Snap
+Allow: /
+
+User-agent: Snapchat
+Allow: /
+
+User-agent: TikTok
+Allow: /
+
+User-agent: Bytedance
+Allow: /
+
+User-agent: BytedanceWebCollector
+Allow: /
+
+User-agent: Pinterest
+Allow: /
+
 # ============================================================
 # MEDIA, ADS, AND FEED BOTS
 # ============================================================
@@ -382,6 +590,12 @@ User-agent: NetNewsWire
 Allow: /
 
 User-agent: NewsBlur
+Allow: /
+
+User-agent: SimplePie
+Allow: /
+
+User-agent: MagpieRSS
 Allow: /
 
 # ============================================================
@@ -423,19 +637,57 @@ Allow: /
 User-agent: ZoomBot
 Allow: /
 
+User-agent: Lighthouse
+Allow: /
+
+User-agent: Chrome-Lighthouse
+Allow: /
+
+User-agent: WebPageTest
+Allow: /
+
+User-agent: GTmetrix
+Allow: /
+
+User-agent: SpeedCurve
+Allow: /
+
+User-agent: Caliper
+Allow: /
+
+User-agent: Timber
+Allow: /
+
+User-agent: Browsershots
+Allow: /
+
+User-agent: BotPoke
+Allow: /
+
+User-agent: crawler4j
+Allow: /
+
+User-agent: heritrix
+Allow: /
+
+User-agent: lwp-trivial
+Allow: /
+
+User-agent: Zyte
+Allow: /
+
+User-agent: Scrapy
+Allow: /
+
 # ============================================================
 # SITEMAP LOCATIONS — list every sitemap you publish
 # ============================================================
 Sitemap: https://img.ladestack.in/sitemap.xml
 Sitemap: https://img.ladestack.in/sitemap-index.xml
 Sitemap: https://img.ladestack.in/image-sitemap.xml
+Sitemap: https://img.ladestack.in/news-sitemap.xml
 
 # ============================================================
 # CANONICAL HOST
 # ============================================================
 Host: https://img.ladestack.in
-
-# ============================================================
-# Crawl-delay: 1 second is polite and is ignored by Google.
-# ============================================================
-Crawl-delay: 1

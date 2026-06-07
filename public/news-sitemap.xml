@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:news="http://www.google.com/schemas/sitemap-news/0.9">
+
+  <!-- News sitemap: announces recent product updates, releases and
+       feature additions to the site. Google News / Discover will
+       pick these up so journalists and aggregators can cite them. -->
+
+  <url>
+    <loc>https://img.ladestack.in/</loc>
+    <news:news>
+      <news:publication>
+        <news:name>LS Image Compressor</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-06-07</news:publication_date>
+      <news:title>LS Image Compressor — 100% private, in-browser image compression for JPG, PNG, WebP and AVIF</news:title>
+      <news:keywords>image compressor, WebP converter, AVIF converter, privacy-first, browser-based, free</news:keywords>
+      <news:stock_tickers>NASDAQ:GOOGL, NASDAQ:MSFT</news:stock_tickers>
+    </news:news>
+  </url>
+
+  <url>
+    <loc>https://img.ladestack.in/compress-pdf</loc>
+    <news:news>
+      <news:publication>
+        <news:name>LS Image Compressor</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-06-07</news:publication_date>
+      <news:title>Free online PDF compressor — shrink PDFs up to 90% in your browser, no upload</news:title>
+      <news:keywords>PDF compressor, shrink PDF, reduce PDF size, browser-based, privacy-first</news:keywords>
+    </news:news>
+  </url>
+
+  <url>
+    <loc>https://img.ladestack.in/bulk-rename</loc>
+    <news:news>
+      <news:publication>
+        <news:name>LS Image Compressor</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-06-07</news:publication_date>
+      <news:title>Bulk file renamer with 13 live rules — find and replace, numbering, date, case, regex</news:title>
+      <news:keywords>bulk rename, batch rename, regex rename, file manager, free tool</news:keywords>
+    </news:news>
+  </url>
+
+  <url>
+    <loc>https://img.ladestack.in/about</loc>
+    <news:news>
+      <news:publication>
+        <news:name>LS Image Compressor</news:name>
+        <news:language>en</news:language>
+      </news:publication>
+      <news:publication_date>2026-06-07</news:publication_date>
+      <news:title>About LS Image Compressor — privacy-first tools built in India by a solo developer</news:title>
+      <news:keywords>Lade Stack, Girish Lade, solo developer, indie hacker, India</news:keywords>
+    </news:news>
+  </url>
+
+</urlset>

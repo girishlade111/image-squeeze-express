@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+              xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <sitemap>
     <loc>https://img.ladestack.in/sitemap.xml</loc>
     <lastmod>2026-06-07</lastmod>
   </sitemap>
   <sitemap>
     <loc>https://img.ladestack.in/image-sitemap.xml</loc>
+    <lastmod>2026-06-07</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://img.ladestack.in/news-sitemap.xml</loc>
     <lastmod>2026-06-07</lastmod>
   </sitemap>
 </sitemapindex>

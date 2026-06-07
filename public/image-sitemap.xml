@@ -2,16 +2,19 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 
+  <!-- Homepage OG image -->
   <url>
     <loc>https://img.ladestack.in/</loc>
     <image:image>
       <image:loc>https://img.ladestack.in/og-image.png</image:loc>
       <image:title>LS Image Compressor — Free Online Image Compressor</image:title>
       <image:caption>Compress images up to 90% smaller in your browser. 100% private, no upload, no signup.</image:caption>
+      <image:geo_location>Worldwide</image:geo_location>
       <image:license>https://img.ladestack.in/terms</image:license>
     </image:image>
   </url>
 
+  <!-- PDF tool OG image -->
   <url>
     <loc>https://img.ladestack.in/compress-pdf</loc>
     <image:image>
@@ -22,6 +25,7 @@
     </image:image>
   </url>
 
+  <!-- Bulk rename tool OG image -->
   <url>
     <loc>https://img.ladestack.in/bulk-rename</loc>
     <image:image>
@@ -32,6 +36,7 @@
     </image:image>
   </url>
 
+  <!-- About OG image -->
   <url>
     <loc>https://img.ladestack.in/about</loc>
     <image:image>
@@ -42,6 +47,7 @@
     </image:image>
   </url>
 
+  <!-- Contact OG image -->
   <url>
     <loc>https://img.ladestack.in/contact</loc>
     <image:image>
@@ -52,31 +58,80 @@
     </image:image>
   </url>
 
+  <!-- Privacy OG image -->
   <url>
     <loc>https://img.ladestack.in/privacy</loc>
     <image:image>
       <image:loc>https://img.ladestack.in/og-privacy.png</image:loc>
       <image:title>LS Image Compressor Privacy Policy</image:title>
-      <image:caption>How LS Image Compressor handles your data. Spoiler: we don’t collect anything.</image:caption>
+      <image:caption>How LS Image Compressor handles your data. Spoiler: we do not collect anything.</image:caption>
       <image:license>https://img.ladestack.in/terms</image:license>
     </image:image>
   </url>
 
+  <!-- Terms OG image -->
   <url>
     <loc>https://img.ladestack.in/terms</loc>
     <image:image>
       <image:loc>https://img.ladestack.in/og-terms.png</image:loc>
       <image:title>LS Image Compressor Terms of Service</image:title>
       <image:caption>Free for personal and commercial use, no warranty, your files stay on your device.</image:caption>
+      <image:license>https://img.ladestack.in/terms</image:license>
     </image:image>
   </url>
 
+  <!-- Brand logo -->
   <url>
     <loc>https://img.ladestack.in/</loc>
     <image:image>
       <image:loc>https://img.ladestack.in/logo-mark.svg</image:loc>
       <image:title>LS Image Compressor logo</image:title>
-      <image:caption>The LS Image Compressor brand mark — two inward chevrons with a spark, indigo-to-teal gradient.</image:caption>
+      <image:caption>The LS Image Compressor brand mark — a lightning bolt sign for fast, private, in-browser image compression.</image:caption>
+      <image:license>https://img.ladestack.in/terms</image:license>
+    </image:image>
+  </url>
+
+  <!-- Favicon -->
+  <url>
+    <loc>https://img.ladestack.in/</loc>
+    <image:image>
+      <image:loc>https://img.ladestack.in/favicon.svg</image:loc>
+      <image:title>LS Image Compressor favicon</image:title>
+      <image:caption>Favicon for LS Image Compressor — lightning bolt mark in monochrome.</image:caption>
+      <image:license>https://img.ladestack.in/terms</image:license>
+    </image:image>
+  </url>
+
+  <!-- Founder profile photo (AVIF variant) -->
+  <url>
+    <loc>https://img.ladestack.in/about</loc>
+    <image:image>
+      <image:loc>https://img.ladestack.in/assets/profile.avif</image:loc>
+      <image:title>Girish Lade — Founder of LS Image Compressor</image:title>
+      <image:caption>Profile photo of Girish Lade, founder and solo developer of LS Image Compressor. Image served in modern AVIF format.</image:caption>
+      <image:license>https://img.ladestack.in/terms</image:license>
+    </image:image>
+  </url>
+
+  <!-- Founder profile photo (WebP variant) -->
+  <url>
+    <loc>https://img.ladestack.in/about</loc>
+    <image:image>
+      <image:loc>https://img.ladestack.in/assets/profile.webp</image:loc>
+      <image:title>Girish Lade — Founder of LS Image Compressor</image:title>
+      <image:caption>Profile photo of Girish Lade, founder and solo developer of LS Image Compressor. Image served in WebP format.</image:caption>
+      <image:license>https://img.ladestack.in/terms</image:license>
+    </image:image>
+  </url>
+
+  <!-- Apple touch icon -->
+  <url>
+    <loc>https://img.ladestack.in/</loc>
+    <image:image>
+      <image:loc>https://img.ladestack.in/apple-touch-icon.png</image:loc>
+      <image:title>LS Image Compressor Apple touch icon</image:title>
+      <image:caption>Apple touch icon for LS Image Compressor — 180x180 PNG.</image:caption>
+      <image:license>https://img.ladestack.in/terms</image:license>
     </image:image>
   </url>
 
