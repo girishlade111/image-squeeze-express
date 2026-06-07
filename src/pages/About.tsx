@@ -1337,8 +1337,20 @@ const FeaturedStatCard = ({ stat, active }: { stat: (typeof stats)[number]; acti
 
   return (
     <div className="relative h-full overflow-hidden rounded-2xl p-px">
-      {/* Animated gradient border */}
-      <div className="animated-gradient-border absolute inset-0 rounded-2xl" aria-hidden />
+      <motion.div
+        className="absolute inset-0 rounded-2xl"
+        style={{
+          background: `linear-gradient(135deg,
+            hsl(var(--primary) / 0.55),
+            hsl(var(--accent) / 0.55),
+            hsl(var(--primary) / 0.3),
+            hsl(var(--accent) / 0.55))`,
+          backgroundSize: '300% 300%',
+        }}
+        animate={{ backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+        aria-hidden
+      />
       <div className="relative h-full overflow-hidden rounded-[15px] border border-border/40 bg-card/70 backdrop-blur-sm">
         {/* Decorative orbs */}
         <div
