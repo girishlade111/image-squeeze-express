@@ -481,11 +481,13 @@ const SocialProfileCard = ({
         <p className="text-sm font-semibold tracking-tight">{profile.label}</p>
         <p className="truncate text-[12px] text-muted-foreground">{profile.handle}</p>
       </div>
-      <ArrowUpRight
-        size={14}
-        weight="bold"
-        className="relative flex-shrink-0 text-muted-foreground/50 transition-all duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-primary"
-      />
+      <motion.span
+        className="relative flex-shrink-0 text-muted-foreground/50 transition-colors duration-300 group-hover:text-primary"
+        variants={{ rest: { x: 0, y: 0 }, hover: { x: 2, y: -2 } }}
+        transition={{ duration: 0.25, ease: 'easeOut' }}
+      >
+        <ArrowUpRight size={14} weight="bold" />
+      </motion.span>
     </motion.a>
   );
 };
