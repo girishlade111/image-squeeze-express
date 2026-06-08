@@ -36,73 +36,56 @@ export default defineConfig(({ mode }) => ({
           if (!id.includes("node_modules")) return undefined;
 
           // Heavy tool-specific deps are split out so they never reach the
-          // main bundle and only download when their route is visited.
+          // main bundle and only download when their route is visited. These
+          // are route-lazy and never imported by the React runtime, so they
+          // cannot create an evaluation cycle with the core chunk.
           if (id.includes("pdfjs-dist") || id.includes("pdf-lib")) return "vendor-pdf";
           if (id.includes("jszip") || id.includes("file-saver")) return "vendor-zip";
           if (id.includes("browser-image-compression")) return "vendor-image";
+          if (id.includes("pako") || id.includes("/fflate")) return "vendor-compress";
 
-          // React core — shared by every page; preload in parallel with main.
+          // EVERYTHING that touches the React runtime ships in one chunk.
+          //
+          // Splitting React away from its ecosystem (Radix, router, query,
+          // motion, etc) made those chunks import `vendor-react` while
+          // `vendor-react` imported them back — a circular dependency. At
+          // runtime the browser evaluated a consumer chunk before React had
+          // finished initializing, so React's named exports were still
+          // `undefined`, producing:
+          //   "Cannot read properties of undefined (reading 'useLayoutEffect')"
+          // and a blank screen. Keeping the whole React graph in a single
+          // chunk removes the cycle: anything that needs React is evaluated
+          // in the same module as React itself.
           if (
             id.includes("react-dom") ||
             id.includes("/react/") ||
-            id.includes("scheduler")
-          ) {
-            return "vendor-react";
-          }
-
-          // React Router + its underlying @remix-run/router engine. Split
-          // out so the 100+ KB of router internals can be cached as a single
-          // fingerprinted asset and never bundled with the React runtime.
-          if (id.includes("react-router") || id.includes("@remix-run/router")) {
-            return "vendor-router";
-          }
-
-          // Animation engine — only the pages that use framer-motion pull it in.
-          if (
+            id.includes("react/jsx-runtime") ||
+            id.includes("scheduler") ||
+            id.includes("react-router") ||
+            id.includes("@remix-run/router") ||
             id.includes("framer-motion") ||
             id.includes("motion-dom") ||
             id.includes("motion-utils") ||
-            id.includes("/motion/")
-          ) {
-            return "vendor-motion";
-          }
-
-          // All Radix UI primitives + their internals (floating-ui,
-          // react-remove-scroll, etc) share a single chunk so any dialog /
-          // popover page can be opened without re-downloading.
-          if (
+            id.includes("/motion/") ||
             id.includes("@radix-ui") ||
             id.includes("@floating-ui") ||
             id.includes("react-remove-scroll") ||
-            id.includes("use-sync-external-store")
-          ) {
-            return "vendor-radix";
-          }
-
-          // Small icon library used by the shadcn primitives — keep separate
-          // from Phosphor (which Vite auto-splits per icon).
-          if (id.includes("lucide-react")) return "vendor-lucide";
-
-          // State/data/utility deps.
-          if (id.includes("@tanstack")) return "vendor-query";
-          if (id.includes("sonner")) return "vendor-sonner";
-          if (
+            id.includes("use-sync-external-store") ||
+            id.includes("aria-hidden") ||
+            id.includes("get-nonce") ||
+            id.includes("lucide-react") ||
+            id.includes("@tanstack") ||
+            id.includes("sonner") ||
+            id.includes("next-themes") ||
             id.includes("clsx") ||
             id.includes("tailwind-merge") ||
             id.includes("class-variance-authority")
           ) {
-            return "vendor-utils";
+            return "vendor-react";
           }
 
-          // Theme resolution — only loaded for the theme provider.
-          if (id.includes("next-themes")) return "vendor-themes";
-
-          // Analytics are tiny but bundled to a dedicated chunk so they can
-          // be loaded strictly after first paint.
+          // Analytics are tiny and loaded strictly after first paint.
           if (id.includes("@vercel")) return "vendor-vercel";
-
-          // Pako / zlib — used by pdfjs for compression.
-          if (id.includes("pako") || id.includes("/fflate")) return "vendor-compress";
 
           return "vendor";
         },
