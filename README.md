@@ -1,94 +1,82 @@
 # ⚡ LS Image Compressor — Free Browser-Native File Toolkit
 
-> **Compress images up to 90%, compress PDFs, and rename hundreds of files in bulk — all 100% in your browser. No uploads, no accounts, no tracking.**
+> **Compress images up to 90%, shrink PDFs, and rename hundreds of files in bulk — all 100% in your browser. No uploads, no accounts, no tracking. Zero servers.**
 
 [![React](https://img.shields.io/badge/React-18.3-61DAFB?logo=react&logoColor=white)](https://react.dev)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://typescriptlang.org)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.x-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
-[![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
-[![Tests](https://img.shields.io/badge/Tests-157_passing-brightgreen)](#-testing)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.8-3178C6?logo=typescript&logoColor=white)](https://typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-06B6D4?logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![Vite](https://img.shields.io/badge/Vite-5.4-646CFF?logo=vite&logoColor=white)](https://vitejs.dev)
+[![Framer Motion](https://img.shields.io/badge/Framer_Motion-12.x-0055FF?logo=framer&logoColor=white)](https://www.framer.com/motion/)
+[![Tests](https://img.shields.io/badge/Tests-228_passing-brightgreen)](#-testing)
 [![License](https://img.shields.io/badge/License-MIT-green)](https://choosealicense.com/licenses/mit/)
 [![Platform](https://img.shields.io/badge/Platform-Web-brightgreen)](#)
 [![Architecture](https://img.shields.io/badge/Architecture-100%25_Client_Side-blueviolet)](#-system-architecture)
 [![PRs Welcome](https://img.shields.io/badge/PRs-Welcome-brightgreen.svg)](http://makeapullrequest.com)
+[![Domain](https://img.shields.io/badge/Live_at-img.ladestack.in-8B5CF6)](https://img.ladestack.in)
 
 ---
 
 ## 📑 Table of Contents
 
 - [🎯 What is LS Image Compressor?](#-what-is-ls-image-compressor)
-- [🧰 Three Powerful Tools, One App](#-three-powerful-tools-one-app)
+- [🧰 Three Tools, One App](#-three-tools-one-app)
 - [✨ Key Highlights](#-key-highlights)
 - [🚀 Features](#-features)
   - [🖼️ Image Compressor (`/`)](#️-image-compressor-)
-  - [📕 Compress PDF (`/compress-pdf`)](#-compress-pdf-compress-pdf)
-  - [✏️ Bulk File Rename (`/bulk-rename`)](#️-bulk-file-rename-bulk-rename)
+  - [📕 PDF Compressor (`/compress-pdf`)](#-pdf-compressor-compress-pdf)
+  - [✏️ Bulk File Renamer (`/bulk-rename`)](#️-bulk-file-renamer-bulk-rename)
+  - [📜 History & Re-Download](#-history--re-download)
   - [🛡️ Cross-Cutting Concerns](#️-cross-cutting-concerns)
 - [🏗️ System Architecture](#️-system-architecture)
   - [🗺️ App-Wide Architecture](#️-app-wide-architecture)
   - [🖼️ Image Compression Pipeline](#️-image-compression-pipeline)
   - [📕 PDF Compression Pipeline](#-pdf-compression-pipeline)
   - [✏️ Bulk Rename Pipeline](#️-bulk-rename-pipeline)
+  - [🗄️ History Storage Flow](#️-history-storage-flow)
   - [🛡️ Privacy Architecture](#️-privacy-architecture)
 - [🛠️ Tech Stack](#️-tech-stack)
 - [📊 Performance Stats](#-performance-stats)
 - [🚀 Getting Started](#-getting-started)
 - [⚙️ Configuration](#️-configuration)
-- [☁️ Deploy to Vercel](#️-deploy-to-vercel)
 - [📁 Project Structure](#-project-structure)
 - [🧪 Testing](#-testing)
+- [☁️ Deploy to Vercel](#️-deploy-to-vercel)
 - [♿ Accessibility](#-accessibility)
 - [🔒 Privacy & Security](#-privacy--security)
-- [🌐 SEO Optimization](#-seo-optimization)
+- [🌐 SEO & Performance](#-seo--performance)
 - [📄 License](#-license)
-- [🙏 Credits & Thanks](#-credits--thanks)
+- [🙏 Credits](#-credits)
 
 ---
 
 ## 🎯 What is LS Image Compressor?
 
-**LS Image Compressor** is a **100% client-side** file toolkit for the three most common browser tasks that normally force you to upload your files to a stranger's server:
+**LS Image Compressor** is a **100% client-side** privacy-first file toolkit that runs three essential utilities entirely in the browser. Built with **React 18**, **TypeScript**, **Tailwind CSS**, and **Vite**, it provides a polished, accessible experience for common file tasks — without ever sending your data to a server.
 
-1. **🖼️ Compress images** — resize, recompress, and convert format (with social-media presets)
-2. **📕 Compress PDFs** — shrink PDFs by re-rendering every page as a JPEG
-3. **✏️ Bulk rename files** — find & replace, number, change case, sanitize — for *any* file type
+| Tool | Route | Purpose | Max Inputs | Engine |
+|------|-------|---------|------------|--------|
+| 🖼️ **Image Compressor / Resizer / Converter** | `/` | Compress, resize, convert, rotate, mirror, grayscale, strip EXIF, target KB | **50** images × 25 MB (750 MB total) | Canvas API + `browser-image-compression` |
+| 📕 **PDF Compressor** | `/compress-pdf` | Shrink PDFs by re-rendering pages as JPEG, with smart presets, DPI override, grayscale, page range | **5** PDFs × 100 MB | `pdfjs-dist` + `pdf-lib` |
+| ✏️ **Bulk File Renamer** | `/bulk-rename` | Rename any file type with 13 stackable rules, live preview, safe sanitization | **100** files × 200 MB | Pure JS string engine + `jszip` |
 
-> 🎯 **Mission**: Provide a fast, private, and free alternative to bloated online tools that require uploads, accounts, or watermarks.
-
-> 🔐 **Privacy by default**: every byte stays in your browser. Closing the tab is the only "delete" you need.
-
----
-
-## 🧰 Three Powerful Tools, One App
-
-| Tool | Route | Best For | Max Inputs | Engine |
-|------|-------|----------|------------|--------|
-| 🖼️ **Image Compressor** | [`/`](#) | Photos, social media, web assets | **50** images × 25 MB (750 MB total) | Canvas API + `browser-image-compression` |
-| 📕 **Compress PDF** | [`/compress-pdf`](#) | Image-heavy PDFs, email attachments | **5** PDFs × 100 MB | `pdfjs-dist` + `pdf-lib` |
-| ✏️ **Bulk File Rename** | [`/bulk-rename`](#) | Any file type, batch renaming | **100** files × 200 MB | Pure JS string engine + `jszip` |
-
-All three tools share:
-
-- 🌗 Dark / light mode (persisted)
-- 🎨 Identical design system, shadcn/ui primitives, Tailwind tokens
-- ⌨️ Full keyboard navigation + screen-reader support
-- 📋 Paste-from-clipboard and page-level drag-and-drop
-- 💾 Zero network requests at runtime
+> 🔐 **Privacy by default**: every byte stays on your device. Closing the tab is the only "delete" you need.
 
 ---
 
 ## ✨ Key Highlights
 
-- 🔒 **100% Private** — every byte stays in the browser, no API calls, no telemetry
-- ⚡ **Instant Processing** — no upload delays, no server round-trips
-- 🆓 **Free Forever** — no subscriptions, no hidden fees, no watermarks
-- 📱 **Fully Responsive** — works on desktop, tablet, and mobile
-- 🌙 **Dark/Light Mode** — theme persists across sessions via `localStorage`
-- 🎯 **Smart Presets** — one-click social media presets + compression level buttons
-- 🧠 **Smart Targeting** — specify target KB and the engine finds the right quality
-- 📦 **Batch + ZIP** — process many files and download as a single ZIP
-- 👁️ **Live Preview** — see renamed file diffs *before* downloading
-- ♿ **Accessible** — WCAG AA compliant with full keyboard & screen-reader support
+- 🔒 **100% Private** — Zero network requests at runtime. No API calls, no telemetry, no cookies
+- ⚡ **Instant Processing** — No upload delays, no server round-trips. Files never leave your machine
+- 🆓 **Free Forever** — No subscriptions, no hidden fees, no watermarks, no account required
+- 🎯 **Smart Targeting** — Specify a target KB for images & PDFs; engine auto-discovers optimal quality
+- 📦 **Batch + ZIP** — Process multiple files in parallel, download as a single ZIP archive
+- 🧠 **Smart PDF Recommendation** — Classifies pages (text-heavy / image-heavy) and suggests ideal preset
+- 📜 **History** — Previous compression sessions are saved locally for re-download
+- 👁️ **Live Preview** — Side-by-side, slider, & toggle comparison views with zoom/pan
+- ♿ **Accessible** — Full keyboard navigation, screen-reader support, semantic HTML
+- 🌙 **Dark/Light Mode** — Theme persists via `localStorage`; no-FOUC inline script
+- 🧩 **Code-Split** — PDF & ZIP libraries loaded only on the pages that need them
+- 📱 **Fully Responsive** — Works on desktop, tablet, and mobile with a dedicated mobile action bar
 
 ---
 
@@ -96,197 +84,193 @@ All three tools share:
 
 ### 🖼️ Image Compressor (`/`)
 
-> The flagship tool. Resize, recompress, and convert up to 50 images at once (750 MB total) with full social-media preset support.
+The flagship tool — resize, recompress, and convert up to **50 images** at once (750 MB total) with social-media presets and a canvas-based transform pipeline.
 
 #### 🗜️ Compression
 
-- **🎚️ Quality Slider** — Adjustable from **10–100%** with real-time quality indicator
-  - 🟢 **High (80–100%)** — minimal compression, best quality
-  - 🟡 **Balanced (50–79%)** — great for web & social media
-  - 🔴 **Aggressive (10–49%)** — maximum compression for thumbnails
-- **⚡ Auto Optimize for Web** — locks quality at **75%** for the best balance
-- **🎯 Target File Size** — specify max KB and the engine auto-discovers the right quality (iterates down by 10% until under target)
-- **🔁 Multi-Engine Pipeline** — `browser-image-compression` with **Canvas API fallback** for reliability
-- **📉 Live Stats** — real-time before/after size, reduction %, savings in KB
+- **🎚️ Quality Slider** — Adjustable **10–100%** with quick presets (Max / High / Balanced / Compact)
+  - 🟢 **High (80–100%)** — Minimal compression, best quality
+  - 🟡 **Balanced (50–79%)** — Great for web & social media (default: **75%**)
+  - 🔴 **Aggressive (10–49%)** — Maximum compression for thumbnails
+- **⚡ Auto Optimize** — Automatically selects the best quality for web delivery
+- **🎯 Target File Size** — Specify max KB; engine iteratively reduces quality by 10% until target is met (max 5 iterations, floor at 10%)
+- **📉 Live Stats** — Real-time per-file before/after size, reduction %, savings in KB with animated counters
+- **🔁 Dual Engine** — Fast Web Worker path (`browser-image-compression`) with Canvas API fallback for transforms
 
 #### 📐 Resize
 
-- **🧮 Custom Dimensions** — width/height inputs with pixel precision
-- **🔗 Aspect Ratio Lock** — auto-recalculates the missing dimension
-- **🎯 9 Social Media Presets** — one-click apply with **center-crop to fit** (no distortion)
+- **🧮 Custom Dimensions** — Width/height inputs with pixel precision
+- **🔗 Aspect Ratio Lock** — Auto-derives missing dimension from source aspect ratio
+- **🎯 9 Social Media Presets** — One-click apply with **center-crop to fit** (no distortion)
 
 | Platform | Preset | Dimensions |
 |----------|--------|------------|
-| 📸 | Instagram Post | 1080×1080 |
-| 📱 | Instagram Story | 1080×1920 |
-| 💼 | LinkedIn Post | 1200×627 |
-| 💼 | LinkedIn Banner | 1584×396 |
-| 💬 | WhatsApp DP | 500×500 |
-| 🐦 | Twitter / X Post | 1200×675 |
-| 📘 | Facebook Cover | 820×312 |
-| 📺 | YouTube Thumbnail | 1280×720 |
-| 🖥️ | Full HD | 1920×1080 |
-
-> 💡 **Pro Tip**: The optimizer center-crops to the preset's aspect ratio — upload any photo and you'll get a platform-perfect result.
+| 📸 Instagram Post | IG Post | 1080×1080 |
+| 📱 Instagram Story | IG Story | 1080×1920 |
+| 💼 LinkedIn Post | LinkedIn Post | 1200×627 |
+| 💼 LinkedIn Banner | LI Banner | 1584×396 |
+| 💬 WhatsApp DP | WhatsApp DP | 500×500 |
+| 🐦 Twitter / X Post | Twitter Post | 1200×675 |
+| 📘 Facebook Cover | FB Cover | 820×312 |
+| 📺 YouTube Thumbnail | YT Thumb | 1280×720 |
+| 🖥️ Full HD | Full HD | 1920×1080 |
 
 #### 🔄 Format Conversion
 
 | Format | Best For | Notes |
 |--------|----------|-------|
-| **JPEG** | Photos, complex images | Universal compatibility |
-| **PNG** | Transparency, graphics | Lossless, larger files |
-| **WebP** ⭐ | Web performance | ~30% smaller than JPEG at same quality |
-| **AVIF** | Best compression | ~50% smaller than JPEG; requires Chrome 85+ / Firefox 113+ / Safari 16+ |
-| **Keep Original** | Compression only | No format change |
+| **⬜ Keep Original** | Compression only | No format change |
+| **🟦 JPEG** | Photos, complex images | Universal compatibility, lossy |
+| **🟩 PNG** | Transparency, graphics | Lossless, larger files |
+| **🟨 WebP** ⭐ | Web performance | **~30% smaller** than JPEG at same quality |
+| **🟪 AVIF** | Best compression | **~50% smaller** than JPEG; Chrome 85+ / FF 113+ / Safari 16+ |
 
-#### 🔄 Other Transforms
+#### 🔄 Transforms
 
 - 🔁 **Rotation** — 0°, 90°, 180°, 270°
-- 🪞 **Mirror / Flip** — horizontal flip
-- ⚫ **Grayscale** — convert to black & white
-- 🛡️ **Strip EXIF** — remove camera info, GPS, and other metadata (privacy)
+- 🪞 **Mirror / Flip** — Horizontal flip
+- ⚫ **Grayscale** — BT.601 luma transform (`0.299 R + 0.587 G + 0.114 B`)
+- 🛡️ **Strip EXIF** — Removes camera info, GPS, and metadata
+- 🏷️ **Filename Tokens** — `{name}`, `{ext}`, `{format}`, `{w}`, `{h}`, `{q}`, `{index}`, `{date}`, `{size}` — all customizable
 
 #### 📦 Batch Processing
 
-- **📤 Batch Upload** — up to **50 images** per batch (750 MB total)
-- **🖱️ Drag & Drop** — or click to browse
-- **⌨️ Paste from Clipboard** — `Ctrl+V` works anywhere
-- **📊 Progress Tracking** — real-time progress bar with status badges
-- **⬇️ Individual Download** — download single processed images
-- **🗂️ Batch ZIP Download** — download all as a single ZIP via **JSZip**
-- **🆚 Before/After Cards** — visual comparison with size reduction stats
+- **50 images** per batch (750 MB total, 25 MB each)
+- Drag & drop + click-to-browse + **`Ctrl+V` clipboard paste**
+- Per-file status badges: Ready / Processing / Done / Failed
+- Retry individual failed files without re-processing the batch
+- Download single files or **Download All as ZIP**
+- **Before/After comparison cards** with animated stat counters
 
 ---
 
-### 📕 Compress PDF (`/compress-pdf`)
+### 📕 PDF Compressor (`/compress-pdf`)
 
-> Re-renders every page as a JPEG and rebuilds the document — the most reliable way to shrink image-heavy PDFs in the browser.
+Re-renders every page as a JPEG and rebuilds the document — the most reliable way to shrink image-heavy PDFs in the browser.
 
-#### 🎚️ Three Compression Levels
+#### 🎚️ Compression Levels
 
-| Level | JPEG Quality | Max Width | Best For |
-|-------|--------------|-----------|----------|
-| 🚀 **Strong** | 40% | 1100 px | Emailing, sharing — smallest file |
-| ⚡ **Balanced** ⭐ | 60% | 1700 px | Recommended default |
-| ✨ **Light** | 82% | 2400 px | Best quality, still smaller |
+| Level | JPEG Quality | Max Width | Scale | Best For |
+|-------|--------------|-----------|-------|----------|
+| 🚀 **Strong** | 40% | 1100 px | 1.25× | Emailing, sharing — smallest file |
+| ⚡ **Balanced** ⭐ | 60% | 1700 px | 1.75× | Recommended default |
+| ✨ **Light** | 82% | 2400 px | 2.25× | Best quality, still smaller |
 
-- **🎚️ Custom Slider** — fine-tune JPEG quality from 10% to 95% (auto-switches to "Custom" preset)
-- **📄 Per-Page Progress** — live "page N/M" status with a smooth progress bar
-- **🧠 Memory-Conscious** — eager `page.cleanup()` + event-loop yields every 3 pages keep RAM bounded on large PDFs
-- **📥 Drag & Drop** or browse — accepts up to 5 PDFs (100 MB each)
-- **👁️ In-App Preview** — view the compressed PDF inline before downloading
-- **🗂️ Batch ZIP** — multi-file download wrapped in a ZIP
+#### ⚙️ Advanced Controls
 
-> ⚠️ **Trade-off note**: pages become image-only PDFs, so text is no longer selectable. Document *appearance* is preserved; the search/copy-text workflow is not.
+- **🎚️ Custom Slider** — Fine-tune JPEG quality 10–95% (auto-switches to "Custom" preset)
+- **🎯 Target Size (KB)** — Iterative quality reduction (5 iterations max) to hit target
+- **📐 DPI Override** — 72 / 96 / 150 / 300 DPI (overrides preset scale)
+- **⚫ Grayscale** — BT.601 luma conversion; saves ~25% on color image-heavy PDFs
+- **🕵️ Strip Metadata** — Drops title, author, producer, creator from output
+- **📑 Page Range** — Select specific pages (e.g., `1-5`, `12-20`); unselected pages are dropped
+- **🏷️ Filename Tokens** — `{name}`, `{ext}`, `{format}`, `{pages}`, `{size}`, `{date}`, `{q}`, `{index}`
 
-#### ✨ Power Features
+#### 🧠 Smart Recommendation Engine
 
-- **🔍 PDF Inspector** — click the first-page thumbnail (or the 👁 *Inspect* button) to open a full preview dialog with: first-page thumbnail, side-by-side original/processed iframe, zoom controls (50–400%), document metadata (page count, page size, aspect ratio, title, author, PDF version), and the smart recommendation card.
-- **💡 Smart Recommendation** — when a PDF is dropped, the engine samples the first page and classifies it as text-heavy / image-heavy / mixed, then suggests a preset + quality + estimated savings. A `smart` badge appears next to the file name — click it to apply the suggestion.
-- **🎯 Target Size (KB)** — set a max output size and the engine iteratively reduces JPEG quality (in 10% steps) and scale (in 15% steps) to fit, with a 5-iteration safety floor.
-- **📐 DPI Override** — choose 72 / 96 / 150 / 300 DPI (1 DPI = 1/72 in pdfjs space). Overrides the preset's render scale; a higher DPI keeps text crisp at the cost of file size.
-- **⚫ Grayscale** — converts every page to B&W (BT.601 luma). Saves ~25% on color image-heavy PDFs with no text loss.
-- **🕵️ Strip Metadata** — drops title, author, producer, creator from the output. Useful for sharing without leaking the original authoring tool.
-- **📑 Page Range** — compress only the pages you need (e.g. `1-5` or `12-20`). The other pages are dropped from the output.
-- **🏷️ Filename Pattern** — token-based output naming with 8 tokens: `{name}`, `{ext}`, `{format}`, `{pages}`, `{size}` (KB), `{date}` (YYYY-MM-DD), `{q}` (final quality 0–100), `{index}` (1-based in batch). Click the `Tokens` button in the panel for a one-click picker. Sanitized against OS-illegal characters.
-- **⚡ Live Throughput** — per-batch progress bar shows real-time speed (KB/s / MB/s) and ETA, computed from a rolling 200 ms window.
+When a PDF is dropped, the engine samples the first page and classifies it via edge + color analysis:
 
-#### ⚙️ Engine Details
+- **Soft-edge ratio** — blur detection
+- **Hard-edge ratio** — text/sharp content
+- **Color quantization** — 4-bit color palette count
 
-- **Parser**: `pdfjs-dist` v6 (lazy-loaded with a code-split chunk — never fetched unless the user visits this page)
-- **Builder**: `pdf-lib` v1.17
-- **Worker**: pdfjs 1.2 MB minified worker is served as a static file from `public/pdf.worker.min.mjs`
-- **Output**: `image/jpeg` per page, embedded via `outDoc.embedJpg()`, with `useObjectStreams: true` for smaller files
-- **Thumbnail**: 240 px JPEG data-URL of page 1, generated on drop, used by the queue card and the inspector
-- **Recommendation engine**: edge + color analysis of a 0.25× scale render (soft-edge ratio, hard-edge ratio, 4-bit quantized color count) — text-heavy if `hardRatio > 0.15` or `(colors < 200 && hardRatio > 0.08)`; image-heavy if `softRatio > 0.3 && colors > 1500`
+**Logic**: `text-heavy` if `hardRatio > 0.15` or `(colors < 200 && hardRatio > 0.08)`; `image-heavy` if `softRatio > 0.3 && colors > 1500`
+
+A **smart badge** appears next to the file — click to apply the recommended preset.
+
+#### 📦 Batch & Preview
+
+- **5 PDFs** per batch (100 MB each)
+- Per-file page progress with live ETA
+- **In-App Preview** — embedded `<iframe>` of compressed PDF
+- Download single or all as ZIP
+- **Confetti burst** on completion 🎉
+
+> ⚠️ **Trade-off**: Pages become image-only JPEGs embedded in PDF — text is no longer selectable/searchable. Document *appearance* is preserved.
 
 ---
 
-### ✏️ Bulk File Rename (`/bulk-rename`)
+### ✏️ Bulk File Renamer (`/bulk-rename`)
 
-> Pure string-manipulation engine with a live preview. Works for **any** file type — images, docs, archives, source code, anything.
+Pure string-manipulation engine with live preview. Works for **any** file type — images, docs, archives, source code.
 
-#### 🎛️ Thirteen Rule Types (stackable, reorderable)
+#### 🎛️ 13 Stackable Rule Types
 
-| Rule | What it does | Options |
-|------|--------------|---------|
-| 🔍 **Find & Replace** | Replace text or regex | Plain / Regex, Case-sensitive toggle |
-| ✏️ **Add Prefix** | Prepend text | — |
-| ✏️ **Add Suffix** | Append text (before extension) | — |
-| 🔢 **Numbering** | Sequential numbers | Position (start/end), separator, start, zero-pad width |
-| Aa **Change Case** | Transform case | `lower` / `UPPER` / `Title Case` / `Sentence case` |
-| 📏 **Whitespace** | Replace or strip spaces | `a-b` / `a_b` / `ab` (remove) |
-| 🧹 **Remove Chars** | Strip specific characters | Any character set |
-| 📅 **Date Stamp** | Insert the file's `lastModified` as prefix/suffix | 7 formats (`YYYY-MM-DD`, `YYYYMMDD`, `YYYY-MM-DD_HHMMSS`, `YYYY-MM-DD HHMM`, `DD-MM-YYYY`, `MM-DD-YYYY`, `ISO`), separator, "use now" override |
-| 🧷 **Insert At** | Inject text at a character index | Index (negative = from end), text |
-| ✂️ **Trim / Truncate** | Strip ends or cap to a max length | Mode: `start` / `end` / `both` / `truncate`; char count or max length; optional `…` |
-| 🗂️ **Replace Extension** | Set, lowercase, uppercase, or strip the extension | Mode: `set` (with optional leading dot) / `lower` / `upper` / `remove` |
-| 🔁 **Counter From Name** | Re-sequence the existing number in the filename | Where (`first`/`last`), place at (`start`/`end`), separator, pad, fallback start |
-| 🪞 **Reverse Name** | Flip the base name backwards | — |
+| # | Rule | What it does | Options |
+|---|------|--------------|---------|
+| 1 | 🔍 **Find & Replace** | Replace text or regex pattern | Plain / Regex, Case-insensitive toggle |
+| 2 | ✏️ **Add Prefix** | Prepend text to filename | Text input |
+| 3 | ✏️ **Add Suffix** | Append text before extension | Text input |
+| 4 | 🔢 **Numbering** | Sequential numbering | Start/End position, separator, start value, zero-pad width (0–10) |
+| 5 | Aa **Change Case** | Transform letter case | `lower` / `UPPER` / `Title Case` / `Sentence case` |
+| 6 | 📏 **Whitespace** | Replace or strip spaces | Dash `a-b` / Underscore `a_b` / Remove `ab` / Collapse |
+| 7 | 🧹 **Remove Chars** | Strip specific characters | Any character set (regex-escaped) |
+| 8 | 📅 **Date Stamp** | Insert `lastModified` or current date | 7 formats, separator, Prefix/Suffix, "use now" override |
+| 9 | 🧷 **Insert At** | Inject text at index | Index (negative = from end), text |
+| 10 | ✂️ **Trim / Truncate** | Strip ends or cap length | Start/End/Both/Truncate, count, optional `…` ellipsis |
+| 11 | 🗂️ **Replace Extension** | Set, lower, upper, or remove extension | Mode: Set / Lower / Upper / Remove |
+| 12 | 🔁 **Counter From Name** | Re-sequence existing number in filename | First/Last match, Start/End position, separator, pad, fallback start |
+| 13 | 🪞 **Reverse Name** | Flip the base name backwards | — |
 
-#### 👁️ Live Preview
+#### 👁️ Live Preview & Safety
 
-- **Before / After diff** — the original name is struck through, the new name is shown with a highlighted changed segment
-- **Per-file badges** — `N renamed`, `No changes yet`
-- **Drag-to-reorder** rules (up/down arrows on each rule)
-- **🛡️ Built-in safety**:
-  - Extensions are **always preserved** untouched
-  - **Name sanitisation** strips illegal characters (`<>:"/\|?*` and control chars) so the result opens on every OS
-  - **De-duplication** — if two files end up with the same name, `(2)`, `(3)`, … are appended to keep every entry unique in the ZIP
-
-#### 📤 Download
-
-- One click → ZIP of all renamed files in a `renamed/` folder
-- Up to **100 files × 200 MB** per session
-- Progress bar with live percentage during ZIP build
+- **Before/After diff** — Original struck through, changed segment highlighted with color pill
+- **Extensions are always preserved** untouched
+- **Sanitization** — Strips illegal OS chars (`<>:"/\|?*` + control chars), collapses underscores, trims dots, caps at 200 chars
+- **De-duplication** — Colliding names get `(2)`, `(3)`, etc. appended
+- **Download as ZIP** with STORE compression (fast, no CPU waste on already-compressed files)
 
 #### 💡 Common Recipes
 
 | Recipe | Rules to stack |
 |--------|----------------|
-| **Screenshots to share** | Find&Replace `Screenshot ` → ``, Case `lower`, Whitespace `dash` |
-| **Numbered batch** | Numbering `start=1 pad=2 separator=_ position=start` |
-| **Date-stamped** | Date `format=YYYY-MM-DD position=start separator=_` |
+| **Screenshots to share** | Find&Replace `Screenshot`→``, Case `lower`, Whitespace `dash` |
+| **Date-stamped batch** | Date `format=YYYY-MM-DD position=start separator=_` |
 | **URL-safe slugs** | Whitespace `dash`, Remove Chars `!@#$%^&*()`, Case `lower` |
-| **Re-sequence broken numbering** | Counter From Name `where=last fallbackStart=1 pad=2 position=end` |
-| **Normalise extensions to lowercase** | Replace Extension `mode=lower` |
-| **Cap long names to 40 chars** | Trim `mode=truncate maxLength=40 ellipsis=true` |
+| **Re-sequence numbering** | Counter From Name `where=last fallbackStart=1 pad=2` |
+| **Normalize extensions** | Replace Extension `mode=lower` |
+| **Cap long names** | Trim `mode=truncate maxLength=40 ellipsis=true` |
+
+---
+
+### 📜 History & Re-Download
+
+Processed files are saved to `localStorage` via **IndexedDB-backed history storage** so you can re-download previous compression results without re-processing.
+
+- Stored per tool (image / pdf / rename)
+- Saves original name, processed blob (as base64), dimensions, quality, reduction %
+- Re-download or delete individual entries
+- History section at the bottom of each tool page
 
 ---
 
 ### 🛡️ Cross-Cutting Concerns
 
-#### Error Handling (every tool)
-
-- **⚠️ Large file warnings** — toast before processing files that exceed recommended sizes
-- **🎞️ Animated-GIF notice** — warns the user that GIFs will become static
-- **🚧 Per-file errors** — failed files show their own error message, batch processing continues
-- **🔄 Graceful fallbacks** — Canvas API is used when the primary engine can't handle a format
-- **🧹 Memory cleanup** — object URLs are revoked on unmount; PDF pages are eagerly released
-
-#### UX Consistency
-
-- **Identical upload zone** component, themed for each tool
-- **Identical queue** component (file list, progress bars, status badges, retry, remove)
-- **Identical "how it works" + FAQ + features** sections at the bottom of each page
-- **Identical header / footer / theme toggle** across all three routes
+- **⚠️ Large file warnings** — Toast notification when files exceed recommended sizes
+- **🎞️ Animated-GIF notice** — Warns that GIFs will become static via canvas re-encoding
+- **🚧 Per-file error isolation** — Failed files show individual error messages; batch processing continues
+- **🔄 Graceful fallbacks** — Canvas API path used when primary engine can't handle a format
+- **🧹 Memory cleanup** — Object URLs tracked in `useRef<Set>` and revoked on unmount; PDF pages eagerly `cleanup()`-ed
+- **🐢 Event-loop yields** — PDF processing yields every 3 pages to keep UI responsive
+- **🛡️ Filename sanitization** — Every output filename is cleaned for cross-platform safety
 
 ---
 
 ## 🏗️ System Architecture
 
-LS Image Compressor follows a **fully client-side, layered, multi-route architecture**. Every layer runs in the browser — there is **no backend service** and no telemetry endpoint.
+LS Image Compressor follows a **fully client-side, layered, multi-route architecture**. All layers run in the browser — there is **no backend service, no database, and no telemetry endpoint**.
 
 ### 🗺️ App-Wide Architecture
 
 ```mermaid
 flowchart TB
-    User([👤 User]) -->|Visits| Router[🌐 React Router<br/>App.tsx]
+    User([👤 User]) -->|Visits| Router[🌐 React Router 6<br/>App.tsx]
 
     Router -->|"/"| Image[🖼️ Image Compressor<br/>pages/Index.tsx]
     Router -->|"/compress-pdf"| Pdf[📕 Compress PDF<br/>pages/CompressPdf.tsx]
     Router -->|"/bulk-rename"| Rename[✏️ Bulk Rename<br/>pages/BulkRename.tsx]
-    Router -->|"*"| NotFound[🚫 NotFound]
+    Router -->|"/about /contact<br/>/privacy /terms"| Pages[📄 Marketing Pages]
+    Router -->|"*"| NotFound[🚫 404 NotFound]
 
     Image --> ImgHook[🪝 useImageUpload]
     Image --> ImgSettings[🪝 useSettings]
@@ -297,27 +281,27 @@ flowchart TB
     PdfHook --> PdfProc[⚙️ utils/pdfProcessor]
     RenameHook --> RenameProc[⚙️ utils/fileRenamer]
 
-    ImgProc --> Canvas[🎨 Canvas API]
-    ImgProc --> BIC[📦 browser-image-compression]
-    PdfProc --> Pdfjs[📚 pdfjs-dist<br/>+ worker]
-    PdfProc --> PdfLib[📚 pdf-lib]
-    RenameProc --> Zip[📚 JSZip]
+    ImgProc --> Canvas[🎨 Canvas 2D API]
+    ImgProc --> BIC[📦 browser-image-compression<br/>Web Worker fast path]
+    PdfProc --> Pdfjs[📚 pdfjs-dist v6<br/>+ /pdf.worker.min.mjs]
+    PdfProc --> PdfLib[📚 pdf-lib v1.17]
+    RenameProc --> Zip[📚 JSZip v3.10<br/>STORE compression]
 
     ImgSettings -.->|persist| LS1[(💾 localStorage)]
     ImgHook -.->|persist| LS1
-    PdfHook -.->|blob URLs| MEM[(🧠 Memory)]
-    RenameHook -.->|zip blob| MEM
     Theme[🌗 ThemeContext] -.->|persist| LS1
 
-    Image -->|Download| Save1[⬇️ file-saver]
-    Pdf -->|Download| Save2[⬇️ file-saver]
-    Rename -->|ZIP Download| Save3[⬇️ file-saver]
-    Pdf -->|ZIP Download| Save4[⬇️ file-saver]
+    ImgHook -.->|save| Hist[📜 HistoryStorage<br/>IndexedDB + localStorage]
+    PdfHook -.->|save| Hist
+    RenameHook -.->|save| Hist
+
+    Image -->|saveAs| Save1[⬇️ file-saver v2]
+    Pdf -->|saveAs| Save2[⬇️ file-saver]
+    Rename -->|ZIP saveAs| Save3[⬇️ file-saver]
 
     Save1 --> Disk([💽 User's Device])
     Save2 --> Disk
     Save3 --> Disk
-    Save4 --> Disk
 
     classDef page fill:#7c3aed,stroke:#a78bfa,color:#fff
     classDef hook fill:#0891b2,stroke:#06b6d4,color:#fff
@@ -325,44 +309,50 @@ flowchart TB
     classDef store fill:#ea580c,stroke:#fb923c,color:#fff
     classDef io fill:#64748b,stroke:#94a3b8,color:#fff
 
-    class Image,Pdf,Rename,NotFound page
+    class Image,Pdf,Rename,Pages,NotFound page
     class ImgHook,ImgSettings,PdfHook,RenameHook,Theme hook
     class ImgProc,PdfProc,RenameProc,Canvas,BIC,Pdfjs,PdfLib,Zip util
-    class LS1,MEM store
-    class Save1,Save2,Save3,Save4,Disk io
+    class LS1,Hist store
+    class Save1,Save2,Save3,Disk io
 ```
 
 ### 🖼️ Image Compression Pipeline
 
 ```mermaid
 flowchart TB
-    Drop[📤 User drops files] --> Queue[📋 useImageUpload<br/>file queue]
-    Queue --> Set[⚙️ user adjusts settings]
-    Set -->|trigger| Process[⚙️ imageProcessor.processImage]
+    Drop[📤 User drops / pastes files] -->|validateBatch| Queue[📋 useImageUpload<br/>file queue]
+    Queue --> Set[⚙️ useSettings<br/>tabs: Quality / Resize / Format / Output]
+    Set -->|"processAll()"| Process[⚙️ imageProcessor.processImage]
 
-    Process --> Check{has transforms<br/>or resize<br/>or format change?}
+    Process --> Check{Has transforms,<br/>resize, or<br/>format change?}
     Check -->|Yes| Canvas[🎨 Canvas API path]
-    Check -->|No| BIC[📦 browser-image-compression path]
+    Check -->|No| BIC[📦 browser-image-compression<br/>Web Worker path]
 
-    Canvas --> Calc[📐 calcDimensions<br/>with center-crop]
-    Calc --> Draw[🖌️ ctx.drawImage + drawImage crop]
-    Draw --> Out[💾 blob]
+    Canvas --> Calc[📐 calcDimensions<br/>center-crop to aspect ratio]
+    Calc --> Draw[🖌️ OffscreenCanvas<br/>imageSmoothingQuality: high]
+    Draw --> Transforms{rotation,<br/>mirror,<br/>grayscale?}
+    Transforms -->|Yes| Apply[🔄 ctx.rotate / ctx.scale<br/>BT.601 luma pixel loop]
+    Apply --> Blob[💾 canvas.toBlob]
+    Transforms -->|No| Blob
 
-    BIC --> Lib[📚 maxWidthOrHeight + quality]
-    Lib --> Out
+    BIC --> Lib[📚 maxSizeMB + initialQuality]
+    Lib --> Blob
 
-    Out -->|iterative| Target{target size<br/>reached?}
-    Target -->|No, q > 10| Reduce[📉 reduce quality by 10%]
-    Reduce --> Out
-    Target -->|Yes| Done[✅ final blob]
+    Blob --> Target{targetSizeKB set<br/>& blob too large?}
+    Target -->|Yes, q > 10| Reduce[📉 quality -= 10%<br/>re-encode]
+    Reduce --> Blob
+    Target -->|Yes, q <= 10| Accept[⚠️ accept best effort]
+    Target -->|No target / fits| Accept
 
-    Done --> Preview[👁️ preview URL]
-    Done --> File[💾 File object]
-    Preview --> Result[📊 ResultsSection]
+    Accept --> Done[✅ ProcessResult<br/>{blob, w, h, reduction, quality}]
+    Done --> Preview[👁️ ObjectURL → processedPreview]
+    Done --> File[📁 toDownloadFile<br/>filename tokens applied]
+
+    Preview --> Result[📊 ResultsSection<br/>animated stat counters]
     File --> Result
-    Result -->|one click| Save1[⬇️ single]
-    Result -->|batch| Zip[🗂️ JSZip]
-    Zip --> Save2[⬇️ ZIP]
+    Result -->|single| DL1[⬇️ file-saver]
+    Result -->|batch ZIP| Zip[🗂️ JSZip<br/>folder → generateAsync]
+    Zip --> DL2[⬇️ file-saver ZIP]
 
     classDef ui fill:#7c3aed,stroke:#a78bfa,color:#fff
     classDef logic fill:#0891b2,stroke:#06b6d4,color:#fff
@@ -370,9 +360,9 @@ flowchart TB
     classDef out fill:#ea580c,stroke:#fb923c,color:#fff
 
     class Drop,Queue,Set,Result ui
-    class Process,Check,Target logic
-    class Canvas,Calc,Draw,BIC,Lib,Zip util
-    class Out,Done,Preview,File,Save1,Save2 out
+    class Process,Check,Canvas,Calc,Draw,Transforms,Apply,Blob,Target,Reduce,Accept logic
+    class BIC,Lib,Done,Preview,File,Zip util
+    class DL1,DL2 out
 ```
 
 ### 📕 PDF Compression Pipeline
@@ -380,39 +370,44 @@ flowchart TB
 ```mermaid
 flowchart TB
     Drop[📤 User drops PDFs] --> Hook[🪝 usePdfUpload]
-    Hook --> Probe[🔍 page-count probe<br/>lazy pdfjs import]
-    Probe -->|pages| Queue[📋 queue]
-    Queue --> Set[⚙️ quality / scale / maxWidth]
-    Set -->|trigger| Proc[⚙️ pdfProcessor.compressPdf]
+    Hook --> Probe[🔍 lazy import pdfjs-dist<br/>GlobalWorkerOptions setup]
+    Probe --> Meta[📋 extractPdfMetadata<br/>page count, thumbnail,<br/>smart recommendation]
+    Meta --> Queue[📋 file queue]
+    Queue --> Set[⚙️ PdfSettingsPanel<br/>preset / slider / DPI /<br/>gray / page range / tokens]
 
-    Proc --> Load[📚 loadPdfDocument]
-    Load --> Loop{For each page}
-    Loop --> Render[🎨 renderPageToJpeg<br/>canvas + JPEG blob]
-    Render --> Embed[📄 outDoc.embedJpg]
-    Embed --> Add[➕ outDoc.addPage + drawImage]
-    Add --> Cleanup[🧹 page.cleanup]
-    Cleanup --> Yield[⏱️ event-loop yield<br/>every 3 pages]
-    Yield --> Loop
-    Loop -->|done| Save[💾 outDoc.save<br/>useObjectStreams: true]
-    Save --> Blob[💽 application/pdf blob]
+    Set -->|trigger| Proc[⚙️ pdfProcessor.compressPdf]
+    Proc --> Load[📚 pdfjs.getDocument<br/>slice(0) to preserve original]
+    Load --> Loop{For each page<br/>in range}
+
+    Loop --> Render[🎨 renderPageToJpeg<br/>canvas + toBlob('image/jpeg')]
+    Render --> Embed[📄 pdf-lib: outDoc.embedJpg]
+    Embed --> Add[➕ addPage + drawImage<br/>at page dimensions]
+    Add --> Clean[🧹 page.cleanup()]
+    Clean --> Yield{Every 3 pages?}
+    Yield -->|No| Loop
+    Yield -->|Yes| Tick[⏱️ await setTimeout(0)<br/>yield to UI thread]
+    Tick --> Loop
+
+    Loop -->|All pages done| OutDoc[💾 outDoc.save<br/>useObjectStreams: true]
+    OutDoc --> Blob[📦 application/pdf Blob]
 
     Blob --> Result[📊 PdfResultsSection]
-    Result -->|inline| Iframe[👁️ iframe preview]
-    Result -->|click| Save1[⬇️ file-saver]
-    Result -->|batch| Zip[🗂️ JSZip]
-    Zip --> Save2[⬇️ ZIP]
+    Result --> Preview[👁️ iframe ObjectURL preview]
+    Result --> DL1[⬇️ single file-saver]
+    Result --> Zip[🗂️ JSZip → ZIP]
+    Zip --> DL2[⬇️ file-saver ZIP]
 
-    Worker[/⚙️ pdf.worker.min.mjs<br/>served from public\//] -.->|parses| Load
+    Worker[/⚙️ pdf.worker.min.mjs<br/>served from public/<br/>1.2 MB static asset/] -.->|Web Worker| Load
 
     classDef ui fill:#7c3aed,stroke:#a78bfa,color:#fff
     classDef logic fill:#0891b2,stroke:#06b6d4,color:#fff
     classDef util fill:#16a34a,stroke:#4ade80,color:#fff
     classDef out fill:#ea580c,stroke:#fb923c,color:#fff
 
-    class Drop,Queue,Set,Result,Iframe ui
-    class Hook,Probe,Proc,Loop logic
-    class Load,Render,Embed,Add,Cleanup,Yield,Save,Zip,Worker util
-    class Blob,Save1,Save2 out
+    class Drop,Queue,Set,Result,Preview ui
+    class Hook,Probe,Meta,Proc,Load,Loop,Yield logic
+    class Render,Embed,Add,Clean,OutDoc,Blob,Zip,Tick,Worker util
+    class DL1,DL2 out
 ```
 
 ### ✏️ Bulk Rename Pipeline
@@ -420,63 +415,86 @@ flowchart TB
 ```mermaid
 flowchart TB
     Drop[📤 User drops any files] --> Hook[🪝 useFileRename]
-    Hook --> Plan[📋 useMemo: buildRenamePlan]
+    Rules[⚙️ FileRenameRuleBuilder<br/>13 rule types, reorderable] --> Hook
 
-    Rules[⚙️ RenameRule array] --> Plan
-    Plan --> Loop{For each file}
-    Loop --> Split[✂️ splitExtension<br/>preserve ext]
+    Hook --> Plan[🧮 useMemo: buildRenamePlan]
+    Plan --> Split[✂️ For each file:<br/>splitExtension]
 
-    Split --> Order[📐 apply base rules in order]
-    Order --> Replace[🔍 applyReplace<br/>plain or regex]
-    Order --> Affix[✏️ prefix / suffix]
-    Order --> Number[🔢 applyNumbering]
-    Order --> Case[Aa applyCase]
-    Order --> Space[📏 applyWhitespace]
-    Order --> Strip[🧹 applyRemoveChars]
-    Order --> Date[📅 applyDate<br/>uses lastModified]
-    Order --> Insert[🧷 applyInsertAt<br/>negative = from end]
-    Order --> Trim[✂️ applyTrim<br/>start/end/both/truncate]
-    Order --> Counter[🔁 applyExtractCounter<br/>uses original base]
-    Order --> Reverse[🪞 applyReverse]
+    Split --> BaseRules[📐 apply all base rules in order]
+    BaseRules --> R1[🔍 Find & Replace]
+    BaseRules --> R2[✏️ Prefix / Suffix]
+    BaseRules --> R3[🔢 Numbering]
+    BaseRules --> R4[Aa Change Case]
+    BaseRules --> R5[📏 Whitespace]
+    BaseRules --> R6[🧹 Remove Chars]
+    BaseRules --> R7[📅 Date Stamp]
+    BaseRules --> R8[🧷 Insert At]
+    BaseRules --> R9[✂️ Trim / Truncate]
+    BaseRules --> R10[🔁 Counter From Name]
+    BaseRules --> R11[🪞 Reverse Name]
 
-    Replace --> Compose[🧩 candidate = newBase + newExt]
-    Affix --> Compose
-    Number --> Compose
-    Case --> Compose
-    Space --> Compose
-    Strip --> Compose
-    Date --> Compose
-    Insert --> Compose
-    Trim --> Compose
-    Counter --> Compose
-    Reverse --> Compose
+    R1 --> Compose[🧩 newBase + newExt]
+    R2 --> Compose
+    R3 --> Compose
+    R4 --> Compose
+    R5 --> Compose
+    R6 --> Compose
+    R7 --> Compose
+    R8 --> Compose
+    R9 --> Compose
+    R10 --> Compose
+    R11 --> Compose
 
-    ExtRules[🗂️ Replace Extension rules] --> NewExt[🔧 applyExtRules]
+    ExtRules[🗂️ Extension rules] --> NewExt[🔧 applyExtRules]
     NewExt --> Compose
 
-    Compose --> Dedup{collision?<br/>seen map}
-    Dedup -->|yes| Suffix["append (2) (3)…"]
-    Dedup -->|no| Keep[keep]
-    Suffix --> Push[📥 push entry with diff]
-    Keep --> Push
-    Push --> Loop
+    Compose --> Dedup{Collision?<br/>lowercased name seen?}
+    Dedup -->|Yes| Suffix["➕ append (2), (3)…"]
+    Dedup -->|No| Keep[✅ keep]
+    Suffix --> Entry[📥 push RenamePlanEntry{changed, diff}]
+    Keep --> Entry
 
-    Loop -->|done| Preview[👁️ FileRenamePreviewList<br/>live diff highlight]
+    Entry --> Preview[👁️ FileRenamePreviewList<br/>highlightDiff pills]
     Preview --> Click[🖱️ Download ZIP]
-    Click --> Sanitise[🛡️ sanitizeFileName<br/>strip illegal chars]
-    Sanitise --> Zip[🗂️ JSZip<br/>STORE compression]
-    Zip --> Save[⬇️ file-saver]
-    Save --> Disk([💽 User's Device])
+
+    Click --> Sanitize[🛡️ sanitizeFileName<br/>strip <>:"/\|?*<br/>control chars, trim dots]
+    Sanitize --> Zip[🗂️ JSZip<br/>STORE compression<br/>(no re-compression)]
+    Zip --> Progress[📊 Progress: 0-90% add,<br/>90-100% generateAsync]
+    Progress --> DL[⬇️ file-saver download]
+    DL --> Disk([💽 User's Device])
 
     classDef ui fill:#7c3aed,stroke:#a78bfa,color:#fff
     classDef logic fill:#0891b2,stroke:#06b6d4,color:#fff
     classDef util fill:#16a34a,stroke:#4ade80,color:#fff
     classDef out fill:#ea580c,stroke:#fb923c,color:#fff
 
-    class Drop,Rules,ExtRules,Preview,Click ui
-    class Hook,Plan,Loop,Compose,Dedup logic
-    class Split,Order,Replace,Affix,Number,Case,Space,Strip,Date,Insert,Trim,Counter,Reverse,NewExt,Suffix,Push,Sanitise,Zip util
-    class Save,Disk out
+    class Drop,Rules,Preview,Click ui
+    class Hook,Plan,Split,BaseRules,ExtRules,Compose,Dedup,Suffix logic
+    class R1,R2,R3,R4,R5,R6,R7,R8,R9,R10,R11,NewExt,Entry,Keep,Sanitize,Zip,Progress util
+    class DL,Disk out
+```
+
+### 🗄️ History Storage Flow
+
+```mermaid
+flowchart LR
+    Process[⚙️ Processing Complete] -->|saveToHistory| Cache[💾 historyStorage.ts]
+    Cache -->|tool + entry| LS[(📦 IndexedDB<br/>via localStorage polyfill)]
+    Cache -->|metadata| LS2[(📋 localStorage<br/>index list)]
+
+    View[👁️ HistorySection] -->|read| LS
+    View -->|render cards| Cards[📇 History cards<br/>thumbnail + stats + date]
+
+    Cards -->|click download| DL[⬇️ file-saver<br/>re-download from stored blob]
+    Cards -->|click delete| Del[🗑️ remove entry<br/>free blob storage]
+
+    classDef proc fill:#0891b2,stroke:#06b6d4,color:#fff
+    classDef store fill:#ea580c,stroke:#fb923c,color:#fff
+    classDef ui fill:#7c3aed,stroke:#a78bfa,color:#fff
+
+    class Process,View,Cards proc
+    class Cache,LS,LS2 store
+    class DL,Del ui
 ```
 
 ### 🛡️ Privacy Architecture
@@ -487,7 +505,7 @@ flowchart LR
     B -->|Blob URL| C{Which tool?}
     C -->|image| D1[🎨 Canvas / BIC]
     C -->|pdf| D2[📚 pdfjs / pdf-lib]
-    C -->|rename| D3[✂️ pure string engine]
+    C -->|rename| D3[✂️ Pure string engine]
     D1 --> E[💽 Compressed Blob]
     D2 --> E
     D3 --> F[📂 Renamed ZIP]
@@ -502,7 +520,7 @@ flowchart LR
     classDef ghost fill:#1f2937,stroke:#6b7280,color:#9ca3af,stroke-dasharray: 5 5
 ```
 
-> 🔐 **Zero data ever leaves the user's device.** No API calls, no telemetry, no third-party requests at runtime. The only network traffic is loading the static HTML / JS / CSS / pdf-worker bundle.
+> 🔐 **Zero data ever leaves the user's device.** No API calls, no telemetry, no third-party requests at runtime. The only network traffic is loading the static HTML/JS/CSS/pdf-worker bundle from the CDN.
 
 ---
 
@@ -512,44 +530,55 @@ flowchart LR
 
 | Technology | Version | Purpose |
 |------------|---------|---------|
-| **React** | 18.3.1 | UI framework & state management |
-| **TypeScript** | 5.8.x | Type safety & developer experience |
-| **Vite** | 5.4.x | Lightning-fast HMR & bundling |
-| **Tailwind CSS** | 3.4.x | Utility-first responsive styling |
-| **shadcn/ui** | Latest | Accessible component library |
-| **React Router** | 6.30.x | SPA navigation & routing |
-| **Framer Motion** | 12.x | UI animations & transitions |
+| **React** | 18.3.1 | UI framework & component model |
+| **TypeScript** | 5.8.x | Type safety (strict mode OFF — intentional for prototyping) |
+| **Vite** | 5.4.x | Build tool with SWC-based HMR |
+| **Tailwind CSS** | 3.4.x | Utility-first responsive styling via CSS variables |
+| **shadcn/ui** | Latest | Accessible Radix UI primitives with `cn()` helper |
+| **React Router** | 6.30.x | Client-side SPA routing with lazy loading |
+| **Framer Motion** | 12.x | Declarative animations & gesture handling |
 
 ### 📚 Feature Libraries
 
-| Package | Used by | Purpose |
+| Package | Used By | Purpose |
 |---------|---------|---------|
-| `browser-image-compression` | Image | Client-side image compression engine |
-| `pdfjs-dist` | PDF | PDF parsing & page rendering |
-| `pdf-lib` | PDF | PDF document construction |
-| `jszip` | Image, PDF, Rename | ZIP file generation |
-| `file-saver` | All | Cross-browser file save triggers |
-| `lucide-react` | All | Tree-shakable icon set |
-| `sonner` | All | Toast notifications |
-| `next-themes` | All | Theme management |
-| `zod` | All | Runtime schema validation |
-| `react-hook-form` | All | Performant form state |
-| `@tanstack/react-query` | All | Async data caching |
-| `@radix-ui/*` | All | Accessible UI primitives |
+| `browser-image-compression` | Image tool | Client-side image compression via Web Worker |
+| `pdfjs-dist` | PDF tool | PDF parsing & per-page canvas rendering |
+| `pdf-lib` | PDF tool | PDF document construction & serialization |
+| `jszip` | Image / PDF / Rename | ZIP archive generation (STORE compression) |
+| `file-saver` | All | Cross-browser `saveAs()` file download trigger |
+| `lucide-react` | All | Tree-shakable icon set (primary) |
+| `@phosphor-icons/react` | Marketing pages | Alternative icon set for heroes & features |
+| `sonner` | All | Toast notification system |
+| `next-themes` | All | Theme resolution infrastructure |
+| `date-fns` | (Installed) | Date formatting (not actively used) |
+| `zod` | (Installed) | Schema validation (not actively used) |
+| `react-hook-form` | (Installed) | Form state management (not actively used) |
+| `@hookform/resolvers` | (Installed) | Form validation resolvers (not actively used) |
+| `@tanstack/react-query` | (Installed) | Async state (not actively used — kept for future) |
+| `@radix-ui/*` | All | 20+ accessible UI primitives (accordion, dialog, slider, tabs, tooltip, etc.) |
 
-### 🧰 Development Tools
+### 🧰 Development & Build Tools
 
 | Tool | Version | Purpose |
 |------|---------|---------|
-| **ESLint** | 9.x | Code linting & quality enforcement |
-| **TypeScript ESLint** | 8.x | Type-aware linting rules |
-| **Vitest** | 3.x | Unit & integration testing |
-| **Testing Library** | 16.x | React component testing |
-| **jsdom** | 20.x | Browser environment for tests |
-| **PostCSS** | 8.x | CSS processing pipeline |
+| **ESLint** | 9.x | Flat-config linting with `typescript-eslint` |
+| **Vitest** | 3.x | Unit & integration test runner (jsdom env) |
+| **Testing Library** | 16.x | React component testing utilities |
+| **jsdom** | 20.x | Headless browser environment for tests |
+| **PostCSS** | 8.x | CSS transformation pipeline |
 | **Autoprefixer** | 10.x | Vendor prefix automation |
-| **Lovable Tagger** | Latest | Dev-mode component tagging |
-| **SWC** | — | Rust-based JS/TS compiler (via Vite plugin) |
+| **SWC** | — | Rust-based JSX/TS compiler (via `@vitejs/plugin-react-swc`) |
+| **Lovable Tagger** | 1.x | Dev-only component tagging for visual debugging |
+| **sharp** | 0.34.x | OG image generation script (`scripts/generate-og-images.mjs`) |
+
+### 🚀 Deploy & Analytics
+
+| Service | Purpose |
+|---------|---------|
+| **Vercel** | Hosting, SPA rewrites, edge CDN, SSL |
+| **Vercel Analytics** | Cookieless, privacy-friendly page stats (idle-loaded) |
+| **Vercel Speed Insights** | Real-user performance monitoring (idle-loaded) |
 
 ---
 
@@ -560,24 +589,25 @@ flowchart LR
 | Metric | Value |
 |--------|-------|
 | 🗜️ **Compression Ratio** | Up to **90%** file size reduction |
-| 📦 **Max Batch Size** | **50 images** per session (750 MB total) |
+| 📦 **Max Batch Size** | **50 images** (750 MB total, 25 MB each) |
 | 📥 **Supported Input** | JPG, PNG, WebP, AVIF, GIF, BMP |
 | 📤 **Output Formats** | JPEG, PNG, WebP, AVIF, Original |
 | 📐 **Max Resolution** | Browser memory limited |
 | ☁️ **Server Uploads** | **Zero** — fully client-side |
 | 🎯 **Default Quality** | 75% (Auto-Optimize mode) |
+| ⚡ **Processing** | Web Worker fast path + Canvas fallback |
 
-### 📕 Compress PDF
+### 📕 PDF Compressor
 
 | Metric | Value |
 |--------|-------|
 | 🗜️ **Typical Reduction** | 50–85% for image-heavy PDFs |
-| 📦 **Max Batch Size** | **5 PDFs** per session |
+| 📦 **Max Batch** | **5 PDFs** per session |
 | 📄 **Per-File Limit** | 100 MB |
 | 🎚️ **Quality Range** | 10–95% JPEG |
 | 📐 **Max Render Width** | 2400 px (Light) / 1100 px (Strong) |
-| 🧠 **Memory Strategy** | Eager `page.cleanup()` + yields every 3 pages |
-| ⚡ **Code-Split** | pdfjs (~470 KB) loads only on this page |
+| 🧠 **Memory Strategy** | Eager `page.cleanup()` + event loop yield every 3 pages |
+| ⚡ **Code-Split** | `pdfjs-dist` + `pdf-lib` (~470 KB) loaded on demand only |
 
 ### ✏️ Bulk Rename
 
@@ -585,21 +615,21 @@ flowchart LR
 |--------|-------|
 | 📦 **Max Files** | **100 files** per session |
 | 📥 **Per-File Limit** | 200 MB |
-| 🎛️ **Rule Types** | **7** (replace, prefix, suffix, numbering, case, whitespace, remove) |
-| 🔀 **Stackable** | Yes — rules apply in order |
-| 📐 **Rule Reordering** | Up/Down arrows on each rule |
-| 👁️ **Live Preview** | Diff-highlighted per file |
+| 🎛️ **Rule Types** | **13** stackable, reorderable rules |
+| 🔀 **Rule Application** | Sequential in order; extension rules in separate pass |
+| 👁️ **Live Preview** | Diff-highlighted per file with `highlightDiff()` |
 | 🛡️ **Safety** | Extensions preserved, illegal chars stripped, names de-duplicated |
-| 📤 **Output** | ZIP of `renamed/` folder |
+| 📤 **Output** | ZIP with STORE compression (instant, no re-compression waste) |
 
 ### 🌍 Global
 
 | Metric | Value |
 |--------|-------|
-| 🧠 **Memory Management** | Object URLs auto-revoked on unmount |
-| ⚡ **Lazy Loading** | Code-split by route & component (per-route chunks < 470 KB) |
-| 🧪 **Test Coverage** | 157 unit tests across 5 modules |
-| 🚀 **Dev Server** | Port `8080` (HMR enabled) |
+| 🧠 **Memory Management** | Object URLs tracked in `useRef<Set>` & auto-revoked on unmount |
+| ⚡ **Lazy Loading** | Code-split by route: `vendor-pdf`, `vendor-zip`, `vendor-image`, `vendor-motion`, `vendor-react` |
+| 🧪 **Test Coverage** | **228 test calls** across 6 test modules |
+| 🚀 **Dev Server** | Port `8080` with SWC-based HMR |
+| 📦 **Bundle Splitting** | 5 manual chunks + default chunk |
 
 ---
 
@@ -607,28 +637,26 @@ flowchart LR
 
 ### ✅ Prerequisites
 
-Before you begin, make sure you have the following installed:
-
-- **Node.js** ≥ 18.x — [Install via nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-- **npm** (bundled with Node.js) **or** **bun** package manager
-- **Git** — for cloning the repository
+- **Node.js** ≥ 20.x
+- **npm** (bundled) **or** **bun** (faster alternative)
+- **Git**
 
 ### 📥 Installation
 
 ```bash
-# 1️⃣ Clone the repository
+# Clone the repository
 git clone https://github.com/girishlade111/image-squeeze-express.git
 
-# 2️⃣ Navigate to the project directory
+# Navigate into the project
 cd image-squeeze-express
 
-# 3️⃣ Install dependencies
+# Install dependencies
 npm install
-# or (faster)
+# or (faster with bun)
 bun install
 ```
 
-### ▶️ Run Development Server
+### ▶️ Development
 
 ```bash
 npm run dev
@@ -637,39 +665,22 @@ bun dev
 ```
 
 > 🌐 **App URL**: `http://localhost:8080`
-> ⚡ **HMR**: Enabled — changes hot-reload instantly without page refresh
-> 🗺️ **Available routes**: `/`, `/compress-pdf`, `/bulk-rename`, `/about`, `/privacy`, `/terms`, `/contact`
+> ⚡ **HMR**: Enabled via SWC — changes hot-reload instantly
 
-### 🏗️ Build for Production
+### 🏗️ Production Build
 
 ```bash
-# Create optimized production build
-npm run build
-
-# Output directory: dist/
-# Notable assets: pdf.worker.min.mjs (1.2 MB, served as static file)
+npm run build          # Output → dist/
+npm run build:dev      # Unminified dev build
+npm run preview        # Preview production build locally
 ```
 
-### 👀 Preview Production Build
+### 🧪 Testing
 
 ```bash
-npm run preview
-```
-
-### 🧪 Run Tests
-
-```bash
-# Run tests once
-npm run test
-
-# Watch mode (re-runs on file change)
-npm run test:watch
-```
-
-### 🧹 Lint Code
-
-```bash
-npm run lint
+npm run test            # Run once (CI)
+npm run test:watch      # Watch mode
+npm run lint            # ESLint
 ```
 
 ### 📜 Available Scripts
@@ -679,10 +690,12 @@ npm run lint
 | `npm run dev` | Start Vite dev server with HMR on port `8080` |
 | `npm run build` | Build production bundle to `dist/` |
 | `npm run build:dev` | Build in development mode (unminified) |
-| `npm run preview` | Preview the production build locally |
-| `npm run lint` | Run ESLint on the entire project |
+| `npm run preview` | Preview production build locally |
+| `npm run lint` | Run ESLint flat config across the project |
 | `npm run test` | Run Vitest test suite once |
 | `npm run test:watch` | Run Vitest in watch mode |
+| `npm run og:gen` | Regenerate 6 OG images via `satori` + `sharp` |
+| `npm run og:optimize` | Re-encode profile image to AVIF/WebP |
 
 ---
 
@@ -690,105 +703,74 @@ npm run lint
 
 ### 🎨 Theme Colors
 
-Customize theme tokens in `src/index.css`:
+All theme tokens are defined as CSS custom properties in `src/index.css`. The app uses a **monochrome greyscale** palette (all legacy aliases remapped):
 
 ```css
 :root {
-  /* 🟣 Primary: Violet */
-  --primary: 263 70% 58%;
-
-  /* 🩵 Accent: Cyan */
-  --accent: 187 92% 43%;
-
-  /* ☀️ Light mode background */
-  --background: 210 20% 98%;
-  --foreground: 240 10% 10%;
-
-  /* 🟢 Success green */
-  --success: 142 71% 45%;
+  --background: 0 0% 100%;       /* Light mode */
+  --foreground: 0 0% 9%;
+  --primary: 0 0% 9%;            /* Near-black */
+  --accent: 0 0% 15%;
+  --border: 0 0% 90%;
+  --radius: 0.625rem;
+  /* Legacy aliases remapped to greyscale */
+  --indigo: 0 0% 9%;
+  --teal: 0 0% 15%;
+  --violet: 0 0% 9%;
+  --brand: 0 0% 9%;
+  --brand-2: 0 0% 15%;
 }
 
 .dark {
-  /* 🌙 Dark mode background */
-  --background: 0 0% 5.9%;
-  --foreground: 0 0% 95%;
+  --background: 0 0% 6%;         /* Near-black dark mode */
+  --foreground: 0 0% 96%;
+  --primary: 0 0% 96%;           /* Near-white */
+  --accent: 0 0% 88%;
+  --border: 0 0% 14%;
 }
 ```
 
-### 🌀 Tailwind Extensions
+### 🌀 Custom Tailwind Extensions
 
-Custom animations & utilities in `tailwind.config.ts`:
+Defined in `tailwind.config.ts`:
 
-```typescript
-// Custom animations
-animations: {
-  fadeIn,        // Smooth opacity transition
-  fadeInUp,      // Rise + fade entrance
-  scaleIn,       // Scale-up entrance
-  slideInRight,  // Horizontal slide
-  float,         // Gentle floating motion
-  shimmer,       // Loading skeleton effect
-}
+| Keyframes | Purpose |
+|-----------|---------|
+| `accordion-down` / `accordion-up` | Radix accordion height animation |
+| `pulse-glow` | Box-shadow pulse effect |
+| `fade-in-up` | Opacity + translateY(24px → 0) |
+| `shimmer` | translateX(-100% → 100%) shimmer overlay |
+| `float` | Gentle y-axis floating (hero blobs) |
 
-// Custom utilities
-utilities: {
-  glass-card,        // Frosted glass card
-  gradient-text,     // Gradient text fill
-  gradient-bg,       // Gradient background
-  gradient-border,   // Gradient border
-  glass-morphism,    // Glassmorphism effect
-}
-```
+### 💾 Settings Persistence
 
-### 💾 Settings Storage
+| localStorage Key | Stores | Default | Type |
+|------------------|--------|---------|------|
+| `ls-image-compressor-settings` | Image compression preferences | `{ quality: 75, outputFormat: 'webp', ... }` | JSON |
+| `ls-image-compressor-theme` | Dark/light mode | `dark` | `"dark"` / `"light"` |
 
-User settings persisted to `localStorage`:
+#### Default Image Settings
 
-| Key | Setting | Default | Type |
-|-----|---------|---------|------|
-| `ls-image-compressor-settings` | Image preferences | See below | JSON |
-| `ls-image-compressor-theme` | Dark/Light mode | `dark` | string |
+| Setting | Default | Range |
+|---------|---------|-------|
+| `quality` | `75` | 10–100 |
+| `autoOptimize` | `true` | boolean |
+| `outputFormat` | `'webp'` | `jpeg` / `png` / `webp` / `avif` / `original` |
+| `targetSizeKB` | `null` | number / null |
+| `stripEXIF` | `true` | boolean |
+| `grayscale` | `false` | boolean |
+| `rotation` | `0` | 0 / 90 / 180 / 270 |
+| `mirror` | `false` | boolean |
+| `lockAspectRatio` | `true` | boolean |
+| `filenamePattern` | `'{name}_q{q}.{format}'` | token string |
 
-### 🎛️ Default Image Settings
-
-| Setting | Default | Range / Options |
-|---------|--------|-----------------|
-| Quality | `75` | 10–100 |
-| Auto Optimize | `true` | boolean |
-| Output Format | `webp` | jpeg / png / webp / original |
-| Lock Aspect Ratio | `true` | boolean |
-| Target Size (KB) | `null` | number / null |
-| Width | `null` | number / null |
-| Height | `null` | number / null |
-| Strip EXIF | `true` | boolean |
-| Grayscale | `false` | boolean |
-| Rotation | `0` | 0 / 90 / 180 / 270 |
-| Mirror | `false` | boolean |
-| Progressive JPEG | `true` | boolean |
-
-### 📕 PDF Compressor Defaults
+#### Default PDF Settings
 
 | Setting | Default |
 |---------|---------|
-| Preset | `medium` (60% quality, 1700 px max width, 1.75× scale) |
-| Output | `image/jpeg` per page, rebuilt with `pdf-lib` |
-| Worker URL | `/pdf.worker.min.mjs` (static asset) |
-
-### ✏️ Bulk Rename Defaults
-
-| Setting | Default |
-|---------|---------|
-| Rules | `[]` (empty — user adds as needed) |
-| Output | ZIP of `renamed/` folder via `jszip` (STORE compression) |
-| Max files | `100` |
-| Max file size | `200 MB` |
-
-### 🌙 Dark Mode
-
-- **Default Theme**: Dark mode
-- **Persistence Key**: `ls-image-compressor-theme`
-- **No Flash on Reload**: Inline script in `index.html` applies theme before React hydrates
-- **System Preference**: Detects `prefers-color-scheme` on first visit
+| `preset` | `'medium'` (60% quality, 1700 px max width, 1.75× scale) |
+| `output` | `image/jpeg` per page, rebuilt with `pdf-lib` |
+| `workerSrc` | `/pdf.worker.min.mjs` (static asset) |
 
 ### ⚙️ Vite Config Highlights
 
@@ -796,120 +778,21 @@ Defined in `vite.config.ts`:
 
 | Option | Value | Notes |
 |--------|-------|-------|
-| `server.host` | `"::"` | Listens on all IPv6/IPv4 interfaces |
+| `server.host` | `"0.0.0.0"` | Listen on all interfaces |
 | `server.port` | `8080` | Dev server port |
-| `server.hmr.overlay` | `false` | Disables error overlay |
-| `resolve.alias` | `"@" → ./src` | Path alias for clean imports |
-| `plugins` | `react-swc` | Fast Rust-based React compiler |
+| `server.hmr.overlay` | `false` | Disable error overlay for canvas/preview errors |
+| `resolve.alias` | `"@" → ./src` | Path alias |
+| `build.manualChunks` | 5 vendor chunks | See chunk strategy below |
 
----
+#### Manual Chunk Strategy
 
-## ☁️ Deploy to Vercel
-
-LS Image Compressor is a **fully client-side** Vite SPA — no server, no API routes, no environment variables. It deploys to Vercel as a **static site** in under a minute.
-
-> 🔒 **Privacy note** — The app ships with **privacy-friendly** [Vercel Analytics](https://vercel.com/docs/analytics) and [Speed Insights](https://vercel.com/docs/speed-insights) pre-wired. They are **cookieless**, **DNT-aware**, and **do not collect any personal data** or file contents. Analytics components are mounted only in production builds (`import.meta.env.PROD`) and are no-ops in dev.
-
-### ⚡ One-Click Deploy
-
-<p align="left">
-  <a href="https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fgirishlade%2Fimage-squeeze-express&project-name=image-squeeze-express&repository-name=image-squeeze-express">
-    <img src="https://vercel.com/button" alt="Deploy with Vercel" />
-  </a>
-</p>
-
-The button above forks this repo into your GitHub account and immediately starts a Vercel deployment with **zero configuration** — Vercel auto-detects the Vite framework.
-
-### 🛠️ Manual Deploy (CLI)
-
-If you prefer the command line:
-
-```bash
-# 1️⃣ Install the Vercel CLI (one-time)
-npm i -g vercel
-
-# 2️⃣ From the project root, deploy
-vercel              # preview deployment (great for QA)
-vercel --prod       # production deployment
-```
-
-The CLI auto-detects Vite, runs `npm run build`, and serves `dist/` globally on Vercel's edge network.
-
-### 🧩 Git-Based Continuous Deployment
-
-The recommended workflow:
-
-1. **Push your fork** to GitHub / GitLab / Bitbucket
-2. **Import the repo** at [vercel.com/new](https://vercel.com/new)
-3. **Click Deploy** — every subsequent `git push` triggers a fresh production build
-
-### 📋 Build Settings (auto-detected by Vercel)
-
-| Setting | Value | Source |
-|---------|-------|--------|
-| **Framework Preset** | `Vite` | Auto-detected from `vite.config.ts` |
-| **Build Command** | `npm run build` | `package.json` |
-| **Output Directory** | `dist` | `vercel.json` (also auto-detected) |
-| **Install Command** | `npm install` | `package.json` |
-| **Node Version** | `20.x` | `package.json` `engines.node` |
-
-> You can override any of these in the Vercel dashboard under **Settings → General → Build & Development Settings**, but the defaults work out of the box.
-
-### 🔁 SPA Routing (deep-link support)
-
-The included `vercel.json` rewrites every URL to `/index.html` so client-side routes work on hard refresh and direct links:
-
-```json
-{
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
-  ]
-}
-```
-
-This means every route works as a deep link:
-
-- `/` — Image Compressor
-- `/compress-pdf` — PDF Compressor
-- `/bulk-rename` — Bulk File Renamer
-- `/about` — `/contact` — `/privacy` — `/terms`
-
-### 🛡️ Security & Cache Headers
-
-The same `vercel.json` ships with opinionated security headers and **1-year immutable cache** for fingerprinted assets:
-
-| Header | Value | Why |
-|--------|-------|-----|
-| `X-Content-Type-Options` | `nosniff` | Block MIME-type sniffing attacks |
-| `X-Frame-Options` | `DENY` | Prevent clickjacking |
-| `Referrer-Policy` | `strict-origin-when-cross-origin` | Limit referrer leakage |
-| `Permissions-Policy` | `camera=(), microphone=(), geolocation=()` | No sensor access needed |
-| `Cache-Control` (assets) | `public, max-age=31536000, immutable` | Cache-bust via Vite's file hashes |
-
-### 🌍 Custom Domain
-
-After your first deploy:
-
-1. Open the project on the [Vercel dashboard](https://vercel.com/dashboard)
-2. **Settings → Domains → Add**
-3. Point your domain's DNS to Vercel (instructions are shown in the UI)
-4. Vercel auto-provisions a free **Let's Encrypt** SSL certificate
-
-For the production deployment of this project, the canonical domain is `https://img.ladestack.in`.
-
-### 🧪 Preview Deployments
-
-Every push to a non-`main` branch (and every PR) gets its own **unique preview URL** — perfect for QA. Preview deployments share the same code, but use a separate analytics project, so production dashboards stay clean.
-
-### 🆘 Troubleshooting
-
-| Symptom | Fix |
-|---------|-----|
-| `404` on direct route like `/compress-pdf` | Make sure `vercel.json` is at the **project root** (not in `public/`) |
-| Analytics not showing up | Analytics only fire on `vercel.com` deployments — they're no-ops on localhost |
-| Build fails on Node version | Vercel uses Node 20 by default. Override in **Settings → General → Node.js Version** if needed |
-| PDF worker returns 404 | `public/pdf.worker.min.mjs` is auto-copied to `dist/` by Vite — no config needed |
-| Service Worker / PWA not working | PWA is not yet enabled (see Roadmap) |
+| Chunk Name | Contents | Loaded On |
+|------------|----------|-----------|
+| `vendor-pdf` | `pdfjs-dist` + `pdf-lib` | `/compress-pdf` |
+| `vendor-zip` | `jszip` + `file-saver` | Results sections, `/bulk-rename` |
+| `vendor-image` | `browser-image-compression` | Home page image processing |
+| `vendor-react` | `react` + `react-dom` + `react-router-dom` | All pages |
+| `vendor-motion` | `framer-motion` | All pages (animations) |
 
 ---
 
@@ -917,150 +800,243 @@ Every push to a non-`main` branch (and every PR) gets its own **unique preview U
 
 ```
 image-squeeze-express/
+├── index.html                         # SEO + theme bootstrap + root mount
+├── package.json                       # Dependencies & scripts
+├── vite.config.ts                     # @ alias, port 8080, manualChunks
+├── vitest.config.ts                   # jsdom + @ alias + setup
+├── tailwind.config.ts                 # CSS-var colors, animations
+├── tsconfig.json / .app / .node.json  # TypeScript config (strict: false)
+├── eslint.config.js                   # Flat config (lenient)
+├── postcss.config.js
+├── components.json                    # shadcn/ui config
+├── vercel.json                        # SPA rewrites + 1y cache + security headers
+│
 ├── public/
-│   └── pdf.worker.min.mjs   # pdfjs worker (1.2 MB, served statically)
+│   ├── favicon.svg / *.png / apple-touch-icon.*  # PWA icons
+│   ├── logo-mark.svg                  # ⚡ Logo
+│   ├── pdf.worker.min.mjs            # pdfjs worker (1.2 MB)
+│   ├── robots.txt                    # 7 KB bot directives
+│   ├── sitemap*.xml / image-sitemap.xml
+│   └── og-*.{png,svg}                # 6 OG images
+│
+├── scripts/
+│   ├── generate-og-images.mjs         # satori + sharp OG generator
+│   └── optimize-profile.mjs          # sharp → AVIF/WebP profile photo
+│
 ├── src/
+│   ├── main.tsx                      # ReactDOM.createRoot mount
+│   ├── App.tsx                       # Providers + routes (lazy) + ErrorBoundary
+│   ├── VercelAnalytics.tsx           # Idle-loaded analytics + speed-insights
+│   ├── index.css                     # Tailwind + theme CSS vars + utilities
+│   │
+│   ├── assets/
+│   │   └── profile.{webp,avif}       # @2x variants for About page
+│   │
 │   ├── components/
-│   │   ├── Header.tsx                # Fixed nav, theme toggle, route links
-│   │   ├── HeroSection.tsx           # Image tool hero
-│   │   ├── UploadZone.tsx            # Image upload zone
-│   │   ├── ImageQueue.tsx            # Image file queue
-│   │   ├── SettingsPanel.tsx         # Image settings (Compress/Resize/Format/More)
-│   │   ├── ResultsSection.tsx        # Image before/after cards
-│   │   ├── SocialPresetsGrid.tsx     # One-click social media presets
-│   │   ├── PdfUploadZone.tsx         # PDF upload zone
-│   │   ├── PdfQueue.tsx              # PDF file queue with per-file progress
-│   │   ├── PdfSettingsPanel.tsx      # PDF compression level + slider
-│   │   ├── PdfResultsSection.tsx     # PDF results with inline preview
-│   │   ├── FileRenameUploadZone.tsx  # Rename upload zone (any file)
-│   │   ├── FileRenameRuleBuilder.tsx # Reorderable rule stack
-│   │   ├── FileRenamePreviewList.tsx # Live before/after diff list
-│   │   ├── HowItWorks.tsx            # Image tool — 3-step explainer
-│   │   ├── FeaturesGrid.tsx          # Image tool — feature cards
-│   │   ├── FAQSection.tsx            # Image tool — accordion FAQ
-│   │   ├── ProTeaser.tsx             # Pro upsell
-│   │   ├── Footer.tsx                # Shared links & attribution
-│   │   ├── PageDropOverlay.tsx       # Page-level drag overlay
-│   │   ├── LazySection.tsx           # Intersection-observer wrapper
-│   │   ├── NavLink.tsx               # Nav link primitive
-│   │   └── ui/                       # shadcn/ui primitives
-│   ├── hooks/
-│   │   ├── useImageUpload.ts         # Image queue + processing
-│   │   ├── usePdfUpload.ts           # PDF queue + processing
-│   │   ├── useFileRename.ts          # Rename queue + rules + ZIP
-│   │   ├── useSettings.ts            # Settings with localStorage persistence
-│   │   ├── useClipboardPaste.ts      # Global Ctrl+V handler
-│   │   ├── usePageDropZone.ts        # Page-level drag-and-drop
-│   │   └── use-mobile.tsx            # Mobile breakpoint detection
+│   │   ├── Header.tsx                # Fixed nav, mobile drawer, theme toggle, prefetch
+│   │   ├── Footer.tsx                # 4-column footer + socials
+│   │   ├── ToolHero.tsx              # Shared hero (gradient mesh + floating shapes)
+│   │   ├── HeroSection.tsx           # Image tool hero wrapper
+│   │   ├── UploadZone.tsx            # Image drop zone
+│   │   ├── ImageQueue.tsx            # Image file grid with per-file status
+│   │   ├── SettingsPanel.tsx         # Quality / Resize / Format / Output tabs
+│   │   ├── ResultsSection.tsx        # Before/after cards + ZIP download + share
+│   │   ├── ImageInspector.tsx        # Image preview dialog
+│   │   ├── ComparisonView.tsx        # Side / Slider / Toggle before-after + zoom
+│   │   ├── PdfUploadZone.tsx         # PDF drop zone
+│   │   ├── PdfQueue.tsx              # PDF file list + smart rec badge
+│   │   ├── PdfSettingsPanel.tsx      # Presets + slider + DPI/target/gray/range
+│   │   ├── PdfResultsSection.tsx     # PDF results + iframe preview + confetti
+│   │   ├── PdfInspector.tsx          # PDF preview dialog + smart recommendation
+│   │   ├── FileRenameUploadZone.tsx  # Any-file drop zone
+│   │   ├── FileRenameRuleBuilder.tsx # 13-rule stack builder (845 lines)
+│   │   ├── FileRenamePreviewList.tsx # Live rename diff preview
+│   │   ├── HistorySection.tsx        # Re-download previous results
+│   │   ├── PrimaryCTA.tsx            # Reusable gradient CTA button
+│   │   ├── TrustBar.tsx              # "Why teams trust" 6-tile strip
+│   │   ├── HowItWorks.tsx            # 3-step explainer
+│   │   ├── FeaturesGrid.tsx          # Bento 6-card feature grid
+│   │   ├── FAQSection.tsx            # 12 Q&A accordion
+│   │   ├── DocumentTitle.tsx         # Per-route <title> + meta + JSON-LD
+│   │   ├── LazySection.tsx           # IntersectionObserver gate + requestIdleCallback
+│   │   ├── EmptyState.tsx            # Centered empty state card
+│   │   ├── ErrorBoundary.tsx         # Route-level error + ChunkLoadError catch
+│   │   ├── MobileActionBar.tsx       # Sticky mobile-only CTA
+│   │   ├── PageDropOverlay.tsx       # Full-page drag overlay
+│   │   ├── ScrollToTop.tsx           # Floating back-to-top button
+│   │   ├── Skeleton.tsx              # Route / Block / Card / Queue skeletons
+│   │   ├── ProfileImage.tsx          # <picture> wrapper with gradient frame
+│   │   ├── NavLink.tsx               # NavLink wrapper
+│   │   └── ui/                       # 49 shadcn/ui primitives (some unused)
+│   │
+│   ├── config/
+│   │   └── seo.ts                    # Per-page SEO registry (8 pages)
+│   │
 │   ├── contexts/
-│   │   └── ThemeContext.tsx          # Dark/light mode provider
-│   ├── utils/
-│   │   ├── imageProcessor.ts         # Image engine (Canvas + BIC)
-│   │   ├── pdfProcessor.ts           # PDF engine (pdfjs + pdf-lib)
-│   │   └── fileRenamer.ts            # Rename engine (pure JS string ops)
+│   │   └── ThemeContext.tsx           # Dark/light toggle + localStorage
+│   │
+│   ├── hooks/
+│   │   ├── useImageUpload.ts         # Image batch state machine
+│   │   ├── usePdfUpload.ts           # PDF batch state machine
+│   │   ├── useFileRename.ts          # Renamer state machine + ZIP builder
+│   │   ├── useSettings.ts            # Persistent image settings
+│   │   ├── useHistory.ts             # History read/download/delete
+│   │   ├── useClipboardPaste.ts      # Global Ctrl+V handler
+│   │   ├── usePageDropZone.ts        # Document drag-and-drop tracker
+│   │   ├── use-toast.ts              # Radix toast reducer (legacy)
+│   │   └── use-mobile.tsx            # < 768px viewport detection
+│   │
+│   ├── lib/
+│   │   ├── utils.ts                  # cn() helper
+│   │   ├── motion.ts                 # Shared framer-motion variants
+│   │   └── prefetch.ts               # usePrefetchOnHover + prefetchOnIdle
+│   │
 │   ├── pages/
 │   │   ├── Index.tsx                 # 🖼️ Image tool (`/`)
 │   │   ├── CompressPdf.tsx           # 📕 PDF tool (`/compress-pdf`)
 │   │   ├── BulkRename.tsx            # ✏️ Rename tool (`/bulk-rename`)
-│   │   ├── About.tsx
-│   │   ├── Contact.tsx
-│   │   ├── PrivacyPolicy.tsx
-│   │   ├── TermsOfService.tsx
-│   │   └── NotFound.tsx
-│   ├── test/
-│   │   ├── setup.ts
-│   │   ├── example.test.ts
-│   │   ├── imageProcessor.test.ts    # 41 tests
-│   │   ├── pdfProcessor.test.ts      # 12 tests
-│   │   ├── fileRenamer.test.ts       # 66 tests
-│   │   └── batchValidation.test.ts   # 14 tests
-│   ├── App.tsx                       # Router
-│   ├── main.tsx                      # Entry point
-│   └── index.css                     # Styles & design tokens
-├── components.json                   # shadcn/ui configuration
-├── tailwind.config.ts                # Tailwind theme & extensions
-├── vite.config.ts                    # Vite configuration
-├── vitest.config.ts                  # Vitest test configuration
-├── postcss.config.js                 # PostCSS plugins
-├── eslint.config.js                  # ESLint flat config
-├── tsconfig.json                     # TypeScript root config
-├── tsconfig.app.json                 # App-specific TS config
-├── tsconfig.node.json                # Node-side TS config
-├── index.html                        # HTML entry
-├── package.json                      # Dependencies & scripts
-└── README.md                         # You are here 👋
+│   │   ├── About.tsx                 # Story, stats, philosophy (1687 lines)
+│   │   ├── Contact.tsx               # Channels + FAQ
+│   │   ├── PrivacyPolicy.tsx         # Privacy policy (Mar 2026)
+│   │   ├── TermsOfService.tsx        # Terms of service (Mar 2026)
+│   │   └── NotFound.tsx              # 404 with motion
+│   │
+│   ├── utils/
+│   │   ├── imageProcessor.ts         # Canvas pipeline + filename tokens
+│   │   ├── pdfProcessor.ts           # pdfjs → JPEG → pdf-lib + smart rec
+│   │   ├── pdfFormat.ts              # Quality presets + token docs
+│   │   ├── fileRenamer.ts            # 13-rule rename engine + sanitize
+│   │   ├── batchValidation.ts        # Batch validation (50 files, 750 MB)
+│   │   └── historyStorage.ts         # IndexedDB + localStorage history
+│   │
+│   └── test/
+│       ├── setup.ts                  # matchMedia polyfill + jest-dom
+│       ├── batchValidation.test.ts   # 16 tests
+│       ├── example.test.ts           # 2 tests
+│       ├── fileRenamer.test.ts       # 83 tests
+│       ├── historyStorage.test.ts    # 30 tests
+│       ├── imageProcessor.test.ts    # 72 tests
+│       └── pdfProcessor.test.ts      # 25 tests
+│
+├── bun.lock / bun.lockb              # Bun lockfiles
+└── package-lock.json                  # npm lockfile
 ```
 
 ---
 
 ## 🧪 Testing
 
-The project ships with **157 unit tests** across 5 modules, all in pure-function form so they run in jsdom without any browser shim.
-
-### 📋 Test Coverage
+The project ships with **228 test calls** across 6 test modules, all pure-function tests running in `jsdom` without browser shims.
 
 | Module | Tests | What it covers |
 |--------|-------|----------------|
-| `imageProcessor.test.ts` | 56 | `formatFileSize`, `getCompressionRatio`, `estimateQualityForSize`, `computeAspectDimensions`, **`calcDimensions` (with center-crop logic)**, AVIF format support, **smart-recommendation engine**, **filename-pattern token replacement** |
-| `pdfProcessor.test.ts` | 20 | `formatBytes`, `getReductionRatio`, `getQualityPresetSettings`, preset bounds, **filename pattern + token replacement**, **filename sanitization** |
-| `fileRenamer.test.ts` | 66 | `splitExtension`, all **13** rule types, rule ordering, dedup with collisions, `sanitizeFileName` |
-| `batchValidation.test.ts` | 14 | overflow, oversized skip, GIF/extension detection, total-cap warning, FIFO order, dedup-safety with identical metadata |
+| `imageProcessor.test.ts` | 72 | `formatFileSize`, `getCompressionRatio`, `calcDimensions` (center-crop), `estimateQualityForSize`, `isFormatSupported`, filename token replacement, AVIF detection |
+| `fileRenamer.test.ts` | 83 | `splitExtension`, all **13** rule types individually and in combination, rule ordering, dedup with collisions, `sanitizeFileName` edge cases (hidden files, trailing dots, illegal chars) |
+| `pdfProcessor.test.ts` | 25 | `formatBytes`, `getReductionRatio`, `getQualityPresetSettings`, preset bounds, filename pattern + token replacement, filename sanitization |
+| `historyStorage.test.ts` | 30 | Save/load/delete history entries, per-tool isolation, data integrity, blob storage limits |
+| `batchValidation.test.ts` | 16 | Overflow, oversized skip, GIF detection, total-cap warning, FIFO ordering |
+| `example.test.ts` | 2 | Basic sanity check |
 
-### ▶️ Running Tests
+### ▶️ Run Tests
 
 ```bash
-# Run once
-npm run test
-
-# Watch mode
-npm run test:watch
+npm run test           # Run once
+npm run test:watch     # Watch mode
 ```
 
-### 🎯 What the Tests Catch
+---
 
-- ✅ **Social-media preset bug regression** — the original `calcDimensions` overrode explicit dimensions with source aspect; tests now cover the fix
-- ✅ **PDF preset invariants** — quality stays in `[0.1, 1.0]`, scale is positive, `low` < `high` in both quality and max width
-- ✅ **Rename edge cases** — empty finds/replaces, invalid regex, leading-dot hidden files, trailing dots, dedup when renamed names collide
-- ✅ **Filename safety** — Windows/macOS illegal characters, control chars, length cap, fallback when everything is stripped
+## ☁️ Deploy to Vercel
+
+LS Image Compressor is a **fully client-side** Vite SPA — no server, no API routes, no environment variables. It deploys to Vercel as a static site.
+
+### ⚡ One-Click Deploy
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fgirishlade%2Fimage-squeeze-express&project-name=image-squeeze-express&repository-name=image-squeeze-express)
+
+### 🔧 Manual Deploy
+
+```bash
+npm i -g vercel
+vercel                # Preview deployment
+vercel --prod         # Production
+```
+
+### 📋 Build Settings (auto-detected)
+
+| Setting | Value |
+|---------|-------|
+| **Framework Preset** | `Vite` |
+| **Build Command** | `npm run build` |
+| **Output Directory** | `dist` |
+| **Install Command** | `npm install` |
+| **Node Version** | `20.x` |
+
+### 🔁 SPA Routing
+
+`vercel.json` rewrites all paths to `/index.html` for deep-link support:
+
+```json
+{ "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }] }
+```
+
+### 🛡️ Security & Cache Headers
+
+| Header | Value |
+|--------|-------|
+| `X-Content-Type-Options` | `nosniff` |
+| `X-Frame-Options` | `DENY` |
+| `Referrer-Policy` | `strict-origin-when-cross-origin` |
+| `Permissions-Policy` | `camera=(), microphone=(), geolocation=(), interest-cohort=()` |
+| `Cache-Control` (assets) | `public, max-age=31536000, immutable` |
+
+### 🌍 Custom Domain
+
+The canonical deployment lives at **[img.ladestack.in](https://img.ladestack.in)**
 
 ---
 
 ## ♿ Accessibility
 
-- ✅ **WCAG AA** color contrast compliance
+- ✅ WCAG AA color contrast compliance
 - ✅ `aria-label` on all icon-only buttons
-- ✅ `role="button"` with full keyboard support
-- ✅ `aria-pressed` / `aria-checked` on toggles
-- ✅ `aria-expanded` / `aria-controls` on the mobile nav
-- ✅ Semantic HTML (`nav`, `section`, `header`, `footer`, `main`)
+- ✅ `role="button"` with full keyboard (Enter/Space) support
+- ✅ `aria-pressed` / `aria-checked` on toggle controls
+- ✅ `aria-expanded` + `aria-controls` on mobile nav & accordions
+- ✅ Semantic HTML5 (`<nav>`, `<section>`, `<header>`, `<footer>`, `<main>`)
 - ✅ `focus-visible` ring styles for keyboard navigation
 - ✅ Proper `alt` text on all images
 - ✅ `aria-live="polite"` on progress regions
+- ✅ Skip-link styling for screen readers
 
 ---
 
 ## 🔒 Privacy & Security
 
 - ✅ **Zero server uploads** — all processing happens in-browser
-- ✅ **No tracking** — no cookies, no analytics, no fingerprinting
+- ✅ **No tracking** — no cookies, no analytics cookies, no fingerprinting
 - ✅ **No account required** — fully anonymous usage
-- ✅ **Memory cleanup** — object URLs revoked on unmount to prevent leaks
-- ✅ **No third-party requests at runtime**
-- ✅ **PDF worker bundled as static asset** — no third-party CDN
-- ✅ **Open source** — audit the code yourself
+- ✅ **Memory cleanup** — object URLs revoked on unmount
+- ✅ **No third-party requests at runtime** — no CDN fonts after initial load
+- ✅ **PDF worker bundled as static asset** — no external worker host
+- ✅ **Open source** — full transparency, audit the code yourself
+- ✅ **Vercel Analytics** — cookieless, DNT-aware, no personal data collected
 
 ---
 
-## 🌐 SEO Optimization
+## 🌐 SEO & Performance
 
-- ✅ Single `<h1>` per page with primary keyword
-- ✅ Meta description <160 characters
-- ✅ Open Graph & Twitter Cards
-- ✅ JSON-LD structured data
-- ✅ Canonical URL configured
-- ✅ Semantic HTML throughout
-- ✅ Lazy-loaded images and routes
-- ✅ Per-route code splitting (home / pdf / rename)
+- ✅ Per-route `<title>` + `<meta>` via `DocumentTitle` component
+- ✅ Open Graph + Twitter Cards for all 8 pages
+- ✅ JSON-LD structured data (WebApplication, FAQPage, BreadcrumbList, Organization, Article)
+- ✅ Canonical URL per page
+- ✅ Dedicated OG images per page (6 PNG/SVG pairs in `public/`)
+- ✅ Lazy-loaded routes with `<Suspense>` + `<RouteSkeleton />`
+- ✅ Code-split vendor chunks to minimize initial bundle
+- ✅ IntersectionObserver-based lazy section mounting
+- ✅ `requestIdleCallback` for non-critical JS (analytics, below-fold sections)
+- ✅ `prefetchOnIdle` for Vercel Analytics + Speed Insights
+- ✅ `usePrefetchOnHover` for route chunk warming on nav hover
 
 ---
 
@@ -1077,58 +1053,52 @@ Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software...
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 ```
 
 ---
 
-## 🙏 Credits & Thanks
+## 🙏 Credits
 
-### 🖼️ Image tool
+### 🖼️ Image Tool
 - [React](https://react.dev) — UI framework
-- [Vite](https://vitejs.dev) — Build tool
-- [Tailwind CSS](https://tailwindcss.com) — Styling
-- [shadcn/ui](https://ui.shadcn.com) — Component library
-- [browser-image-compression](https://github.com/Donaldcwl/browser-image-compression) — Compression engine
-- [JSZip](https://stuk.github.io/jszip/) — ZIP generation
-- [file-saver](https://github.com/eligrey/FileSaver.js) — File saving
-- [Lucide](https://lucide.dev) — Icon set
+- [Vite](https://vitejs.dev) — Build tool with SWC
+- [Tailwind CSS](https://tailwindcss.com) — Utility-first styling
+- [shadcn/ui](https://ui.shadcn.com) — Accessible component primitives
+- [browser-image-compression](https://github.com/Donaldcwl/browser-image-compression) — Web Worker compression engine
+- [Framer Motion](https://www.framer.com/motion/) — Declarative animations
+- [Lucide](https://lucide.dev) & [Phosphor Icons](https://phosphoricons.com) — Icon sets
 - [Sonner](https://sonner.emilkowal.dev) — Toast notifications
-- [Framer Motion](https://www.framer.com/motion/) — Animations
 
-### 📕 PDF tool
-- [pdf.js](https://mozilla.github.io/pdf.js/) — PDF parsing
-- [pdf-lib](https://pdf-lib.js.org) — PDF construction
+### 📕 PDF Tool
+- [pdf.js](https://mozilla.github.io/pdf.js/) — Mozilla's PDF parser & renderer
+- [pdf-lib](https://pdf-lib.js.org) — PDF document construction & manipulation
 
-### ✏️ Rename tool
-- [JSZip](https://stuk.github.io/jszip/) — ZIP generation (shared)
-- [file-saver](https://github.com/eligrey/FileSaver.js) — File saving (shared)
+### ✏️ Rename Tool
+- [JSZip](https://stuk.github.io/jszip/) — Client-side ZIP generation
+- [file-saver](https://github.com/eligrey/FileSaver.js) — Cross-browser file download
 
 ### 🌐 Platform
-- [Lovable](https://lovable.dev) — Development platform
-
----
-
-## 📈 Live Stats
-
-```
-┌─────────────────────────────────────┐
-│  Images Processed   │     0         │
-│  PDFs Compressed    │     0         │
-│  Files Renamed      │     0         │
-│  Total Reduced      │     0 KB      │
-│  Avg Reduction      │     0%        │
-└─────────────────────────────────────┘
-        ↑ Updates when you use any tool ↑
-```
+- [Vercel](https://vercel.com) — Hosting, edge network, analytics
+- [Inter](https://rsms.me/inter/) — Typeface by Rasmus Andersson
 
 ---
 
 <div align="center">
 
-**Last Updated**: June 2026
-**Version**: 2.0.0
-**Maintainer**: [@girishlade111](https://github.com/girishlade111)
+**Last Updated**: June 2026 &nbsp;·&nbsp; **Version**: 0.0.0 &nbsp;·&nbsp; **Maintainer**: [@girishlade111](https://github.com/girishlade111)
 
 ⭐ **Star this repo** if LS Image Compressor saved you time or bandwidth!
 
