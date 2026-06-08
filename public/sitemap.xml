@@ -26,46 +26,6 @@
   </url>
 
   <!-- =========================================================
-       HOMEPAGE ANCHOR — How It Works section
-       ========================================================= -->
-  <url>
-    <loc>https://img.ladestack.in/#how-it-works</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- =========================================================
-       HOMEPAGE ANCHOR — Features section
-       ========================================================= -->
-  <url>
-    <loc>https://img.ladestack.in/#features</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- =========================================================
-       HOMEPAGE ANCHOR — FAQ section
-       ========================================================= -->
-  <url>
-    <loc>https://img.ladestack.in/#faq</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <!-- =========================================================
-       HOMEPAGE ANCHOR — Trust bar
-       ========================================================= -->
-  <url>
-    <loc>https://img.ladestack.in/#trust-bar</loc>
-    <lastmod>2026-06-07</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- =========================================================
        PDF COMPRESSOR TOOL — high priority
        ========================================================= -->
   <url>
