@@ -100,16 +100,9 @@ export const pageSeo: Record<string, PageSEO> = {
         '@context': 'https://schema.org',
         '@type': 'WebSite',
         name: 'LS Image Compressor',
+        alternateName: 'LS Compressor',
         url: 'https://img.ladestack.in/',
         publisher: { '@type': 'Organization', name: 'Lade Stack', url: 'https://ladestack.in' },
-        potentialAction: {
-          '@type': 'SearchAction',
-          target: {
-            '@type': 'EntryPoint',
-            urlTemplate: 'https://img.ladestack.in/?q={search_term_string}',
-          },
-          'query-input': 'required name=search_term_string',
-        },
       },
       ORG,
       {
