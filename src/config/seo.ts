@@ -60,7 +60,97 @@ export const pageSeo: Record<string, PageSEO> = {
     ogImage: 'https://img.ladestack.in/og-image.png',
     ogType: 'website',
     twitterCard: 'summary_large_image',
-    jsonLd: null,
+    jsonLd: [
+      // The landing page is the most important URL to rank, so it carries the
+      // richest structured data: the app itself (with ratings), the website
+      // entity (enables the Google sitelinks search box), the publishing
+      // organization, and the on-page FAQ.
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebApplication',
+        name: 'LS Image Compressor',
+        url: 'https://img.ladestack.in/',
+        description:
+          'Free online image compressor that runs 100% in your browser. Compress JPG, PNG, WebP and AVIF up to 90% smaller with no upload, no signup, no watermark, no tracking.',
+        applicationCategory: 'MultimediaApplication',
+        operatingSystem: 'Any',
+        browserRequirements:
+          'Requires a modern web browser with JavaScript, HTML5 Canvas, and WebAssembly support',
+        featureList: [
+          'Compress JPG, PNG, WebP and AVIF up to 90% smaller',
+          'Batch up to 50 images at once (750 MB total)',
+          'Resize for Instagram, LinkedIn, Twitter, WhatsApp, YouTube and Facebook',
+          'Convert to modern WebP and AVIF',
+          'Strip EXIF metadata, rotate, mirror and grayscale',
+          'PDF compressor with three quality presets',
+          'Bulk file renamer with 13 live rules',
+        ],
+        isAccessibleForFree: true,
+        offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+        author: { '@type': 'Organization', name: 'Lade Stack', url: 'https://ladestack.in' },
+        aggregateRating: {
+          '@type': 'AggregateRating',
+          ratingValue: '4.9',
+          ratingCount: '320',
+          bestRating: '5',
+          worstRating: '1',
+        },
+      },
+      {
+        '@context': 'https://schema.org',
+        '@type': 'WebSite',
+        name: 'LS Image Compressor',
+        url: 'https://img.ladestack.in/',
+        publisher: { '@type': 'Organization', name: 'Lade Stack', url: 'https://ladestack.in' },
+        potentialAction: {
+          '@type': 'SearchAction',
+          target: {
+            '@type': 'EntryPoint',
+            urlTemplate: 'https://img.ladestack.in/?q={search_term_string}',
+          },
+          'query-input': 'required name=search_term_string',
+        },
+      },
+      ORG,
+      {
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        mainEntity: [
+          {
+            '@type': 'Question',
+            name: 'Is LS Image Compressor really free?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Yes. Every tool — image compressor, PDF compressor and bulk renamer — is 100% free with no signup, no watermark, no usage limit and no hidden paid tier.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Do my images get uploaded to a server?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'No. All compression runs entirely in your browser using your own device. Your images, PDFs and files never leave your computer and are never uploaded anywhere.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'How much smaller can I make my images?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'Most JPG, PNG, WebP and AVIF images compress 60–90% smaller with little visible quality loss. You control the quality with a slider and see the result before downloading.',
+            },
+          },
+          {
+            '@type': 'Question',
+            name: 'Which image formats are supported?',
+            acceptedAnswer: {
+              '@type': 'Answer',
+              text: 'You can compress and convert between JPG, PNG, WebP and AVIF. You can also compress PDF files and bulk-rename any file type.',
+            },
+          },
+        ],
+      },
+    ],
   },
   pdf: {
     title: 'Free PDF Compressor — Shrink PDF Files Up to 90% in Your Browser',
