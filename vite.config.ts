@@ -44,50 +44,28 @@ export default defineConfig(({ mode }) => ({
           if (id.includes("browser-image-compression")) return "vendor-image";
           if (id.includes("pako") || id.includes("/fflate")) return "vendor-compress";
 
-          // EVERYTHING that touches the React runtime ships in one chunk.
+          // Analytics are tiny and loaded strictly after first paint. They
+          // do not pull in React, so they can never cycle back to the core.
+          if (id.includes("@vercel")) return "vendor-vercel";
+
+          // EVERYTHING else ships in one chunk with React.
           //
-          // Splitting React away from its ecosystem (Radix, router, query,
-          // motion, etc) made those chunks import `vendor-react` while
+          // Previously React was split away from its ecosystem (Radix,
+          // router, query, motion, and a long tail of react-* helper
+          // packages). Those consumer chunks imported `vendor-react`, and
           // `vendor-react` imported them back — a circular dependency. At
           // runtime the browser evaluated a consumer chunk before React had
           // finished initializing, so React's named exports were still
           // `undefined`, producing:
           //   "Cannot read properties of undefined (reading 'useLayoutEffect')"
-          // and a blank screen. Keeping the whole React graph in a single
-          // chunk removes the cycle: anything that needs React is evaluated
-          // in the same module as React itself.
-          if (
-            id.includes("react-dom") ||
-            id.includes("/react/") ||
-            id.includes("react/jsx-runtime") ||
-            id.includes("scheduler") ||
-            id.includes("react-router") ||
-            id.includes("@remix-run/router") ||
-            id.includes("framer-motion") ||
-            id.includes("motion-dom") ||
-            id.includes("motion-utils") ||
-            id.includes("/motion/") ||
-            id.includes("@radix-ui") ||
-            id.includes("@floating-ui") ||
-            id.includes("react-remove-scroll") ||
-            id.includes("use-sync-external-store") ||
-            id.includes("aria-hidden") ||
-            id.includes("get-nonce") ||
-            id.includes("lucide-react") ||
-            id.includes("@tanstack") ||
-            id.includes("sonner") ||
-            id.includes("next-themes") ||
-            id.includes("clsx") ||
-            id.includes("tailwind-merge") ||
-            id.includes("class-variance-authority")
-          ) {
-            return "vendor-react";
-          }
-
-          // Analytics are tiny and loaded strictly after first paint.
-          if (id.includes("@vercel")) return "vendor-vercel";
-
-          return "vendor";
+          // and a blank screen.
+          //
+          // Rather than enumerate every react-importing package (vaul, cmdk,
+          // embla, recharts, react-hook-form, input-otp, … — easy to miss
+          // one and reintroduce the cycle), we keep the entire shared React
+          // graph in a single chunk. Anything that needs React is evaluated
+          // in the same module as React itself, so no cycle is possible.
+          return "vendor-react";
         },
       },
     },
