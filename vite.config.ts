@@ -42,7 +42,6 @@ export default defineConfig(({ mode }) => ({
           if (id.includes("pdfjs-dist") || id.includes("pdf-lib")) return "vendor-pdf";
           if (id.includes("jszip") || id.includes("file-saver")) return "vendor-zip";
           if (id.includes("browser-image-compression")) return "vendor-image";
-          if (id.includes("pako") || id.includes("/fflate")) return "vendor-compress";
 
           // Analytics are tiny and loaded strictly after first paint. They
           // do not pull in React, so they can never cycle back to the core.
