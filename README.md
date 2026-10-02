@@ -1103,3 +1103,9 @@ SOFTWARE.
 ⭐ **Star this repo** if LS Image Compressor saved you time or bandwidth!
 
 </div>
+
+---
+
+## Credits
+
+Built by **Girish Lade** — [ladestack.in](https://ladestack.in)
